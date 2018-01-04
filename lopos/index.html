@@ -1,89 +1,183 @@
 <!doctype html>
 <html lang="ru">
-  <head>
-    <title>Lopos</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-  </head>
-  <body>
+<head>
+  <title>Lopos</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <div class="container mt-3 mb-3">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+</head>
 
-      <div class="row">
+<body>
 
-        <div class="col-3">
-          <div class="list-group" id="list-tab" role="tablist">
-            <a class="list-group-item list-group-item-action active" id="list-login-list" data-toggle="list" href="#list-login" role="tab" aria-controls="login">Вход</a>
-            <a class="list-group-item list-group-item-action" id="list-log-list" data-toggle="list" href="#list-log" role="tab" aria-controls="log">Журнал</a>
-            <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">to be continued...</a>
+  <div class="container mt-3 mb-3">
 
-          </div>
+    <div>
+
+      <!--МЕНЮ (КНОПКИ)-->
+      <nav>
+        <ul class="nav nav-tabs" id="list-tab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="list-login-list" data-toggle="list" href="#list-login" role="tab" aria-controls="login">Вход / Выход</a>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="list-operations-list" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="operations">Операции</a>
+
+            <div class="dropdown-menu">
+              <a class="dropdown-item" id="list-receipt-list" data-toggle="list" href="#list-receipt" role="tab" aria-controls="receipt">Поступление</a>
+              <a class="dropdown-item" id="list-sell-list" data-toggle="list" href="#list-sell" role="tab" aria-controls="sell">Продажа</a>
+              <a class="dropdown-item" id="list-balance-list" data-toggle="list" href="#list-balance" role="tab" aria-controls="balance">Балансовые операции</a>
+              <a class="dropdown-item" id="list-manufacture-list" data-toggle="list" href="#list-manufacture" role="tab" aria-controls="manufacture">Производство</a>
+            </div>
+
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" id="list-catalog-list" data-toggle="list" href="#list-catalog" role="tab" aria-controls="catalog">Каталог</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" id="list-accounting-list" data-toggle="list" href="#list-accounting" role="tab" aria-controls="accounting">Учет</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" id="list-reference-list" data-toggle="list" href="#list-reference" role="tab" aria-controls="reference">Справочники</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" id="list-log-list" data-toggle="list" href="#list-log" role="tab" aria-controls="log">Журнал операций</a>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="list-online-list" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="online">Онлайн</a>
+
+            <div class="dropdown-menu">
+              <a class="dropdown-item" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Профиль</a>
+              <a class="dropdown-item" id="list-users-list" data-toggle="list" href="#list-users" role="tab" aria-controls="users">Пользователи</a>
+              <a class="dropdown-item" id="list-setup-list" data-toggle="list" href="#list-setup" role="tab" aria-controls="setup">Настройка</a>
+            </div>
+          </li>
+
+
+        </ul>
+      </nav>
+
+      <!--МЕНЮ (КОНТЕЙНЕРЫ)-->
+      <div class="tab-content mt-3" id="nav-tabContent">
+
+        <!--ФОРМА ВХОДА-->
+        <div class="tab-pane fade show active" id="list-login" role="tabpanel" aria-labelledby="list-login-list">
+
+          <form id='form-login' action="https://lopos.bidone.ru/api/v1/user_boss/login/" enctype="application/x-www-form-urlencoded">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Адрес электронной почты</label>
+              <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="почта">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Пароль</label>
+              <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="пароль">
+            </div>
+            <button type="submit" class="btn btn-primary">Войти</button>
+          </form>
+
+          <button id="profile-exit" type="button" class="btn btn-danger invisible">Выйти</button>
+
         </div>
 
-         <div class="col-9">
-          <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="list-login" role="tabpanel" aria-labelledby="list-login-list">
+        <!--===ОПЕРАЦИИ===-->
 
-               <form id='form-login' action="https://lopos.bidone.ru/api/v1/user_boss/login/" enctype="application/x-www-form-urlencoded">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Адрес электронной почты</label>
-                  <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="почта">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Пароль</label>
-                  <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="пароль">
-                </div>
-                <button type="submit" class="btn btn-primary">Войти</button>
-              </form>
+        <div class="tab-pane fade" id="list-operations" role="tabpanel" aria-labelledby="list-operations-list">
+          <p>ОПЕРАЦИИ (UNDER CONSTRUCTION)</p>
+        </div>
 
-              <div id="profile" class="card d-none" style="width: 20rem;">
-                <div class="card-header">
-                  Личный кабинет
-                </div>
-                <ul class="list-group list-group-flush">
-                  <li id="profile-name" class="list-group-item"></li>
-                  <li id="profile-time" class="list-group-item"></li>
-                  <li id="profile-directory" class="list-group-item"></li>
-                </ul>
-                <button id="profile-exit" type="button" class="btn btn-danger">Выйти</button>
-              </div>
+        <div class="tab-pane fade" id="list-receipt" role="tabpanel" aria-labelledby="list-receipt-list">
+          <p>ПОСТУПЛЕНИЕ (UNDER CONSTRUCTION)</p>
+        </div>
 
-            </div>
-            <div class="tab-pane fade" id="list-log" role="tabpanel" aria-labelledby="list-log-list">
+        <div class="tab-pane fade" id="list-sell" role="tabpanel" aria-labelledby="list-sell-list">
+          <p>ПРОДАЖА (UNDER CONSTRUCTION)</p>
+        </div>
 
-              <div id="log-header" class="alert alert-primary" role="alert">
-                Журнал
-              </div>
+        <div class="tab-pane fade" id="list-balance" role="tabpanel" aria-labelledby="list-balance-list">
+          <p>БАЛАНСОВЫЕ ОПЕРАЦИИ (UNDER CONSTRUCTION)</p>
+        </div>
 
-              <div id="log-body" class="alert alert-dark" role="alert">
-                Пожалуйста, зарегистрируйтесь...
-              </div>
+        <div class="tab-pane fade" id="list-manufacture" role="tabpanel" aria-labelledby="list-manufacture-list">
+          <p>ПРОИЗВОДСТВО (UNDER CONSTRUCTION)</p>
+        </div>
 
-            </div>
-            <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
-              <p>Теперь, насколько мы понимаем, задача в общем сводится к тому, чтобы дополнить пункты меню, для каждого четко прописать логику, описать влияние параметров, выбранных в одних пунктах меню, на отображение других пунктов, и придумать план по каждой функции.</p>
-              <p>Для отображения данных на начальном этапе воспользуемся библиотекой Bootstrap, она вполне покрывает интерфейс приложения, легко адаптируется под мобильные устройства и позволит сосредоточиться на логике. </p>
-              <p>На данный момент реализована авторизация по паре почта/пароль, подсветка при неверном вводе пароля, отображение некоторых данных пользователя и записей из журнала. Журнал отрисовывается только в том случае, если пользователь успешно авторизовался. Перестает отображаться или после пользователького выхода, или при закрытии браузера.</p>
-            </div>
+        <!--КАТАЛОГ-->
+        <div class="tab-pane fade" id="list-catalog" role="tabpanel" aria-labelledby="list-catalog-list">
+          <p>КАТАЛОГ (UNDER CONSTRUCTION)</p>
+        </div>
 
+        <!--УЧЕТ-->
+        <div class="tab-pane fade" id="list-accounting" role="tabpanel" aria-labelledby="list-accounting-list">
+          <p>УЧЕТ (UNDER CONSTRUCTION)</p>
+        </div>
+
+        <!--СПРАВОЧНИКИ-->
+        <div class="tab-pane fade" id="list-reference" role="tabpanel" aria-labelledby="list-reference-list">
+          <p>СПРАВОЧНИКИ (UNDER CONSTRUCTION)</p>
+        </div>
+
+        <!--ЖУРНАЛ-->
+        <div class="tab-pane fade" id="list-log" role="tabpanel" aria-labelledby="list-log-list">
+
+          <div id="log-body" class="alert alert-dark" role="alert">
+            Пожалуйста, зарегистрируйтесь...
           </div>
+
+        </div>
+
+        <!--===ОНЛАЙН===-->
+
+        <!--ПРОФИЛЬ-->
+        <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+          <p>ПРОФИЛЬ (Пожалуйста, зарегистрируйтесь...)</p>
+
+          <div id="profile" class="card d-none" style="width: 20rem;">
+            <div class="card-header">
+              Личный кабинет
+            </div>
+            <ul class="list-group list-group-flush">
+              <li id="profile-name" class="list-group-item"></li>
+              <li id="profile-time" class="list-group-item"></li>
+              <li id="profile-directory" class="list-group-item"></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!--ПОЛЬЗОВАТЕЛИ-->
+        <div class="tab-pane fade" id="list-users" role="tabpanel" aria-labelledby="list-users-list">
+          <p>ПОЛЬЗОВАТЕЛИ (UNDER CONSTRUCTION)</p>
+
+        </div>
+
+        <!--НАСТРОЙКА-->
+        <div class="tab-pane fade" id="list-setup" role="tabpanel" aria-labelledby="list-setup-list">
+          <p>НАСТРОЙКА (UNDER CONSTRUCTION)</p>
         </div>
 
       </div>
 
     </div>
 
+  </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-    <script src="script.min.js"></script>
-    <!--<script src="script.js"></script>-->
-  </body>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+  <!--<script src="script.min.js"></script>-->
+  <script src="js/script.js"></script>
+</body>
+
 </html>
