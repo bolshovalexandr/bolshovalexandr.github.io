@@ -13,7 +13,7 @@
 
 <body>
 
-  <div class="container mt-3 mb-3">
+  <div class="container mt-3 mb-5" style="min-height: 80%">
 
     <div>
 
@@ -84,7 +84,7 @@
             <button type="submit" class="btn btn-primary">Войти</button>
           </form>
 
-          <button id="profile-exit" type="button" class="btn btn-danger invisible">Выйти</button>
+          <button id="profile-exit" type="button" class="btn btn-danger d-none">Выйти</button>
 
         </div>
 
@@ -132,13 +132,16 @@
             Пожалуйста, зарегистрируйтесь...
           </div>
 
+          <div id="loader" class="container-fluid bg-info d-none mb-5" style="height: 50px;">Ждем подготовки порции карточек...</div>
+
+
         </div>
 
         <!--===ОНЛАЙН===-->
 
         <!--ПРОФИЛЬ-->
         <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
-          <p>ПРОФИЛЬ (Пожалуйста, зарегистрируйтесь...)</p>
+          <p id="unregistered-profile">ПРОФИЛЬ (Пожалуйста, зарегистрируйтесь...)</p>
 
           <div id="profile" class="card d-none" style="width: 20rem;">
             <div class="card-header">
