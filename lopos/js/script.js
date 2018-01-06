@@ -147,39 +147,43 @@
 	var getLog = function getLog() {
 	
 	  // ====пока используем API Гитхаба====
-	  /*
-	  let xhr = new XMLHttpRequest();
-	    let body = 'position=0&count=50&token=' + sessionStorage.getItem('userToken');
-	  let url = `https://lopos.bidone.ru/api/v1/lopos_directory/${sessionStorage.getItem('userDirectory')}/update_log/${Date.now()}/story`;
-	    xhr.open('POST', url, true);
-	  xhr.responseType = 'json';
-	  xhr.send(body);
-	    xhr.addEventListener('load', function () {
-	      if (xhr.response.status === 281) {
-	      xhr.response.data.forEach(function (item, index) {
-	        logCardNodes.push(log.getLogElement(item));
-	      });
-	      logCardNodes.splice(0, 3).forEach(addCardToLogContainer);
-	      window.addEventListener('scroll', onMouseScroll);
-	    }
-	  });
-	  */
 	
 	  var xhr = new XMLHttpRequest();
-	  xhr.responseType = 'json';
-	  xhr.open('GET', 'https://api.github.com/users/bolshovalexandr/repos');
-	  xhr.send();
 	
-	  // Событие окончания загрузки
+	  var body = 'position=0&count=200&token=' + sessionStorage.getItem('token');
+	  var url = 'https://lopos.bidone.ru/api/v1/lopos_directory/' + sessionStorage.getItem('directory') + '/update_log/' + Date.now() + '/story';
+	
+	  xhr.open('POST', url, true);
+	  xhr.responseType = 'json';
+	  xhr.send(body);
+	
 	  xhr.addEventListener('load', function () {
-	    if (xhr.status === 200) {
-	      xhr.response.forEach(function (item, index) {
+	
+	    if (xhr.response.status === 281) {
+	      xhr.response.data.forEach(function (item, index) {
 	        logCardNodes.push(_log2.default.getElement(item));
 	      });
 	      logCardNodes.splice(0, 3).forEach(_log2.default.addCardToContainer);
 	      window.addEventListener('scroll', onMouseScroll);
 	    }
 	  });
+	
+	  /*
+	  let xhr = new XMLHttpRequest();
+	  xhr.responseType = 'json';
+	  xhr.open('GET', 'https://api.github.com/users/bolshovalexandr/repos');
+	  xhr.send();
+	    // Событие окончания загрузки
+	  xhr.addEventListener('load', function () {
+	    if (xhr.status === 200) {
+	      xhr.response.forEach(function (item, index) {
+	        logCardNodes.push(log.getElement(item));
+	      });
+	      logCardNodes.splice(0, 3).forEach(log.addCardToContainer);
+	      window.addEventListener('scroll', onMouseScroll);
+	    }
+	  });
+	  */
 	};
 	
 	// слушаем кнопку "Журнал"
@@ -228,7 +232,6 @@
 	
 	  // заполняем хранилище
 	  set data(loadedData) {
-	    console.log(loadedData);
 	    sessionStorage.setItem('nickname', loadedData.nickname);
 	    sessionStorage.setItem('lastLogin', loadedData.lastLogin);
 	    sessionStorage.setItem('email', loadedData.email);
