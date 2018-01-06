@@ -13,17 +13,20 @@
 
 <body>
 
-  <div class="container mt-3 mb-5" style="min-height: 80%">
+  <div class="container mt-3 mb-5">
 
     <div>
 
       <!--МЕНЮ (КНОПКИ)-->
       <nav>
+
         <ul class="nav nav-tabs" id="list-tab" role="tablist">
+          <!--Вход / Выход-->
           <li class="nav-item">
             <a class="nav-link active" id="list-login-list" data-toggle="list" href="#list-login" role="tab" aria-controls="login">Вход / Выход</a>
           </li>
 
+          <!--Операции-->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="list-operations-list" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="operations">Операции</a>
 
@@ -36,22 +39,50 @@
 
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" id="list-catalog-list" data-toggle="list" href="#list-catalog" role="tab" aria-controls="catalog">Каталог</a>
+          <!--Каталог-->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="list-catalog-list" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="catalog">Каталог</a>
+
+            <div class="dropdown-menu">
+              <a class="dropdown-item" id="list-showcase-list" data-toggle="list" href="#list-showcase" role="tab" aria-controls="showcase">Витрина товаров</a>
+              <a class="dropdown-item" id="list-groups-list" data-toggle="list" href="#list-groups" role="tab" aria-controls="groups">Группы товаров</a>
+              <a class="dropdown-item" id="list-cards-list" data-toggle="list" href="#list-cards" role="tab" aria-controls="cards">Производственные карточки</a>
+            </div>
+
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" id="list-accounting-list" data-toggle="list" href="#list-accounting" role="tab" aria-controls="accounting">Учет</a>
+          <!--Учет-->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="list-accounting-list" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="accounting">Учет</a>
+
+            <div class="dropdown-menu">
+              <a class="dropdown-item" id="list-docs-list" data-toggle="list" href="#list-docs" role="tab" aria-controls="docs">Все документы</a>
+              <a class="dropdown-item" id="list-reports-list" data-toggle="list" href="#list-reports" role="tab" aria-controls="reports">Отчеты и аналитика</a>
+            </div>
+
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" id="list-reference-list" data-toggle="list" href="#list-reference" role="tab" aria-controls="reference">Справочники</a>
+          <!--Справочники-->
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="list-reference-list" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="reference">Справочники</a>
+
+            <div class="dropdown-menu">
+              <a class="dropdown-item" id="list-supplier-list" data-toggle="list" href="#list-supplier" role="tab" aria-controls="supplier">Поставщики</a>
+              <a class="dropdown-item" id="list-buyer-list" data-toggle="list" href="#list-buyer" role="tab" aria-controls="buyer">Покупатели</a>
+              <a class="dropdown-item" id="list-points-list" data-toggle="list" href="#list-points" role="tab" aria-controls="points">Точки продаж</a>
+              <a class="dropdown-item" id="list-keywords-list" data-toggle="list" href="#list-keywords" role="tab" aria-controls="keywords">Ключевые слова</a>
+              <a class="dropdown-item" id="list-enterprises-list" data-toggle="list" href="#list-enterprises" role="tab" aria-controls="enterprises">Предприятия</a>
+            </div>
+
           </li>
 
+          <!--Журнал операций-->
           <li class="nav-item">
             <a class="nav-link" id="list-log-list" data-toggle="list" href="#list-log" role="tab" aria-controls="log">Журнал операций</a>
           </li>
 
+          <!--Онлайн-->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="list-online-list" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="online">Онлайн</a>
 
@@ -88,20 +119,16 @@
 
         </div>
 
-        <!--===ОПЕРАЦИИ===-->
-
+        <!--ОПЕРАЦИИ-->
         <div class="tab-pane fade" id="list-operations" role="tabpanel" aria-labelledby="list-operations-list">
           <p>ОПЕРАЦИИ (UNDER CONSTRUCTION)</p>
         </div>
-
         <div class="tab-pane fade" id="list-receipt" role="tabpanel" aria-labelledby="list-receipt-list">
           <p>ПОСТУПЛЕНИЕ (UNDER CONSTRUCTION)</p>
         </div>
-
         <div class="tab-pane fade" id="list-sell" role="tabpanel" aria-labelledby="list-sell-list">
           <p>ПРОДАЖА (UNDER CONSTRUCTION)</p>
         </div>
-
         <div class="tab-pane fade" id="list-balance" role="tabpanel" aria-labelledby="list-balance-list">
           <p>БАЛАНСОВЫЕ ОПЕРАЦИИ (UNDER CONSTRUCTION)</p>
         </div>
@@ -111,38 +138,52 @@
         </div>
 
         <!--КАТАЛОГ-->
-        <div class="tab-pane fade" id="list-catalog" role="tabpanel" aria-labelledby="list-catalog-list">
-          <p>КАТАЛОГ (UNDER CONSTRUCTION)</p>
+        <div class="tab-pane fade" id="list-showcase" role="tabpanel" aria-labelledby="list-showcase-list">
+          <p>ВИТРИНА ТОВАРОВ (UNDER CONSTRUCTION)</p>
+        </div>
+        <div class="tab-pane fade" id="list-groups" role="tabpanel" aria-labelledby="list-groups-list">
+          <p>ГРУППЫ ТОВАРОВ (UNDER CONSTRUCTION)</p>
+        </div>
+        <div class="tab-pane fade" id="list-cards" role="tabpanel" aria-labelledby="list-cards-list">
+          <p>ПРОИЗВОДСТВЕННЫЕ КАРТОЧКИ (UNDER CONSTRUCTION)</p>
         </div>
 
         <!--УЧЕТ-->
-        <div class="tab-pane fade" id="list-accounting" role="tabpanel" aria-labelledby="list-accounting-list">
-          <p>УЧЕТ (UNDER CONSTRUCTION)</p>
+        <div class="tab-pane fade" id="list-docs" role="tabpanel" aria-labelledby="list-docs-list">
+          <p>ВСЕ ДОКУМЕНТЫ (UNDER CONSTRUCTION)</p>
+        </div>
+        <div class="tab-pane fade" id="list-reports" role="tabpanel" aria-labelledby="list-reports-list">
+          <p>ОТЧЕТЫ И АНАЛИТИКА (UNDER CONSTRUCTION)</p>
         </div>
 
         <!--СПРАВОЧНИКИ-->
-        <div class="tab-pane fade" id="list-reference" role="tabpanel" aria-labelledby="list-reference-list">
-          <p>СПРАВОЧНИКИ (UNDER CONSTRUCTION)</p>
+        <div class="tab-pane fade" id="list-supplier" role="tabpanel" aria-labelledby="list-supplier-list">
+          <p>ПОСТАВЩИКИ (UNDER CONSTRUCTION)</p>
+        </div>
+        <div class="tab-pane fade" id="list-buyer" role="tabpanel" aria-labelledby="list-buyer-list">
+          <p>ПОКУПАТЕЛИ (UNDER CONSTRUCTION)</p>
+        </div>
+        <div class="tab-pane fade" id="list-points" role="tabpanel" aria-labelledby="list-points-list">
+          <p>ТОЧКИ ПРОДАЖ (UNDER CONSTRUCTION)</p>
+        </div>
+        <div class="tab-pane fade" id="list-keywords" role="tabpanel" aria-labelledby="list-keywords-list">
+          <p>КЛЮЧЕВЫЕ СЛОВА (UNDER CONSTRUCTION)</p>
+        </div>
+        <div class="tab-pane fade" id="list-enterprises" role="tabpanel" aria-labelledby="list-enterprises-list">
+          <p>ПРЕДПРИЯТИЯ (UNDER CONSTRUCTION)</p>
         </div>
 
         <!--ЖУРНАЛ-->
         <div class="tab-pane fade" id="list-log" role="tabpanel" aria-labelledby="list-log-list">
-
           <div id="log-body" class="alert alert-dark" role="alert">
             Пожалуйста, зарегистрируйтесь...
           </div>
-
           <div id="loader" class="container-fluid bg-info d-none mb-5" style="height: 50px;">Ждем подготовки порции карточек...</div>
-
-
         </div>
 
-        <!--===ОНЛАЙН===-->
-
-        <!--ПРОФИЛЬ-->
+        <!--ОНЛАЙН-->
         <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
           <p id="unregistered-profile">ПРОФИЛЬ (Пожалуйста, зарегистрируйтесь...)</p>
-
           <div id="profile" class="card d-none" style="width: 20rem;">
             <div class="card-header">
               Личный кабинет
@@ -153,24 +194,16 @@
               <li id="profile-directory" class="list-group-item"></li>
             </ul>
           </div>
-
         </div>
-
-        <!--ПОЛЬЗОВАТЕЛИ-->
         <div class="tab-pane fade" id="list-users" role="tabpanel" aria-labelledby="list-users-list">
           <p>ПОЛЬЗОВАТЕЛИ (UNDER CONSTRUCTION)</p>
-
         </div>
-
-        <!--НАСТРОЙКА-->
         <div class="tab-pane fade" id="list-setup" role="tabpanel" aria-labelledby="list-setup-list">
           <p>НАСТРОЙКА (UNDER CONSTRUCTION)</p>
         </div>
 
       </div>
-
     </div>
-
   </div>
 
 

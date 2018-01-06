@@ -1,1 +1,300 @@
-'use strict';(function(a){function b(d){if(c[d])return c[d].exports;var e=c[d]={exports:{},id:d,loaded:!1};return a[d].call(e.exports,e,e.exports,b),e.loaded=!0,e.exports}var c={};return b.m=a,b.c=c,b.p='',b(0)})([function(a,b,c){'use strict';var e=c(1),f=function(g){return g&&g.__esModule?g:{default:g}}(e);(0,f.default)()},function(a,b){'use strict';Object.defineProperty(b,'__esModule',{value:!0}),b.default=function(){var c=document.querySelector('#form-login'),d=c.querySelector('BUTTON'),e=document.querySelector('#list-login-list'),f=document.querySelector('#list-log-list'),g=document.querySelector('#log-body'),h=document.querySelector('#profile'),i=h.querySelector('#profile-name'),j=h.querySelector('#profile-time'),k=h.querySelector('#profile-directory'),l=document.querySelector('#profile-exit'),m=document.querySelector('#unregistered-profile'),n=document.querySelector('#loader'),o=function(){sessionStorage.removeItem('userNickname'),sessionStorage.removeItem('userLastLogin'),sessionStorage.removeItem('userToken')},p=function(B){sessionStorage.setItem('userNickname',B.nickname),sessionStorage.setItem('userLastLogin',B.lastLogin),sessionStorage.setItem('userDirectory',B.directory),sessionStorage.setItem('userToken',B.token)},q=function(){c.classList.add('d-none'),h.classList.remove('d-none'),l.classList.remove('d-none'),m.classList.add('d-none'),g.innerHTML=''},r=function(){c.classList.remove('d-none'),h.classList.add('d-none'),l.classList.add('d-none'),m.classList.remove('d-none'),g.innerHTML='\u041F\u043E\u0436\u0430\u043B\u0443\u0439\u0441\u0442\u0430, \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u0443\u0439\u0442\u0435\u0441\u044C...'},s=function(B){var C=new XMLHttpRequest;C.responseType='json',C.open('POST',c.action,!0),C.send(B),C.addEventListener('load',function(){200===C.response.status?(d.classList.remove('btn-danger'),p(C.response.data),q(),i.innerHTML=sessionStorage.getItem('userNickname'),j.innerHTML=sessionStorage.getItem('userLastLogin'),k.innerHTML=sessionStorage.getItem('userDirectory')):d.classList.add('btn-danger')})},t=[],u=function(B){return'<li class="list-group-item"><b>'+B[0]+': </b>'+B[1]+'</li>'},v=function(B){return g.insertAdjacentHTML('beforeend',B)},w=function(){return 150>=g.getBoundingClientRect().bottom-window.innerHeight},x=Date.now(),y=function A(){100<=Date.now()-x&&(console.log(w()),w()&&0<t.length&&(window.removeEventListener('scroll',A),n.classList.remove('d-none'),window.setTimeout(function(){console.log('time'),t.splice(0,3).forEach(v),window.addEventListener('scroll',A),n.classList.add('d-none')},1500)),x=Date.now())};window.addEventListener('scroll',y);var z=function(){var B=new XMLHttpRequest,C='position=0&count=50&token='+sessionStorage.getItem('userToken'),D='https://lopos.bidone.ru/api/v1/lopos_directory/'+sessionStorage.getItem('userDirectory')+'/update_log/'+Date.now()+'/story';B.open('POST',D,!0),B.responseType='json',B.send(C),B.addEventListener('load',function(){281===B.response.status&&(B.response.data.forEach(function(E){t.push('<div class="card m-2" style="width: 100%;"><ul class="list-group list-group-flush">'+Object.entries(E).map(u).join('')+'</ul></div>')}),t.splice(0,3).forEach(v),window.addEventListener('scroll',y))})};c.addEventListener('submit',function(A){A.preventDefault();var B=new FormData(c);B.append('deviceToken','2222'),s(B)}),e.addEventListener('click',function(){sessionStorage.getItem('userNickname')?q():r()}),l.addEventListener('click',function(){r(),c.reset(),o()}),f.addEventListener('click',function(){sessionStorage.getItem('userNickname')?z():g.innerHTML='\u041F\u043E\u0436\u0430\u043B\u0443\u0439\u0441\u0442\u0430, \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u0443\u0439\u0442\u0435\u0441\u044C...'})}}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _log = __webpack_require__(2);
+	
+	var _log2 = _interopRequireDefault(_log);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var formLogin = document.querySelector('#form-login');
+	var formLoginBtn = formLogin.querySelector('BUTTON');
+	var listLogin = document.querySelector('#list-login-list');
+	var listLog = document.querySelector('#list-log-list');
+	var listLogBody = document.querySelector('#log-body');
+	var profile = document.querySelector('#profile');
+	var profileName = profile.querySelector('#profile-name');
+	var profileTime = profile.querySelector('#profile-time');
+	var profileDirectory = profile.querySelector('#profile-directory');
+	var profileExit = document.querySelector('#profile-exit');
+	var unregisteredProfile = document.querySelector('#unregistered-profile');
+	var loader = document.querySelector('#loader');
+	
+	// спрятать форму, показать профиль
+	var hideFormShowProfile = function hideFormShowProfile() {
+	  formLogin.classList.add('d-none');
+	  profile.classList.remove('d-none');
+	  profileExit.classList.remove('d-none');
+	  unregisteredProfile.classList.add('d-none');
+	  _log2.default.cleanContainer();
+	};
+	
+	// спрятать профиль, показать форму
+	var hideProfileShowForm = function hideProfileShowForm() {
+	  formLogin.classList.remove('d-none');
+	  profile.classList.add('d-none');
+	  profileExit.classList.add('d-none');
+	  unregisteredProfile.classList.remove('d-none');
+	  _log2.default.setUnregistered();
+	};
+	
+	// создаем запрос на токен
+	var getTocken = function getTocken(body) {
+	
+	  var xhr = new XMLHttpRequest();
+	  xhr.responseType = 'json';
+	  xhr.open('POST', formLogin.action, true);
+	  xhr.send(body);
+	
+	  var onSuccessAuthLoad = function onSuccessAuthLoad() {
+	    if (xhr.response.status === 200) {
+	      formLoginBtn.classList.remove('btn-danger');
+	      _storage2.default.data = xhr.response.data;
+	      hideFormShowProfile();
+	      var _auth$data = _storage2.default.data,
+	          nickname = _auth$data.nickname,
+	          lastLogin = _auth$data.lastLogin,
+	          directory = _auth$data.directory;
+	
+	      profileName.innerHTML = nickname;
+	      profileTime.innerHTML = lastLogin;
+	      profileDirectory.innerHTML = directory;
+	    } else {
+	      formLoginBtn.classList.add('btn-danger');
+	    }
+	  };
+	
+	  xhr.addEventListener('load', onSuccessAuthLoad);
+	};
+	
+	// "ленивая отрисовка" журнала
+	var logCardNodes = [];
+	var lastCall = Date.now();
+	
+	var isBottomReached = function isBottomReached() {
+	  return listLogBody.getBoundingClientRect().bottom - window.innerHeight <= 150;
+	};
+	
+	var onMouseScroll = function onMouseScroll(evt) {
+	  if (Date.now() - lastCall >= 100) {
+	
+	    if (isBottomReached() && logCardNodes.length > 0) {
+	      window.removeEventListener('scroll', onMouseScroll);
+	      loader.classList.remove('d-none');
+	      window.setTimeout(function () {
+	        logCardNodes.splice(0, 3).forEach(_log2.default.addCardToContainer);
+	        window.addEventListener('scroll', onMouseScroll);
+	        loader.classList.add('d-none');
+	      }, 1500);
+	    }
+	
+	    lastCall = Date.now();
+	  }
+	};
+	
+	window.addEventListener('scroll', onMouseScroll);
+	
+	// создаем запрос на журнал
+	var getLog = function getLog() {
+	
+	  // ====пока используем API Гитхаба====
+	  /*
+	  let xhr = new XMLHttpRequest();
+	    let body = 'position=0&count=50&token=' + sessionStorage.getItem('userToken');
+	  let url = `https://lopos.bidone.ru/api/v1/lopos_directory/${sessionStorage.getItem('userDirectory')}/update_log/${Date.now()}/story`;
+	    xhr.open('POST', url, true);
+	  xhr.responseType = 'json';
+	  xhr.send(body);
+	    xhr.addEventListener('load', function () {
+	      if (xhr.response.status === 281) {
+	      xhr.response.data.forEach(function (item, index) {
+	        logCardNodes.push(log.getLogElement(item));
+	      });
+	      logCardNodes.splice(0, 3).forEach(addCardToLogContainer);
+	      window.addEventListener('scroll', onMouseScroll);
+	    }
+	  });
+	  */
+	
+	  var xhr = new XMLHttpRequest();
+	  xhr.responseType = 'json';
+	  xhr.open('GET', 'https://api.github.com/users/bolshovalexandr/repos');
+	  xhr.send();
+	
+	  // Событие окончания загрузки
+	  xhr.addEventListener('load', function () {
+	    if (xhr.status === 200) {
+	      xhr.response.forEach(function (item, index) {
+	        logCardNodes.push(_log2.default.getElement(item));
+	      });
+	      logCardNodes.splice(0, 3).forEach(_log2.default.addCardToContainer);
+	      window.addEventListener('scroll', onMouseScroll);
+	    }
+	  });
+	};
+	
+	// слушаем кнопку "Журнал"
+	listLog.addEventListener('click', function () {
+	  if (_storage2.default.isSetFlag) {
+	    getLog();
+	  } else {
+	    _log2.default.setUnregistered();
+	  }
+	});
+	
+	// слушаем сабмит отправки логина/пароля
+	formLogin.addEventListener('submit', function (evt) {
+	  evt.preventDefault();
+	  var data = new FormData(formLogin);
+	  data.append('deviceToken', '2222');
+	  getTocken(data);
+	});
+	
+	// слушаем кнопку "Вход"
+	listLogin.addEventListener('click', function () {
+	  if (_storage2.default.isSetFlag) {
+	    hideFormShowProfile();
+	  } else {
+	    hideProfileShowForm();
+	  }
+	});
+	
+	// слушаем кнопку "Выход"
+	profileExit.addEventListener('click', function () {
+	  hideProfileShowForm();
+	  formLogin.reset();
+	  _storage2.default.clean();
+	});
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = {
+	
+	  // заполняем хранилище
+	  set data(loadedData) {
+	    console.log(loadedData);
+	    sessionStorage.setItem('nickname', loadedData.nickname);
+	    sessionStorage.setItem('lastLogin', loadedData.lastLogin);
+	    sessionStorage.setItem('email', loadedData.email);
+	    sessionStorage.setItem('directory', loadedData.directory);
+	    sessionStorage.setItem('operatorId', loadedData.operator_id);
+	    sessionStorage.setItem('token', loadedData.token);
+	  },
+	
+	  // возвращаем данные
+	  get data() {
+	    return {
+	      nickname: sessionStorage.getItem('nickname'),
+	      lastLogin: sessionStorage.getItem('lastLogin'),
+	      directory: sessionStorage.getItem('directory'),
+	      email: sessionStorage.getItem('email'),
+	      operatorId: sessionStorage.getItem('operatorId'),
+	      token: sessionStorage.getItem('userToken')
+	    };
+	  },
+	
+	  get isSetFlag() {
+	    return Object.values(this.data).some(function (item) {
+	      return item !== null;
+	    });
+	  },
+	
+	  // чистим хранилище
+	  clean: function clean() {
+	    sessionStorage.removeItem('nickname');
+	    sessionStorage.removeItem('lastLogin');
+	    sessionStorage.removeItem('directory');
+	    sessionStorage.removeItem('email');
+	    sessionStorage.removeItem('operatorId');
+	    sessionStorage.removeItem('token');
+	  }
+	};
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var listLogBody = document.querySelector('#log-body');
+	
+	exports.default = {
+	  cleanContainer: function cleanContainer() {
+	    listLogBody.innerHTML = '';
+	  },
+	  setUnregistered: function setUnregistered() {
+	    listLogBody.innerHTML = 'Пожалуйста, зарегистрируйтесь...';
+	  },
+	  getLogTableRowMarkup: function getLogTableRowMarkup(rowElements) {
+	    return '<li class="list-group-item"><b>' + rowElements[0] + ': </b>' + rowElements[1] + '</li>';
+	  },
+	  getElement: function getElement(item) {
+	    return '<div class="card m-2" style="width: 100%;"><ul class="list-group list-group-flush">' + Object.entries(item).map(this.getLogTableRowMarkup).join('') + '</ul></div>';
+	  },
+	  addCardToContainer: function addCardToContainer(cardMarkupItem) {
+	    listLogBody.insertAdjacentHTML('beforeend', cardMarkupItem);
+	  }
+	};
+
+/***/ })
+/******/ ]);
+//# sourceMappingURL=script.js.map
