@@ -156,7 +156,7 @@
 	
 	
 	    var url = urlApi + 'lopos_directory/' + _storage2.default.data.directory + '/update_log/' + Date.now() + '/story';
-	    var body = 'position=200&count=2000&token=' + _storage2.default.data.token;
+	    var body = 'position=0&count=200&token=' + _storage2.default.data.token;
 	    var successCode = 281;
 	
 	    (0, _xhr2.default)(body, url, successCode, onSuccessLogLoad, onErrorLogLoad);
