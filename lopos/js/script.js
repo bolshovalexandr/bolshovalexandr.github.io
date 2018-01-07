@@ -54,6 +54,10 @@
 	
 	var _log2 = _interopRequireDefault(_log);
 	
+	var _xhr = __webpack_require__(3);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var formLogin = document.querySelector('#form-login');
@@ -87,35 +91,6 @@
 	  _log2.default.setUnregistered();
 	};
 	
-	// создаем запрос на токен
-	var getTocken = function getTocken(body) {
-	
-	  var xhr = new XMLHttpRequest();
-	  xhr.responseType = 'json';
-	  xhr.open('POST', formLogin.action, true);
-	  xhr.send(body);
-	
-	  var onSuccessAuthLoad = function onSuccessAuthLoad() {
-	    if (xhr.response.status === 200) {
-	      formLoginBtn.classList.remove('btn-danger');
-	      _storage2.default.data = xhr.response.data;
-	      hideFormShowProfile();
-	      var _auth$data = _storage2.default.data,
-	          nickname = _auth$data.nickname,
-	          lastLogin = _auth$data.lastLogin,
-	          directory = _auth$data.directory;
-	
-	      profileName.innerHTML = nickname;
-	      profileTime.innerHTML = lastLogin;
-	      profileDirectory.innerHTML = directory;
-	    } else {
-	      formLoginBtn.classList.add('btn-danger');
-	    }
-	  };
-	
-	  xhr.addEventListener('load', onSuccessAuthLoad);
-	};
-	
 	// "ленивая отрисовка" журнала
 	var logCardNodes = [];
 	var lastCall = Date.now();
@@ -143,53 +118,48 @@
 	
 	window.addEventListener('scroll', onMouseScroll);
 	
-	// создаем запрос на журнал
-	var getLog = function getLog() {
+	var onSuccessAuthLoad = function onSuccessAuthLoad(loadedData) {
+	  formLoginBtn.classList.remove('btn-danger');
+	  _storage2.default.data = loadedData;
+	  hideFormShowProfile();
+	  var _auth$data = _storage2.default.data,
+	      nickname = _auth$data.nickname,
+	      lastLogin = _auth$data.lastLogin,
+	      directory = _auth$data.directory;
 	
-	  // ====пока используем API Гитхаба====
+	  profileName.innerHTML = nickname;
+	  profileTime.innerHTML = lastLogin;
+	  profileDirectory.innerHTML = directory;
+	};
 	
-	  var xhr = new XMLHttpRequest();
+	var onErrorAuthLoad = function onErrorAuthLoad() {
+	  formLoginBtn.classList.add('btn-danger');
+	};
 	
-	  var body = 'position=0&count=200&token=' + sessionStorage.getItem('token');
-	  var url = 'https://lopos.bidone.ru/api/v1/lopos_directory/' + sessionStorage.getItem('directory') + '/update_log/' + Date.now() + '/story';
-	
-	  xhr.open('POST', url, true);
-	  xhr.responseType = 'json';
-	  xhr.send(body);
-	
-	  xhr.addEventListener('load', function () {
-	
-	    if (xhr.response.status === 281) {
-	      xhr.response.data.forEach(function (item, index) {
-	        logCardNodes.push(_log2.default.getElement(item));
-	      });
-	      logCardNodes.splice(0, 3).forEach(_log2.default.addCardToContainer);
-	      window.addEventListener('scroll', onMouseScroll);
-	    }
+	var onSuccessLogLoad = function onSuccessLogLoad(loadedLog) {
+	  loadedLog.forEach(function (item, index) {
+	    logCardNodes.push(_log2.default.getElement(item));
 	  });
+	  logCardNodes.splice(0, 5).forEach(_log2.default.addCardToContainer);
+	  window.addEventListener('scroll', onMouseScroll);
+	};
 	
-	  /*
-	  let xhr = new XMLHttpRequest();
-	  xhr.responseType = 'json';
-	  xhr.open('GET', 'https://api.github.com/users/bolshovalexandr/repos');
-	  xhr.send();
-	    // Событие окончания загрузки
-	  xhr.addEventListener('load', function () {
-	    if (xhr.status === 200) {
-	      xhr.response.forEach(function (item, index) {
-	        logCardNodes.push(log.getElement(item));
-	      });
-	      logCardNodes.splice(0, 3).forEach(log.addCardToContainer);
-	      window.addEventListener('scroll', onMouseScroll);
-	    }
-	  });
-	  */
+	var onErrorLogLoad = function onErrorLogLoad() {
+	  console.log('Somethig went arowng');
 	};
 	
 	// слушаем кнопку "Журнал"
 	listLog.addEventListener('click', function () {
 	  if (_storage2.default.isSetFlag) {
-	    getLog();
+	    console.log(window.appSettings.xhr);
+	    var urlApi = window.appSettings.xhr.urlApi;
+	
+	
+	    var url = urlApi + 'lopos_directory/' + _storage2.default.data.directory + '/update_log/' + Date.now() + '/story';
+	    var body = 'position=200&count=2000&token=' + _storage2.default.data.token;
+	    var successCode = 281;
+	
+	    (0, _xhr2.default)(body, url, successCode, onSuccessLogLoad, onErrorLogLoad);
 	  } else {
 	    _log2.default.setUnregistered();
 	  }
@@ -198,9 +168,14 @@
 	// слушаем сабмит отправки логина/пароля
 	formLogin.addEventListener('submit', function (evt) {
 	  evt.preventDefault();
-	  var data = new FormData(formLogin);
-	  data.append('deviceToken', '2222');
-	  getTocken(data);
+	
+	  var body = new FormData(formLogin);
+	  var url = formLogin.action;
+	  var successCode = 200;
+	
+	  body.append('deviceToken', '2222');
+	
+	  (0, _xhr2.default)(body, url, successCode, onSuccessAuthLoad, onErrorAuthLoad);
 	});
 	
 	// слушаем кнопку "Вход"
@@ -248,7 +223,7 @@
 	      directory: sessionStorage.getItem('directory'),
 	      email: sessionStorage.getItem('email'),
 	      operatorId: sessionStorage.getItem('operatorId'),
-	      token: sessionStorage.getItem('userToken')
+	      token: sessionStorage.getItem('token')
 	    };
 	  },
 	
@@ -288,14 +263,78 @@
 	    listLogBody.innerHTML = 'Пожалуйста, зарегистрируйтесь...';
 	  },
 	  getLogTableRowMarkup: function getLogTableRowMarkup(rowElements) {
-	    return '<li class="list-group-item"><b>' + rowElements[0] + ': </b>' + rowElements[1] + '</li>';
+	    return rowElements[1] ? '<li class="list-group-item"><b>' + rowElements[0] + ': </b>' + rowElements[1] + '</li>' : null;
+	  },
+	  getAdditionalImages: function getAdditionalImages(rowElements) {
+	    var markup = '';
+	
+	    if (rowElements[0] === 'ha_kontr_agent_id_fk' && rowElements[1]) {
+	      markup += '<img class="mr-3" src="img/buyers.png" width="50" alt="Generic placeholder image">';
+	    }
+	    if (rowElements[0] === 'ha_nomenclature_card_id_fk' && rowElements[1]) {
+	      markup += '<img class="mr-3" src="img/ic_my_nomenclature.png" width="50" alt="Generic placeholder image">';
+	    }
+	    if (rowElements[0] === 'ha_group_good_id_fk' && rowElements[1]) {
+	      markup += '<img class="mr-3" src="img/groups.png" width="50" alt="Generic placeholder image">';
+	    }
+	    if (rowElements[0] === 'ha_good_id_fk' || rowElements[0] === 'ha_price_id_fk' && rowElements[1]) {
+	      markup += '<img class="mr-3" src="img/goods.png" width="50" alt="Generic placeholder image">';
+	    }
+	    if (rowElements[0] === 'ha_tag_id_fk' && rowElements[1]) {
+	      markup += '<img class="mr-3" src="img/ic_my_tag.png" width="50" alt="Generic placeholder image">';
+	    }
+	    return markup;
 	  },
 	  getElement: function getElement(item) {
-	    return '<div class="card m-2" style="width: 100%;"><ul class="list-group list-group-flush">' + Object.entries(item).map(this.getLogTableRowMarkup).join('') + '</ul></div>';
+	    var hasMinusInComments = item.ha_comment.includes('-') ? true : false;
+	    var markup = '';
+	
+	    if (item.ha_balance_act_id_fk && hasMinusInComments) {
+	      markup += '<img class="mr-3" src="img/expenses.png" width="50" alt="Generic placeholder image">';
+	    } else if (item.ha_balance_act_id_fk && !hasMinusInComments) {
+	      markup += '<img class="mr-3" src="img/revenue.png" width="50" alt="Generic placeholder image">';
+	    }
+	    if (item.ha_naklad_id_fk && hasMinusInComments) {
+	      markup += '<img class="mr-3" src="img/admission.png" width="50" alt="Generic placeholder image">';
+	    } else if (item.ha_naklad_id_fk && !hasMinusInComments) {
+	      markup += '<img class="mr-3" src="img/sale.png" width="50" alt="Generic placeholder image">';
+	    }
+	
+	    return '\n    <div class="media">\n      <img class="mr-3" src="img/user-male-filled-32.png" width="50" alt="Generic placeholder image">\n      ' + markup + '\n      ' + Object.entries(item).map(this.getAdditionalImages).join('') + '\n      <div class="media-body">\n        <h5 class="mt-0">\u0421\u043E\u0437\u0434\u0430\u043D\u0430 \u043D\u0430\u043A\u043B\u0430\u0434\u043D\u0430\u044F \u2116 ' + item.ha_id + '</h5>\n        ' + item.ha_comment + '\n        <span class="badge badge-info">' + new Date(+(item.ha_time + '000')).toLocaleString() + '</span>\n      </div>\n    </div>\n    <div class="card m-2" style="width: 100%;"><ul class="list-group list-group-flush">' + Object.entries(item).map(this.getLogTableRowMarkup).join('') + '</ul></div>\n    <hr><hr>';
 	  },
 	  addCardToContainer: function addCardToContainer(cardMarkupItem) {
 	    listLogBody.insertAdjacentHTML('beforeend', cardMarkupItem);
 	  }
+	};
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	exports.default = function (body, url, successCode, onSuccessLoad, onErrorLoad) {
+	  var timeout = window.appSettings.xhr.timeout;
+	
+	  var xhr = new XMLHttpRequest();
+	  xhr.timeout = timeout;
+	  xhr.responseType = 'json';
+	  xhr.open('POST', url, true);
+	  xhr.send(body);
+	
+	  xhr.addEventListener('load', function () {
+	    if (xhr.response.status === successCode) {
+	      onSuccessLoad(xhr.response.data);
+	    } else {
+	      onErrorLoad();
+	    }
+	  });
+	
+	  xhr.addEventListener('error', onErrorLoad);
 	};
 
 /***/ })
