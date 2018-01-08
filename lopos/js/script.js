@@ -91,32 +91,7 @@
 	  _log2.default.setUnregistered();
 	};
 	
-	// "ленивая отрисовка" журнала
-	var logCardNodes = [];
-	var lastCall = Date.now();
-	
-	var isBottomReached = function isBottomReached() {
-	  return listLogBody.getBoundingClientRect().bottom - window.innerHeight <= 150;
-	};
-	
-	var onMouseScroll = function onMouseScroll(evt) {
-	  if (Date.now() - lastCall >= 100) {
-	
-	    if (isBottomReached() && logCardNodes.length > 0) {
-	      window.removeEventListener('scroll', onMouseScroll);
-	      loader.classList.remove('d-none');
-	      window.setTimeout(function () {
-	        logCardNodes.splice(0, 3).forEach(_log2.default.addCardToContainer);
-	        window.addEventListener('scroll', onMouseScroll);
-	        loader.classList.add('d-none');
-	      }, 1500);
-	    }
-	
-	    lastCall = Date.now();
-	  }
-	};
-	
-	window.addEventListener('scroll', onMouseScroll);
+	// ==========АВТОРИЗАЦИЯ==========
 	
 	var onSuccessAuthLoad = function onSuccessAuthLoad(loadedData) {
 	  formLoginBtn.classList.remove('btn-danger');
@@ -135,35 +110,6 @@
 	var onErrorAuthLoad = function onErrorAuthLoad() {
 	  formLoginBtn.classList.add('btn-danger');
 	};
-	
-	var onSuccessLogLoad = function onSuccessLogLoad(loadedLog) {
-	  loadedLog.forEach(function (item, index) {
-	    logCardNodes.push(_log2.default.getElement(item));
-	  });
-	  logCardNodes.splice(0, 5).forEach(_log2.default.addCardToContainer);
-	  window.addEventListener('scroll', onMouseScroll);
-	};
-	
-	var onErrorLogLoad = function onErrorLogLoad() {
-	  console.log('Somethig went arowng');
-	};
-	
-	// слушаем кнопку "Журнал"
-	listLog.addEventListener('click', function () {
-	  if (_storage2.default.isSetFlag) {
-	    console.log(window.appSettings.xhr);
-	    var urlApi = window.appSettings.xhr.urlApi;
-	
-	
-	    var url = urlApi + 'lopos_directory/' + _storage2.default.data.directory + '/update_log/' + Date.now() + '/story';
-	    var body = 'position=0&count=200&token=' + _storage2.default.data.token;
-	    var successCode = 281;
-	
-	    (0, _xhr2.default)(body, url, successCode, onSuccessLogLoad, onErrorLogLoad);
-	  } else {
-	    _log2.default.setUnregistered();
-	  }
-	});
 	
 	// слушаем сабмит отправки логина/пароля
 	formLogin.addEventListener('submit', function (evt) {
@@ -192,6 +138,91 @@
 	  hideProfileShowForm();
 	  formLogin.reset();
 	  _storage2.default.clean();
+	});
+	
+	// ==========ЖУРНАЛ==========
+	
+	var logCardNodes = [];
+	var lastCall = Date.now();
+	
+	// начальная позиция и смещение
+	var position = 0;
+	var count = 200;
+	
+	var drawCardSet = function drawCardSet() {
+	  logCardNodes.splice(0, count / 2).forEach(_log2.default.addCardToContainer);
+	  console.log(logCardNodes.length);
+	};
+	
+	// успех загрузки
+	var onSuccessLogLoad = function onSuccessLogLoad(loadedLog) {
+	
+	  loadedLog.forEach(function (item, index) {
+	    logCardNodes.push(_log2.default.getElement(item));
+	  });
+	  drawCardSet();
+	  window.addEventListener('scroll', onMouseScroll);
+	};
+	
+	// ошибка загрузки
+	var onErrorLogLoad = function onErrorLogLoad() {
+	  console.log('Somethig went arowng');
+	};
+	
+	// отправка запроса на новую порцию
+	var getLog = function getLog() {
+	  var urlApi = window.appSettings.xhr.urlApi;
+	
+	
+	  var url = urlApi + 'lopos_directory/' + _storage2.default.data.directory + '/update_log/' + Date.now() + '/story';
+	  var body = 'position=' + position + '&count=' + count + '&token=' + _storage2.default.data.token;
+	  var successCode = 281;
+	
+	  (0, _xhr2.default)(body, url, successCode, onSuccessLogLoad, onErrorLogLoad);
+	};
+	
+	// "ленивая отрисовка" журнала
+	var isBottomReached = function isBottomReached() {
+	  return listLogBody.getBoundingClientRect().bottom - window.innerHeight <= 150;
+	};
+	
+	var onMouseScroll = function onMouseScroll(evt) {
+	  console.log(logCardNodes.length);
+	
+	  if (Date.now() - lastCall >= 200) {
+	    if (isBottomReached() && logCardNodes.length > 0) {
+	      window.removeEventListener('scroll', onMouseScroll);
+	      loader.classList.remove('d-none');
+	
+	      window.addEventListener('scroll', onMouseScroll);
+	      loader.classList.add('d-none');
+	      drawCardSet();
+	
+	      /*
+	      window.setTimeout(function () {
+	        window.addEventListener('scroll', onMouseScroll);
+	        loader.classList.add('d-none');
+	        drawCardSet();
+	      }, 1500);
+	      */
+	    } else if (logCardNodes.length === 0) {
+	      position += count;
+	      getLog();
+	    }
+	
+	    lastCall = Date.now();
+	  }
+	};
+	
+	window.addEventListener('scroll', onMouseScroll);
+	
+	// слушаем кнопку "Журнал"
+	listLog.addEventListener('click', function () {
+	  if (_storage2.default.isSetFlag) {
+	    getLog();
+	  } else {
+	    _log2.default.setUnregistered();
+	  }
 	});
 
 /***/ }),
@@ -277,7 +308,7 @@
 	    if (rowElements[0] === 'ha_group_good_id_fk' && rowElements[1]) {
 	      markup += '<img class="mr-3" src="img/groups.png" width="50" alt="Generic placeholder image">';
 	    }
-	    if (rowElements[0] === 'ha_good_id_fk' || rowElements[0] === 'ha_price_id_fk' && rowElements[1]) {
+	    if ((rowElements[0] === 'ha_good_id_fk' || rowElements[0] === 'ha_price_id_fk') && rowElements[1]) {
 	      markup += '<img class="mr-3" src="img/goods.png" width="50" alt="Generic placeholder image">';
 	    }
 	    if (rowElements[0] === 'ha_tag_id_fk' && rowElements[1]) {
