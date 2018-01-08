@@ -72,6 +72,7 @@
 	var profileExit = document.querySelector('#profile-exit');
 	var unregisteredProfile = document.querySelector('#unregistered-profile');
 	var loader = document.querySelector('#loader');
+	var loaderFinish = document.querySelector('#loader-finish');
 	
 	// спрятать форму, показать профиль
 	var hideFormShowProfile = function hideFormShowProfile() {
@@ -142,8 +143,15 @@
 	
 	// ==========ЖУРНАЛ==========
 	
+	// let lastCall = Date.now();
+	
+	/*
+	1. После клика на кнопку "журнал" мы вызываем функцию getLog
+	2. Функция getLog настраивает и создает xhr-запрос для получения порции данных журнала.
+	Для формирования запроса она использует переменную position (откуда начинаем) и константу count (сколько записей берем)
+	3. onSuccessLogLoad выполняется при успехе загрузки, и вот тут наступает самое интересное
+	*/
 	var logCardNodes = [];
-	var lastCall = Date.now();
 	
 	// начальная позиция и смещение
 	var position = 0;
@@ -157,10 +165,16 @@
 	// успех загрузки
 	var onSuccessLogLoad = function onSuccessLogLoad(loadedLog) {
 	
-	  loadedLog.forEach(function (item, index) {
-	    logCardNodes.push(_log2.default.getElement(item));
-	  });
-	  drawCardSet();
+	  if (loadedLog.length) {
+	    loadedLog.forEach(function (item, index) {
+	      logCardNodes.push(_log2.default.getElement(item));
+	    });
+	  } else {
+	    loaderFinish.classList.remove('d-none');
+	  }
+	  if (position === 0) {
+	    drawCardSet();
+	  }
 	  window.addEventListener('scroll', onMouseScroll);
 	};
 	
@@ -179,42 +193,43 @@
 	  var successCode = 281;
 	
 	  (0, _xhr2.default)(body, url, successCode, onSuccessLogLoad, onErrorLogLoad);
+	
+	  window.removeEventListener('scroll', onMouseScroll);
 	};
 	
 	// "ленивая отрисовка" журнала
 	var isBottomReached = function isBottomReached() {
+	  console.log(listLogBody.getBoundingClientRect().bottom);
+	  console.log(window.innerHeight);
 	  return listLogBody.getBoundingClientRect().bottom - window.innerHeight <= 150;
 	};
 	
 	var onMouseScroll = function onMouseScroll(evt) {
 	  console.log(logCardNodes.length);
 	
-	  if (Date.now() - lastCall >= 200) {
-	    if (isBottomReached() && logCardNodes.length > 0) {
-	      window.removeEventListener('scroll', onMouseScroll);
-	      loader.classList.remove('d-none');
+	  if (isBottomReached() && logCardNodes.length > 0) {
+	    window.removeEventListener('scroll', onMouseScroll);
+	    loader.classList.remove('d-none');
 	
+	    window.setTimeout(function () {
 	      window.addEventListener('scroll', onMouseScroll);
 	      loader.classList.add('d-none');
 	      drawCardSet();
+	    }, 1500);
+	  } else if (logCardNodes.length === 0) {
+	    position += count;
+	    getLog();
+	  }
 	
-	      /*
-	      window.setTimeout(function () {
-	        window.addEventListener('scroll', onMouseScroll);
-	        loader.classList.add('d-none');
-	        drawCardSet();
-	      }, 1500);
-	      */
-	    } else if (logCardNodes.length === 0) {
-	      position += count;
-	      getLog();
-	    }
-	
+	  /*
+	  // троттлинг
+	  if (Date.now() - lastCall >= 200) {
 	    lastCall = Date.now();
 	  }
+	  */
 	};
 	
-	window.addEventListener('scroll', onMouseScroll);
+	// window.addEventListener('scroll', onMouseScroll);
 	
 	// слушаем кнопку "Журнал"
 	listLog.addEventListener('click', function () {
@@ -331,7 +346,7 @@
 	      markup += '<img class="mr-3" src="img/sale.png" width="50" alt="Generic placeholder image">';
 	    }
 	
-	    return '\n    <div class="media">\n      <img class="mr-3" src="img/user-male-filled-32.png" width="50" alt="Generic placeholder image">\n      ' + markup + '\n      ' + Object.entries(item).map(this.getAdditionalImages).join('') + '\n      <div class="media-body">\n        <h5 class="mt-0">\u0421\u043E\u0437\u0434\u0430\u043D\u0430 \u043D\u0430\u043A\u043B\u0430\u0434\u043D\u0430\u044F \u2116 ' + item.ha_id + '</h5>\n        ' + item.ha_comment + '\n        <span class="badge badge-info">' + new Date(+(item.ha_time + '000')).toLocaleString() + '</span>\n      </div>\n    </div>\n    <div class="card m-2" style="width: 100%;"><ul class="list-group list-group-flush">' + Object.entries(item).map(this.getLogTableRowMarkup).join('') + '</ul></div>\n    <hr><hr>';
+	    return '\n    <div class="card mb-2" style="width: 100%">\n      <div class="media">\n        <img class="mr-3" src="img/user-male-filled-32.png" width="50" alt="Generic placeholder image">\n        ' + markup + '\n        ' + Object.entries(item).map(this.getAdditionalImages).join('') + '\n        <div class="media-body">\n          <h5 class="mt-0">\u0421\u043E\u0437\u0434\u0430\u043D\u0430 \u043D\u0430\u043A\u043B\u0430\u0434\u043D\u0430\u044F \u2116 ' + item.ha_id + '</h5>\n          ' + item.ha_comment + '\n          <span class="badge badge-info">' + new Date(+(item.ha_time + '000')).toLocaleString() + '</span>\n        </div>\n      </div>\n    <div id="exampleAccordion" data-children=".item">\n      <div class="item">\n        <a data-toggle="collapse" data-parent="#exampleAccordion" href="#exampleAccordion' + item.ha_id + '" role="button" aria-expanded="false" aria-controls="exampleAccordion1">\n          <p class="text-right">\u0422\u0430\u0431\u043B\u0438\u0446\u0430 \u0441\u043E \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044F\u043C\u0438 \u043F\u0435\u0440\u0435\u043C\u0435\u043D\u043D\u044B\u0445</p>\n        </a>\n        <div id="exampleAccordion' + item.ha_id + '" class="collapse" role="tabpanel">\n          <p class="mb-3">\n            <div class="card m-2" style="width: 100%;"><ul class="list-group list-group-flush">' + Object.entries(item).map(this.getLogTableRowMarkup).join('') + '</ul></div>\n          </p>\n        </div>\n      </div>\n    </div>';
 	  },
 	  addCardToContainer: function addCardToContainer(cardMarkupItem) {
 	    listLogBody.insertAdjacentHTML('beforeend', cardMarkupItem);
