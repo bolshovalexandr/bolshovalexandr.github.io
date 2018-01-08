@@ -311,7 +311,7 @@
 	  getLogTableRowMarkup: function getLogTableRowMarkup(rowElements) {
 	    return rowElements[1] ? '<li class="list-group-item"><b>' + rowElements[0] + ': </b>' + rowElements[1] + '</li>' : null;
 	  },
-	  getAdditionalImages: function getAdditionalImages(rowElements) {
+	  getAdditionalImage: function getAdditionalImage(rowElements) {
 	    var markup = '';
 	
 	    if (rowElements[0] === 'ha_kontr_agent_id_fk' && rowElements[1]) {
@@ -335,18 +335,26 @@
 	    var hasMinusInComments = item.ha_comment.includes('-') ? true : false;
 	    var markup = '';
 	
+	    markup = Object.entries(item).map(this.getAdditionalImage).join('');
+	
 	    if (item.ha_balance_act_id_fk && hasMinusInComments) {
-	      markup += '<img class="mr-3" src="img/expenses.png" width="50" alt="Generic placeholder image">';
+	      markup = '<img class="mr-3" src="img/expenses.png" width="50" alt="Generic placeholder image">';
 	    } else if (item.ha_balance_act_id_fk && !hasMinusInComments) {
-	      markup += '<img class="mr-3" src="img/revenue.png" width="50" alt="Generic placeholder image">';
+	      markup = '<img class="mr-3" src="img/revenue.png" width="50" alt="Generic placeholder image">';
 	    }
 	    if (item.ha_naklad_id_fk && hasMinusInComments) {
-	      markup += '<img class="mr-3" src="img/admission.png" width="50" alt="Generic placeholder image">';
+	      markup = '<img class="mr-3" src="img/admission.png" width="50" alt="Generic placeholder image">';
 	    } else if (item.ha_naklad_id_fk && !hasMinusInComments) {
-	      markup += '<img class="mr-3" src="img/sale.png" width="50" alt="Generic placeholder image">';
+	      markup = '<img class="mr-3" src="img/sale.png" width="50" alt="Generic placeholder image">';
 	    }
 	
-	    return '\n    <div class="card mb-2" style="width: 100%">\n      <div class="media">\n        <img class="mr-3" src="img/user-male-filled-32.png" width="50" alt="Generic placeholder image">\n        ' + markup + '\n        ' + Object.entries(item).map(this.getAdditionalImages).join('') + '\n        <div class="media-body">\n          <h5 class="mt-0">\u0421\u043E\u0437\u0434\u0430\u043D\u0430 \u043D\u0430\u043A\u043B\u0430\u0434\u043D\u0430\u044F \u2116 ' + item.ha_id + '</h5>\n          ' + item.ha_comment + '\n          <span class="badge badge-info">' + new Date(+(item.ha_time + '000')).toLocaleString() + '</span>\n        </div>\n      </div>\n    <div id="exampleAccordion" data-children=".item">\n      <div class="item">\n        <a data-toggle="collapse" data-parent="#exampleAccordion" href="#exampleAccordion' + item.ha_id + '" role="button" aria-expanded="false" aria-controls="exampleAccordion1">\n          <p class="text-right">\u0422\u0430\u0431\u043B\u0438\u0446\u0430 \u0441\u043E \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044F\u043C\u0438 \u043F\u0435\u0440\u0435\u043C\u0435\u043D\u043D\u044B\u0445</p>\n        </a>\n        <div id="exampleAccordion' + item.ha_id + '" class="collapse" role="tabpanel">\n          <p class="mb-3">\n            <div class="card m-2" style="width: 100%;"><ul class="list-group list-group-flush">' + Object.entries(item).map(this.getLogTableRowMarkup).join('') + '</ul></div>\n          </p>\n        </div>\n      </div>\n    </div>';
+	    markup = markup ? markup : '<img class="mr-3" src="img/other_ic_history.png" width="50" alt="Generic placeholder image">';
+	
+	    console.log(!!markup);
+	
+	    // ${Object.entries(item).map(this.getAdditionalImage).join('')}
+	
+	    return '\n    <div class="card mb-2" style="width: 100%">\n      <div class="media">\n        <img class="mr-3 rounded-circle bg-danger p-1" src="img/user-male-filled-32.png" width="50" alt="Generic placeholder image">\n        ' + markup + '\n        <div class="media-body">\n          <h5 class="mt-0">\u0421\u043E\u0437\u0434\u0430\u043D\u0430 \u043D\u0430\u043A\u043B\u0430\u0434\u043D\u0430\u044F \u2116 ' + item.ha_id + '</h5>\n          ' + item.ha_comment + '\n          <span class="badge text-right text-muted w-100">' + new Date(+(item.ha_time + '000')).toLocaleString() + '</span>\n        </div>\n      </div>\n    <div id="exampleAccordion" data-children=".item">\n      <div class="item">\n        <a data-toggle="collapse" data-parent="#exampleAccordion" href="#exampleAccordion' + item.ha_id + '" role="button" aria-expanded="false" aria-controls="exampleAccordion1">\n          <p class="text-right">\u0422\u0430\u0431\u043B\u0438\u0446\u0430 \u0441\u043E \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044F\u043C\u0438 \u043F\u0435\u0440\u0435\u043C\u0435\u043D\u043D\u044B\u0445</p>\n        </a>\n        <div id="exampleAccordion' + item.ha_id + '" class="collapse" role="tabpanel">\n          <p class="mb-3">\n            <div class="card m-2" style="width: 100%;"><ul class="list-group list-group-flush">' + Object.entries(item).map(this.getLogTableRowMarkup).join('') + '</ul></div>\n          </p>\n        </div>\n      </div>\n    </div>';
 	  },
 	  addCardToContainer: function addCardToContainer(cardMarkupItem) {
 	    listLogBody.insertAdjacentHTML('beforeend', cardMarkupItem);
