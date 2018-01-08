@@ -54,25 +54,25 @@
 	
 	var _log2 = _interopRequireDefault(_log);
 	
-	var _xhr = __webpack_require__(3);
+	var _xhr = __webpack_require__(4);
 	
 	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _log3 = __webpack_require__(3);
+	
+	var _log4 = _interopRequireDefault(_log3);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var formLogin = document.querySelector('#form-login');
 	var formLoginBtn = formLogin.querySelector('BUTTON');
 	var listLogin = document.querySelector('#list-login-list');
-	var listLog = document.querySelector('#list-log-list');
-	var listLogBody = document.querySelector('#log-body');
 	var profile = document.querySelector('#profile');
 	var profileName = profile.querySelector('#profile-name');
 	var profileTime = profile.querySelector('#profile-time');
 	var profileDirectory = profile.querySelector('#profile-directory');
 	var profileExit = document.querySelector('#profile-exit');
 	var unregisteredProfile = document.querySelector('#unregistered-profile');
-	var loader = document.querySelector('#loader');
-	var loaderFinish = document.querySelector('#loader-finish');
 	
 	// спрятать форму, показать профиль
 	var hideFormShowProfile = function hideFormShowProfile() {
@@ -80,7 +80,7 @@
 	  profile.classList.remove('d-none');
 	  profileExit.classList.remove('d-none');
 	  unregisteredProfile.classList.add('d-none');
-	  _log2.default.cleanContainer();
+	  _log4.default.cleanContainer();
 	};
 	
 	// спрятать профиль, показать форму
@@ -89,7 +89,7 @@
 	  profile.classList.add('d-none');
 	  profileExit.classList.add('d-none');
 	  unregisteredProfile.classList.remove('d-none');
-	  _log2.default.setUnregistered();
+	  _log4.default.setUnregistered();
 	};
 	
 	// ==========АВТОРИЗАЦИЯ==========
@@ -147,83 +147,7 @@
 	
 	// ==========ЖУРНАЛ==========
 	
-	var logCardNodes = [];
-	
-	// начальная позиция и смещение
-	var position = 0;
-	var count = 200;
-	
-	var drawCardSet = function drawCardSet() {
-	  logCardNodes.splice(0, count / 2).forEach(_log2.default.addCardToContainer);
-	};
-	
-	// успех загрузки
-	var onSuccessLogLoad = function onSuccessLogLoad(logResponse) {
-	  var loadedLog = logResponse.data;
-	  if (loadedLog.length) {
-	    loadedLog.forEach(function (item, index) {
-	      logCardNodes.push(_log2.default.getElement(item));
-	    });
-	  } else {
-	    loaderFinish.classList.remove('d-none');
-	  }
-	  if (position === 0) {
-	    drawCardSet();
-	  }
-	  window.addEventListener('scroll', onMouseScroll);
-	};
-	
-	// ошибка загрузки
-	var onErrorLogLoad = function onErrorLogLoad() {
-	  console.log('Somethig went arowng');
-	};
-	
-	// отправка запроса на новую порцию
-	var getLog = function getLog() {
-	
-	  var body = 'position=' + position + '&count=' + count + '&token=' + _storage2.default.data.token;
-	
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/update_log/' + Date.now() + '/story',
-	    data: body,
-	    callbackSuccess: onSuccessLogLoad,
-	    callbackError: onErrorLogLoad
-	  };
-	
-	  window.removeEventListener('scroll', onMouseScroll);
-	};
-	
-	// "ленивая отрисовка" журнала
-	var isBottomReached = function isBottomReached() {
-	  return listLogBody.getBoundingClientRect().bottom - window.innerHeight <= 150;
-	};
-	
-	var onMouseScroll = function onMouseScroll(evt) {
-	
-	  if (isBottomReached() && logCardNodes.length > 0) {
-	    window.removeEventListener('scroll', onMouseScroll);
-	    loader.classList.remove('d-none');
-	
-	    window.setTimeout(function () {
-	      window.addEventListener('scroll', onMouseScroll);
-	      loader.classList.add('d-none');
-	      drawCardSet();
-	    }, 1500);
-	  } else if (logCardNodes.length === 0) {
-	    position += count;
-	    getLog();
-	  }
-	};
-	
-	// слушаем кнопку "Журнал"
-	listLog.addEventListener('click', function () {
-	  if (_storage2.default.isSetFlag) {
-	    getLog();
-	  } else {
-	    _log2.default.setUnregistered();
-	  }
-	});
+	(0, _log2.default)();
 
 /***/ }),
 /* 1 */
@@ -277,6 +201,117 @@
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _log = __webpack_require__(3);
+	
+	var _log2 = _interopRequireDefault(_log);
+	
+	var _xhr = __webpack_require__(4);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var logCardNodes = [];
+	
+	exports.default = function () {
+	
+	  var listLog = document.querySelector('#list-log-list');
+	  var listLogBody = document.querySelector('#log-body');
+	  var loader = document.querySelector('#loader');
+	  var loaderFinish = document.querySelector('#loader-finish');
+	
+	  // начальная позиция и смещение
+	  var position = 0;
+	  var count = 200;
+	
+	  var drawCardSet = function drawCardSet() {
+	    logCardNodes.splice(0, count / 2).forEach(_log2.default.addCardToContainer);
+	  };
+	
+	  // успех загрузки
+	  var onSuccessLogLoad = function onSuccessLogLoad(logResponse) {
+	    var loadedLog = logResponse.data;
+	    console.log(loadedLog);
+	    if (loadedLog.length) {
+	      loadedLog.forEach(function (item, index) {
+	        logCardNodes.push(_log2.default.getElement(item));
+	      });
+	    } else {
+	      loaderFinish.classList.remove('d-none');
+	      window.removeEventListener('scroll', onMouseScroll);
+	      return;
+	    }
+	    if (position === 0) {
+	      drawCardSet();
+	    }
+	    window.addEventListener('scroll', onMouseScroll);
+	  };
+	
+	  // ошибка загрузки
+	  var onErrorLogLoad = function onErrorLogLoad() {
+	    console.log('Somethig went arowng');
+	  };
+	
+	  // отправка запроса на новую порцию
+	  var getLog = function getLog() {
+	
+	    _xhr2.default.request = {
+	      metod: 'POST',
+	      url: 'lopos_directory/' + _storage2.default.data.directory + '/update_log/' + Date.now() + '/story',
+	      data: 'position=' + position + '&count=' + count + '&token=' + _storage2.default.data.token,
+	      callbackSuccess: onSuccessLogLoad,
+	      callbackError: onErrorLogLoad
+	    };
+	
+	    window.removeEventListener('scroll', onMouseScroll);
+	  };
+	
+	  // "ленивая отрисовка" журнала
+	  var isBottomReached = function isBottomReached() {
+	    return listLogBody.getBoundingClientRect().bottom - window.innerHeight <= 150;
+	  };
+	
+	  var onMouseScroll = function onMouseScroll(evt) {
+	
+	    if (isBottomReached() && logCardNodes.length > 0) {
+	      window.removeEventListener('scroll', onMouseScroll);
+	      loader.classList.remove('d-none');
+	
+	      window.setTimeout(function () {
+	        window.addEventListener('scroll', onMouseScroll);
+	        loader.classList.add('d-none');
+	        drawCardSet();
+	      }, 1500);
+	    } else if (logCardNodes.length === 0) {
+	      position += count;
+	      getLog();
+	    }
+	  };
+	
+	  // слушаем кнопку "Журнал"
+	  listLog.addEventListener('click', function () {
+	    if (_storage2.default.isSetFlag) {
+	      getLog();
+	    } else {
+	      _log2.default.setUnregistered();
+	    }
+	  });
+	};
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -296,48 +331,44 @@
 	  getLogTableRowMarkup: function getLogTableRowMarkup(rowElements) {
 	    return rowElements[1] ? '<li class="list-group-item"><b>' + rowElements[0] + ': </b>' + rowElements[1] + '</li>' : null;
 	  },
-	  getAdditionalImage: function getAdditionalImage(rowElements) {
-	    var markup = '';
-	
-	    if (rowElements[0] === 'ha_kontr_agent_id_fk' && rowElements[1]) {
-	      markup += '<img class="mr-3" src="img/buyers.png" width="50" alt="Generic placeholder image">';
-	    }
-	    if (rowElements[0] === 'ha_nomenclature_card_id_fk' && rowElements[1]) {
-	      markup += '<img class="mr-3" src="img/ic_my_nomenclature.png" width="50" alt="Generic placeholder image">';
-	    }
-	    if (rowElements[0] === 'ha_group_good_id_fk' && rowElements[1]) {
-	      markup += '<img class="mr-3" src="img/groups.png" width="50" alt="Generic placeholder image">';
-	    }
-	    if ((rowElements[0] === 'ha_good_id_fk' || rowElements[0] === 'ha_price_id_fk') && rowElements[1]) {
-	      markup += '<img class="mr-3" src="img/goods.png" width="50" alt="Generic placeholder image">';
-	    }
-	    if (rowElements[0] === 'ha_tag_id_fk' && rowElements[1]) {
-	      markup += '<img class="mr-3" src="img/ic_my_tag.png" width="50" alt="Generic placeholder image">';
-	    }
-	    return markup;
-	  },
 	  getElement: function getElement(item) {
-	    var hasMinusInComments = item.ha_comment.includes('-') ? true : false;
-	    var markup = '';
+	    var getIconColor = item.ha_operator_hex ? item.ha_operator_hex : 'F4002C';
+	    var hasMinusInComments = item.ha_comment.includes('-');
+	    var imgName = '';
 	
-	    markup = Object.entries(item).map(this.getAdditionalImage).join('');
+	    if (item.ha_kontr_agent_id_fk) {
+	      imgName = 'buyers';
+	    }
+	    if (item.ha_nomenclature_card_id_fk) {
+	      imgName = 'ic_my_nomenclature';
+	    }
+	    if (item.ha_group_good_id_fk) {
+	      imgName = 'groups';
+	    }
+	    if (item.ha_good_id_fk || item.ha_price_id_fk) {
+	      imgName = 'goods';
+	    }
+	    if (item.ha_tag_id_fk) {
+	      imgName = 'ic_my_tag';
+	    }
 	
 	    if (item.ha_balance_act_id_fk && hasMinusInComments) {
-	      markup = '<img class="mr-3" src="img/expenses.png" width="50" alt="Generic placeholder image">';
+	      imgName = 'expenses';
 	    } else if (item.ha_balance_act_id_fk && !hasMinusInComments) {
-	      markup = '<img class="mr-3" src="img/revenue.png" width="50" alt="Generic placeholder image">';
+	      imgName = 'revenue';
 	    }
+	
 	    if (item.ha_naklad_id_fk && hasMinusInComments) {
-	      markup = '<img class="mr-3" src="img/admission.png" width="50" alt="Generic placeholder image">';
+	      imgName = 'admission';
 	    } else if (item.ha_naklad_id_fk && !hasMinusInComments) {
-	      markup = '<img class="mr-3" src="img/sale.png" width="50" alt="Generic placeholder image">';
+	      imgName = 'sale';
 	    }
 	
-	    markup = markup ? markup : '<img class="mr-3" src="img/other_ic_history.png" width="50" alt="Generic placeholder image">';
+	    imgName = imgName ? imgName : 'other_ic_history';
 	
-	    var getIconColor = item.ha_operator_hex ? item.ha_operator_hex : '#F4002C';
+	    var cardHeader = item.ha_comment.split('\n');
 	
-	    return '\n    <div class="card mb-2" style="width: 100%">\n      <div class="media">\n        <img class="mr-3 rounded-circle p-1" src="img/user-male-filled-32.png" style="background-color: ' + getIconColor + '" width="50" alt="Generic placeholder image">\n        ' + markup + '\n        <div class="media-body">\n          <h5 class="mt-0">\u0421\u043E\u0437\u0434\u0430\u043D\u0430 \u043D\u0430\u043A\u043B\u0430\u0434\u043D\u0430\u044F \u2116 ' + item.ha_id + '</h5>\n          ' + item.ha_comment + '\n          <span class="badge text-right text-muted w-100">' + new Date(+(item.ha_time + '000')).toLocaleString() + '</span>\n        </div>\n      </div>\n    <div id="exampleAccordion" data-children=".item">\n      <div class="item">\n        <a data-toggle="collapse" data-parent="#exampleAccordion" href="#exampleAccordion' + item.ha_id + '" role="button" aria-expanded="false" aria-controls="exampleAccordion1">\n          <p class="text-right">\u0422\u0430\u0431\u043B\u0438\u0446\u0430 \u0441\u043E \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044F\u043C\u0438 \u043F\u0435\u0440\u0435\u043C\u0435\u043D\u043D\u044B\u0445</p>\n        </a>\n        <div id="exampleAccordion' + item.ha_id + '" class="collapse" role="tabpanel">\n          <p class="mb-3">\n            <div class="card m-2" style="width: 100%;"><ul class="list-group list-group-flush">' + Object.entries(item).map(this.getLogTableRowMarkup).join('') + '</ul></div>\n          </p>\n        </div>\n      </div>\n    </div>';
+	    return '\n    <div class="card mb-2" style="width: 100%">\n      <div class="media">\n        <img class="mr-3 rounded-circle p-1" src="img/user-male-filled-32.png" style="background-color: #' + getIconColor + '" width="50" alt="Generic placeholder image">\n        <img class="mr-3" src="img/' + imgName + '.png" width="50" alt="Generic placeholder image">\n        <div class="media-body">\n          <h5 class="mt-0">' + cardHeader[0] + '</h5>\n          ' + cardHeader[1] + '\n          <span class="badge text-right text-muted w-100">' + new Date(+(item.ha_time + '000')).toLocaleString() + '</span>\n        </div>\n      </div>\n    <div id="exampleAccordion" data-children=".item">\n      <div class="item">\n        <a data-toggle="collapse" data-parent="#exampleAccordion" href="#exampleAccordion' + item.ha_id + '" role="button" aria-expanded="false" aria-controls="exampleAccordion1">\n          <p class="text-right">\u0422\u0430\u0431\u043B\u0438\u0446\u0430 \u0441\u043E \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044F\u043C\u0438 \u043F\u0435\u0440\u0435\u043C\u0435\u043D\u043D\u044B\u0445</p>\n        </a>\n        <div id="exampleAccordion' + item.ha_id + '" class="collapse" role="tabpanel">\n          <p class="mb-3">\n            <div class="card m-2" style="width: 100%;"><ul class="list-group list-group-flush">' + Object.entries(item).map(this.getLogTableRowMarkup).join('') + '</ul></div>\n          </p>\n        </div>\n      </div>\n    </div>';
 	  },
 	  addCardToContainer: function addCardToContainer(cardMarkupItem) {
 	    listLogBody.insertAdjacentHTML('beforeend', cardMarkupItem);
@@ -345,7 +376,7 @@
 	};
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports) {
 
 	'use strict';
