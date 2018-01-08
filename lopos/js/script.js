@@ -94,9 +94,10 @@
 	
 	// ==========АВТОРИЗАЦИЯ==========
 	
-	var onSuccessAuthLoad = function onSuccessAuthLoad(loadedData) {
+	var onSuccessAuthLoad = function onSuccessAuthLoad(loadedAuth) {
+	  console.log(loadedAuth);
 	  formLoginBtn.classList.remove('btn-danger');
-	  _storage2.default.data = loadedData;
+	  _storage2.default.data = loadedAuth.data;
 	  hideFormShowProfile();
 	  var _auth$data = _storage2.default.data,
 	      nickname = _auth$data.nickname,
@@ -117,12 +118,15 @@
 	  evt.preventDefault();
 	
 	  var body = new FormData(formLogin);
-	  var url = formLogin.action;
-	  var successCode = 200;
-	
 	  body.append('deviceToken', '2222');
 	
-	  (0, _xhr2.default)(body, url, successCode, onSuccessAuthLoad, onErrorAuthLoad);
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'user_boss/login/',
+	    data: body,
+	    callbackSuccess: onSuccessAuthLoad,
+	    callbackError: onErrorAuthLoad
+	  };
 	});
 	
 	// слушаем кнопку "Вход"
@@ -143,14 +147,6 @@
 	
 	// ==========ЖУРНАЛ==========
 	
-	// let lastCall = Date.now();
-	
-	/*
-	1. После клика на кнопку "журнал" мы вызываем функцию getLog
-	2. Функция getLog настраивает и создает xhr-запрос для получения порции данных журнала.
-	Для формирования запроса она использует переменную position (откуда начинаем) и константу count (сколько записей берем)
-	3. onSuccessLogLoad выполняется при успехе загрузки, и вот тут наступает самое интересное
-	*/
 	var logCardNodes = [];
 	
 	// начальная позиция и смещение
@@ -159,12 +155,11 @@
 	
 	var drawCardSet = function drawCardSet() {
 	  logCardNodes.splice(0, count / 2).forEach(_log2.default.addCardToContainer);
-	  console.log(logCardNodes.length);
 	};
 	
 	// успех загрузки
-	var onSuccessLogLoad = function onSuccessLogLoad(loadedLog) {
-	
+	var onSuccessLogLoad = function onSuccessLogLoad(logResponse) {
+	  var loadedLog = logResponse.data;
 	  if (loadedLog.length) {
 	    loadedLog.forEach(function (item, index) {
 	      logCardNodes.push(_log2.default.getElement(item));
@@ -185,27 +180,26 @@
 	
 	// отправка запроса на новую порцию
 	var getLog = function getLog() {
-	  var urlApi = window.appSettings.xhr.urlApi;
 	
-	
-	  var url = urlApi + 'lopos_directory/' + _storage2.default.data.directory + '/update_log/' + Date.now() + '/story';
 	  var body = 'position=' + position + '&count=' + count + '&token=' + _storage2.default.data.token;
-	  var successCode = 281;
 	
-	  (0, _xhr2.default)(body, url, successCode, onSuccessLogLoad, onErrorLogLoad);
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/update_log/' + Date.now() + '/story',
+	    data: body,
+	    callbackSuccess: onSuccessLogLoad,
+	    callbackError: onErrorLogLoad
+	  };
 	
 	  window.removeEventListener('scroll', onMouseScroll);
 	};
 	
 	// "ленивая отрисовка" журнала
 	var isBottomReached = function isBottomReached() {
-	  console.log(listLogBody.getBoundingClientRect().bottom);
-	  console.log(window.innerHeight);
 	  return listLogBody.getBoundingClientRect().bottom - window.innerHeight <= 150;
 	};
 	
 	var onMouseScroll = function onMouseScroll(evt) {
-	  console.log(logCardNodes.length);
 	
 	  if (isBottomReached() && logCardNodes.length > 0) {
 	    window.removeEventListener('scroll', onMouseScroll);
@@ -220,16 +214,7 @@
 	    position += count;
 	    getLog();
 	  }
-	
-	  /*
-	  // троттлинг
-	  if (Date.now() - lastCall >= 200) {
-	    lastCall = Date.now();
-	  }
-	  */
 	};
-	
-	// window.addEventListener('scroll', onMouseScroll);
 	
 	// слушаем кнопку "Журнал"
 	listLog.addEventListener('click', function () {
@@ -350,11 +335,9 @@
 	
 	    markup = markup ? markup : '<img class="mr-3" src="img/other_ic_history.png" width="50" alt="Generic placeholder image">';
 	
-	    console.log(!!markup);
+	    var getIconColor = item.ha_operator_hex ? item.ha_operator_hex : '#F4002C';
 	
-	    // ${Object.entries(item).map(this.getAdditionalImage).join('')}
-	
-	    return '\n    <div class="card mb-2" style="width: 100%">\n      <div class="media">\n        <img class="mr-3 rounded-circle bg-danger p-1" src="img/user-male-filled-32.png" width="50" alt="Generic placeholder image">\n        ' + markup + '\n        <div class="media-body">\n          <h5 class="mt-0">\u0421\u043E\u0437\u0434\u0430\u043D\u0430 \u043D\u0430\u043A\u043B\u0430\u0434\u043D\u0430\u044F \u2116 ' + item.ha_id + '</h5>\n          ' + item.ha_comment + '\n          <span class="badge text-right text-muted w-100">' + new Date(+(item.ha_time + '000')).toLocaleString() + '</span>\n        </div>\n      </div>\n    <div id="exampleAccordion" data-children=".item">\n      <div class="item">\n        <a data-toggle="collapse" data-parent="#exampleAccordion" href="#exampleAccordion' + item.ha_id + '" role="button" aria-expanded="false" aria-controls="exampleAccordion1">\n          <p class="text-right">\u0422\u0430\u0431\u043B\u0438\u0446\u0430 \u0441\u043E \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044F\u043C\u0438 \u043F\u0435\u0440\u0435\u043C\u0435\u043D\u043D\u044B\u0445</p>\n        </a>\n        <div id="exampleAccordion' + item.ha_id + '" class="collapse" role="tabpanel">\n          <p class="mb-3">\n            <div class="card m-2" style="width: 100%;"><ul class="list-group list-group-flush">' + Object.entries(item).map(this.getLogTableRowMarkup).join('') + '</ul></div>\n          </p>\n        </div>\n      </div>\n    </div>';
+	    return '\n    <div class="card mb-2" style="width: 100%">\n      <div class="media">\n        <img class="mr-3 rounded-circle p-1" src="img/user-male-filled-32.png" style="background-color: ' + getIconColor + '" width="50" alt="Generic placeholder image">\n        ' + markup + '\n        <div class="media-body">\n          <h5 class="mt-0">\u0421\u043E\u0437\u0434\u0430\u043D\u0430 \u043D\u0430\u043A\u043B\u0430\u0434\u043D\u0430\u044F \u2116 ' + item.ha_id + '</h5>\n          ' + item.ha_comment + '\n          <span class="badge text-right text-muted w-100">' + new Date(+(item.ha_time + '000')).toLocaleString() + '</span>\n        </div>\n      </div>\n    <div id="exampleAccordion" data-children=".item">\n      <div class="item">\n        <a data-toggle="collapse" data-parent="#exampleAccordion" href="#exampleAccordion' + item.ha_id + '" role="button" aria-expanded="false" aria-controls="exampleAccordion1">\n          <p class="text-right">\u0422\u0430\u0431\u043B\u0438\u0446\u0430 \u0441\u043E \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044F\u043C\u0438 \u043F\u0435\u0440\u0435\u043C\u0435\u043D\u043D\u044B\u0445</p>\n        </a>\n        <div id="exampleAccordion' + item.ha_id + '" class="collapse" role="tabpanel">\n          <p class="mb-3">\n            <div class="card m-2" style="width: 100%;"><ul class="list-group list-group-flush">' + Object.entries(item).map(this.getLogTableRowMarkup).join('') + '</ul></div>\n          </p>\n        </div>\n      </div>\n    </div>';
 	  },
 	  addCardToContainer: function addCardToContainer(cardMarkupItem) {
 	    listLogBody.insertAdjacentHTML('beforeend', cardMarkupItem);
@@ -370,25 +353,63 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.default = {
 	
-	exports.default = function (body, url, successCode, onSuccessLoad, onErrorLoad) {
-	  var timeout = window.appSettings.xhr.timeout;
+	  set request(requestParameters) {
 	
-	  var xhr = new XMLHttpRequest();
-	  xhr.timeout = timeout;
-	  xhr.responseType = 'json';
-	  xhr.open('POST', url, true);
-	  xhr.send(body);
+	    var ErrorAttr = {
+	      FILE: 'xhr.js',
+	      MESSADGE: {
+	        JSON_ERR: 'XHR: JSON error converting response.',
+	        LOAD_ERR: 'Load Error.',
+	        CONNECT_ERR: 'Connection error.',
+	        TIMEOUT_ERR: 'Сonnection timeout exceeded'
+	      }
+	    };
 	
-	  xhr.addEventListener('load', function () {
-	    if (xhr.response.status === successCode) {
-	      onSuccessLoad(xhr.response.data);
-	    } else {
-	      onErrorLoad();
+	    var getError = function getError(messadge, row, error) {
+	      var newError = new SyntaxError(messadge, ErrorAttr.FILE, row);
+	      newError.cause = error;
+	      return newError;
+	    };
+	
+	    var xhr = new XMLHttpRequest();
+	
+	    xhr.addEventListener('load', function () {
+	
+	      if (xhr.status === 200) {
+	        var response = '';
+	
+	        try {
+	          response = JSON.parse(xhr.response);
+	        } catch (error) {
+	          requestParameters.callbackError(getError(ErrorAttr.MESSADGE.JSON_ERR, 26, error));
+	        }
+	        requestParameters.callbackSuccess(response);
+	      } else {
+	        requestParameters.callbackError(getError(ErrorAttr.MESSADGE.LOAD_ERR + ' ' + xhr.statusText, 35, ''));
+	      }
+	    });
+	
+	    xhr.addEventListener('error', function () {
+	      requestParameters.callbackError(getError(ErrorAttr.MESSADGE.CONNECT_ERR + ' ' + xhr.statusText, 42, ''));
+	    });
+	
+	    xhr.addEventListener('timeout', function () {
+	      requestParameters.callbackError(getError(ErrorAttr.MESSADGE.CONNECT_ERR + ' (' + xhr.timeout + 'ms.)', 50, ''));
+	    });
+	
+	    xhr.timeout = window.appSettings.xhr.timeout;
+	    xhr.open(requestParameters.metod, window.appSettings.xhr.urlApi + requestParameters.url, true);
+	    // xhr.setRequestHeader('Content-Type', window.appSettings.xhr.contentType);
+	
+	    if (requestParameters.metod === 'GET') {
+	      requestParameters.data = '';
 	    }
-	  });
 	
-	  xhr.addEventListener('error', onErrorLoad);
+	    xhr.send(requestParameters.data);
+	  }
+	
 	};
 
 /***/ })
