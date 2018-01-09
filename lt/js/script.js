@@ -58,98 +58,44 @@
 	
 	var _main_login_window2 = _interopRequireDefault(_main_login_window);
 	
+	var _log3 = __webpack_require__(3);
+	
+	var _log4 = _interopRequireDefault(_log3);
+	
+	var _onlineProfile = __webpack_require__(14);
+	
+	var _onlineProfile2 = _interopRequireDefault(_onlineProfile);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var profileExit = document.querySelector('#profile-exit');
-	// import xhr from './tools/xhr.js';
-	// import logMarkup from './markup/log.js';
-	
-	// const formLogin = document.querySelector('#form-login');
-	// const formLoginBtn = formLogin.querySelector('BUTTON');
-	// const listLogin = document.querySelector('#list-login-list');
-	// const profile = document.querySelector('#profile');
-	// const profileName = profile.querySelector('#profile-name');
-	// const profileTime = profile.querySelector('#profile-time');
-	// const profileDirectory = profile.querySelector('#profile-directory');
-	// const unregisteredProfile = document.querySelector('#unregistered-profile');
-	
-	
-	// спрятать форму, показать профиль
-	/*
-	const hideFormShowProfile = function () {
-	  formLogin.classList.add('d-none');
-	  profile.classList.remove('d-none');
-	  profileExit.classList.remove('d-none');
-	  unregisteredProfile.classList.add('d-none');
-	  logMarkup.cleanContainer();
-	};
-	
-	// спрятать профиль, показать форму
-	const hideProfileShowForm = function () {
-	  formLogin.classList.remove('d-none');
-	  profile.classList.add('d-none');
-	  profileExit.classList.add('d-none');
-	  unregisteredProfile.classList.remove('d-none');
-	  logMarkup.setUnregistered();
-	};
-	*/
-	// ==========АВТОРИЗАЦИЯ==========
-	/*
-	const onSuccessAuthLoad = (loadedAuth) => {
-	  formLoginBtn.classList.remove('btn-danger');
-	  auth.data = loadedAuth.data;
-	  hideFormShowProfile();
-	  let {nickname, lastLogin, directory} = auth.data;
-	  profileName.innerHTML = nickname;
-	  profileTime.innerHTML = lastLogin;
-	  profileDirectory.innerHTML = directory;
-	};
-	
-	const onErrorAuthLoad = () => {
-	  formLoginBtn.classList.add('btn-danger');
-	};
-	
-	// слушаем сабмит отправки логина/пароля
-	formLogin.addEventListener('submit', function (evt) {
-	  evt.preventDefault();
-	
-	  let body = new FormData(formLogin);
-	  body.append('deviceToken', '2222');
-	
-	  xhr.request = {
-	    metod: 'POST',
-	    url: 'user_boss/login/',
-	    data: body,
-	    callbackSuccess: onSuccessAuthLoad,
-	    callbackError: onErrorAuthLoad
-	  };
-	
-	});
-	// слушаем кнопку "Вход"
-	listLogin.addEventListener('click', function () {
-	  if (auth.isSetFlag) {
-	    hideFormShowProfile();
-	  } else {
-	    hideProfileShowForm();
-	  }
-	});
-	*/
+	var exit = document.querySelector('#profile-exit');
+	var profile = document.querySelector('#list-profile-list');
 	
 	// слушаем кнопку "Выход"
-	profileExit.addEventListener('click', function () {
-	  // hideProfileShowForm();
-	  // formLogin.reset();
+	exit.addEventListener('click', function () {
 	  document.querySelector('#login').classList.remove('d-none');
 	  document.querySelector('#app').classList.add('d-none');
+	  _log4.default.setUnregistered();
+	  _log2.default.stopListLogHandler();
 	  _storage2.default.clean();
 	});
 	
-	// ==========АВТОРИЗАЦИЯ==========
-	_main_login_window2.default.firstScreen();
+	if (_storage2.default.isSetFlag) {
+	  document.querySelector('#app').classList.remove('d-none');
+	} else {
+	  // ==========АВТОРИЗАЦИЯ==========
+	  document.querySelector('#login').classList.remove('d-none');
+	  _main_login_window2.default.firstScreen();
+	}
 	
 	// ==========ЖУРНАЛ==========
-	(0, _log2.default)();
+	_log2.default.init();
+	_log2.default.startListLogHandler();
 	console.log(_storage2.default.data);
+	
+	// ==========ОНЛАЙН/ПРОФИЛЬ==========
+	profile.addEventListener('click', _onlineProfile2.default.setProfile);
+	// profileMarkup.setProfile();
 
 /***/ }),
 /* 1 */
@@ -225,53 +171,58 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	var listLog = document.querySelector('#list-log-list');
+	var listLogBody = document.querySelector('#log-body');
+	var loader = document.querySelector('#loader');
+	var loaderWait = document.querySelector('#loader-wait');
+	var loaderFinish = document.querySelector('#loader-finish');
+	var loaderFail = document.querySelector('#loader-fail');
+	
+	// начальная позиция и смещение
 	var logCardNodes = [];
+	var position = 0;
+	var count = 200;
+	var drawSet = count / 4;
 	
-	exports.default = function () {
+	// отрисовка порции карточек
+	var drawCardSet = function drawCardSet() {
+	  return logCardNodes.splice(0, drawSet).forEach(_log2.default.addCardToContainer);
+	};
 	
-	  var listLog = document.querySelector('#list-log-list');
-	  var listLogBody = document.querySelector('#log-body');
-	  var loader = document.querySelector('#loader');
-	  var loaderWait = document.querySelector('#loader-wait');
-	  var loaderFinish = document.querySelector('#loader-finish');
+	// создание нод по полученной порции данных
+	var createCardNodes = function createCardNodes(cardData) {
+	  return cardData.forEach(function (item, index) {
+	    return logCardNodes.push(_log2.default.getElement(item, index));
+	  });
+	};
 	
-	  // начальная позиция и смещение
-	  var position = 0;
-	  var count = 200;
-	  var drawSet = count / 4;
+	// успех загрузки
+	var onSuccessLogLoad = function onSuccessLogLoad(logResponse) {
+	  var loadedLog = logResponse.data;
+	  console.log(loadedLog);
 	
-	  var drawCardSet = function drawCardSet() {
-	    logCardNodes.splice(0, drawSet).forEach(_log2.default.addCardToContainer);
-	    console.log(position);
-	  };
+	  loaderWait.classList.add('d-none');
+	  if (loadedLog.length) {
+	    createCardNodes(loadedLog);
+	  } else {
+	    loaderFinish.classList.remove('d-none');
+	    window.removeEventListener('scroll', onMouseScroll);
+	    return;
+	  }
+	  if (position === 0) {
+	    drawCardSet();
+	  }
+	  window.addEventListener('scroll', onMouseScroll);
+	};
 	
-	  // успех загрузки
-	  var onSuccessLogLoad = function onSuccessLogLoad(logResponse) {
-	    var loadedLog = logResponse.data;
-	    console.log(loadedLog);
-	    if (loadedLog.length) {
-	      loadedLog.forEach(function (item, index) {
-	        logCardNodes.push(_log2.default.getElement(item, index));
-	      });
-	      loaderWait.classList.add('d-none');
-	    } else {
-	      loaderFinish.classList.remove('d-none');
-	      window.removeEventListener('scroll', onMouseScroll);
-	      return;
-	    }
-	    if (position === 0) {
-	      drawCardSet();
-	    }
-	    window.addEventListener('scroll', onMouseScroll);
-	  };
+	// ошибка загрузки
+	var onErrorLogLoad = function onErrorLogLoad() {
+	  loaderFail.classList.remove('d-none');
+	};
 	
-	  // ошибка загрузки
-	  var onErrorLogLoad = function onErrorLogLoad() {
-	    console.log('Somethig went arowng');
-	  };
-	
-	  // отправка запроса на новую порцию
-	  var getLog = function getLog() {
+	// отправка запроса на новую порцию
+	var getLog = function getLog() {
+	  if (logCardNodes.length === 0) {
 	
 	    loaderWait.classList.remove('d-none');
 	    window.removeEventListener('scroll', onMouseScroll);
@@ -285,39 +236,52 @@
 	        callbackError: onErrorLogLoad
 	      };
 	    }, 2000);
-	  };
+	  }
+	};
 	
-	  // "ленивая отрисовка" журнала
-	  var isBottomReached = function isBottomReached() {
-	    return listLogBody.getBoundingClientRect().bottom - window.innerHeight <= 150;
-	  };
+	// "ленивая отрисовка" журнала
+	var isBottomReached = function isBottomReached() {
+	  return listLogBody.getBoundingClientRect().bottom - window.innerHeight <= 150;
+	};
 	
-	  var onMouseScroll = function onMouseScroll(evt) {
+	var onMouseScroll = function onMouseScroll(evt) {
 	
-	    if (isBottomReached() && logCardNodes.length > 0) {
-	      window.removeEventListener('scroll', onMouseScroll);
-	      loader.classList.remove('d-none');
+	  if (isBottomReached() && logCardNodes.length > 0) {
+	    window.removeEventListener('scroll', onMouseScroll);
+	    loader.classList.remove('d-none');
 	
-	      window.setTimeout(function () {
-	        window.addEventListener('scroll', onMouseScroll);
-	        loader.classList.add('d-none');
-	        drawCardSet();
-	      }, 1500);
-	    } else if (logCardNodes.length === 0) {
-	      position += count;
-	      getLog();
-	    }
-	  };
+	    window.setTimeout(function () {
+	      window.addEventListener('scroll', onMouseScroll);
+	      loader.classList.add('d-none');
+	      drawCardSet();
+	    }, 1500);
+	  } else if (logCardNodes.length === 0) {
+	    position += count;
+	    getLog();
+	  }
+	};
 	
+	var onListLogClick = function onListLogClick() {
 	  // слушаем кнопку "Журнал"
-	  listLog.addEventListener('click', function () {
-	    if (_storage2.default.isSetFlag) {
-	      _log2.default.cleanContainer();
-	      getLog();
-	    } else {
-	      _log2.default.setUnregistered();
-	    }
-	  });
+	  if (_storage2.default.isSetFlag) {
+	    getLog();
+	  } else {
+	    _log2.default.setUnregistered();
+	  }
+	};
+	
+	exports.default = {
+	  init: function init() {
+	    _log2.default.cleanContainer();
+	    logCardNodes = [];
+	    position = 0;
+	  },
+	  startListLogHandler: function startListLogHandler() {
+	    listLog.addEventListener('click', onListLogClick);
+	  },
+	  stopListLogHandler: function stopListLogHandler() {
+	    listLog.removeEventListener('click', onListLogClick);
+	  }
 	};
 
 /***/ }),
@@ -379,7 +343,7 @@
 	    var cardHeader = item.ha_comment.split('\n');
 	    cardHeader[1] = cardHeader[1] ? cardHeader[1] : '';
 	
-	    return '\n    <div class="card mb-2 p-1" style="width: 100%">\n      <div class="media">\n        <img class="mr-3 rounded-circle p-1" src="img/user-male-filled-32.png" title="' + item.ha_operator_name + '" style="background-color: #' + getIconColor + '" width="50" alt="' + item.ha_operator_name + '">\n        <img class="mr-3" src="img/' + imgName + '.png" width="50" alt="Generic placeholder image">\n        <div class="media-body">\n          <h6 class="mt-0">' + cardHeader[0] + '</h5>\n          ' + cardHeader[1] + '\n          <span class="badge text-right text-muted w-100">' + new Date(+(item.ha_time + '000')).toLocaleString() + ' *' + index + '</span>\n        </div>\n      </div>\n    <!--\n    <div id="exampleAccordion" data-children=".item">\n      <div class="item">\n        <a data-toggle="collapse" data-parent="#exampleAccordion" href="#exampleAccordion' + item.ha_id + '" role="button" aria-expanded="false" aria-controls="exampleAccordion1">\n          <p class="text-right">\u0422\u0430\u0431\u043B\u0438\u0446\u0430 \u0441\u043E \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044F\u043C\u0438 \u043F\u0435\u0440\u0435\u043C\u0435\u043D\u043D\u044B\u0445</p>\n        </a>\n        <div id="exampleAccordion' + item.ha_id + '" class="collapse" role="tabpanel">\n          <p class="mb-3">\n            <div class="card m-2" style="width: 100%;"><ul class="list-group list-group-flush">' + Object.entries(item).map(this.getLogTableRowMarkup).join('') + '</ul></div>\n          </p>\n        </div>\n      </div>\n    </div>\n    -->';
+	    return '\n    <div class="card mb-2 p-1" style="width: 100%">\n      <div class="media">\n        <img class="mr-3 rounded-circle p-1" src="img/user-male-filled-32.png" title="' + item.ha_operator_name + '" style="background-color: #' + getIconColor + '" width="50" alt="' + item.ha_operator_name + '">\n        <img class="mr-3" src="img/' + imgName + '.png" width="50" alt="Generic placeholder image">\n        <div class="media-body">\n          <h6 class="mt-0">' + cardHeader[0] + '</h5>\n          ' + cardHeader[1] + '\n          <span class="badge text-right text-muted w-100">' + new Date(+(item.ha_time + '000')).toLocaleString() + ' *' + index + ' *' + item.ha_id + '</span>\n        </div>\n      </div>\n    <!--\n    <div id="exampleAccordion" data-children=".item">\n      <div class="item">\n        <a data-toggle="collapse" data-parent="#exampleAccordion" href="#exampleAccordion' + item.ha_id + '" role="button" aria-expanded="false" aria-controls="exampleAccordion1">\n          <p class="text-right">\u0422\u0430\u0431\u043B\u0438\u0446\u0430 \u0441\u043E \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044F\u043C\u0438 \u043F\u0435\u0440\u0435\u043C\u0435\u043D\u043D\u044B\u0445</p>\n        </a>\n        <div id="exampleAccordion' + item.ha_id + '" class="collapse" role="tabpanel">\n          <p class="mb-3">\n            <div class="card m-2" style="width: 100%;"><ul class="list-group list-group-flush">' + Object.entries(item).map(this.getLogTableRowMarkup).join('') + '</ul></div>\n          </p>\n        </div>\n      </div>\n    </div>\n    -->';
 	  },
 	  addCardToContainer: function addCardToContainer(cardMarkupItem) {
 	    listLogBody.insertAdjacentHTML('beforeend', cardMarkupItem);
@@ -596,6 +560,10 @@
 	
 	var _form_login2 = _interopRequireDefault(_form_login);
 	
+	var _log = __webpack_require__(2);
+	
+	var _log2 = _interopRequireDefault(_log);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var validId = window.appSettings.loginValid.id;
@@ -614,6 +582,8 @@
 	      _storage2.default.data = response.data;
 	      document.querySelector('#login').classList.add('d-none');
 	      document.querySelector('#app').classList.remove('d-none');
+	      _log2.default.init();
+	      _log2.default.startListLogHandler();
 	      // Загрузка приложения
 	    }
 	  } else {
@@ -1158,6 +1128,41 @@
 	
 	    if (validateForm(email)) {
 	      submitForm(email);
+	    }
+	  }
+	};
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var listProfile = document.querySelector('#list-profile');
+	
+	var prepareProfileMarkup = function prepareProfileMarkup() {
+	  return '\n  <div id="profile" class="card" style="width: 20rem;">\n    <div class="card-header">\n      \u041B\u0438\u0447\u043D\u044B\u0439 \u043A\u0430\u0431\u0438\u043D\u0435\u0442\n    </div>\n    <ul class="list-group list-group-flush">\n      <li id="profile-name" class="list-group-item">' + _storage2.default.data.nickname + '</li>\n      <li id="profile-time" class="list-group-item">' + _storage2.default.data.lastLogin + '</li>\n      <li id="profile-directory" class="list-group-item">' + _storage2.default.data.directory + '</li>\n      <li id="profile-email" class="list-group-item">' + _storage2.default.data.email + '</li>\n    </ul>\n  </div>';
+	};
+	
+	exports.default = {
+	  setProfile: function setProfile() {
+	    console.log(_storage2.default.isSetFlag);
+	    if (_storage2.default.isSetFlag) {
+	      console.log(prepareProfileMarkup());
+	      console.log(listProfile);
+	      listProfile.innerHTML = prepareProfileMarkup();
+	    } else {
+	      listProfile.innerHTML = '<p id="unregistered-profile">ПРОФИЛЬ (Пожалуйста, зарегистрируйтесь...)</p>';
 	    }
 	  }
 	};
