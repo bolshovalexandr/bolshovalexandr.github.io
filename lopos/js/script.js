@@ -1193,13 +1193,13 @@
 	    } else {
 	      _storage2.default.data = response.data;
 	      // Загрузка приложения
+	      document.querySelector('#login').classList.add('d-none');
+	      document.querySelector('#app').classList.remove('d-none');
+	      _onlineProfile2.default.start();
 	    }
 	  } else {
 	    // показ ошибки
 	    alert(response.message);
-	    document.querySelector('#login').classList.add('d-none');
-	    document.querySelector('#app').classList.remove('d-none');
-	    _onlineProfile2.default.start();
 	  }
 	};
 	
