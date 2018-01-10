@@ -68,9 +68,17 @@
 	var app = document.querySelector('#app');
 	var login = document.querySelector('#login');
 	
+	// ========== Добавил в форму ==========
+	/*
+	login.js (21-22)
+	      document.querySelector('#login').classList.add('d-none');
+	      document.querySelector('#app').classList.remove('d-none');
+	*/
+	
 	// ========== F5/АВТОРИЗАЦИЯ ==========
 	if (_storage2.default.isSetFlag) {
 	  app.classList.remove('d-none');
+	  _onlineProfile2.default.start();
 	} else {
 	  login.classList.remove('d-none');
 	  _main_login_window2.default.firstScreen();
@@ -80,13 +88,14 @@
 	_log2.default.start();
 	
 	// ========== ОНЛАЙН/ПРОФИЛЬ ==========
-	_onlineProfile2.default.start();
+	// profileButton.start();
 	
 	// ========== ВЫХОД ==========
 	exit.addEventListener('click', function () {
 	  app.classList.add('d-none');
 	  login.classList.remove('d-none');
 	  _log2.default.stop();
+	  _onlineProfile2.default.stop();
 	  _storage2.default.clean();
 	});
 
@@ -103,6 +112,7 @@
 	
 	  // заполняем хранилище
 	  set data(loadedData) {
+	    console.log(loadedData);
 	    sessionStorage.setItem('nickname', loadedData.nickname);
 	    sessionStorage.setItem('lastLogin', loadedData.lastLogin);
 	    sessionStorage.setItem('email', loadedData.email);
@@ -221,7 +231,7 @@
 	  if (logCardNodes.length === 0) {
 	    loaderWait.classList.remove('d-none');
 	    window.removeEventListener('scroll', onMouseScroll);
-	
+	    console.log(_storage2.default.data);
 	    window.setTimeout(function () {
 	      _xhr2.default.request = {
 	        metod: 'POST',
@@ -430,7 +440,11 @@
 	
 	exports.default = {
 	  start: function start() {
+	    _onlineProfile2.default.setProfile();
 	    profile.addEventListener('click', _onlineProfile2.default.setProfile);
+	  },
+	  stop: function stop() {
+	    _onlineProfile2.default.clearProfile();
 	  }
 	};
 
@@ -458,7 +472,11 @@
 	
 	exports.default = {
 	  setProfile: function setProfile() {
+	    listProfile.classList.add('active');
 	    listProfile.innerHTML = _storage2.default.isSetFlag ? prepareProfileMarkup() : '<p id="unregistered-profile">ПРОФИЛЬ (Пожалуйста, зарегистрируйтесь...)</p>';
+	  },
+	  clearProfile: function clearProfile() {
+	    listProfile.innerHTML = '';
 	  }
 	};
 
@@ -602,6 +620,10 @@
 	
 	var _form_login2 = _interopRequireDefault(_form_login);
 	
+	var _onlineProfile = __webpack_require__(5);
+	
+	var _onlineProfile2 = _interopRequireDefault(_onlineProfile);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var validId = window.appSettings.loginValid.id;
@@ -621,6 +643,7 @@
 	      // Загрузка приложения
 	      document.querySelector('#login').classList.add('d-none');
 	      document.querySelector('#app').classList.remove('d-none');
+	      _onlineProfile2.default.start();
 	    }
 	  } else {
 	    // capcha++;
@@ -981,6 +1004,10 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
+	var _onlineProfile = __webpack_require__(5);
+	
+	var _onlineProfile2 = _interopRequireDefault(_onlineProfile);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var kodVal = window.appSettings.confirmEmailKodValid;
@@ -994,6 +1021,9 @@
 	      // сброс на страницу загрузки
 	    } else {
 	      _storage2.default.data = response.data;
+	      document.querySelector('#login').classList.add('d-none');
+	      document.querySelector('#app').classList.remove('d-none');
+	      _onlineProfile2.default.start();
 	      // Загрузка приложения
 	    }
 	  } else {
