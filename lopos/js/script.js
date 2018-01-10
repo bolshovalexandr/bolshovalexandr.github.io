@@ -135,7 +135,7 @@
 	      directory: sessionStorage.getItem('directory'),
 	      email: sessionStorage.getItem('email'),
 	      operatorId: sessionStorage.getItem('operatorId'),
-	      token: sessionStorage.getItem('token')
+	      token: sessionStorage.getItem('userToken')
 	    };
 	  },
 	
@@ -689,14 +689,14 @@
 	var validEmail = window.appSettings.loginValid.email;
 	var validPassword = window.appSettings.loginValid.password;
 	
-	// let capcha = 0;
-	
 	var callbackXhrSuccess = function callbackXhrSuccess(response) {
 	  console.dir(response);
+	
+	  _form_login2.default.addCaptchaCount();
+	
 	  if (response.status === 200) {
 	    if (response.data.status === '0') {
 	      alert('Ваш пользователь заблокирован, обратитесь к администратору');
-	      // сброс на страницу загрузки
 	    } else {
 	      _storage2.default.data = response.data;
 	      // Загрузка приложения
@@ -705,7 +705,6 @@
 	      _onlineProfile2.default.start();
 	    }
 	  } else {
-	    // capcha++;
 	    // показ ошибки
 	    alert(response.message);
 	  }
@@ -743,14 +742,6 @@
 	  };
 	};
 	
-	var submitForm = function submitForm(userLogin, userPassword, isEmail) {
-	  if (isEmail) {
-	    _xhr2.default.request = getRequestDataEmail(userLogin, userPassword);
-	  } else {
-	    _xhr2.default.request = getRequestDataId(userLogin, userPassword);
-	  }
-	};
-	
 	var validateData = function validateData(template, data) {
 	
 	  if (template.test(data)) {
@@ -762,42 +753,37 @@
 	
 	var validateForm = function validateForm(userLogin, userPassword) {
 	
-	  var valid = {
-	    valid: true,
-	    loginEmail: true
-	  };
+	  var valid = true;
 	
 	  if (!validateData(validEmail, userLogin)) {
-	    valid.loginEmail = false;
 	    if (!validateData(validId, userLogin)) {
-	      valid.valid = false;
+	      valid = false;
 	      _form_login2.default.setError('login', 'Неверный формат логина');
 	    }
 	  }
 	
 	  if (!validateData(validPassword, userPassword)) {
-	    valid.valid = false;
+	    valid = false;
 	    _form_login2.default.setError('password', 'Пароль должен быть длиннее 3-х символов');
 	  }
 	
 	  return valid;
 	};
 	
+	var submitForm = function submitForm(userLogin, userPassword, isEmail) {
+	  if (validateData(validEmail, userLogin)) {
+	    _xhr2.default.request = getRequestDataEmail(userLogin, userPassword);
+	  } else {
+	    _xhr2.default.request = getRequestDataId(userLogin, userPassword);
+	  }
+	};
+	
 	exports.default = {
 	  submit: function submit(login, password) {
-	
-	    // if (capcha === 3) {
-	    //   form.showLoginCaptcha();
-	    // }
-	
-	    login = login.toLowerCase();
-	    login = login.replace(/-/g, '');
-	
-	    var valid = validateForm(login, password);
-	
-	    if (valid.valid) {
-	      submitForm(login, password, valid.loginEmail);
-	    }
+	    submitForm(login, password);
+	  },
+	  validate: function validate(login, password) {
+	    return validateForm(login, password);
 	  }
 	};
 
@@ -971,10 +957,6 @@
 	var _form_register = __webpack_require__(11);
 	
 	var _form_register2 = _interopRequireDefault(_form_register);
-	
-	var _captcha = __webpack_require__(10);
-	
-	var _captcha2 = _interopRequireDefault(_captcha);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -1157,6 +1139,10 @@
 	  reset: function reset() {
 	    emailConfirmForm.reset();
 	    emailConfirmInputKey.setCustomValidity('');
+	
+	    if (captchaId !== 'NO') {
+	      _captcha2.default.catchaReset(captchaId);
+	    }
 	  },
 	  submitForm: function submitForm() {
 	    _confirm_email2.default.submit(emailConfirmInputKey.value, registerInputEmail.value);
@@ -1206,14 +1192,14 @@
 	      // сброс на страницу загрузки
 	    } else {
 	      _storage2.default.data = response.data;
-	      document.querySelector('#login').classList.add('d-none');
-	      document.querySelector('#app').classList.remove('d-none');
-	      _onlineProfile2.default.start();
 	      // Загрузка приложения
 	    }
 	  } else {
 	    // показ ошибки
 	    alert(response.message);
+	    document.querySelector('#login').classList.add('d-none');
+	    document.querySelector('#app').classList.remove('d-none');
+	    _onlineProfile2.default.start();
 	  }
 	};
 	
@@ -1249,10 +1235,10 @@
 	
 	exports.default = {
 	  submit: function submit(kod, email) {
-	
-	    if (validateForm(kod)) {
-	      submitForm(kod, email);
-	    }
+	    submitForm(kod, email);
+	  },
+	  validate: function validate(kod) {
+	    return validateForm(kod);
 	  }
 	};
 
@@ -1290,7 +1276,7 @@
 	var captchaId = 'NO';
 	
 	var captchaCallback = function captchaCallback() {
-	  console.log('registerCallback');
+	  console.log('forgotCallback');
 	  _forgot2.default.submit(forgotInputEmail.value);
 	};
 	
@@ -1326,6 +1312,10 @@
 	  reset: function reset() {
 	    forgotForm.reset();
 	    forgotInputEmail.setCustomValidity('');
+	
+	    if (captchaId !== 'NO') {
+	      _captcha2.default.catchaReset(captchaId);
+	    }
 	  },
 	  submitForm: function submitForm() {
 	    _forgot2.default.submit(forgotInputEmail.value);
