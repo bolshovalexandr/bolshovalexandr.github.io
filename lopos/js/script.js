@@ -85,13 +85,14 @@
 	if (_storage2.default.isSetFlag) {
 	  app.classList.remove('d-none');
 	  _onlineProfile2.default.start();
+	  _log2.default.start();
 	} else {
 	  login.classList.remove('d-none');
 	  _main_login_window2.default.firstScreen();
 	}
 	
 	// ========== ЖУРНАЛ ==========
-	_log2.default.start();
+	// logButton.start();
 	
 	// ========== ОНЛАЙН/ПРОФИЛЬ ==========
 	// profileButton.start();
@@ -683,6 +684,10 @@
 	
 	var _onlineProfile2 = _interopRequireDefault(_onlineProfile);
 	
+	var _log = __webpack_require__(2);
+	
+	var _log2 = _interopRequireDefault(_log);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var validId = window.appSettings.loginValid.id;
@@ -703,6 +708,7 @@
 	      document.querySelector('#login').classList.add('d-none');
 	      document.querySelector('#app').classList.remove('d-none');
 	      _onlineProfile2.default.start();
+	      _log2.default.start();
 	    }
 	  } else {
 	    // показ ошибки
@@ -1179,6 +1185,10 @@
 	
 	var _onlineProfile2 = _interopRequireDefault(_onlineProfile);
 	
+	var _log = __webpack_require__(2);
+	
+	var _log2 = _interopRequireDefault(_log);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var kodVal = window.appSettings.confirmEmailKodValid;
@@ -1196,6 +1206,7 @@
 	      document.querySelector('#login').classList.add('d-none');
 	      document.querySelector('#app').classList.remove('d-none');
 	      _onlineProfile2.default.start();
+	      _log2.default.start();
 	    }
 	  } else {
 	    // показ ошибки
