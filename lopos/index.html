@@ -13,18 +13,161 @@
 
 <body>
 
-  <div id="app" class="container mt-3 mb-5">
+  <div id="login" class="container mt-3 mb-5 d-none">
+      <header>
+    <div class="container-fluid">
+      <div class="jumbotron text-center">
+        <h1 class="display-3">Lopos Tutorial</h1>
+        <p class="lead">Демонстрация.</p>
+        <hr class="my-4">
+      </div>
+    </div>
+  </header>
+
+  <section id = 'sectionLoginFormMain'>
+
+    <section id="sectionLogin" class="">
+      <div class="container-fluid">
+        <h3 class="text-center text-primary">Вход</h3>
+        <form id=loginForm class="w-25 mx-auto">
+          <div class="form-group">
+            <label for="loginInputLogin">Введите id или email</label>
+            <input class="form-control" type="text" id="loginInputLogin" placeholder="Введите id или email">
+          </div>
+          <div class="form-group">
+            <label for="loginInputPassword">Пароль</label>
+            <input type="password" class="form-control" id="loginInputPassword" placeholder="Password">
+          </div>
+          <div id="loginCaptcha" class="form-group d-none">
+            <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title">Типа капча</h5>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button id='loginButtonSubmit' type="submit" class="btn btn-primary">Войти</button>
+
+            <div>
+              <button id='loginButtonForgot' type="button" class="btn btn-link">Забыли пароль?</button>
+            </div>
+
+          </div>
+          <button id='loginButtonRegister' type="button" class="btn btn-link mt-5">Регистрация нового пользователя</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="sectionRegister" class="d-none">
+      <div class="container-fluid">
+
+        <article>
+          <h3 class="text-center text-primary">Регистрация нового пользователя</h3>
+          <form id="registerForm" class="w-25 mx-auto">
+            <div class="form-group">
+              <label for="registerInputName">Введите имя ваше имя</label>
+              <input class="form-control" type="text" id="registerInputName" placeholder="Enter name">
+            </div>
+            <div class="form-group">
+              <label for="registerInputEmail">Введите адрес вашей электронной почты</label>
+               <input type="email" class="form-control" id="registerInputEmail" aria-describedby="emailHelp" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+              <label for="registerInputPassword">Введите пароль</label>
+              <input type="password" class="form-control" id="registerInputPassword" placeholder="Password">
+            </div>
+            <div class="form-group">
+              <label for="registerInputConfirmPassword">Повторите пароль</label>
+              <input type="password" class="form-control" id="registerInputConfirmPassword" placeholder="Confirm password">
+            </div>
+
+            <div id='recaptcha' class="g-recaptcha"
+              data-sitekey="6LcCxT8UAAAAADePAfRygUpreEvUj6J8oMWRE0JW"
+              data-callback="captchaOnLoad"
+              data-size="invisible"></div>
+
+
+            <button id='registerButtonSubmit' type="submit" class="btn btn-success g-recaptcha" data-sitekey="6LcCxT8UAAAAADePAfRygUpreEvUj6J8oMWRE0JW" data-callback='onSubmit'>Регистрация</button>
+            <button id="registerButtonCancel" type="button" class="btn btn-danger">Отмена</button>
+          </form>
+        </article>
+
+        <article>
+          <!-- Button trigger modal -->
+          <div class="input-group w-25 mx-auto mt-5">
+            <span class="pt-2">
+              <input type="checkbox" id='registerUserAgreement' aria-label="Установите для согласия с пользовательским соглашением">
+            </span>
+            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModalLong">
+              Принимаю соглашение пользователя
+            </button>
+          </div>
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Соглашение пользователя</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  БЛА-БЛА-БЛА и все такое
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="sectionConfirmEmail" class="d-none">
+      <div class="container-fluid">
+        <h3 class="text-center text-primary">Подтверждение адреса электронной почты</h3>
+        <form id='emailConfirmForm' class="w-25 mx-auto">
+          <div class="form-group">
+            <label for="emailConfirmInputKey">Введите ключ, полученный по электронной почте</label>
+            <input id="emailConfirmInputKey" type="text" class="form-control" placeholder="Confirm Key">
+          </div>
+          <button id='emailConfirmButtonSubmit' type="submit" class="btn btn-success">Подтвердить</button>
+          <button id='emailConfirmButtonCancel' type="button" class="btn btn-danger">Отмена</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="sectionForgot" class="d-none">
+      <div class="container-fluid">
+        <h3 class="text-center text-primary">Восстановление пароля</h3>
+        <form id='forgotForm' class="w-25 mx-auto">
+          <div class="form-group">
+            <label for="emailConfirmInputKey">Введите адрес электронной почты </label>
+            <input id="forgotInputEmail" type="text" class="form-control" placeholder="Confirm Key">
+          </div>
+
+          <button id='forgotButtonSubmit' type="submit" class="btn btn-success">Восстановить</button>
+
+          <button id='forgotButtonCancel' type="button" class="btn btn-danger">Отмена</button>
+
+        </form>
+      </div>
+    </section>
+
+  </section>
+  </div>
+
+  <div id="app" class="container mt-3 mb-5 d-none">
 
     <div>
 
       <!--МЕНЮ (КНОПКИ)-->
-      <nav>
+      <nav class="d-flex">
 
         <ul class="nav nav-tabs" id="list-tab" role="tablist">
-          <!--Вход / Выход-->
-          <li class="nav-item">
-            <a class="nav-link active" id="list-login-list" data-toggle="list" href="#list-login" role="tab" aria-controls="login">Вход / Выход</a>
-          </li>
 
           <!--Операции-->
           <li class="nav-item dropdown">
@@ -93,14 +236,21 @@
             </div>
           </li>
 
-
+          <!--Вход / Выход-->
+          <!--
+          <li class="nav-item">
+            <a class="nav-link active" id="list-login-list" data-toggle="list" href="#list-login" role="tab" aria-controls="login">Вход / Выход</a>
+          </li>
+          -->
         </ul>
+        <button type="button" id="profile-exit" class="btn btn-danger  ml-auto p-2">Выйти</button>
       </nav>
 
       <!--МЕНЮ (КОНТЕЙНЕРЫ)-->
       <div class="tab-content mt-3" id="nav-tabContent">
 
         <!--ФОРМА ВХОДА-->
+        <!--
         <div class="tab-pane fade show active" id="list-login" role="tabpanel" aria-labelledby="list-login-list">
 
           <form id='form-login' action="https://lopos.bidone.ru/api/v1/user_boss/login/" enctype="application/x-www-form-urlencoded">
@@ -118,6 +268,7 @@
           <button id="profile-exit" type="button" class="btn btn-danger d-none">Выйти</button>
 
         </div>
+        -->
 
         <!--ОПЕРАЦИИ-->
         <div class="tab-pane fade" id="list-operations" role="tabpanel" aria-labelledby="list-operations-list">
@@ -175,15 +326,23 @@
 
         <!--ЖУРНАЛ-->
         <div class="tab-pane fade" id="list-log" role="tabpanel" aria-labelledby="list-log-list">
-          <div id="log-body" class="bg-white" role="alert">
-            Пожалуйста, зарегистрируйтесь...
+          <div id="log-body" class="bg-white" role="alert"></div>
+
+           <div id="loader" class="progress text-white d-none"  style="height: 25px;">
+              <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase bg-success" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Ждем отрисовки порции карточек...</div>
           </div>
-          <div id="loader" class="container-fluid bg-info d-none mb-5" style="height: 50px;">Ждем подготовки порции карточек...</div>
-          <div id="loader-finish" class="container-fluid bg-warning d-none mb-5" style="height: 50px;">На сервере нет ничего нового</div>
+
+           <div id="loader-wait" class="progress text-white d-none" style="height: 25px;">
+              <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Ждем загрузки карточек...</div>
+          </div>
+
+          <div id="loader-finish" class="container-fluid bg-warning text-dark text-center d-none mb-5" style="height: 25;">На сервере нет ничего нового</div>
+          <div id="loader-fail" class="container-fluid bg-danger text-white text-center d-none mb-5" style="height: 25;">Сервер не возвратил данные</div>
         </div>
 
         <!--ОНЛАЙН-->
         <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+         <!--
           <p id="unregistered-profile">ПРОФИЛЬ (Пожалуйста, зарегистрируйтесь...)</p>
           <div id="profile" class="card d-none" style="width: 20rem;">
             <div class="card-header">
@@ -195,6 +354,7 @@
               <li id="profile-directory" class="list-group-item"></li>
             </ul>
           </div>
+          -->
         </div>
         <div class="tab-pane fade" id="list-users" role="tabpanel" aria-labelledby="list-users-list">
           <p>ПОЛЬЗОВАТЕЛИ (UNDER CONSTRUCTION)</p>
