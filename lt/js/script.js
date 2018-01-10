@@ -54,48 +54,41 @@
 	
 	var _log2 = _interopRequireDefault(_log);
 	
-	var _main_login_window = __webpack_require__(5);
-	
-	var _main_login_window2 = _interopRequireDefault(_main_login_window);
-	
-	var _log3 = __webpack_require__(3);
-	
-	var _log4 = _interopRequireDefault(_log3);
-	
-	var _onlineProfile = __webpack_require__(14);
+	var _onlineProfile = __webpack_require__(5);
 	
 	var _onlineProfile2 = _interopRequireDefault(_onlineProfile);
+	
+	var _main_login_window = __webpack_require__(7);
+	
+	var _main_login_window2 = _interopRequireDefault(_main_login_window);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var exit = document.querySelector('#profile-exit');
-	var profile = document.querySelector('#list-profile-list');
+	var app = document.querySelector('#app');
+	var login = document.querySelector('#login');
 	
-	// слушаем кнопку "Выход"
-	exit.addEventListener('click', function () {
-	  document.querySelector('#login').classList.remove('d-none');
-	  document.querySelector('#app').classList.add('d-none');
-	  _log4.default.setUnregistered();
-	  _log2.default.stopListLogHandler();
-	  _storage2.default.clean();
-	});
-	
+	// ========== F5/АВТОРИЗАЦИЯ ==========
 	if (_storage2.default.isSetFlag) {
-	  document.querySelector('#app').classList.remove('d-none');
+	  app.classList.remove('d-none');
 	} else {
-	  // ==========АВТОРИЗАЦИЯ==========
-	  document.querySelector('#login').classList.remove('d-none');
+	  login.classList.remove('d-none');
 	  _main_login_window2.default.firstScreen();
 	}
 	
-	// ==========ЖУРНАЛ==========
-	_log2.default.init();
-	_log2.default.startListLogHandler();
-	console.log(_storage2.default.data);
+	// ========== ЖУРНАЛ ==========
+	_log2.default.start();
 	
-	// ==========ОНЛАЙН/ПРОФИЛЬ==========
-	profile.addEventListener('click', _onlineProfile2.default.setProfile);
-	// profileMarkup.setProfile();
+	// ========== ОНЛАЙН/ПРОФИЛЬ ==========
+	_onlineProfile2.default.start();
+	
+	// ========== ВЫХОД ==========
+	exit.addEventListener('click', function () {
+	  app.classList.add('d-none');
+	  login.classList.remove('d-none');
+	  _log2.default.stop();
+	  _storage2.default.clean();
+	});
 
 /***/ }),
 /* 1 */
@@ -199,7 +192,6 @@
 	// успех загрузки
 	var onSuccessLogLoad = function onSuccessLogLoad(logResponse) {
 	  var loadedLog = logResponse.data;
-	  console.log(loadedLog);
 	
 	  loaderWait.classList.add('d-none');
 	  if (loadedLog.length) {
@@ -218,12 +210,14 @@
 	// ошибка загрузки
 	var onErrorLogLoad = function onErrorLogLoad() {
 	  loaderFail.classList.remove('d-none');
+	  loader.classList.add('d-none');
+	  loaderWait.classList.add('d-none');
+	  loaderFinish.classList.add('d-none');
 	};
 	
 	// отправка запроса на новую порцию
 	var getLog = function getLog() {
 	  if (logCardNodes.length === 0) {
-	
 	    loaderWait.classList.remove('d-none');
 	    window.removeEventListener('scroll', onMouseScroll);
 	
@@ -247,8 +241,8 @@
 	var onMouseScroll = function onMouseScroll(evt) {
 	
 	  if (isBottomReached() && logCardNodes.length > 0) {
-	    window.removeEventListener('scroll', onMouseScroll);
 	    loader.classList.remove('d-none');
+	    window.removeEventListener('scroll', onMouseScroll);
 	
 	    window.setTimeout(function () {
 	      window.addEventListener('scroll', onMouseScroll);
@@ -261,26 +255,16 @@
 	  }
 	};
 	
-	var onListLogClick = function onListLogClick() {
-	  // слушаем кнопку "Журнал"
-	  if (_storage2.default.isSetFlag) {
-	    getLog();
-	  } else {
-	    _log2.default.setUnregistered();
-	  }
-	};
-	
 	exports.default = {
-	  init: function init() {
+	  start: function start() {
+	    listLog.addEventListener('click', getLog);
+	  },
+	  stop: function stop() {
 	    _log2.default.cleanContainer();
 	    logCardNodes = [];
 	    position = 0;
-	  },
-	  startListLogHandler: function startListLogHandler() {
-	    listLog.addEventListener('click', onListLogClick);
-	  },
-	  stopListLogHandler: function stopListLogHandler() {
-	    listLog.removeEventListener('click', onListLogClick);
+	    listLog.removeEventListener('click', getLog);
+	    window.removeEventListener('scroll', onMouseScroll);
 	  }
 	};
 
@@ -430,19 +414,71 @@
 	  value: true
 	});
 	
-	var _form_login = __webpack_require__(6);
+	var _onlineProfile = __webpack_require__(6);
+	
+	var _onlineProfile2 = _interopRequireDefault(_onlineProfile);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var profile = document.querySelector('#list-profile-list');
+	
+	exports.default = {
+	  start: function start() {
+	    profile.addEventListener('click', _onlineProfile2.default.setProfile);
+	  }
+	};
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var listProfile = document.querySelector('#list-profile');
+	
+	var prepareProfileMarkup = function prepareProfileMarkup() {
+	  return '\n  <div id="profile" class="card" style="width: 20rem;">\n    <div class="card-header">\n      \u041B\u0438\u0447\u043D\u044B\u0439 \u043A\u0430\u0431\u0438\u043D\u0435\u0442\n    </div>\n    <ul class="list-group list-group-flush">\n      <li id="profile-name" class="list-group-item">' + _storage2.default.data.nickname + '</li>\n      <li id="profile-time" class="list-group-item">' + _storage2.default.data.lastLogin + '</li>\n      <li id="profile-directory" class="list-group-item">' + _storage2.default.data.directory + '</li>\n      <li id="profile-email" class="list-group-item">' + _storage2.default.data.email + '</li>\n    </ul>\n  </div>';
+	};
+	
+	exports.default = {
+	  setProfile: function setProfile() {
+	    listProfile.innerHTML = _storage2.default.isSetFlag ? prepareProfileMarkup() : '<p id="unregistered-profile">ПРОФИЛЬ (Пожалуйста, зарегистрируйтесь...)</p>';
+	  }
+	};
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _form_login = __webpack_require__(8);
 	
 	var _form_login2 = _interopRequireDefault(_form_login);
 	
-	var _form_register = __webpack_require__(8);
+	var _form_register = __webpack_require__(10);
 	
 	var _form_register2 = _interopRequireDefault(_form_register);
 	
-	var _form_confirm_email = __webpack_require__(10);
+	var _form_confirm_email = __webpack_require__(12);
 	
 	var _form_confirm_email2 = _interopRequireDefault(_form_confirm_email);
 	
-	var _form_forgot = __webpack_require__(12);
+	var _form_forgot = __webpack_require__(14);
 	
 	var _form_forgot2 = _interopRequireDefault(_form_forgot);
 	
@@ -481,7 +517,7 @@
 	};
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -490,11 +526,11 @@
 	  value: true
 	});
 	
-	var _main_login_window = __webpack_require__(5);
+	var _main_login_window = __webpack_require__(7);
 	
 	var _main_login_window2 = _interopRequireDefault(_main_login_window);
 	
-	var _login = __webpack_require__(7);
+	var _login = __webpack_require__(9);
 	
 	var _login2 = _interopRequireDefault(_login);
 	
@@ -539,7 +575,7 @@
 	};
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -556,13 +592,9 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _form_login = __webpack_require__(6);
+	var _form_login = __webpack_require__(8);
 	
 	var _form_login2 = _interopRequireDefault(_form_login);
-	
-	var _log = __webpack_require__(2);
-	
-	var _log2 = _interopRequireDefault(_log);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -580,11 +612,9 @@
 	      // сброс на страницу загрузки
 	    } else {
 	      _storage2.default.data = response.data;
+	      // Загрузка приложения
 	      document.querySelector('#login').classList.add('d-none');
 	      document.querySelector('#app').classList.remove('d-none');
-	      _log2.default.init();
-	      _log2.default.startListLogHandler();
-	      // Загрузка приложения
 	    }
 	  } else {
 	    // capcha++;
@@ -684,7 +714,7 @@
 	};
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -693,11 +723,11 @@
 	  value: true
 	});
 	
-	var _main_login_window = __webpack_require__(5);
+	var _main_login_window = __webpack_require__(7);
 	
 	var _main_login_window2 = _interopRequireDefault(_main_login_window);
 	
-	var _register = __webpack_require__(9);
+	var _register = __webpack_require__(11);
 	
 	var _register2 = _interopRequireDefault(_register);
 	
@@ -741,7 +771,7 @@
 	};
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -750,7 +780,7 @@
 	  value: true
 	});
 	
-	var _main_login_window = __webpack_require__(5);
+	var _main_login_window = __webpack_require__(7);
 	
 	var _main_login_window2 = _interopRequireDefault(_main_login_window);
 	
@@ -758,7 +788,7 @@
 	
 	var _xhr2 = _interopRequireDefault(_xhr);
 	
-	var _form_register = __webpack_require__(8);
+	var _form_register = __webpack_require__(10);
 	
 	var _form_register2 = _interopRequireDefault(_form_register);
 	
@@ -873,7 +903,7 @@
 	};
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -882,11 +912,11 @@
 	  value: true
 	});
 	
-	var _main_login_window = __webpack_require__(5);
+	var _main_login_window = __webpack_require__(7);
 	
 	var _main_login_window2 = _interopRequireDefault(_main_login_window);
 	
-	var _confirm_email = __webpack_require__(11);
+	var _confirm_email = __webpack_require__(13);
 	
 	var _confirm_email2 = _interopRequireDefault(_confirm_email);
 	
@@ -924,7 +954,7 @@
 	};
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -937,7 +967,7 @@
 	
 	var _xhr2 = _interopRequireDefault(_xhr);
 	
-	var _form_confirm_email = __webpack_require__(10);
+	var _form_confirm_email = __webpack_require__(12);
 	
 	var _form_confirm_email2 = _interopRequireDefault(_form_confirm_email);
 	
@@ -1006,7 +1036,7 @@
 	};
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1015,11 +1045,11 @@
 	  value: true
 	});
 	
-	var _main_login_window = __webpack_require__(5);
+	var _main_login_window = __webpack_require__(7);
 	
 	var _main_login_window2 = _interopRequireDefault(_main_login_window);
 	
-	var _forgot = __webpack_require__(13);
+	var _forgot = __webpack_require__(15);
 	
 	var _forgot2 = _interopRequireDefault(_forgot);
 	
@@ -1055,7 +1085,7 @@
 	};
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1064,7 +1094,7 @@
 	  value: true
 	});
 	
-	var _main_login_window = __webpack_require__(5);
+	var _main_login_window = __webpack_require__(7);
 	
 	var _main_login_window2 = _interopRequireDefault(_main_login_window);
 	
@@ -1072,7 +1102,7 @@
 	
 	var _xhr2 = _interopRequireDefault(_xhr);
 	
-	var _form_forgot = __webpack_require__(12);
+	var _form_forgot = __webpack_require__(14);
 	
 	var _form_forgot2 = _interopRequireDefault(_form_forgot);
 	
@@ -1128,41 +1158,6 @@
 	
 	    if (validateForm(email)) {
 	      submitForm(email);
-	    }
-	  }
-	};
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _storage = __webpack_require__(1);
-	
-	var _storage2 = _interopRequireDefault(_storage);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var listProfile = document.querySelector('#list-profile');
-	
-	var prepareProfileMarkup = function prepareProfileMarkup() {
-	  return '\n  <div id="profile" class="card" style="width: 20rem;">\n    <div class="card-header">\n      \u041B\u0438\u0447\u043D\u044B\u0439 \u043A\u0430\u0431\u0438\u043D\u0435\u0442\n    </div>\n    <ul class="list-group list-group-flush">\n      <li id="profile-name" class="list-group-item">' + _storage2.default.data.nickname + '</li>\n      <li id="profile-time" class="list-group-item">' + _storage2.default.data.lastLogin + '</li>\n      <li id="profile-directory" class="list-group-item">' + _storage2.default.data.directory + '</li>\n      <li id="profile-email" class="list-group-item">' + _storage2.default.data.email + '</li>\n    </ul>\n  </div>';
-	};
-	
-	exports.default = {
-	  setProfile: function setProfile() {
-	    console.log(_storage2.default.isSetFlag);
-	    if (_storage2.default.isSetFlag) {
-	      console.log(prepareProfileMarkup());
-	      console.log(listProfile);
-	      listProfile.innerHTML = prepareProfileMarkup();
-	    } else {
-	      listProfile.innerHTML = '<p id="unregistered-profile">ПРОФИЛЬ (Пожалуйста, зарегистрируйтесь...)</p>';
 	    }
 	  }
 	};
