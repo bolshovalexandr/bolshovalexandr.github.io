@@ -70,9 +70,15 @@
 	
 	// ========== Добавил в форму ==========
 	/*
-	login.js (21-22)
+	login.js и confirm_email
+	
+	в начало
+	import profileButton from '../buttons/online-profile.js';
+	
+	В обработку успеха:
 	      document.querySelector('#login').classList.add('d-none');
 	      document.querySelector('#app').classList.remove('d-none');
+	      profileButton.start();
 	*/
 	
 	// ========== F5/АВТОРИЗАЦИЯ ==========
