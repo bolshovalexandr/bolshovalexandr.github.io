@@ -217,6 +217,7 @@
 	
 	// отправка запроса на новую порцию
 	var getLog = function getLog() {
+	  console.log('hi');
 	  if (logCardNodes.length === 0) {
 	    loaderWait.classList.remove('d-none');
 	    window.removeEventListener('scroll', onMouseScroll);
@@ -263,7 +264,12 @@
 	    _log2.default.cleanContainer();
 	    logCardNodes = [];
 	    position = 0;
-	    listLog.removeEventListener('click', getLog);
+	    listLog.classList.remove('active');
+	    loaderFail.classList.add('d-none');
+	    loader.classList.add('d-none');
+	    loaderWait.classList.add('d-none');
+	    loaderFinish.classList.add('d-none');
+	    // listLog.removeEventListener('click', getLog);
 	    window.removeEventListener('scroll', onMouseScroll);
 	  }
 	};
