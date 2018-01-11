@@ -24,7 +24,8 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9bdcbf', endColorstr='#4a9ad1',GradientType=1 );
   /* IE6-9 */ }
 
-#app {
+#app,
+#log-row {
   background-color: #EDECF2; }
 
 @font-face {
