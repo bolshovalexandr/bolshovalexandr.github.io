@@ -24,25 +24,11 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9bdcbf', endColorstr='#4a9ad1',GradientType=1 );
   /* IE6-9 */ }
 
-#app,
-#log-row {
-  background-color: #EDECF2; }
-
-@font-face {
-  font-family: "HelveticaNeue";
-  src: url("../fonts/HelveticaNeue-Light.woff") format("woff");
-  font-weight: 300;
-  font-style: normal; }
-
-body {
-  font-family: "HelveticaNeue";
-  font-size: 18px; }
-
 /*
+@import "src/sass/components/app.scss";
+@import "src/sass/components/font.scss";
 body {
-    font-family: "PT Sans";
-    src: url("fonts/HelveticaNeue-Light.woff") format('woff'),
-    font-weight: 700;
-    font-style: normal;
+  font-family: "HelveticaNeue";
+  font-size: 1rem;
 }
 */

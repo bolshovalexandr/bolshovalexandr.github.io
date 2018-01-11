@@ -78,59 +78,63 @@
 	  app.classList.remove('d-none');
 	};
 	
-	var onDocumentLoginSuccessDispatch = function onDocumentLoginSuccessDispatch() {
+	// ========== ОБНОВЛЕНИЕ/ОТКРЫТИЕ СТРАНИЦЫ ==========
+	var start = function start() {
 	  if (_storage2.default.isSetFlag) {
 	    showAppHideLogin();
 	    _onlineProfile2.default.start();
 	    _log2.default.start();
 	  } else {
-	    console.log('loginSuccess произошел, но при записи в sessionStorage во время авторизации/регистрации что-то пошло не так');
+	    showLoginHideApp();
+	    _main_login_window2.default.firstScreen();
 	  }
 	};
 	
-	/*
-	Возможные сценарии запуска приложения:
-	
-	1. Открытие страницы в новой вкладке + авторизация
-	2. Открытие страницы в новой вкладке + регистрация
-	3. Обновление страницы в ходе работы после успешной авторизации
-	4. Выход и новая регистрация без перезагрузки страницы в той же вкладке
-	
-	1,2:
-	 - слушаем возникновение события loginSuccess на документе
-	 - проверяем, все ли хорошо с данными пользователя в storage, и если да:
-	    - прячем форму,
-	    - показываем приложение,
-	    -
-	*/
-	
-	// ========== ОТКРЫТИЕ СТРАНИЦЫ В НОВОЙ ВКЛАДКЕ + РЕГИСТРАЦИЯ/АВТОРИЗАЦИЯ ==========
-	document.addEventListener('loginSuccess', onDocumentLoginSuccessDispatch);
-	
-	// ========== ОБНОВЛЕНИЕ СТРАНИЦЫ ==========
-	if (_storage2.default.isSetFlag) {
-	  showAppHideLogin();
-	  _onlineProfile2.default.start();
-	  _log2.default.start();
-	} else {
-	  showLoginHideApp();
-	  _main_login_window2.default.firstScreen();
-	}
-	
-	// ========== ЖУРНАЛ ==========
-	// logButton.start();
-	
-	// ========== ОНЛАЙН/ПРОФИЛЬ ==========
-	// profileButton.start();
-	
 	// ========== ВЫХОД ==========
-	exit.addEventListener('click', function () {
+	var stop = function stop() {
 	  showLoginHideApp();
 	  _log2.default.stop();
 	  _onlineProfile2.default.stop();
 	  _storage2.default.clean();
 	  document.dispatchEvent(new Event('logoutSuccess'));
-	});
+	};
+	
+	// ========== НАЧАЛО РАБОТЫ ==========
+	start();
+	document.addEventListener('loginSuccess', start);
+	
+	// ========== ЗАВЕРШЕНИЕ РАБОТЫ ==========
+	exit.addEventListener('click', stop);
+	
+	/*
+	Возможные сценарии запуска приложения:
+
+	1. Обновление страницы в ходе работы после успешной авторизации
+	2. Открытие страницы в новой вкладке + авторизация
+	3. Открытие страницы в новой вкладке + регистрация
+	4. Выход и новая регистрация без перезагрузки страницы в той же вкладке
+
+	NB1: на старте оба контейнера (app и login) скрыты
+	NB2: событие loginSuccess создается в модулях confirm_email.js и login.js
+
+	Алгоритм:
+	(1)
+	 - проверяем sessionStorage и авторизацию, если данные пользователя есть, то выполняем функцию start:
+	    - показываем контейнер app и прячем login
+	    - запускаем profileButton, чтобы заново записать в Онлайн/Профиль данные пользователя
+	    - запускаем logButton, который при клике на кнопку журнала начнет грузить данные
+	 (2,3)
+	 - показываем контейнер login
+	 - mainWindow.firstScreen() =?= может переименуем его во что-то типа authority =?=
+	 - слушаем возникновение события loginSuccess на документе и выполняем функцию start (см. п.1)
+	 событие loginSuccess вызывается модулями авторизации/регистрации и сообщает нам, что данная процедура пройдена
+	 (4)
+	 - слушаем click по кнопке exit и обрабатываем выход, запустив функцию stop:
+	    - прячем контейнер app и показываем login
+	    - останавливаем модуль с журналом: чистим счетчики, кэш неотрисованных нод, прячем все сообщения о процессе загрузки и чистим контейнер, чистим обработчики клика и скролла
+	    - чистим sessionStorage
+	    - создаем событие logoutSuccess на document, по которому можно сделать все необходимое с формой авторизации
+	*/
 
 /***/ }),
 /* 1 */
@@ -145,7 +149,6 @@
 	
 	  // заполняем хранилище
 	  set data(loadedData) {
-	    console.log(loadedData);
 	    sessionStorage.setItem('nickname', loadedData.nickname);
 	    sessionStorage.setItem('lastLogin', loadedData.lastLogin);
 	    sessionStorage.setItem('email', loadedData.email);
@@ -263,7 +266,6 @@
 	  if (logCardNodes.length === 0) {
 	    loaderWait.classList.remove('d-none');
 	    window.removeEventListener('scroll', onMouseScroll);
-	    console.log(_storage2.default.data);
 	    _xhr2.default.request = {
 	      metod: 'POST',
 	      url: 'lopos_directory/' + _storage2.default.data.directory + '/update_log/' + Date.now() + '/story',
@@ -271,17 +273,6 @@
 	      callbackSuccess: onSuccessLogLoad,
 	      callbackError: onErrorLogLoad
 	    };
-	    /*
-	    window.setTimeout(function () {
-	      xhr.request = {
-	        metod: 'POST',
-	        url: `lopos_directory/${auth.data.directory}/update_log/${Date.now()}/story`,
-	        data: `position=${position}&count=${count}&token=${auth.data.token}`,
-	        callbackSuccess: onSuccessLogLoad,
-	        callbackError: onErrorLogLoad
-	      };
-	    }, 2000);
-	    */
 	  }
 	};
 	
@@ -315,12 +306,13 @@
 	    _log2.default.cleanContainer();
 	    logCardNodes = [];
 	    position = 0;
-	    listLog.classList.remove('active');
+	
 	    loaderFail.classList.add('d-none');
 	    loader.classList.add('d-none');
 	    loaderWait.classList.add('d-none');
 	    loaderFinish.classList.add('d-none');
-	    // listLog.removeEventListener('click', getLog);
+	
+	    listLog.removeEventListener('click', getLog);
 	    window.removeEventListener('scroll', onMouseScroll);
 	  }
 	};
@@ -339,12 +331,6 @@
 	exports.default = {
 	  cleanContainer: function cleanContainer() {
 	    listLogBody.innerHTML = '';
-	  },
-	  setUnregistered: function setUnregistered() {
-	    listLogBody.innerHTML = 'Пожалуйста, зарегистрируйтесь...';
-	  },
-	  getLogTableRowMarkup: function getLogTableRowMarkup(rowElements) {
-	    return rowElements[1] ? '<li class="list-group-item"><b>' + rowElements[0] + ': </b>' + rowElements[1] + '</li>' : null;
 	  },
 	  getElement: function getElement(item, index) {
 	    var getIconColor = item.ha_operator_hex ? item.ha_operator_hex : 'F4002C';
@@ -384,7 +370,7 @@
 	    var cardHeader = item.ha_comment.split('\n');
 	    cardHeader[1] = cardHeader[1] ? cardHeader[1] : '';
 	
-	    return '\n    <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n      <div class="media">\n        <img class="mr-3 rounded-circle p-1" src="img/user-male-filled-32.png" title="' + item.ha_operator_name + '" style="background-color: #' + getIconColor + '" width="30" alt="' + item.ha_operator_name + '">\n        <img class="mr-3" src="img/' + imgName + '.png" width="30" alt="Generic placeholder image">\n        <div class="media-body">\n          <b>' + cardHeader[0] + '</b>\n          ' + cardHeader[1] + '\n          <div class="badge text-right text-muted float-right">' + new Date(+(item.ha_time + '000')).toLocaleString() + ' *' + index + ' *' + item.ha_id + '</div>\n        </div>\n      </div>\n    <!--\n    <div id="exampleAccordion" data-children=".item">\n      <div class="item">\n        <a data-toggle="collapse" data-parent="#exampleAccordion" href="#exampleAccordion' + item.ha_id + '" role="button" aria-expanded="false" aria-controls="exampleAccordion1">\n          <p class="text-right">\u0422\u0430\u0431\u043B\u0438\u0446\u0430 \u0441\u043E \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044F\u043C\u0438 \u043F\u0435\u0440\u0435\u043C\u0435\u043D\u043D\u044B\u0445</p>\n        </a>\n        <div id="exampleAccordion' + item.ha_id + '" class="collapse" role="tabpanel">\n          <p class="mb-3">\n            <div class="card m-2" style="width: 100%;"><ul class="list-group list-group-flush">' + Object.entries(item).map(this.getLogTableRowMarkup).join('') + '</ul></div>\n          </p>\n        </div>\n      </div>\n    </div>\n    -->';
+	    return '\n    <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n      <div class="media">\n        <img class="mr-3 rounded-circle p-1" src="img/user-male-filled-32.png" title="' + item.ha_operator_name + '" style="background-color: #' + getIconColor + '" width="30" alt="' + item.ha_operator_name + '">\n        <img class="mr-3" src="img/' + imgName + '.png" width="30" alt="Generic placeholder image">\n        <div class="media-body">\n          <b>' + cardHeader[0] + '</b>\n          ' + cardHeader[1] + '\n          <div class="badge text-right text-muted float-right">' + new Date(+(item.ha_time + '000')).toLocaleString() + ' *' + index + ' *' + item.ha_id + '</div>\n        </div>\n      </div>';
 	  },
 	  addCardToContainer: function addCardToContainer(cardMarkupItem) {
 	    listLogBody.insertAdjacentHTML('beforeend', cardMarkupItem);
@@ -477,12 +463,9 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var profile = document.querySelector('#list-profile-list');
-	
 	exports.default = {
 	  start: function start() {
 	    _onlineProfile2.default.setProfile();
-	    profile.addEventListener('click', _onlineProfile2.default.setProfile);
 	  },
 	  stop: function stop() {
 	    _onlineProfile2.default.clearProfile();
@@ -513,8 +496,7 @@
 	
 	exports.default = {
 	  setProfile: function setProfile() {
-	    listProfile.classList.add('active');
-	    listProfile.innerHTML = _storage2.default.isSetFlag ? prepareProfileMarkup() : '<p id="unregistered-profile">ПРОФИЛЬ (Пожалуйста, зарегистрируйтесь...)</p>';
+	    listProfile.innerHTML = _storage2.default.isSetFlag ? prepareProfileMarkup() : '';
 	  },
 	  clearProfile: function clearProfile() {
 	    listProfile.innerHTML = '';
