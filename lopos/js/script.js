@@ -68,20 +68,37 @@
 	var app = document.querySelector('#app');
 	var login = document.querySelector('#login');
 	
-	// ========== Добавил в форму ==========
+	var onDocumentLoginSuccessDispatch = function onDocumentLoginSuccessDispatch() {
+	  if (_storage2.default.isSetFlag) {
+	    login.classList.add('d-none');
+	    app.classList.remove('d-none');
+	    _onlineProfile2.default.start();
+	    _log2.default.start();
+	  } else {
+	    console.log('loginSuccess произошел, но при записи в sessionStorage во время авторизации/регистрации что-то пошло не так');
+	  }
+	};
+	
 	/*
-	login.js и confirm_email
+	Возможные сценарии запуска приложения:
 	
-	в начало
-	import profileButton from '../buttons/online-profile.js';
+	1. Открытие страницы в новой вкладке + авторизация
+	2. Открытие страницы в новой вкладке + регистрация
+	3. Обновление страницы в ходе работы после успешной авторизации
+	4. Выход и новая регистрация без перезагрузки страницы в той же вкладке
 	
-	В обработку успеха:
-	      document.querySelector('#login').classList.add('d-none');
-	      document.querySelector('#app').classList.remove('d-none');
-	      profileButton.start();
+	1,2:
+	 - слушаем возникновение события loginSuccess на документе
+	 - проверяем, все ли хорошо с данными пользователя в storage, и если да:
+	    - прячем форму,
+	    - показываем приложение,
+	    -
 	*/
 	
-	// ========== F5/АВТОРИЗАЦИЯ ==========
+	// ========== ОТКРЫТИЕ СТРАНИЦЫ В НОВОЙ ВКЛАДКЕ + РЕГИСТРАЦИЯ/АВТОРИЗАЦИЯ ==========
+	document.addEventListener('loginSuccess', onDocumentLoginSuccessDispatch);
+	
+	// ========== ОБНОВЛЕНИЕ СТРАНИЦЫ ==========
 	if (_storage2.default.isSetFlag) {
 	  app.classList.remove('d-none');
 	  _onlineProfile2.default.start();
@@ -234,7 +251,6 @@
 	
 	// отправка запроса на новую порцию
 	var getLog = function getLog() {
-	  console.log('hi');
 	  if (logCardNodes.length === 0) {
 	    loaderWait.classList.remove('d-none');
 	    window.removeEventListener('scroll', onMouseScroll);
@@ -350,7 +366,7 @@
 	    var cardHeader = item.ha_comment.split('\n');
 	    cardHeader[1] = cardHeader[1] ? cardHeader[1] : '';
 	
-	    return '\n    <div class="card mb-2 p-1" style="width: 100%">\n      <div class="media">\n        <img class="mr-3 rounded-circle p-1" src="img/user-male-filled-32.png" title="' + item.ha_operator_name + '" style="background-color: #' + getIconColor + '" width="50" alt="' + item.ha_operator_name + '">\n        <img class="mr-3" src="img/' + imgName + '.png" width="50" alt="Generic placeholder image">\n        <div class="media-body">\n          <h6 class="mt-0">' + cardHeader[0] + '</h5>\n          ' + cardHeader[1] + '\n          <span class="badge text-right text-muted w-100">' + new Date(+(item.ha_time + '000')).toLocaleString() + ' *' + index + ' *' + item.ha_id + '</span>\n        </div>\n      </div>\n    <!--\n    <div id="exampleAccordion" data-children=".item">\n      <div class="item">\n        <a data-toggle="collapse" data-parent="#exampleAccordion" href="#exampleAccordion' + item.ha_id + '" role="button" aria-expanded="false" aria-controls="exampleAccordion1">\n          <p class="text-right">\u0422\u0430\u0431\u043B\u0438\u0446\u0430 \u0441\u043E \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044F\u043C\u0438 \u043F\u0435\u0440\u0435\u043C\u0435\u043D\u043D\u044B\u0445</p>\n        </a>\n        <div id="exampleAccordion' + item.ha_id + '" class="collapse" role="tabpanel">\n          <p class="mb-3">\n            <div class="card m-2" style="width: 100%;"><ul class="list-group list-group-flush">' + Object.entries(item).map(this.getLogTableRowMarkup).join('') + '</ul></div>\n          </p>\n        </div>\n      </div>\n    </div>\n    -->';
+	    return '\n    <div class="card mb-0 p-1 rounded-0" style="width: 100%">\n      <div class="media">\n        <img class="mr-3 rounded-circle p-1" src="img/user-male-filled-32.png" title="' + item.ha_operator_name + '" style="background-color: #' + getIconColor + '" width="30" alt="' + item.ha_operator_name + '">\n        <img class="mr-3" src="img/' + imgName + '.png" width="30" alt="Generic placeholder image">\n        <div class="media-body">\n          <b>' + cardHeader[0] + '</b>\n          ' + cardHeader[1] + '\n          <div class="badge text-right text-muted float-right">' + new Date(+(item.ha_time + '000')).toLocaleString() + ' *' + index + ' *' + item.ha_id + '</div>\n        </div>\n      </div>\n    <!--\n    <div id="exampleAccordion" data-children=".item">\n      <div class="item">\n        <a data-toggle="collapse" data-parent="#exampleAccordion" href="#exampleAccordion' + item.ha_id + '" role="button" aria-expanded="false" aria-controls="exampleAccordion1">\n          <p class="text-right">\u0422\u0430\u0431\u043B\u0438\u0446\u0430 \u0441\u043E \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044F\u043C\u0438 \u043F\u0435\u0440\u0435\u043C\u0435\u043D\u043D\u044B\u0445</p>\n        </a>\n        <div id="exampleAccordion' + item.ha_id + '" class="collapse" role="tabpanel">\n          <p class="mb-3">\n            <div class="card m-2" style="width: 100%;"><ul class="list-group list-group-flush">' + Object.entries(item).map(this.getLogTableRowMarkup).join('') + '</ul></div>\n          </p>\n        </div>\n      </div>\n    </div>\n    -->';
 	  },
 	  addCardToContainer: function addCardToContainer(cardMarkupItem) {
 	    listLogBody.insertAdjacentHTML('beforeend', cardMarkupItem);
@@ -680,14 +696,6 @@
 	
 	var _form_login2 = _interopRequireDefault(_form_login);
 	
-	var _onlineProfile = __webpack_require__(5);
-	
-	var _onlineProfile2 = _interopRequireDefault(_onlineProfile);
-	
-	var _log = __webpack_require__(2);
-	
-	var _log2 = _interopRequireDefault(_log);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var validId = window.appSettings.loginValid.id;
@@ -705,10 +713,7 @@
 	    } else {
 	      _storage2.default.data = response.data;
 	      // Загрузка приложения
-	      document.querySelector('#login').classList.add('d-none');
-	      document.querySelector('#app').classList.remove('d-none');
-	      _onlineProfile2.default.start();
-	      _log2.default.start();
+	      document.dispatchEvent(new Event('loginSuccess'));
 	    }
 	  } else {
 	    // показ ошибки
@@ -1181,14 +1186,6 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _onlineProfile = __webpack_require__(5);
-	
-	var _onlineProfile2 = _interopRequireDefault(_onlineProfile);
-	
-	var _log = __webpack_require__(2);
-	
-	var _log2 = _interopRequireDefault(_log);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var kodVal = window.appSettings.confirmEmailKodValid;
@@ -1203,10 +1200,7 @@
 	    } else {
 	      _storage2.default.data = response.data;
 	      // Загрузка приложения
-	      document.querySelector('#login').classList.add('d-none');
-	      document.querySelector('#app').classList.remove('d-none');
-	      _onlineProfile2.default.start();
-	      _log2.default.start();
+	      document.dispatchEvent(new Event('loginSuccess'));
 	    }
 	  } else {
 	    // показ ошибки
