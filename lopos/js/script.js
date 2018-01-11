@@ -255,15 +255,24 @@
 	    loaderWait.classList.remove('d-none');
 	    window.removeEventListener('scroll', onMouseScroll);
 	    console.log(_storage2.default.data);
+	    _xhr2.default.request = {
+	      metod: 'POST',
+	      url: 'lopos_directory/' + _storage2.default.data.directory + '/update_log/' + Date.now() + '/story',
+	      data: 'position=' + position + '&count=' + count + '&token=' + _storage2.default.data.token,
+	      callbackSuccess: onSuccessLogLoad,
+	      callbackError: onErrorLogLoad
+	    };
+	    /*
 	    window.setTimeout(function () {
-	      _xhr2.default.request = {
+	      xhr.request = {
 	        metod: 'POST',
-	        url: 'lopos_directory/' + _storage2.default.data.directory + '/update_log/' + Date.now() + '/story',
-	        data: 'position=' + position + '&count=' + count + '&token=' + _storage2.default.data.token,
+	        url: `lopos_directory/${auth.data.directory}/update_log/${Date.now()}/story`,
+	        data: `position=${position}&count=${count}&token=${auth.data.token}`,
 	        callbackSuccess: onSuccessLogLoad,
 	        callbackError: onErrorLogLoad
 	      };
 	    }, 2000);
+	    */
 	  }
 	};
 	
@@ -282,7 +291,7 @@
 	      window.addEventListener('scroll', onMouseScroll);
 	      loader.classList.add('d-none');
 	      drawCardSet();
-	    }, 1500);
+	    }, 500);
 	  } else if (logCardNodes.length === 0) {
 	    position += count;
 	    getLog();
@@ -490,7 +499,7 @@
 	var listProfile = document.querySelector('#list-profile');
 	
 	var prepareProfileMarkup = function prepareProfileMarkup() {
-	  return '\n  <div id="profile" class="card" style="width: 20rem;">\n    <div class="card-header">\n      \u041B\u0438\u0447\u043D\u044B\u0439 \u043A\u0430\u0431\u0438\u043D\u0435\u0442\n    </div>\n    <ul class="list-group list-group-flush">\n      <li id="profile-name" class="list-group-item">' + _storage2.default.data.nickname + '</li>\n      <li id="profile-time" class="list-group-item">' + _storage2.default.data.lastLogin + '</li>\n      <li id="profile-directory" class="list-group-item">' + _storage2.default.data.directory + '</li>\n      <li id="profile-email" class="list-group-item">' + _storage2.default.data.email + '</li>\n    </ul>\n  </div>';
+	  return '\n  <div id="profile" class="card p-3 w-50 text-dark">\n    <h3>\u041B\u0438\u0447\u043D\u044B\u0439 \u043A\u0430\u0431\u0438\u043D\u0435\u0442</h3>\n    <p><span>\u0418\u043C\u044F: </span><span>' + _storage2.default.data.nickname + '</span></p>\n    <p><span>\u0412\u0440\u0435\u043C\u044F \u043F\u043E\u0441\u043B\u0435\u0434\u043D\u0435\u0433\u043E \u0432\u0445\u043E\u0434\u0430: </span><span>' + _storage2.default.data.lastLogin + '</span></p>\n    <p><span></span>\u041A\u0430\u0442\u0430\u043B\u043E\u0433: <span>' + _storage2.default.data.directory + '</span></p>\n    <p><span></span>\u041F\u043E\u0447\u0442\u0430: <span>' + _storage2.default.data.email + '</span></p>\n  </div>';
 	};
 	
 	exports.default = {

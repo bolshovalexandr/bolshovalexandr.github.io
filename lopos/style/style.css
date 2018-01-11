@@ -1,0 +1,25 @@
+#login {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#4a9ad1+0,60abf8+39,9bdcbf+100 */
+  background: #4a9ad1;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #4a9ad1 0%, #60abf8 39%, #9bdcbf 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4a9ad1', endColorstr='#9bdcbf',GradientType=0 );
+  /* IE6-9 */ }
+
+#loginButtonSubmit {
+  background-color: #ff0029;
+  border-color: #ff0029; }
+
+#profile {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#4a9ad1+0,60abf8+39,9bdcbf+100 */
+  background: #4a9ad1;
+  /* Old browsers */
+  /* FF3.6-15 */
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #4a9ad1 0%, #60abf8 39%, #9bdcbf 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4a9ad1', endColorstr='#9bdcbf',GradientType=0 );
+  /* IE6-9 */ }
