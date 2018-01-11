@@ -86,7 +86,7 @@
 	    _log2.default.start();
 	  } else {
 	    showLoginHideApp();
-	    _main_login_window2.default.firstScreen();
+	    _main_login_window2.default.init();
 	  }
 	};
 	
@@ -537,7 +537,22 @@
 	
 	var sectionLoginFormMain = document.querySelector('#sectionLoginFormMain');
 	
-	console.log('v27');
+	var formInit = function formInit() {
+	  _form_confirm_email2.default.reset();
+	  _form_register2.default.reset();
+	  _form_forgot2.default.reset();
+	  _form_login2.default.reset();
+	  _form_confirm_email2.default.hide();
+	  _form_register2.default.hide();
+	  _form_forgot2.default.hide();
+	  _form_login2.default.show();
+	};
+	
+	document.addEventListener('logoutSuccess', function () {
+	  formInit();
+	});
+	
+	console.log('v44');
 	
 	_captcha2.default.init();
 	
@@ -546,16 +561,9 @@
 	});
 	
 	exports.default = {
-	  firstScreen: function firstScreen() {
-	    _form_confirm_email2.default.reset();
-	    _form_register2.default.reset();
-	    _form_forgot2.default.reset();
-	    _form_login2.default.reset();
-	    _form_confirm_email2.default.hide();
-	    _form_register2.default.hide();
-	    _form_forgot2.default.hide();
-	    _form_login2.default.show();
-	  },
+	
+	  init: formInit,
+	
 	  confirmEmail: function confirmEmail() {
 	    _form_register2.default.hide();
 	    _form_confirm_email2.default.show();
@@ -610,8 +618,11 @@
 	var userLogin = void 0;
 	
 	var captchaCallback = function captchaCallback() {
-	  console.log('loginCallback');
-	  // captcha.catchaReset(captchaId);
+	
+	  if (_captcha2.default.getResponse(captchaId)) {
+	    _captcha2.default.catchaReset(captchaId);
+	  }
+	
 	  _login2.default.submit(userLogin, inputFields.password.value);
 	};
 	
@@ -623,10 +634,8 @@
 	  if (_login2.default.validate(userLogin, inputFields.password.value)) {
 	
 	    if (captchaId !== 'NO' && captchaCount >= 2) {
-	      console.log('captchaEXEC');
 	      _captcha2.default.captchaExec(captchaId);
 	    } else {
-	      console.log('SUBMIT');
 	      _login2.default.submit(userLogin, inputFields.password.value);
 	    }
 	  }
@@ -670,7 +679,6 @@
 	  },
 	  setCaptcha: function setCaptcha() {
 	    captchaId = _captcha2.default.getCaptcha(loginCaptcha, captchaCallback);
-	    console.log('setCaptcha id = ' + captchaId);
 	  }
 	};
 
@@ -703,8 +711,6 @@
 	var validPassword = window.appSettings.loginValid.password;
 	
 	var callbackXhrSuccess = function callbackXhrSuccess(response) {
-	  console.dir(response);
-	
 	  _form_login2.default.addCaptchaCount();
 	
 	  if (response.status === 200) {
@@ -712,7 +718,6 @@
 	      alert('Ваш пользователь заблокирован, обратитесь к администратору');
 	    } else {
 	      _storage2.default.data = response.data;
-	      // Загрузка приложения
 	      document.dispatchEvent(new Event('loginSuccess'));
 	    }
 	  } else {
@@ -826,6 +831,10 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	var captchaErrorCallback = function captchaErrorCallback(response) {
+	  console.log('ERROR Catpcha: ' + response);
+	};
+	
 	exports.default = {
 	  init: function init() {
 	    window.captchaOnLoadCallback = function () {
@@ -845,11 +854,15 @@
 	  catchaReset: function catchaReset(captchaId) {
 	    window.grecaptcha.reset(captchaId);
 	  },
+	  getResponse: function getResponse(captchaId) {
+	    return window.grecaptcha.getResponse(captchaId);
+	  },
 	  getCaptcha: function getCaptcha(elementId, callback) {
 	    return window.grecaptcha.render(elementId, {
 	      'size': 'invisible',
 	      'sitekey': window.appSettings.reCaptchaSiteKey,
-	      'callback': callback
+	      'callback': callback,
+	      'error-callback': captchaErrorCallback
 	    });
 	  }
 	};
@@ -894,7 +907,11 @@
 	var captchaId = 'NO';
 	
 	var captchaCallback = function captchaCallback() {
-	  console.log('registerCallback');
+	
+	  if (_captcha2.default.getResponse(captchaId)) {
+	    _captcha2.default.catchaReset(captchaId);
+	  }
+	
 	  _register2.default.submit(inputFields.name.value, inputFields.email.value, inputFields.password.value);
 	};
 	
@@ -904,17 +921,15 @@
 	  if (_register2.default.validate(inputFields.name.value, inputFields.email.value, inputFields.password.value, inputFields.confirm.value, registerUserAgreement.checked)) {
 	
 	    if (captchaId !== 'NO') {
-	      console.log('captchaEXEC');
 	      _captcha2.default.captchaExec(captchaId);
 	    } else {
-	      console.log('SUBMIT');
 	      _register2.default.submit(inputFields.name.value, inputFields.email.value, inputFields.password.value);
 	    }
 	  }
 	});
 	
 	registerButtonCancel.addEventListener('click', function () {
-	  _main_login_window2.default.firstScreen();
+	  _main_login_window2.default.init();
 	});
 	
 	exports.default = {
@@ -943,7 +958,6 @@
 	  },
 	  setCaptcha: function setCaptcha() {
 	    captchaId = _captcha2.default.getCaptcha(registerCaptcha, captchaCallback);
-	    console.log('setCaptcha id = ' + captchaId);
 	  }
 	};
 
@@ -975,7 +989,6 @@
 	var regUrlApi = window.appSettings.registerUrlApi;
 	
 	var callbackXhrSuccess = function callbackXhrSuccess(response) {
-	  console.dir(response);
 	
 	  switch (response.status) {
 	
@@ -1114,7 +1127,11 @@
 	var captchaId = 'NO';
 	
 	var captchaCallback = function captchaCallback() {
-	  console.log('registerCallback');
+	
+	  if (_captcha2.default.getResponse(captchaId)) {
+	    _captcha2.default.catchaReset(captchaId);
+	  }
+	
 	  _confirm_email2.default.submit(emailConfirmInputKey.value, registerInputEmail.value);
 	};
 	
@@ -1124,17 +1141,16 @@
 	  if (_confirm_email2.default.validate(emailConfirmInputKey.value)) {
 	
 	    if (captchaId !== 'NO') {
-	      console.log('captchaEXEC');
 	      _captcha2.default.captchaExec(captchaId);
 	    } else {
-	      console.log('SUBMIT');
 	      _confirm_email2.default.submit(emailConfirmInputKey.value, registerInputEmail.value);
+	      _main_login_window2.default.init();
 	    }
 	  }
 	});
 	
 	emailConfirmButtonCancel.addEventListener('click', function () {
-	  _main_login_window2.default.firstScreen();
+	  _main_login_window2.default.init();
 	});
 	
 	exports.default = {
@@ -1160,7 +1176,6 @@
 	  },
 	  setCaptcha: function setCaptcha() {
 	    captchaId = _captcha2.default.getCaptcha(emailConfirmCaptcha, captchaCallback);
-	    console.log('setCaptcha id = ' + captchaId);
 	  }
 	};
 
@@ -1199,7 +1214,6 @@
 	      // сброс на страницу загрузки
 	    } else {
 	      _storage2.default.data = response.data;
-	      // Загрузка приложения
 	      document.dispatchEvent(new Event('loginSuccess'));
 	    }
 	  } else {
@@ -1281,7 +1295,11 @@
 	var captchaId = 'NO';
 	
 	var captchaCallback = function captchaCallback() {
-	  console.log('forgotCallback');
+	
+	  if (_captcha2.default.getResponse(captchaId)) {
+	    _captcha2.default.catchaReset(captchaId);
+	  }
+	
 	  _forgot2.default.submit(forgotInputEmail.value);
 	};
 	
@@ -1291,17 +1309,15 @@
 	  if (_forgot2.default.validate(forgotInputEmail.value)) {
 	
 	    if (captchaId !== 'NO') {
-	      console.log('captchaEXEC');
 	      _captcha2.default.captchaExec(captchaId);
 	    } else {
-	      console.log('SUBMIT');
 	      _forgot2.default.submit(forgotInputEmail.value);
 	    }
 	  }
 	});
 	
 	forgotButtonCancel.addEventListener('click', function () {
-	  _main_login_window2.default.firstScreen();
+	  _main_login_window2.default.init();
 	});
 	
 	exports.default = {
@@ -1327,7 +1343,6 @@
 	  },
 	  setCaptcha: function setCaptcha() {
 	    captchaId = _captcha2.default.getCaptcha(forgotCaptcha, captchaCallback);
-	    console.log('setCaptcha id = ' + captchaId);
 	  }
 	};
 
@@ -1340,10 +1355,6 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	
-	var _main_login_window = __webpack_require__(7);
-	
-	var _main_login_window2 = _interopRequireDefault(_main_login_window);
 	
 	var _xhr = __webpack_require__(4);
 	
@@ -1359,11 +1370,9 @@
 	var urlApi = window.appSettings.forgotUrlApi;
 	
 	var callbackXhrSuccess = function callbackXhrSuccess(response) {
-	  console.dir(response);
 	
 	  if (response.status === 400) {
 	    alert(response.message);
-	    _main_login_window2.default.firstScreen();
 	  } else {
 	    // показ ошибки
 	    alert('Ошибка восстановления пароля');
