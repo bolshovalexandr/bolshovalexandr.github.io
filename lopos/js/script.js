@@ -121,6 +121,7 @@
 	  _log2.default.stop();
 	  _onlineProfile2.default.stop();
 	  _storage2.default.clean();
+	  document.dispatchEvent(new Event('logoutSuccess'));
 	});
 
 /***/ }),

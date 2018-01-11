@@ -15,154 +15,147 @@
 
 <body>
 
-  <div id="login" class="container mt-3 mb-5 d-none">
-  <header>
-    <div class="container-fluid text-center">
-      <img src="./img/sk1024_v6_unvisible.png" class="rounded w-25" alt="...">
-     <!--
-      <div class="jumbotron text-center">
-        <h1 class="display-3">Lopos Tutorial</h1>
-        <p class="lead">Демонстрация.</p>
-        <hr class="my-4">
+  <div id="login" class="container-fluid mx-auto d-none" style="min-height: 920px;">
+    <header>
+      <div class="container-fluid text-center" style="max-width: 27rem">
+        <img src="./img/sk1024_v6_unvisible.png" class="img-fluid rounded" style="max-width: 100%" alt="...">
       </div>
-      -->
-    </div>
-  </header>
+    </header>
 
-  <section id = 'sectionLoginFormMain'>
+    <section id='sectionLoginFormMain'>
 
-    <section id="sectionLogin" class="">
-      <div class="container-fluid">
-        <h3 class="text-center text-primary">Вход</h3>
-        <form id=loginForm class="w-25 mx-auto">
-          <div class="form-group">
-            <label for="loginInputLogin">Введите id или email</label>
-            <input class="form-control" type="text" id="loginInputLogin" placeholder="Введите id или email">
-          </div>
+      <section id="sectionLogin" class="">
+        <div class="container-fluid">
+          <h3 class="text-center text-primary">Вход</h3>
+          <form id=loginForm class="mx-auto" style="max-width: 400px;">
+            <div class="form-group">
+              <label for="loginInputLogin">Введите id или email</label>
+              <input class="form-control" type="text" id="loginInputLogin" placeholder="Введите id или email">
+            </div>
 
-          <div id='loginCaptcha'></div>
+            <div id='loginCaptcha'></div>
 
-          <div class="form-group">
-            <label for="loginInputPassword">Пароль</label>
-            <input type="password" class="form-control" id="loginInputPassword" placeholder="Password">
-          </div>
-
-          <div>
-            <button id='loginButtonSubmit' type="submit" class="btn btn-primary w-100">Войти</button>
+            <div class="form-group">
+              <label for="loginInputPassword">Пароль</label>
+              <input type="password" class="form-control" id="loginInputPassword" placeholder="Password">
+            </div>
 
             <div>
-              <button id='loginButtonForgot' type="button" class="btn btn-link">Забыли пароль?</button>
+              <button id='loginButtonSubmit' type="submit" class="btn btn-primary w-100">Войти</button>
+
+              <div>
+                <button id='loginButtonForgot' type="button" class="btn btn-link">Забыли пароль?</button>
+              </div>
+
             </div>
-
-          </div>
-          <button id='loginButtonRegister' type="button" class="btn btn-link mt-5">Регистрация нового пользователя</button>
-        </form>
-      </div>
-    </section>
-
-    <section id="sectionRegister" class="d-none">
-      <div class="container-fluid">
-
-        <article>
-          <h3 class="text-center text-primary">Регистрация нового пользователя</h3>
-          <form id="registerForm" class="w-25 mx-auto">
-            <div class="form-group">
-              <label for="registerInputName">Введите имя ваше имя</label>
-              <input class="form-control" type="text" id="registerInputName" placeholder="Enter name">
-            </div>
-            <div class="form-group">
-              <label for="registerInputEmail">Введите адрес вашей электронной почты</label>
-               <input type="email" class="form-control" id="registerInputEmail" aria-describedby="emailHelp" placeholder="Enter email">
-            </div>
-            <div class="form-group">
-              <label for="registerInputPassword">Введите пароль</label>
-              <input type="password" class="form-control" id="registerInputPassword" placeholder="Password">
-            </div>
-            <div class="form-group">
-              <label for="registerInputConfirmPassword">Повторите пароль</label>
-              <input type="password" class="form-control" id="registerInputConfirmPassword" placeholder="Confirm password">
-            </div>
-
-            <div id='registerCaptcha'></div>
-
-
-            <button id='registerButtonSubmit' type="submit" class="btn btn-success g-recaptcha" data-sitekey="6LcCxT8UAAAAADePAfRygUpreEvUj6J8oMWRE0JW" data-callback='onSubmit'>Регистрация</button>
-            <button id="registerButtonCancel" type="button" class="btn btn-danger">Отмена</button>
+            <button id='loginButtonRegister' type="button" class="btn btn-link mt-5">Регистрация нового пользователя</button>
           </form>
-        </article>
+        </div>
+      </section>
 
-        <article>
-          <!-- Button trigger modal -->
-          <div class="input-group w-25 mx-auto mt-5">
-            <span class="pt-2">
+      <section id="sectionRegister" class="d-none">
+        <div class="container-fluid">
+
+          <article>
+            <h3 class="text-center text-primary">Регистрация нового пользователя</h3>
+            <form id="registerForm" class="mx-auto" style="max-width: 27rem">
+              <div class="form-group">
+                <label for="registerInputName">Введите имя ваше имя</label>
+                <input class="form-control" type="text" id="registerInputName" placeholder="Enter name">
+              </div>
+              <div class="form-group">
+                <label for="registerInputEmail">Введите адрес вашей электронной почты</label>
+                <input type="email" class="form-control" id="registerInputEmail" aria-describedby="emailHelp" placeholder="Enter email">
+              </div>
+              <div class="form-group">
+                <label for="registerInputPassword">Введите пароль</label>
+                <input type="password" class="form-control" id="registerInputPassword" placeholder="Password">
+              </div>
+              <div class="form-group">
+                <label for="registerInputConfirmPassword">Повторите пароль</label>
+                <input type="password" class="form-control" id="registerInputConfirmPassword" placeholder="Confirm password">
+              </div>
+
+              <div id='registerCaptcha'></div>
+
+
+              <button id='registerButtonSubmit' type="submit" class="btn btn-success g-recaptcha" data-sitekey="6LcCxT8UAAAAADePAfRygUpreEvUj6J8oMWRE0JW" data-callback='onSubmit'>Регистрация</button>
+              <button id="registerButtonCancel" type="button" class="btn btn-danger">Отмена</button>
+            </form>
+          </article>
+
+          <article>
+            <!-- Button trigger modal -->
+            <div class="input-group mx-auto mt-5" style="max-width: 27rem">
+              <span class="pt-2">
               <input type="checkbox" id='registerUserAgreement' aria-label="Установите для согласия с пользовательским соглашением">
             </span>
-            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModalLong">
+              <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModalLong">
               Принимаю соглашение пользователя
             </button>
-          </div>
-          <!-- Modal -->
-          <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLongTitle">Соглашение пользователя</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Соглашение пользователя</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
-                </div>
-                <div class="modal-body">
-                  БЛА-БЛА-БЛА и все такое
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                  </div>
+                  <div class="modal-body">
+                    БЛА-БЛА-БЛА и все такое
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </article>
+          </article>
 
-      </div>
+        </div>
+      </section>
+
+      <section id="sectionConfirmEmail" class="d-none">
+        <div class="container-fluid" style="max-width: 27rem">
+          <h3 class="text-center text-primary">Подтверждение адреса электронной почты</h3>
+          <form id='emailConfirmForm' class="mx-auto" style="max-width: 27rem">
+            <div class="form-group">
+              <label for="emailConfirmInputKey">Введите ключ, полученный по электронной почте</label>
+              <input id="emailConfirmInputKey" type="text" class="form-control" placeholder="Confirm Key">
+            </div>
+
+            <div id="emailConfirmCaptcha" class="form-group"></div>
+
+            <button id='emailConfirmButtonSubmit' type="submit" class="btn btn-success">Подтвердить</button>
+            <button id='emailConfirmButtonCancel' type="button" class="btn btn-danger">Отмена</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="sectionForgot" class="d-none mx-auto" style="max-width: 27rem">
+        <div class="container-fluid">
+          <h3 class="text-center text-primary">Восстановление пароля</h3>
+          <form id='forgotForm' class="mx-auto" style="max-width: 27rem">
+            <div class="form-group">
+              <label for="emailConfirmInputKey">Введите адрес электронной почты </label>
+              <input id="forgotInputEmail" type="text" class="form-control" placeholder="Confirm Key">
+            </div>
+
+            <div id="forgotCaptcha" class="form-group"></div>
+
+            <div class="d-flex justify-content-between">
+              <button id='forgotButtonSubmit' type="submit" class="btn btn-success">Восстановить</button>
+              <button id='forgotButtonCancel' type="button" class="btn btn-danger">Отмена</button>
+            </div>
+
+          </form>
+        </div>
+      </section>
+
     </section>
-
-    <section id="sectionConfirmEmail" class="d-none">
-      <div class="container-fluid">
-        <h3 class="text-center text-primary">Подтверждение адреса электронной почты</h3>
-        <form id='emailConfirmForm' class="w-25 mx-auto">
-          <div class="form-group">
-            <label for="emailConfirmInputKey">Введите ключ, полученный по электронной почте</label>
-            <input id="emailConfirmInputKey" type="text" class="form-control" placeholder="Confirm Key">
-          </div>
-
-          <div id="emailConfirmCaptcha" class="form-group"></div>
-
-          <button id='emailConfirmButtonSubmit' type="submit" class="btn btn-success">Подтвердить</button>
-          <button id='emailConfirmButtonCancel' type="button" class="btn btn-danger">Отмена</button>
-        </form>
-      </div>
-    </section>
-
-    <section id="sectionForgot" class="d-none">
-      <div class="container-fluid">
-        <h3 class="text-center text-primary">Восстановление пароля</h3>
-        <form id='forgotForm' class="w-25 mx-auto">
-          <div class="form-group">
-            <label for="emailConfirmInputKey">Введите адрес электронной почты </label>
-            <input id="forgotInputEmail" type="text" class="form-control" placeholder="Confirm Key">
-
-          </div>
-
-          <div id="forgotCaptcha" class="form-group"></div>
-
-          <button id='forgotButtonSubmit' type="submit" class="btn btn-success">Восстановить</button>
-
-          <button id='forgotButtonCancel' type="button" class="btn btn-danger">Отмена</button>
-
-        </form>
-      </div>
-    </section>
-
-  </section>
   </div>
 
   <div id="app" class="container mt-3 mb-5 d-none">
@@ -170,7 +163,7 @@
     <div>
 
       <!--МЕНЮ (КНОПКИ)-->
-      <nav class="d-flex">
+      <nav class="d-flex flex-wrap">
 
         <ul class="nav nav-tabs" id="list-tab" role="tablist">
 
@@ -240,13 +233,6 @@
               <a class="dropdown-item" id="list-setup-list" data-toggle="list" href="#list-setup" role="tab" aria-controls="setup">Настройка</a>
             </div>
           </li>
-
-          <!--Вход / Выход-->
-          <!--
-          <li class="nav-item">
-            <a class="nav-link active" id="list-login-list" data-toggle="list" href="#list-login" role="tab" aria-controls="login">Вход / Выход</a>
-          </li>
-          -->
         </ul>
         <button type="button" id="profile-exit" class="btn btn-danger  ml-auto p-2">Выйти</button>
       </nav>
@@ -254,26 +240,6 @@
       <!--МЕНЮ (КОНТЕЙНЕРЫ)-->
       <div class="tab-content mt-3" id="nav-tabContent">
 
-        <!--ФОРМА ВХОДА-->
-        <!--
-        <div class="tab-pane fade show active" id="list-login" role="tabpanel" aria-labelledby="list-login-list">
-
-          <form id='form-login' action="https://lopos.bidone.ru/api/v1/user_boss/login/" enctype="application/x-www-form-urlencoded">
-            <div class="form-group">
-              <label for="exampleInputEmail1">Адрес электронной почты</label>
-              <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="почта">
-            </div>
-            <div class="form-group">
-              <label for="exampleInputPassword1">Пароль</label>
-              <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="пароль">
-            </div>
-            <button type="submit" class="btn btn-primary">Войти</button>
-          </form>
-
-          <button id="profile-exit" type="button" class="btn btn-danger d-none">Выйти</button>
-
-        </div>
-        -->
 
         <!--ОПЕРАЦИИ-->
         <div class="tab-pane fade" id="list-operations" role="tabpanel" aria-labelledby="list-operations-list">
@@ -333,12 +299,12 @@
         <div class="tab-pane fade" id="list-log" role="tabpanel" aria-labelledby="list-log-list">
           <div id="log-body" class="bg-white" role="alert"></div>
 
-           <div id="loader" class="progress text-white d-none"  style="height: 25px;">
-              <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase bg-success" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Ждем отрисовки порции карточек...</div>
+          <div id="loader" class="progress text-white d-none" style="height: 25px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase bg-success" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Ждем отрисовки порции карточек...</div>
           </div>
 
-           <div id="loader-wait" class="progress text-white d-none" style="height: 25px;">
-              <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Ждем загрузки карточек...</div>
+          <div id="loader-wait" class="progress text-white d-none" style="height: 25px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Ждем загрузки карточек...</div>
           </div>
 
           <div id="loader-finish" class="container-fluid bg-warning text-dark text-center d-none mb-5" style="height: 25;">На сервере нет ничего нового</div>
@@ -346,21 +312,7 @@
         </div>
 
         <!--ОНЛАЙН-->
-        <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
-         <!--
-          <p id="unregistered-profile">ПРОФИЛЬ (Пожалуйста, зарегистрируйтесь...)</p>
-          <div id="profile" class="card d-none" style="width: 20rem;">
-            <div class="card-header">
-              Личный кабинет
-            </div>
-            <ul class="list-group list-group-flush">
-              <li id="profile-name" class="list-group-item"></li>
-              <li id="profile-time" class="list-group-item"></li>
-              <li id="profile-directory" class="list-group-item"></li>
-            </ul>
-          </div>
-          -->
-        </div>
+        <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list"></div>
         <div class="tab-pane fade" id="list-users" role="tabpanel" aria-labelledby="list-users-list">
           <p>ПОЛЬЗОВАТЕЛИ (UNDER CONSTRUCTION)</p>
         </div>
@@ -382,8 +334,8 @@
   <script src="js/settings.js"></script>
   <script src="js/script.js"></script>
 
-    <!-- reCaptcha -->
-    <script src="https://www.google.com/recaptcha/api.js?onload=captchaOnLoadCallback&render=explicit" async defer></script>
+  <!-- reCaptcha -->
+  <script src="https://www.google.com/recaptcha/api.js?onload=captchaOnLoadCallback&render=explicit" async defer></script>
 </body>
 
 </html>
