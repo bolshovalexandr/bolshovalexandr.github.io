@@ -68,10 +68,19 @@
 	var app = document.querySelector('#app');
 	var login = document.querySelector('#login');
 	
+	var showLoginHideApp = function showLoginHideApp() {
+	  login.classList.remove('d-none');
+	  app.classList.add('d-none');
+	};
+	
+	var showAppHideLogin = function showAppHideLogin() {
+	  login.classList.add('d-none');
+	  app.classList.remove('d-none');
+	};
+	
 	var onDocumentLoginSuccessDispatch = function onDocumentLoginSuccessDispatch() {
 	  if (_storage2.default.isSetFlag) {
-	    login.classList.add('d-none');
-	    app.classList.remove('d-none');
+	    showAppHideLogin();
 	    _onlineProfile2.default.start();
 	    _log2.default.start();
 	  } else {
@@ -100,11 +109,11 @@
 	
 	// ========== ОБНОВЛЕНИЕ СТРАНИЦЫ ==========
 	if (_storage2.default.isSetFlag) {
-	  app.classList.remove('d-none');
+	  showAppHideLogin();
 	  _onlineProfile2.default.start();
 	  _log2.default.start();
 	} else {
-	  login.classList.remove('d-none');
+	  showLoginHideApp();
 	  _main_login_window2.default.firstScreen();
 	}
 	
@@ -116,8 +125,7 @@
 	
 	// ========== ВЫХОД ==========
 	exit.addEventListener('click', function () {
-	  app.classList.add('d-none');
-	  login.classList.remove('d-none');
+	  showLoginHideApp();
 	  _log2.default.stop();
 	  _onlineProfile2.default.stop();
 	  _storage2.default.clean();

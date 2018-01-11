@@ -23,3 +23,25 @@
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9bdcbf', endColorstr='#4a9ad1',GradientType=1 );
   /* IE6-9 */ }
+
+#app {
+  background-color: #EDECF2; }
+
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("../fonts/HelveticaNeue-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal; }
+
+body {
+  font-family: "HelveticaNeue";
+  font-size: 18px; }
+
+/*
+body {
+    font-family: "PT Sans";
+    src: url("fonts/HelveticaNeue-Light.woff") format('woff'),
+    font-weight: 700;
+    font-style: normal;
+}
+*/
