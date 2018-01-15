@@ -80,70 +80,39 @@
 	  app.classList.remove('d-none');
 	};
 	
+	// чистим меню и вкладки
 	var initMarkup = function initMarkup() {
-	  // чистим меню
 	  document.querySelectorAll('.nav-link').forEach(function (item) {
 	    return item.classList.remove('active');
 	  });
 	  document.querySelectorAll('.nav-item.dropdown').forEach(function (item) {
 	    return item.classList.remove('show');
 	  });
-	
-	  // чистим вкладки
 	  document.querySelectorAll('.tab-pane').forEach(function (item) {
 	    return item.classList.add('fade');
 	  });
-	
-	  // чистим вкладки
 	  document.querySelectorAll('.dropdown-item').forEach(function (item) {
 	    return item.classList.remove('active');
 	  });
-	  // document.querySelectorAll('.dropdown-item').forEach((item) => item.setAttribute('aria-selected', 'false'));
-	  // document.querySelectorAll('.dropdown-item').forEach((item) => item.setAttribute('aria-expanded', 'false'));
 	};
 	
 	var hashObserver = function hashObserver() {
-	  switch (window.location.hash) {
-	    case '#list-log':
-	
-	      document.querySelector('#list-log-list').dispatchEvent(new Event('click'));
-	      document.querySelector('#list-log-list').classList.add('active');
-	      document.querySelector('#list-log').classList.add('active');
-	      document.querySelector('#list-log').classList.remove('fade');
-	      console.log('log-list');
-	      break;
-	    case '#list-profile':
-	      document.querySelector('#list-profile-list').dispatchEvent(new Event('click'));
-	      document.querySelector('#list-profile-list').classList.add('active');
-	      document.querySelector('#list-online-list').classList.add('active');
-	      document.querySelector('#list-profile').classList.add('active');
-	      document.querySelector('#list-profile').classList.remove('fade');
-	      console.log('log-profile');
-	      break;
-	
-	    default:
-	      /*
-	      document.querySelector('#list-profile-list').dispatchEvent(new Event('click'));
-	      document.querySelector('#list-profile-list').classList.add('active');
-	      document.querySelector('#list-online-list').classList.add('active');
-	      document.querySelector('#list-profile').classList.add('active');
-	      document.querySelector('#list-profile').classList.remove('fade');
-	      console.log('log-profile2');
-	      */
-	      break;
-	
+	  var hash = window.location.hash;
+	  if (hash) {
+	    document.querySelector(hash + '-list').dispatchEvent(new Event('click'));
+	    document.querySelector(hash + '-list').classList.add('active');
+	    document.querySelector('' + hash).classList.add('active');
+	    document.querySelector('' + hash).classList.remove('fade');
 	  }
 	};
 	
 	// ========== ОБНОВЛЕНИЕ/ОТКРЫТИЕ СТРАНИЦЫ ==========
 	var start = function start() {
 	  if (_storage2.default.isSetFlag) {
-	    console.log('hi');
 	    showAppHideLogin();
 	    _onlineProfile2.default.start();
 	    _log2.default.start();
 	    initMarkup();
-	    // window.location.hash = '#list-profile';
 	    hashObserver();
 	  } else {
 	    showLoginHideApp();
@@ -167,13 +136,6 @@
 	start();
 	document.addEventListener('loginSuccess', start);
 	
-	/*
-	if (window.location.hash) {
-	  document.querySelector(window.location.hash).dispatchEvent(new Event('click'));
-	} else {
-	  document.querySelector('#list-profile').dispatchEvent(new Event('click'));
-	}
-	*/
 	// ========== ЗАВЕРШЕНИЕ РАБОТЫ ==========
 	exit.addEventListener('click', stop);
 	
@@ -450,7 +412,7 @@
 	    var cardHeader = item.ha_comment.split('\n');
 	    cardHeader[1] = cardHeader[1] ? cardHeader[1] : '';
 	
-	    return '\n    <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n      <div class="media">\n        <img class="mr-3 rounded-circle p-1" src="img/user-male-filled-32.png" title="' + item.ha_operator_name + '" style="background-color: #' + getIconColor + '" width="30" alt="' + item.ha_operator_name + '">\n        <img class="mr-3" src="img/' + imgName + '.png" width="30" alt="Generic placeholder image">\n        <div class="media-body">\n          <b>' + cardHeader[0] + '</b>\n          ' + cardHeader[1] + '\n          <div class="badge text-right text-muted float-right">' + new Date(+(item.ha_time + '000')).toLocaleString() + ' *' + index + ' *' + item.ha_id + '</div>\n        </div>\n      </div>';
+	    return '\n    <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n      <div class="media">\n        <img class="mr-3 rounded-circle p-1" src="img/user-male-filled-32.png" title="' + item.ha_operator_name + '" style="background-color: #' + getIconColor + '" width="30" alt="' + item.ha_operator_name + '">\n        <img class="mr-3" src="img/' + imgName + '.png" width="30" alt="Generic placeholder image">\n        <div class="media-body">\n          <b>' + cardHeader[0] + '</b>\n          ' + cardHeader[1] + '\n          <div class="badge text-right text-muted float-right">' + new Date(+(item.ha_time + '000')).toLocaleString() + '</div>\n        </div>\n      </div>';
 	  },
 	  addCardToContainer: function addCardToContainer(cardMarkupItem) {
 	    listLogBody.insertAdjacentHTML('beforeend', cardMarkupItem);
