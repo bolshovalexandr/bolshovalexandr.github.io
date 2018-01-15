@@ -142,7 +142,7 @@
 	    _onlineProfile2.default.start();
 	    _log2.default.start();
 	    initMarkup();
-	    window.location.hash = '#list-profile';
+	    // window.location.hash = '#list-profile';
 	    hashObserver();
 	  } else {
 	    showLoginHideApp();
