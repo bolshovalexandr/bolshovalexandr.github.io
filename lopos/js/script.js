@@ -122,12 +122,14 @@
 	      break;
 	
 	    default:
+	      /*
 	      document.querySelector('#list-profile-list').dispatchEvent(new Event('click'));
 	      document.querySelector('#list-profile-list').classList.add('active');
 	      document.querySelector('#list-online-list').classList.add('active');
 	      document.querySelector('#list-profile').classList.add('active');
 	      document.querySelector('#list-profile').classList.remove('fade');
 	      console.log('log-profile2');
+	      */
 	      break;
 	
 	  }
