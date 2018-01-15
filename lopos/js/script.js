@@ -80,15 +80,32 @@
 	  app.classList.remove('d-none');
 	};
 	
+	var initMarkup = function initMarkup() {
+	  // чистим меню
+	  document.querySelectorAll('.nav-link').forEach(function (item) {
+	    return item.classList.remove('active');
+	  });
+	  document.querySelectorAll('.nav-item.dropdown').forEach(function (item) {
+	    return item.classList.remove('show');
+	  });
+	
+	  // чистим вкладки
+	  document.querySelectorAll('.tab-pane').forEach(function (item) {
+	    return item.classList.add('fade');
+	  });
+	
+	  // чистим вкладки
+	  document.querySelectorAll('.dropdown-item').forEach(function (item) {
+	    return item.classList.remove('active');
+	  });
+	  // document.querySelectorAll('.dropdown-item').forEach((item) => item.setAttribute('aria-selected', 'false'));
+	  // document.querySelectorAll('.dropdown-item').forEach((item) => item.setAttribute('aria-expanded', 'false'));
+	};
+	
 	var hashObserver = function hashObserver() {
 	  switch (window.location.hash) {
 	    case '#list-log':
-	      document.querySelectorAll('.fade').forEach(function (item) {
-	        return item.classList.remove('fade');
-	      });
-	      document.querySelectorAll('.active').forEach(function (item) {
-	        return item.classList.remove('active');
-	      });
+	
 	      document.querySelector('#list-log-list').dispatchEvent(new Event('click'));
 	      document.querySelector('#list-log-list').classList.add('active');
 	      document.querySelector('#list-log').classList.add('active');
@@ -98,13 +115,22 @@
 	    case '#list-profile':
 	      document.querySelector('#list-profile-list').dispatchEvent(new Event('click'));
 	      document.querySelector('#list-profile-list').classList.add('active');
+	      document.querySelector('#list-online-list').classList.add('active');
+	
 	      document.querySelector('#list-profile').classList.add('active');
 	      document.querySelector('#list-profile').classList.remove('fade');
 	      console.log('log-profile');
 	      break;
 	
 	    default:
-	
+	    /*
+	    document.querySelector('#list-profile-list').dispatchEvent(new Event('click'));
+	    document.querySelector('#list-profile-list').classList.add('active');
+	    document.querySelector('#list-profile').classList.add('active');
+	    document.querySelector('#list-profile').classList.remove('fade');
+	    console.log('log-profile2');
+	    break;
+	    */
 	  }
 	};
 	
@@ -115,6 +141,8 @@
 	    showAppHideLogin();
 	    _onlineProfile2.default.start();
 	    _log2.default.start();
+	    initMarkup();
+	    window.location.hash = '#list-profile';
 	    hashObserver();
 	  } else {
 	    showLoginHideApp();
@@ -128,10 +156,13 @@
 	  _log2.default.stop();
 	  _onlineProfile2.default.stop();
 	  _storage2.default.clean();
+	  window.location.hash = '';
 	  document.dispatchEvent(new Event('logoutSuccess'));
 	};
 	
 	// ========== НАЧАЛО РАБОТЫ ==========
+	initMarkup();
+	hashObserver();
 	start();
 	document.addEventListener('loginSuccess', start);
 	
@@ -146,6 +177,7 @@
 	exit.addEventListener('click', stop);
 	
 	/*
+	
 	Возможные сценарии запуска приложения:
 
 	1. Обновление страницы в ходе работы после успешной авторизации
@@ -173,6 +205,7 @@
 	    - останавливаем модуль с журналом: чистим счетчики, кэш неотрисованных нод, прячем все сообщения о процессе загрузки и чистим контейнер, чистим обработчики клика и скролла
 	    - чистим sessionStorage
 	    - создаем событие logoutSuccess на document, по которому можно сделать все необходимое с формой авторизации
+
 	*/
 
 /***/ }),
