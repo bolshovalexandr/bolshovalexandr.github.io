@@ -64,6 +64,8 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	console.log('v54');
+	
 	var exit = document.querySelector('#profile-exit');
 	var app = document.querySelector('#app');
 	var login = document.querySelector('#login');
@@ -78,12 +80,42 @@
 	  app.classList.remove('d-none');
 	};
 	
+	var hashObserver = function hashObserver() {
+	  switch (window.location.hash) {
+	    case '#list-log':
+	      document.querySelectorAll('.fade').forEach(function (item) {
+	        return item.classList.remove('fade');
+	      });
+	      document.querySelectorAll('.active').forEach(function (item) {
+	        return item.classList.remove('active');
+	      });
+	      document.querySelector('#list-log-list').dispatchEvent(new Event('click'));
+	      document.querySelector('#list-log-list').classList.add('active');
+	      document.querySelector('#list-log').classList.add('active');
+	      document.querySelector('#list-log').classList.remove('fade');
+	      console.log('log-list');
+	      break;
+	    case '#list-profile':
+	      document.querySelector('#list-profile-list').dispatchEvent(new Event('click'));
+	      document.querySelector('#list-profile-list').classList.add('active');
+	      document.querySelector('#list-profile').classList.add('active');
+	      document.querySelector('#list-profile').classList.remove('fade');
+	      console.log('log-profile');
+	      break;
+	
+	    default:
+	
+	  }
+	};
+	
 	// ========== ОБНОВЛЕНИЕ/ОТКРЫТИЕ СТРАНИЦЫ ==========
 	var start = function start() {
 	  if (_storage2.default.isSetFlag) {
+	    console.log('hi');
 	    showAppHideLogin();
 	    _onlineProfile2.default.start();
 	    _log2.default.start();
+	    hashObserver();
 	  } else {
 	    showLoginHideApp();
 	    _main_login_window2.default.init();
@@ -103,6 +135,13 @@
 	start();
 	document.addEventListener('loginSuccess', start);
 	
+	/*
+	if (window.location.hash) {
+	  document.querySelector(window.location.hash).dispatchEvent(new Event('click'));
+	} else {
+	  document.querySelector('#list-profile').dispatchEvent(new Event('click'));
+	}
+	*/
 	// ========== ЗАВЕРШЕНИЕ РАБОТЫ ==========
 	exit.addEventListener('click', stop);
 	
@@ -149,23 +188,27 @@
 	
 	  // заполняем хранилище
 	  set data(loadedData) {
-	    sessionStorage.setItem('nickname', loadedData.nickname);
-	    sessionStorage.setItem('lastLogin', loadedData.lastLogin);
-	    sessionStorage.setItem('email', loadedData.email);
-	    sessionStorage.setItem('directory', loadedData.directory);
-	    sessionStorage.setItem('operatorId', loadedData.operator_id);
-	    sessionStorage.setItem('token', loadedData.token);
+	    localStorage.setItem('nickname', loadedData.nickname);
+	    localStorage.setItem('lastLogin', loadedData.lastLogin);
+	    localStorage.setItem('email', loadedData.email);
+	    localStorage.setItem('directory', loadedData.directory);
+	    localStorage.setItem('operatorId', loadedData.operator_id);
+	    localStorage.setItem('token', loadedData.token);
+	    localStorage.setItem('currentBusiness', loadedData.current_business);
+	    localStorage.setItem('currentStock', loadedData.current_stock);
 	  },
 	
 	  // возвращаем данные
 	  get data() {
 	    return {
-	      nickname: sessionStorage.getItem('nickname'),
-	      lastLogin: sessionStorage.getItem('lastLogin'),
-	      directory: sessionStorage.getItem('directory'),
-	      email: sessionStorage.getItem('email'),
-	      operatorId: sessionStorage.getItem('operatorId'),
-	      token: sessionStorage.getItem('token')
+	      nickname: localStorage.getItem('nickname'),
+	      lastLogin: localStorage.getItem('lastLogin'),
+	      directory: localStorage.getItem('directory'),
+	      email: localStorage.getItem('email'),
+	      operatorId: localStorage.getItem('operatorId'),
+	      token: localStorage.getItem('token'),
+	      currentBusiness: localStorage.getItem('currentBusiness'),
+	      currentStock: localStorage.getItem('currentStock')
 	    };
 	  },
 	
@@ -177,12 +220,14 @@
 	
 	  // чистим хранилище
 	  clean: function clean() {
-	    sessionStorage.removeItem('nickname');
-	    sessionStorage.removeItem('lastLogin');
-	    sessionStorage.removeItem('directory');
-	    sessionStorage.removeItem('email');
-	    sessionStorage.removeItem('operatorId');
-	    sessionStorage.removeItem('token');
+	    localStorage.removeItem('nickname');
+	    localStorage.removeItem('lastLogin');
+	    localStorage.removeItem('directory');
+	    localStorage.removeItem('email');
+	    localStorage.removeItem('operatorId');
+	    localStorage.removeItem('token');
+	    localStorage.removeItem('currentBusiness');
+	    localStorage.removeItem('currentStock');
 	  }
 	};
 
@@ -263,6 +308,7 @@
 	
 	// отправка запроса на новую порцию
 	var getLog = function getLog() {
+	  console.log('get.log');
 	  if (logCardNodes.length === 0) {
 	    loaderWait.classList.remove('d-none');
 	    window.removeEventListener('scroll', onMouseScroll);
@@ -536,8 +582,90 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var sectionLoginFormMain = document.querySelector('#sectionLoginFormMain');
+	var globalAlert = document.querySelector('#globalAlert');
+	
+	var inputFields = {
+	  'loginLogin': sectionLoginFormMain.querySelector('#loginInputLogin'),
+	  'loginPassword': sectionLoginFormMain.querySelector('#loginInputPassword'),
+	  'registerLogin': sectionLoginFormMain.querySelector('#registerInputName'),
+	  'registerEmail': sectionLoginFormMain.querySelector('#registerInputEmail'),
+	  'registerPassword': sectionLoginFormMain.querySelector('#registerInputPassword'),
+	  'registerConfirm': sectionLoginFormMain.querySelector('#registerInputConfirmPassword'),
+	  'registerUserAgreement': sectionLoginFormMain.querySelector('#registerUserAgreement'),
+	  'emailConfirmInputKey': sectionLoginFormMain.querySelector('#emailConfirmInputKey'),
+	  'forgotInputEmail': sectionLoginFormMain.querySelector('#forgotInputEmail')
+	};
+	
+	var inputFieldsErrors = {
+	  'loginLogin': sectionLoginFormMain.querySelector('#loginInputLoginError'),
+	  'loginPassword': sectionLoginFormMain.querySelector('#loginInputPasswordError'),
+	  'registerLogin': sectionLoginFormMain.querySelector('#registerInputNameError'),
+	  'registerEmail': sectionLoginFormMain.querySelector('#registerInputEmailError'),
+	  'registerPassword': sectionLoginFormMain.querySelector('#registerInputPasswordError'),
+	  'registerConfirm': sectionLoginFormMain.querySelector('#registerInputConfirmPasswordError'),
+	  'registerUserAgreement': sectionLoginFormMain.querySelector('#registerUserAgreementError'),
+	  'emailConfirmInputKey': sectionLoginFormMain.querySelector('#emailConfirmInputKeyError'),
+	  'forgotInputEmail': sectionLoginFormMain.querySelector('#forgotInputEmailError')
+	};
+	
+	var progressBar = {
+	  'loginProgress': sectionLoginFormMain.querySelector('#loginProgress'),
+	  'registerProgress': sectionLoginFormMain.querySelector('#registerProgress'),
+	  'confirmProgress': sectionLoginFormMain.querySelector('#confirmProgress'),
+	  'forgotProgress': sectionLoginFormMain.querySelector('#forgotProgress')
+	};
+	
+	var buttons = {
+	  'loginButtonSubmit': sectionLoginFormMain.querySelector('#loginButtonSubmit'),
+	  'registerButtonSubmit': sectionLoginFormMain.querySelector('#registerButtonSubmit'),
+	  'emailConfirmButtonSubmit': sectionLoginFormMain.querySelector('#emailConfirmButtonSubmit'),
+	  'forgotButtonSubmit': sectionLoginFormMain.querySelector('#forgotButtonSubmit')
+	};
+	
+	var setGlobalAlert = function setGlobalAlert(msg, type) {
+	  var msgType = void 0;
+	  var msgClass = void 0;
+	  if (type === 'error') {
+	    msgType = 'ОШИБКА! ';
+	    msgClass = 'alert-danger';
+	  }
+	
+	  if (type === 'message') {
+	    msgType = 'СООБЩЕНИЕ! ';
+	    msgClass = 'alert-success';
+	  }
+	
+	  globalAlert.innerHTML = globalAlert.innerHTML + ('<div id="globalAlert" class="alert ' + msgClass + ' fade show" role="alert">\n      <strong>' + msgType + ' </strong> ' + msg + '\n      <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n        <span aria-hidden="true">&times;</span>\n      </button>\n    </div>');
+	};
+	
+	var resetErrors = function resetErrors() {
+	  var errObj = Object.keys(inputFieldsErrors);
+	  var inObg = Object.keys(inputFields);
+	
+	  errObj.forEach(function (value) {
+	    inputFieldsErrors[value].innerHTML = '';
+	  });
+	
+	  inObg.forEach(function (value) {
+	    inputFields[value].classList.remove('border');
+	    inputFields[value].classList.remove('border-danger');
+	  });
+	};
+	
+	sectionLoginFormMain.addEventListener('change', function (event) {
+	
+	  inputFieldsErrors[event.target.dataset.erreset].innerHTML = '';
+	  event.target.classList.remove('border');
+	  event.target.classList.remove('border-danger');
+	});
+	
+	document.addEventListener('logoutSuccess', function () {
+	  formInit();
+	});
 	
 	var formInit = function formInit() {
+	  globalAlert.innerHTML = '';
+	  resetErrors();
 	  _form_confirm_email2.default.reset();
 	  _form_register2.default.reset();
 	  _form_forgot2.default.reset();
@@ -548,17 +676,7 @@
 	  _form_login2.default.show();
 	};
 	
-	document.addEventListener('logoutSuccess', function () {
-	  formInit();
-	});
-	
-	console.log('v44');
-	
 	_captcha2.default.init();
-	
-	sectionLoginFormMain.addEventListener('change', function (event) {
-	  event.target.setCustomValidity('');
-	});
 	
 	exports.default = {
 	
@@ -575,6 +693,25 @@
 	  forgot: function forgot() {
 	    _form_login2.default.hide();
 	    _form_forgot2.default.show();
+	  },
+	  setError: function setError(target, msg) {
+	    inputFieldsErrors[target].innerHTML = msg;
+	    inputFields[target].classList.add('border');
+	    inputFields[target].classList.add('border-danger');
+	  },
+	
+	
+	  setAlert: setGlobalAlert,
+	
+	  showProgress: function showProgress(button, progress) {
+	    progressBar[progress].classList.remove('invisible');
+	    if (button) {
+	      buttons[button].disabled = true;
+	    }
+	  },
+	  hideProgress: function hideProgress(button, progress) {
+	    progressBar[progress].classList.add('invisible');
+	    buttons[button].disabled = false;
 	  }
 	};
 
@@ -604,14 +741,11 @@
 	
 	var sectionLogin = document.querySelector('#sectionLogin');
 	var loginForm = sectionLogin.querySelector('#loginForm');
+	var loginInputLogin = sectionLogin.querySelector('#loginInputLogin');
+	var loginInputPassword = sectionLogin.querySelector('#loginInputPassword');
 	var loginButtonRegister = loginForm.querySelector('#loginButtonRegister');
 	var loginButtonForgot = loginForm.querySelector('#loginButtonForgot');
 	var loginCaptcha = loginForm.querySelector('#loginCaptcha');
-	
-	var inputFields = {
-	  'login': loginForm.querySelector('#loginInputLogin'),
-	  'password': loginForm.querySelector('#loginInputPassword')
-	};
 	
 	var captchaCount = 0;
 	var captchaId = 'NO';
@@ -619,24 +753,27 @@
 	
 	var captchaCallback = function captchaCallback() {
 	
+	  _main_login_window2.default.showProgress('loginButtonSubmit', 'loginProgress');
+	
 	  if (_captcha2.default.getResponse(captchaId)) {
 	    _captcha2.default.catchaReset(captchaId);
 	  }
 	
-	  _login2.default.submit(userLogin, inputFields.password.value);
+	  _login2.default.submit(userLogin, loginInputPassword.value);
 	};
 	
 	loginForm.addEventListener('submit', function (event) {
 	  event.preventDefault();
+	  userLogin = formatLogin(loginInputLogin.value);
 	
-	  userLogin = formatLogin(inputFields.login.value);
+	  if (_login2.default.validate(userLogin, loginInputPassword.value)) {
 	
-	  if (_login2.default.validate(userLogin, inputFields.password.value)) {
-	
-	    if (captchaId !== 'NO' && captchaCount >= 2) {
+	    if (!window.captchaErr && captchaCount >= 3) {
+	      _main_login_window2.default.showProgress(false, 'loginProgress');
 	      _captcha2.default.captchaExec(captchaId);
 	    } else {
-	      _login2.default.submit(userLogin, inputFields.password.value);
+	      _main_login_window2.default.showProgress('loginButtonSubmit', 'loginProgress');
+	      _login2.default.submit(userLogin, loginInputPassword.value);
 	    }
 	  }
 	});
@@ -656,9 +793,6 @@
 	});
 	
 	exports.default = {
-	  setError: function setError(target, msg) {
-	    inputFields[target].setCustomValidity(msg);
-	  },
 	  show: function show() {
 	    sectionLogin.classList.remove('d-none');
 	  },
@@ -667,8 +801,8 @@
 	  },
 	  reset: function reset() {
 	    loginForm.reset();
-	    inputFields.login.setCustomValidity('');
-	    inputFields.password.setCustomValidity('');
+	    loginInputLogin.setCustomValidity('');
+	    loginInputPassword.setCustomValidity('');
 	
 	    if (captchaId !== 'NO') {
 	      _captcha2.default.catchaReset(captchaId);
@@ -704,6 +838,10 @@
 	
 	var _form_login2 = _interopRequireDefault(_form_login);
 	
+	var _main_login_window = __webpack_require__(7);
+	
+	var _main_login_window2 = _interopRequireDefault(_main_login_window);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var validId = window.appSettings.loginValid.id;
@@ -712,22 +850,23 @@
 	
 	var callbackXhrSuccess = function callbackXhrSuccess(response) {
 	  _form_login2.default.addCaptchaCount();
+	  _main_login_window2.default.hideProgress('loginButtonSubmit', 'loginProgress');
 	
 	  if (response.status === 200) {
 	    if (response.data.status === '0') {
-	      alert('Ваш пользователь заблокирован, обратитесь к администратору');
+	      _main_login_window2.default.setAlert(window.appSettings.messages.responseStatus.res0, 'message');
 	    } else {
 	      _storage2.default.data = response.data;
 	      document.dispatchEvent(new Event('loginSuccess'));
 	    }
 	  } else {
-	    // показ ошибки
-	    alert(response.message);
+	    _main_login_window2.default.setAlert(response.message, 'error');
 	  }
 	};
 	
 	var callbackXhrError = function callbackXhrError(response) {
-	  alert('error');
+	  _main_login_window2.default.hideProgress('loginButtonSubmit', 'loginProgress');
+	  _main_login_window2.default.setAlert(window.appSettings.messages.xhrError, 'error');
 	};
 	
 	var getRequestDataEmail = function getRequestDataEmail(userLogin, userPassword) {
@@ -754,7 +893,7 @@
 	    metod: 'POST',
 	    data: dataApi,
 	    callbackSuccess: callbackXhrSuccess,
-	    callbackError: callbackXhrError
+	    callbackError: window.callbackXhrError
 	  };
 	};
 	
@@ -774,13 +913,13 @@
 	  if (!validateData(validEmail, userLogin)) {
 	    if (!validateData(validId, userLogin)) {
 	      valid = false;
-	      _form_login2.default.setError('login', 'Неверный формат логина');
+	      _main_login_window2.default.setError('loginLogin', window.appSettings.messages.formValidation.login.login);
 	    }
 	  }
 	
 	  if (!validateData(validPassword, userPassword)) {
 	    valid = false;
-	    _form_login2.default.setError('password', 'Пароль должен быть длиннее 3-х символов');
+	    _main_login_window2.default.setError('loginPassword', window.appSettings.messages.formValidation.login.password);
 	  }
 	
 	  return valid;
@@ -829,17 +968,22 @@
 	
 	var _form_forgot2 = _interopRequireDefault(_form_forgot);
 	
+	var _main_login_window = __webpack_require__(7);
+	
+	var _main_login_window2 = _interopRequireDefault(_main_login_window);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var captchaErrorCallback = function captchaErrorCallback(response) {
-	  console.log('ERROR Catpcha: ' + response);
+	  window.captchaErr = true;
+	  _main_login_window2.default.setAlert(window.appSettings.messages.captchaError, 'error');
 	};
 	
 	exports.default = {
 	  init: function init() {
 	    window.captchaOnLoadCallback = function () {
-	      console.log('Капча загружена');
 	      window.captchaOnLoad = true;
+	      window.captchaErr = false;
 	
 	      _form_login2.default.setCaptcha();
 	      _form_register2.default.setCaptcha();
@@ -849,7 +993,6 @@
 	  },
 	  captchaExec: function captchaExec(captchaId) {
 	    window.grecaptcha.execute(captchaId);
-	    console.log('капча выполнена');
 	  },
 	  catchaReset: function catchaReset(captchaId) {
 	    window.grecaptcha.reset(captchaId);
@@ -893,37 +1036,39 @@
 	
 	var sectionRegister = document.querySelector('#sectionRegister');
 	var registerForm = sectionRegister.querySelector('#registerForm');
+	var registerInputName = registerForm.querySelector('#registerInputName');
+	var registerInputEmail = registerForm.querySelector('#registerInputEmail');
+	var registerInputPassword = registerForm.querySelector('#registerInputPassword');
+	var registerInputConfirmPassword = registerForm.querySelector('#registerInputConfirmPassword');
 	var registerButtonCancel = registerForm.querySelector('#registerButtonCancel');
 	var registerUserAgreement = document.querySelector('#registerUserAgreement');
 	var registerCaptcha = sectionRegister.querySelector('#registerCaptcha');
-	
-	var inputFields = {
-	  'name': registerForm.querySelector('#registerInputName'),
-	  'email': registerForm.querySelector('#registerInputEmail'),
-	  'password': registerForm.querySelector('#registerInputPassword'),
-	  'confirm': registerForm.querySelector('#registerInputConfirmPassword')
-	};
+	var registerButtonUserAgreement = sectionRegister.querySelector('#registerButtonUserAgreement');
 	
 	var captchaId = 'NO';
 	
 	var captchaCallback = function captchaCallback() {
 	
+	  _main_login_window2.default.showProgress('registerButtonSubmit', 'registerProgress');
+	
 	  if (_captcha2.default.getResponse(captchaId)) {
 	    _captcha2.default.catchaReset(captchaId);
 	  }
 	
-	  _register2.default.submit(inputFields.name.value, inputFields.email.value, inputFields.password.value);
+	  _register2.default.submit(registerInputName.value, registerInputEmail.value, registerInputPassword.value);
 	};
 	
 	registerForm.addEventListener('submit', function (event) {
 	  event.preventDefault();
 	
-	  if (_register2.default.validate(inputFields.name.value, inputFields.email.value, inputFields.password.value, inputFields.confirm.value, registerUserAgreement.checked)) {
+	  if (_register2.default.validate(registerInputName.value, registerInputEmail.value, registerInputPassword.value, registerInputConfirmPassword.value, registerUserAgreement.checked)) {
 	
-	    if (captchaId !== 'NO') {
+	    if (!window.captchaErr) {
+	      _main_login_window2.default.showProgress(false, 'registerProgress');
 	      _captcha2.default.captchaExec(captchaId);
 	    } else {
-	      _register2.default.submit(inputFields.name.value, inputFields.email.value, inputFields.password.value);
+	      _main_login_window2.default.showProgress('registerButtonSubmit', 'registerProgress');
+	      _register2.default.submit(registerInputName.value, registerInputEmail.value, registerInputPassword.value);
 	    }
 	  }
 	});
@@ -932,10 +1077,12 @@
 	  _main_login_window2.default.init();
 	});
 	
+	registerButtonUserAgreement.addEventListener('click', function () {
+	  // window.location = 'http://bidone.ru/lopos_terms_and_agreements';
+	  window.open('http://bidone.ru/lopos_terms_and_agreements');
+	});
+	
 	exports.default = {
-	  setError: function setError(target, msg) {
-	    inputFields[target].setCustomValidity(msg);
-	  },
 	  show: function show() {
 	    sectionRegister.classList.remove('d-none');
 	  },
@@ -944,17 +1091,17 @@
 	  },
 	  reset: function reset() {
 	    registerForm.reset();
-	    inputFields.name.setCustomValidity('');
-	    inputFields.email.setCustomValidity('');
-	    inputFields.password.setCustomValidity('');
-	    inputFields.confirm.setCustomValidity('');
+	    registerInputName.setCustomValidity('');
+	    registerInputEmail.setCustomValidity('');
+	    registerInputPassword.setCustomValidity('');
+	    registerInputConfirmPassword.setCustomValidity('');
 	
 	    if (captchaId !== 'NO') {
 	      _captcha2.default.catchaReset(captchaId);
 	    }
 	  },
 	  submitForm: function submitForm() {
-	    _register2.default.submit(inputFields.name.value, inputFields.email.value, inputFields.password.value, inputFields.confirm.value, registerUserAgreement.checked);
+	    _register2.default.submit(registerInputName.value, registerInputEmail.value, registerInputPassword.value, registerInputConfirmPassword.value, registerUserAgreement.checked);
 	  },
 	  setCaptcha: function setCaptcha() {
 	    captchaId = _captcha2.default.getCaptcha(registerCaptcha, captchaCallback);
@@ -979,10 +1126,6 @@
 	
 	var _xhr2 = _interopRequireDefault(_xhr);
 	
-	var _form_register = __webpack_require__(11);
-	
-	var _form_register2 = _interopRequireDefault(_form_register);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var regVal = window.appSettings.registerValid;
@@ -990,19 +1133,22 @@
 	
 	var callbackXhrSuccess = function callbackXhrSuccess(response) {
 	
+	  _main_login_window2.default.hideProgress('registerButtonSubmit', 'registerProgress');
 	  switch (response.status) {
 	
 	    case 200:
+	      _main_login_window2.default.setAlert(response.message, 'message');
 	      _main_login_window2.default.confirmEmail();
 	      break;
 	    case 400:
-	      alert(response.message);
+	      _main_login_window2.default.setAlert(response.message, 'error');
 	      break;
 	  }
 	};
 	
 	var callbackXhrError = function callbackXhrError(response) {
-	  alert('error');
+	  _main_login_window2.default.hideProgress('registerButtonSubmit', 'registerProgress');
+	  _main_login_window2.default.setAlert(window.appSettings.messages.xhrError, 'error');
 	};
 	
 	var validateName = function validateName(name) {
@@ -1041,27 +1187,27 @@
 	  var valid = true;
 	
 	  if (!validateName(name)) {
-	    _form_register2.default.setError('name', 'Имя!');
+	    _main_login_window2.default.setError('registerLogin', window.appSettings.messages.formValidation.registration.name);
 	    valid = false;
 	  }
 	
 	  if (!validateEmail(email)) {
-	    _form_register2.default.setError('email', 'Почта!');
+	    _main_login_window2.default.setError('registerEmail', window.appSettings.messages.formValidation.registration.email);
 	    valid = false;
 	  }
 	
 	  if (!validatePassword(password)) {
-	    _form_register2.default.setError('password', 'Пароль!');
+	    _main_login_window2.default.setError('registerPassword', window.appSettings.messages.formValidation.registration.password);
 	    valid = false;
 	  }
 	
 	  if (!validateConfirm(password, confirm)) {
-	    _form_register2.default.setError('confirm', 'Не совпадает!');
+	    _main_login_window2.default.setError('registerConfirm', window.appSettings.messages.formValidation.registration.confirmPassword);
 	    valid = false;
 	  }
 	
 	  if (!userAgreement) {
-	    alert('Соглашение!');
+	    _main_login_window2.default.setError('registerUserAgreement', window.appSettings.messages.formValidation.registration.UserAgreement);
 	    valid = false;
 	  }
 	
@@ -1127,6 +1273,7 @@
 	var captchaId = 'NO';
 	
 	var captchaCallback = function captchaCallback() {
+	  _main_login_window2.default.showProgress('emailConfirmButtonSubmit', 'confirmProgress');
 	
 	  if (_captcha2.default.getResponse(captchaId)) {
 	    _captcha2.default.catchaReset(captchaId);
@@ -1140,11 +1287,12 @@
 	
 	  if (_confirm_email2.default.validate(emailConfirmInputKey.value)) {
 	
-	    if (captchaId !== 'NO') {
+	    if (!window.captchaErr) {
+	      _main_login_window2.default.showProgress(false, 'confirmProgress');
 	      _captcha2.default.captchaExec(captchaId);
 	    } else {
+	      _main_login_window2.default.showProgress('emailConfirmButtonSubmit', 'confirmProgress');
 	      _confirm_email2.default.submit(emailConfirmInputKey.value, registerInputEmail.value);
-	      _main_login_window2.default.init();
 	    }
 	  }
 	});
@@ -1154,9 +1302,6 @@
 	});
 	
 	exports.default = {
-	  setError: function setError(msg) {
-	    emailConfirmInputKey.setCustomValidity(msg);
-	  },
 	  show: function show() {
 	    sectionConfirmEmail.classList.remove('d-none');
 	  },
@@ -1193,13 +1338,13 @@
 	
 	var _xhr2 = _interopRequireDefault(_xhr);
 	
-	var _form_confirm_email = __webpack_require__(13);
-	
-	var _form_confirm_email2 = _interopRequireDefault(_form_confirm_email);
-	
 	var _storage = __webpack_require__(1);
 	
 	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _main_login_window = __webpack_require__(7);
+	
+	var _main_login_window2 = _interopRequireDefault(_main_login_window);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -1207,24 +1352,23 @@
 	var urlApi = window.appSettings.confirmEmailUrlApi;
 	
 	var callbackXhrSuccess = function callbackXhrSuccess(response) {
+	  _main_login_window2.default.hideProgress('emailConfirmButtonSubmit', 'confirmProgress');
 	
 	  if (response.status === 200) {
 	    if (response.data.status === '0') {
-	      alert('Ваш пользователь заблокирован, обратитесь к администратору');
-	      // сброс на страницу загрузки
+	      _main_login_window2.default.setAlert(window.appSettings.messages.responseStatus.res0, 'message');
 	    } else {
 	      _storage2.default.data = response.data;
 	      document.dispatchEvent(new Event('loginSuccess'));
 	    }
 	  } else {
-	    // показ ошибки
-	    alert(response.message);
+	    _main_login_window2.default.setAlert(response.message, 'error');
 	  }
 	};
 	
 	var callbackXhrError = function callbackXhrError(response) {
-	  // показ ошибки
-	  alert('error');
+	  _main_login_window2.default.hideProgress('emailConfirmButtonSubmit', 'confirmProgress');
+	  _main_login_window2.default.setAlert(window.appSettings.messages.xhrError, 'error');
 	};
 	
 	var validateForm = function validateForm(kod) {
@@ -1232,7 +1376,7 @@
 	  if (kodVal.test(kod)) {
 	    return true;
 	  }
-	  _form_confirm_email2.default.setError('Неверный формат кода!');
+	  _main_login_window2.default.setError('emailConfirmInputKey', window.appSettings.messages.formValidation.emailConfirm.key);
 	  return false;
 	};
 	
@@ -1296,6 +1440,8 @@
 	
 	var captchaCallback = function captchaCallback() {
 	
+	  _main_login_window2.default.showProgress('forgotButtonSubmit', 'forgotProgress');
+	
 	  if (_captcha2.default.getResponse(captchaId)) {
 	    _captcha2.default.catchaReset(captchaId);
 	  }
@@ -1308,9 +1454,11 @@
 	
 	  if (_forgot2.default.validate(forgotInputEmail.value)) {
 	
-	    if (captchaId !== 'NO') {
+	    if (!window.captchaErr) {
+	      _main_login_window2.default.showProgress(false, 'forgotProgress');
 	      _captcha2.default.captchaExec(captchaId);
 	    } else {
+	      _main_login_window2.default.showProgress('forgotButtonSubmit', 'forgotProgress');
 	      _forgot2.default.submit(forgotInputEmail.value);
 	    }
 	  }
@@ -1321,9 +1469,6 @@
 	});
 	
 	exports.default = {
-	  setError: function setError(msg) {
-	    forgotInputEmail.setCustomValidity(msg);
-	  },
 	  show: function show() {
 	    sectionForgot.classList.remove('d-none');
 	  },
@@ -1360,9 +1505,9 @@
 	
 	var _xhr2 = _interopRequireDefault(_xhr);
 	
-	var _form_forgot = __webpack_require__(15);
+	var _main_login_window = __webpack_require__(7);
 	
-	var _form_forgot2 = _interopRequireDefault(_form_forgot);
+	var _main_login_window2 = _interopRequireDefault(_main_login_window);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -1370,18 +1515,18 @@
 	var urlApi = window.appSettings.forgotUrlApi;
 	
 	var callbackXhrSuccess = function callbackXhrSuccess(response) {
+	  _main_login_window2.default.hideProgress('forgotButtonSubmit', 'forgotProgress');
 	
 	  if (response.status === 400) {
-	    alert(response.message);
+	    _main_login_window2.default.setAlert(response.message, 'message');
 	  } else {
-	    // показ ошибки
-	    alert('Ошибка восстановления пароля');
+	    _main_login_window2.default.setAlert(response.message, 'error');
 	  }
 	};
 	
 	var callbackXhrError = function callbackXhrError(response) {
-	  // показ ошибки
-	  alert('error');
+	  _main_login_window2.default.hideProgress('forgotButtonSubmit', 'forgotProgress');
+	  _main_login_window2.default.setAlert(window.appSettings.messages.xhrError, 'error');
 	};
 	
 	var validateForm = function validateForm(email) {
@@ -1389,7 +1534,7 @@
 	  if (emailVal.test(email)) {
 	    return true;
 	  }
-	  _form_forgot2.default.setError('Введите корректный email');
+	  _main_login_window2.default.setError('forgotInputEmail', window.appSettings.messages.formValidation.forgot.email);
 	  return false;
 	};
 	
