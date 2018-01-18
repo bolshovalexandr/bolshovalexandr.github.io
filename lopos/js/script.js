@@ -1639,6 +1639,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var listEnterprises = document.querySelector('#list-enterprises-list');
+	var listEnterprisesHeader = document.querySelector('#list-enterprises-header');
 	var listEnterprisesBody = document.querySelector('#list-enterprises-body');
 	var listEnterprisesCard = document.querySelector('#list-enterprises-card');
 	var listEnterprisesCardReturnBtn = document.querySelector('#list-enterprises-card-return-btn');
@@ -1711,7 +1712,9 @@
 	};
 	
 	var onListEnterprisesBodyClick = function onListEnterprisesBodyClick(evt) {
-	  if (evt.target.tagName === 'BUTTON') {
+	  if (evt.target.tagName === 'BUTTON' || evt.target.tagName === 'IMG') {
+	    listEnterprisesHeader.classList.remove('d-flex');
+	    listEnterprisesHeader.classList.add('d-none');
 	    listEnterprisesBody.classList.add('d-none');
 	    listEnterprisesCard.classList.remove('d-none');
 	
@@ -1728,6 +1731,8 @@
 	var onListEnterprisesCardReturnBtn = function onListEnterprisesCardReturnBtn() {
 	  listEnterprisesBody.classList.remove('d-none');
 	  listEnterprisesCard.classList.add('d-none');
+	  listEnterprisesHeader.classList.add('d-flex');
+	  listEnterprisesHeader.classList.remove('d-none');
 	  listEnterprisesCardName.innerText = '';
 	  listEnterprisesCardDate.innerText = '';
 	  listEnterprisesCardBalance.innerText = '';
@@ -1773,9 +1778,9 @@
 	    listEnterprisesBody.innerHTML = '';
 	  },
 	  getElement: function getElement(item) {
-	    var currentEnterpriseFlag = item.b_id === _storage2.default.data['currentBusiness'] ? 'V' : '';
+	    var currentEnterpriseFlag = item.b_id === _storage2.default.data['currentBusiness'] ? '<button type="button" class="btn p-0 bg-white reference-icon""><img src="img/icons8-checked-96.png" alt=""></button>' : '';
 	
-	    return '\n    <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n      <div class="media">\n        <div class="media-body">\n          <b>ID: </b>' + item.b_id + ' <b>\u0418\u043C\u044F: </b>' + item.b_name + ' <b>\u041F\u043E\u0447\u0442\u0430: </b>' + item.b_owner_email + ' <b>\u0412\u0440\u0435\u043C\u044F: </b>' + new Date(+(item.b_time_activity + '000')).toLocaleString() + '\n          <div class="badge text-right float-right"><span class="badge badge-pill badge-success">' + currentEnterpriseFlag + '</span> <button type="button" class="btn btn-primary btn-sm" data-enterprise-id="' + item.b_id + '"> > </button> </div>\n        </div>\n      </div>';
+	    return '\n    <div class="d-flex justify-content-between border rounded-0">\n      <div><b>ID: </b>' + item.b_id + ' <b>\u0418\u043C\u044F: </b>' + item.b_name + ' <b>\u041F\u043E\u0447\u0442\u0430: </b>' + item.b_owner_email + ' <b>\u0412\u0440\u0435\u043C\u044F: </b>' + new Date(+(item.b_time_activity + '000')).toLocaleString() + '</div>\n      <div>\n        ' + currentEnterpriseFlag + '\n\n        <button type="button" class="btn p-0 bg-white reference-icon" data-enterprise-id="' + item.b_id + '" style="background-image: url(img/arrow-right.png); background-size: cover;"></button>\n      </div>\n    </div>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(enterprisesData) {
 	    var _this = this;
@@ -2141,6 +2146,16 @@
 	var pointsEditBtn = document.querySelector('#points-edit-btn');
 	var pointsEditName = document.querySelector('#points-edit-name');
 	
+	var enableCheckEditButtons = function enableCheckEditButtons() {
+	  pointsCheckBtn.removeAttribute('disabled');
+	  pointsEditBtn.removeAttribute('disabled');
+	};
+	
+	var disableCheckEditButtons = function disableCheckEditButtons() {
+	  pointsCheckBtn.setAttribute('disabled', 'disabled');
+	  pointsEditBtn.setAttribute('disabled', 'disabled');
+	};
+	
 	var onSuccessPointsLoad = function onSuccessPointsLoad(loadedPoints) {
 	  document.querySelector('#' + loaderSpinnerId).remove();
 	  if (loadedPoints.status === 200) {
@@ -2152,8 +2167,7 @@
 	};
 	
 	var selectedString = '';
-	pointsCheckBtn.setAttribute('disabled', 'disabled');
-	pointsEditBtn.setAttribute('disabled', 'disabled');
+	disableCheckEditButtons();
 	
 	var onErrorPointsLoad = function onErrorPointsLoad(error) {
 	  console.log(error);
@@ -2166,25 +2180,19 @@
 	  }
 	  selectedString = evt.target.labels[0];
 	  selectedString.classList.add('bg-light');
-	  pointsCheckBtn.removeAttribute('disabled');
-	  pointsEditBtn.removeAttribute('disabled');
+	  enableCheckEditButtons();
 	});
 	
 	pointsCheckBtn.addEventListener('click', function () {
 	  if (!pointsCheckBtn.hasAttribute('disabled')) {
-	    console.dir(selectedString);
-	    console.log(selectedString.dataset);
 	    _storage2.default.currentStock = selectedString.dataset.stockId;
-	    pointsCheckBtn.setAttribute('disabled', 'disabled');
-	    pointsEditBtn.setAttribute('disabled', 'disabled');
+	    disableCheckEditButtons();
 	    getPoints();
 	  }
 	});
 	
 	pointsEditBtn.addEventListener('click', function () {
 	  if (!pointsEditBtn.hasAttribute('disabled')) {
-	    console.dir(selectedString);
-	    console.log(selectedString.dataset);
 	    _storage2.default.currentStockId = selectedString.dataset.stockId;
 	    _storage2.default.currentStockName = selectedString.dataset.stockName;
 	    pointsEditName.value = selectedString.dataset.stockName;
@@ -2192,10 +2200,10 @@
 	});
 	
 	var getPoints = function getPoints() {
+	  disableCheckEditButtons();
+	
 	  _referencePoints2.default.cleanContainer();
 	  _referencePoints2.default.drawMarkupInContainer(loaderSpinnerMarkup);
-	  pointsCheckBtn.setAttribute('disabled', 'disabled');
-	  pointsEditBtn.setAttribute('disabled', 'disabled');
 	
 	  _xhr2.default.request = {
 	    metod: 'POST',
@@ -2244,7 +2252,7 @@
 	  getElement: function getElement(item) {
 	    var currentStockFlag = item.id === _storage2.default.data['currentStock'] ? 'V' : '';
 	
-	    return '\n    <input type="radio" id="' + item.id + '" name="contact" value="email" class="d-none">\n    <label id="log-row" for="' + item.id + '" class="card mb-0 p-1 rounded-0" style="width: 100%" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '">\n        <div>\n          <b>ID: </b>' + item.id + ' <b>\u0418\u043C\u044F: </b>' + item.name + '\n          <div class="badge text-right float-right">\n            <span class="badge badge-pill badge-success">' + currentStockFlag + '</span>\n          </div>\n      </label>';
+	    return '\n\n    <input type="radio" id="' + item.id + '" name="contact" value="email" class="d-none">\n    <label id="log-row" for="' + item.id + '"  class="d-flex justify-content-between border rounded-0 m-0" style="min-height: 33px;" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '">\n      <div><b>ID: </b>' + item.id + ' <b>\u0418\u043C\u044F: </b>' + item.name + '</div>\n      <div>\n        <span class="badge badge-pill badge-success">' + currentStockFlag + '</span>\n      </div>\n      </label>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(enterprisesData) {
 	    var _this = this;
@@ -2290,7 +2298,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var loaderSpinnerId = 'loader-enterprises';
+	var loaderSpinnerId = 'loader-contractors';
 	var loaderSpinnerMessage = 'Загрузка';
 	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
 	
@@ -2300,30 +2308,47 @@
 	var listContractorsHeaderType = document.querySelector('#list-contractors-header-type');
 	var listContractorsAddBtn = document.querySelector('#contractors-add-btn');
 	var listContractorsAddForm = document.querySelector('#contractors-add-form');
+	var listContractorsHeader = document.querySelector('#list-contractors-header');
 	var listContractorsBody = document.querySelector('#list-contractors-body');
 	var listContractorsCard = document.querySelector('#list-contractors-card');
 	var listContractorsCardReturnBtn = document.querySelector('#list-contractors-card-return-btn');
 	var listContractorsCardEditBtn = document.querySelector('#list-contractors-card-edit-btn');
 	
+	var listContractorsFormEditLabel = document.querySelector('#contractors-add-label');
 	var listContractorsFormEditName = document.querySelector('#contractors-name');
 	var listContractorsFormEditDescribe = document.querySelector('#contractors-describe');
 	var listContractorsFormEditContact = document.querySelector('#contractors-contact');
 	var listContractorsFormEditEmail = document.querySelector('#contractors-email');
+	
+	var ContractorType = {
+	  SUPPLIER: 1,
+	  BUYER: 2
+	};
+	
+	var showBodyHideCard = function showBodyHideCard() {
+	  listContractorsBody.classList.remove('d-none');
+	  listContractorsCard.classList.add('d-none');
+	};
+	
+	var hideBodyShowCard = function hideBodyShowCard() {
+	  listContractorsBody.classList.add('d-none');
+	  listContractorsCard.classList.remove('d-none');
+	};
 	
 	listContractorsAddBtn.addEventListener('click', function () {
 	  listContractorsAddForm.reset();
 	});
 	
 	listContractorsCardReturnBtn.addEventListener('click', function () {
-	  listContractorsBody.classList.remove('d-none');
-	  listContractorsCard.classList.add('d-none');
+	  showBodyHideCard();
+	  listContractorsHeader.classList.add('d-flex');
+	  listContractorsHeader.classList.remove('d-none');
 	  getContractors(_storage2.default.currentContractor);
 	});
 	
 	var onSuccessContractorsLoad = function onSuccessContractorsLoad(loadedContractors) {
 	  document.querySelector('#' + loaderSpinnerId).remove();
 	  if (loadedContractors.status === 200) {
-	    console.log(loadedContractors);
 	    _referenceContractorsCard2.default.cleanContainer();
 	    _referenceContractors2.default.drawDataInContainer(loadedContractors.data);
 	  } else {
@@ -2358,8 +2383,9 @@
 	
 	var onListContractorsBodyClick = function onListContractorsBodyClick(evt) {
 	  if (evt.target.tagName === 'BUTTON') {
-	    listContractorsBody.classList.add('d-none');
-	    listContractorsCard.classList.remove('d-none');
+	    hideBodyShowCard();
+	    listContractorsHeader.classList.remove('d-flex');
+	    listContractorsHeader.classList.add('d-none');
 	    _referenceContractorsCard2.default.drawMarkupInContainer(loaderSpinnerMarkup);
 	
 	    _xhr2.default.request = {
@@ -2375,13 +2401,13 @@
 	listContractorsBody.addEventListener('click', onListContractorsBodyClick);
 	
 	var getContractors = function getContractors(type) {
-	  console.log(type);
-	  listContractorsBody.classList.remove('d-none');
-	  listContractorsCard.classList.add('d-none');
-	  listContractorsHeaderType.innerHTML = type === 1 ? 'Поставщики' : 'Покупатели';
+	  showBodyHideCard();
+	  listContractorsHeaderType.innerHTML = type === ContractorType.SUPPLIER ? 'ПОСТАВЩИКИ' : 'ПОКУПАТЕЛИ';
+	  listContractorsFormEditLabel.innerHTML = type === ContractorType.SUPPLIER ? 'Поставщики' : 'Покупатели';
+	  _storage2.default.currentContractor = type;
+	
 	  _referenceContractors2.default.cleanContainer();
 	  _referenceContractors2.default.drawMarkupInContainer(loaderSpinnerMarkup);
-	  _storage2.default.currentContractor = type;
 	
 	  _xhr2.default.request = {
 	    metod: 'POST',
@@ -2394,8 +2420,8 @@
 	
 	exports.default = {
 	  start: function start() {
-	    listBuyers.addEventListener('click', getContractors.bind(null, 2));
-	    listSuppliers.addEventListener('click', getContractors.bind(null, 1));
+	    listBuyers.addEventListener('click', getContractors.bind(null, ContractorType.BUYER));
+	    listSuppliers.addEventListener('click', getContractors.bind(null, ContractorType.SUPPLIER));
 	  },
 	
 	
@@ -2419,16 +2445,13 @@
 	});
 	var listContractorsBody = document.querySelector('#list-contractors-body');
 	
-	// import auth from '../tools/storage.js';
-	
 	exports.default = {
 	  cleanContainer: function cleanContainer() {
 	    listContractorsBody.innerHTML = '';
 	  },
 	  getElement: function getElement(item) {
-	    // const currentStockFlag = (item.id === auth.data['currentStock']) ? 'V' : '';
 	
-	    return '\n    <input type="radio" id="' + item.id + '" name="contact" value="email" class="d-none">\n    <label id="log-row" for="' + item.id + '" class="card mb-0 p-1 rounded-0" style="width: 100%" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '">\n        <div>\n          <b>ID: </b>' + item.id + ' <b>\u0418\u043C\u044F: </b>' + item.name + '\n          <div class="badge text-right float-right">\n            <button type="button" class="btn btn-light" data-buyer-id="' + item.id + '"> &rarr; </button>\n          </div>\n      </label>';
+	    return '\n\n    <div class="d-flex justify-content-between border rounded-0">\n      <div><b>ID: </b>' + item.id + ' <b>\u0418\u043C\u044F: </b>' + item.name + '</div>\n      <div>\n        <button type="button" class="btn btn-primary btn-sm" data-buyer-id="' + item.id + '"> &rarr; </button>\n      </div>\n    </div>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(buyersBodyData) {
 	    var _this = this;
@@ -2518,12 +2541,6 @@
 	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
 	
 	var listKeywords = document.querySelector('#list-keywords-list');
-	/*
-	const listPointsBody = document.querySelector('#list-points-body');
-	const pointsCheckBtn = document.querySelector('#points-check');
-	const pointsEditBtn = document.querySelector('#points-edit-btn');
-	const pointsEditName = document.querySelector('#points-edit-name');
-	*/
 	
 	var onSuccessKeywordsLoad = function onSuccessKeywordsLoad(loadedKeywords) {
 	  document.querySelector('#' + loaderSpinnerId).remove();
@@ -2539,28 +2556,6 @@
 	  console.log(error);
 	};
 	
-	/*
-	pointsCheckBtn.addEventListener('click', function () {
-	  if (!pointsCheckBtn.hasAttribute('disabled')) {
-	    console.dir(selectedString);
-	    console.log(selectedString.dataset);
-	    auth.currentStock = selectedString.dataset.stockId;
-	    pointsCheckBtn.setAttribute('disabled', 'disabled');
-	    pointsEditBtn.setAttribute('disabled', 'disabled');
-	    getPoints();
-	  }
-	});
-	
-	pointsEditBtn.addEventListener('click', function () {
-	  if (!pointsEditBtn.hasAttribute('disabled')) {
-	    console.dir(selectedString);
-	    console.log(selectedString.dataset);
-	    auth.currentStockId = selectedString.dataset.stockId;
-	    auth.currentStockName = selectedString.dataset.stockName;
-	    pointsEditName.value = selectedString.dataset.stockName;
-	  }
-	});
-	*/
 	var getKeywords = function getKeywords() {
 	  _referenceKeywords2.default.cleanContainer();
 	  _referenceKeywords2.default.drawMarkupInContainer(loaderSpinnerMarkup);
