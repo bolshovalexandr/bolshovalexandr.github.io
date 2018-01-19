@@ -2419,6 +2419,9 @@
 	
 	var getContractors = function getContractors(type) {
 	  showBodyHideCard();
+	  listContractorsHeader.classList.add('d-flex');
+	  listContractorsHeader.classList.remove('d-none');
+	
 	  listContractorsHeaderType.innerHTML = type === ContractorType.SUPPLIER ? _referenceContractors2.default.getSuppliersHeader() : _referenceContractors2.default.getBuyersHeader();
 	  listContractorsFormEditLabel.innerHTML = type === ContractorType.SUPPLIER ? 'Поставщики' : 'Покупатели';
 	  _storage2.default.currentContractor = type;
