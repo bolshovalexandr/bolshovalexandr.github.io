@@ -2339,7 +2339,7 @@
 	var listContractorsBody = document.querySelector('#list-contractors-body');
 	var listContractorsCard = document.querySelector('#list-contractors-card');
 	var listContractorsCardReturnBtn = document.querySelector('#list-contractors-card-return-btn');
-	var listContractorsCardEditBtn = document.querySelector('#list-contractors-card-edit-btn');
+	// const listContractorsCardEditBtn = document.querySelector('#list-contractors-card-edit-btn');
 	
 	var listContractorsFormEditLabel = document.querySelector('#contractors-add-label');
 	var listContractorsFormEditName = document.querySelector('#contractors-name');
@@ -2359,6 +2359,9 @@
 	var showBodyHideCard = function showBodyHideCard() {
 	  listContractorsBody.classList.remove('d-none');
 	  listContractorsCard.classList.add('d-none');
+	  listContractorsHeader.classList.add('d-flex');
+	  listContractorsHeader.classList.remove('d-none');
+	  listContractorsFormBill.classList.add('d-none');
 	};
 	
 	var hideBodyShowCard = function hideBodyShowCard() {
@@ -2372,8 +2375,6 @@
 	
 	listContractorsCardReturnBtn.addEventListener('click', function () {
 	  showBodyHideCard();
-	  listContractorsHeader.classList.add('d-flex');
-	  listContractorsHeader.classList.remove('d-none');
 	  getContractors(_storage2.default.currentContractorType);
 	});
 	
@@ -2399,17 +2400,11 @@
 	  document.querySelector('#' + loaderSpinnerId).remove();
 	  if (loadedBuyerCard.status === 200) {
 	    console.log(loadedBuyerCard);
+	    _referenceContractorsCard2.default.cleanContainer();
 	    _referenceContractorsCard2.default.drawDataInContainer(loadedBuyerCard.data);
 	    listContractorsFormSubmit.innerHTML = 'Изменить';
 	    _storage2.default.currentContractorId = loadedBuyerCard.id;
 	    _storage2.default.currentContractorOperation = 'edit';
-	
-	    listContractorsCardEditBtn.addEventListener('click', function () {
-	      listContractorsFormEditName.value = contractorsData.name ? contractorsData.name : '';
-	      listContractorsFormEditDescribe.value = contractorsData.description ? contractorsData.description : '';
-	      listContractorsFormEditContact.value = contractorsData.contact ? contractorsData.contact : '';
-	      listContractorsFormEditEmail.value = contractorsData.email ? contractorsData.email : '';
-	    });
 	  } else {
 	    _referenceContractorsCard2.default.drawMarkupInContainer('<p>' + loadedBuyerCard.message + '</p>');
 	  }
@@ -2425,16 +2420,24 @@
 	  while (!currentStringElement.dataset.buyerId) {
 	    currentStringElement = currentStringElement.parentNode;
 	  }
-	  console.log('hi');
-	  var currentStringIndex = currentStringElement.dataset.index;
+	
+	  var _contractorsData$curr = contractorsData[currentStringElement.dataset.index],
+	      name = _contractorsData$curr.name,
+	      description = _contractorsData$curr.description,
+	      contact = _contractorsData$curr.contact,
+	      email = _contractorsData$curr.email;
+	
 	
 	  $('#contractors-add').modal('show');
 	
 	  console.log(contractorsData);
-	  listContractorsFormEditName.value = contractorsData[currentStringIndex].name ? contractorsData[currentStringIndex].name : '';
-	  listContractorsFormEditDescribe.value = contractorsData[currentStringIndex].description ? contractorsData[currentStringIndex].description : '';
-	  listContractorsFormEditContact.value = contractorsData[currentStringIndex].contact ? contractorsData[currentStringIndex].contact : '';
-	  listContractorsFormEditEmail.value = contractorsData[currentStringIndex].email ? contractorsData[currentStringIndex].email : '';
+	
+	  listContractorsFormEditName.value = name ? name : '';
+	  listContractorsFormEditDescribe.value = description ? description : '';
+	  listContractorsFormEditContact.value = contact ? contact : '';
+	  listContractorsFormEditEmail.value = email ? email : '';
+	
+	  listContractorsFormBill.classList.remove('d-none');
 	
 	  listContractorsFormBill.addEventListener('click', function () {
 	    hideBodyShowCard();
@@ -2446,7 +2449,7 @@
 	    _xhr2.default.request = {
 	      metod: 'POST',
 	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/kontr_agent/' + currentStringElement.dataset.buyerId,
-	      data: 'token=' + _storage2.default.data.token + '&count_doc=4&shift_doc=2',
+	      data: 'token=' + _storage2.default.data.token + '&count_doc=4&shift_doc=0',
 	      callbackSuccess: onSuccessBuyerCardLoad,
 	      callbackError: onErrorBuyerCardLoad
 	    };
@@ -2457,8 +2460,6 @@
 	
 	var getContractors = function getContractors(type) {
 	  showBodyHideCard();
-	  listContractorsHeader.classList.add('d-flex');
-	  listContractorsHeader.classList.remove('d-none');
 	
 	  listContractorsHeaderType.innerHTML = type === ContractorType.SUPPLIER ? _referenceContractors2.default.getSuppliersHeader() : _referenceContractors2.default.getBuyersHeader();
 	  listContractorsFormEditLabel.innerHTML = type === ContractorType.SUPPLIER ? 'Поставщики' : 'Покупатели';
