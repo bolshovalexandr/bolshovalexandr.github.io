@@ -268,12 +268,28 @@
 	    return sessionStorage.getItem('currentStockName');
 	  },
 	
-	  set currentContractor(type) {
-	    sessionStorage.setItem('currentContractor', type);
+	  set currentContractorId(id) {
+	    sessionStorage.setItem('currentContractorId', id);
 	  },
 	
-	  get currentContractor() {
-	    return sessionStorage.getItem('currentContractor');
+	  get currentContractorId() {
+	    return sessionStorage.getItem('currentContractorId');
+	  },
+	
+	  set currentContractorType(type) {
+	    sessionStorage.setItem('currentContractorType', type);
+	  },
+	
+	  get currentContractorType() {
+	    return sessionStorage.getItem('currentContractorType');
+	  },
+	
+	  set currentContractorOperation(type) {
+	    sessionStorage.setItem('currentContractorOperation', type);
+	  },
+	
+	  get currentContractorOperation() {
+	    return sessionStorage.getItem('currentContractorOperation');
 	  }
 	
 	};
@@ -1662,6 +1678,7 @@
 	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
 	
 	var onSuccessEnterprisesLoad = function onSuccessEnterprisesLoad(loadedEnterprises) {
+	  console.log(loadedEnterprises);
 	  document.querySelector('#' + loaderSpinnerId).remove();
 	  if (loadedEnterprises.status === 200) {
 	    _referenceEnterprises2.default.drawDataInContainer(loadedEnterprises.data);
@@ -2330,6 +2347,9 @@
 	var listContractorsFormEditContact = document.querySelector('#contractors-contact');
 	var listContractorsFormEditEmail = document.querySelector('#contractors-email');
 	var listContractorsFormSubmit = document.querySelector('#contractors-add-submit');
+	var listContractorsFormBill = document.querySelector('#contractors-add-bill');
+	
+	var contractorsData = [];
 	
 	var ContractorType = {
 	  SUPPLIER: 1,
@@ -2354,15 +2374,18 @@
 	  showBodyHideCard();
 	  listContractorsHeader.classList.add('d-flex');
 	  listContractorsHeader.classList.remove('d-none');
-	  getContractors(_storage2.default.currentContractor);
+	  getContractors(_storage2.default.currentContractorType);
 	});
 	
 	var onSuccessContractorsLoad = function onSuccessContractorsLoad(loadedContractors) {
 	  document.querySelector('#' + loaderSpinnerId).remove();
 	  if (loadedContractors.status === 200) {
+	    console.log(loadedContractors);
+	    contractorsData = loadedContractors.data.slice(0);
 	    _referenceContractorsCard2.default.cleanContainer();
 	    _referenceContractors2.default.drawDataInContainer(loadedContractors.data);
 	    listContractorsFormSubmit.innerHTML = 'Создать';
+	    _storage2.default.currentContractorOperation = 'add';
 	  } else {
 	    _referenceContractors2.default.drawMarkupInContainer('<p>' + loadedContractors.message + '</p>');
 	  }
@@ -2378,12 +2401,14 @@
 	    console.log(loadedBuyerCard);
 	    _referenceContractorsCard2.default.drawDataInContainer(loadedBuyerCard.data);
 	    listContractorsFormSubmit.innerHTML = 'Изменить';
+	    _storage2.default.currentContractorId = loadedBuyerCard.id;
+	    _storage2.default.currentContractorOperation = 'edit';
 	
 	    listContractorsCardEditBtn.addEventListener('click', function () {
-	      listContractorsFormEditName.value = loadedBuyerCard.data.name ? loadedBuyerCard.data.name : '';
-	      listContractorsFormEditDescribe.value = loadedBuyerCard.data.description ? loadedBuyerCard.data.description : '';
-	      listContractorsFormEditContact.value = loadedBuyerCard.data.contact ? loadedBuyerCard.data.contact : '';
-	      listContractorsFormEditEmail.value = loadedBuyerCard.data.email ? loadedBuyerCard.data.email : '';
+	      listContractorsFormEditName.value = contractorsData.name ? contractorsData.name : '';
+	      listContractorsFormEditDescribe.value = contractorsData.description ? contractorsData.description : '';
+	      listContractorsFormEditContact.value = contractorsData.contact ? contractorsData.contact : '';
+	      listContractorsFormEditEmail.value = contractorsData.email ? contractorsData.email : '';
 	    });
 	  } else {
 	    _referenceContractorsCard2.default.drawMarkupInContainer('<p>' + loadedBuyerCard.message + '</p>');
@@ -2400,19 +2425,32 @@
 	  while (!currentStringElement.dataset.buyerId) {
 	    currentStringElement = currentStringElement.parentNode;
 	  }
+	  console.log('hi');
+	  var currentStringIndex = currentStringElement.dataset.index;
 	
-	  hideBodyShowCard();
-	  listContractorsHeader.classList.remove('d-flex');
-	  listContractorsHeader.classList.add('d-none');
-	  _referenceContractorsCard2.default.drawMarkupInContainer(loaderSpinnerMarkup);
+	  $('#contractors-add').modal('show');
 	
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/kontr_agent/' + currentStringElement.dataset.buyerId,
-	    data: 'token=' + _storage2.default.data.token + '&count_doc=4&shift_doc=2',
-	    callbackSuccess: onSuccessBuyerCardLoad,
-	    callbackError: onErrorBuyerCardLoad
-	  };
+	  console.log(contractorsData);
+	  listContractorsFormEditName.value = contractorsData[currentStringIndex].name ? contractorsData[currentStringIndex].name : '';
+	  listContractorsFormEditDescribe.value = contractorsData[currentStringIndex].description ? contractorsData[currentStringIndex].description : '';
+	  listContractorsFormEditContact.value = contractorsData[currentStringIndex].contact ? contractorsData[currentStringIndex].contact : '';
+	  listContractorsFormEditEmail.value = contractorsData[currentStringIndex].email ? contractorsData[currentStringIndex].email : '';
+	
+	  listContractorsFormBill.addEventListener('click', function () {
+	    hideBodyShowCard();
+	    listContractorsHeader.classList.remove('d-flex');
+	    listContractorsHeader.classList.add('d-none');
+	
+	    _referenceContractorsCard2.default.drawMarkupInContainer(loaderSpinnerMarkup);
+	
+	    _xhr2.default.request = {
+	      metod: 'POST',
+	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/kontr_agent/' + currentStringElement.dataset.buyerId,
+	      data: 'token=' + _storage2.default.data.token + '&count_doc=4&shift_doc=2',
+	      callbackSuccess: onSuccessBuyerCardLoad,
+	      callbackError: onErrorBuyerCardLoad
+	    };
+	  });
 	};
 	
 	listContractorsBody.addEventListener('click', onListContractorsBodyClick);
@@ -2424,7 +2462,7 @@
 	
 	  listContractorsHeaderType.innerHTML = type === ContractorType.SUPPLIER ? _referenceContractors2.default.getSuppliersHeader() : _referenceContractors2.default.getBuyersHeader();
 	  listContractorsFormEditLabel.innerHTML = type === ContractorType.SUPPLIER ? 'Поставщики' : 'Покупатели';
-	  _storage2.default.currentContractor = type;
+	  _storage2.default.currentContractorType = type;
 	
 	  _referenceContractors2.default.cleanContainer();
 	  _referenceContractors2.default.drawMarkupInContainer(loaderSpinnerMarkup);
@@ -2469,15 +2507,15 @@
 	  cleanContainer: function cleanContainer() {
 	    listContractorsBody.innerHTML = '';
 	  },
-	  getElement: function getElement(item) {
+	  getElement: function getElement(item, index) {
 	
-	    return '\n\n      <div class="d-flex justify-content-between align-items-center reference-string"  data-buyer-id="' + item.id + '">\n        <div><b>ID: </b>' + item.id + ' <b>\u0418\u043C\u044F: </b>' + item.name + '</div>\n        <div class="d-flex justify-content-between align-items-center">\n\n          <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>\n        </div>\n    </div>';
+	    return '\n\n      <div class="d-flex justify-content-between align-items-center reference-string"  data-buyer-id="' + item.id + '"  data-index="' + index + '">\n        <div><b>ID: </b>' + item.id + ' <b>\u0418\u043C\u044F: </b>' + item.name + '</div>\n        <div class="d-flex justify-content-between align-items-center">\n\n          <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>\n        </div>\n    </div>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(buyersBodyData) {
 	    var _this = this;
 	
-	    buyersBodyData.forEach(function (item) {
-	      return listContractorsBody.insertAdjacentHTML('beforeend', _this.getElement(item));
+	    buyersBodyData.forEach(function (item, index) {
+	      return listContractorsBody.insertAdjacentHTML('beforeend', _this.getElement(item, index));
 	    });
 	  },
 	  drawMarkupInContainer: function drawMarkupInContainer(markup) {
@@ -2571,8 +2609,10 @@
 	var onSuccessKeywordsLoad = function onSuccessKeywordsLoad(loadedKeywords) {
 	  document.querySelector('#' + loaderSpinnerId).remove();
 	  console.log(loadedKeywords);
-	  if (loadedKeywords.status === 200) {
+	  if (loadedKeywords.status === 200 && loadedKeywords.data) {
 	    _referenceKeywords2.default.drawDataInContainer(loadedKeywords.data);
+	  } else if (loadedKeywords.status === 200 && !loadedKeywords.data) {
+	    _referenceKeywords2.default.drawMarkupInContainer('<p>' + (loadedKeywords.message || 'Что-то в поле message пусто и в data лежит false') + '</p>');
 	  } else {
 	    _referenceKeywords2.default.drawMarkupInContainer('<p>' + loadedKeywords.message + '</p>');
 	  }
