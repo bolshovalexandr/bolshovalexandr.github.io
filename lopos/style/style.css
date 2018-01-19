@@ -51,6 +51,10 @@
   background-image: url(../img/arrow-right.png);
   background-size: cover; }
 
+.icon-btn__rgb {
+  background-image: url(../img/rgb-circle-1-50.png);
+  background-size: cover; }
+
 .icon-btn__return {
   background-image: url(../img/icons8-left-100.png);
   background-size: cover;
@@ -70,6 +74,9 @@
 
 .enterprise-card-block {
   margin-left: 55px; }
+
+.btn:disabled {
+  opacity: 0.3; }
 
 /*
 @import "src/sass/components/app.scss";

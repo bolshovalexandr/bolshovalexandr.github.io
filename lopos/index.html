@@ -346,11 +346,25 @@
           </div>
           <div id="list-keywords-body"></div>
 
+          <div id="list-keywords-card" class="d-none">
+            <div class="d-flex flex-nowrap align-items-center">
+              <div class="d-flex mr-auto align-items-center">
+                <button id="list-keywords-card-return-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__return"></button>
+                <h2 id="list-keywords-card-name"></h2>
+              </div>
+              <button id="list-keywords-card-check-btn" type="button" class="btn btn-link p-0 icon-btn icon-btn__rgb"></button>
+              <button id="list-keywords-card-edit-btn" type="button" class="btn btn-warning p-0 icon-btn icon-btn__edit" data-toggle="modal" data-target="#keywords-card-edit"></button>
+              <button id="list-keywords-card-delete-btn" type="button" class="btn btn-danger p-0 icon-btn icon-btn__delete"></button>
+            </div>
+            <div id="list-keywords-card-edit"></div>
+          </div>
+
         </div>
+
+
         <div class="tab-pane fade" id="list-enterprises" role="tabpanel" aria-labelledby="list-enterprises-list">
           <div id="list-enterprises-header" class="d-flex justify-content-between align-items-center mb-2">
             <div class="d-flex align-items-center reference-header">
-              <img src="img/enterprises.png" alt="">
               <h2>ПРЕДПРИЯТИЯ</h2>
             </div>
             <button type="button" class="btn btn-success p-0 icon-btn icon-btn__add" data-toggle="modal" data-target="#enterprises-add"></button>
@@ -367,7 +381,7 @@
               <button id="list-enterprises-card-edit-btn" type="button" class="btn btn-warning p-0 icon-btn icon-btn__edit" data-toggle="modal" data-target="#enterprises-card-edit"></button>
               <button id="list-enterprises-card-delete-btn" type="button" class="btn btn-danger p-0 icon-btn icon-btn__delete"></button>
             </div>
-            <div class="enterprise-card-block">
+            <div class="ml-4">
               <div class="d-flex justify-content-between align-items-center mb-2">
                 <div>
                   <span>Баланс</span>
@@ -611,7 +625,7 @@
               <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
 
-            <button id="contractors-add-submit" type="submit" class="btn btn-primary w-100">Создать</button>
+            <button id="contractors-add-submit" type="submit" class="btn btn-primary w-100" disabled>Изменить</button>
 
             <button id="contractors-add-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal">Отменить</button>
             <button id="contractors-add-bill" type="button" class="btn btn-info w-100 mt-3 d-none" data-dismiss="modal">Последние накладные</button>

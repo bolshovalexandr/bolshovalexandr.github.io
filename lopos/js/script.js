@@ -2346,7 +2346,7 @@
 	var listContractorsFormEditDescribe = document.querySelector('#contractors-describe');
 	var listContractorsFormEditContact = document.querySelector('#contractors-contact');
 	var listContractorsFormEditEmail = document.querySelector('#contractors-email');
-	var listContractorsFormSubmit = document.querySelector('#contractors-add-submit');
+	// const listContractorsFormSubmit = document.querySelector('#contractors-add-submit');
 	var listContractorsFormBill = document.querySelector('#contractors-add-bill');
 	
 	var contractorsData = [];
@@ -2384,7 +2384,7 @@
 	    contractorsData = loadedContractors.data.slice(0);
 	    _referenceContractorsCard2.default.cleanContainer();
 	    _referenceContractors2.default.drawDataInContainer(loadedContractors.data);
-	    listContractorsFormSubmit.innerHTML = 'Создать';
+	    // listContractorsFormSubmit.innerHTML = 'Создать';
 	    _storage2.default.currentContractorOperation = 'add';
 	  } else {
 	    _referenceContractors2.default.drawMarkupInContainer('<p>' + loadedContractors.message + '</p>');
@@ -2401,7 +2401,7 @@
 	    console.log(loadedBuyerCard);
 	    _referenceContractorsCard2.default.cleanContainer();
 	    _referenceContractorsCard2.default.drawDataInContainer(loadedBuyerCard.data);
-	    listContractorsFormSubmit.innerHTML = 'Изменить';
+	    // listContractorsFormSubmit.innerHTML = 'Изменить';
 	    _storage2.default.currentContractorId = loadedBuyerCard.id;
 	    _storage2.default.currentContractorOperation = 'edit';
 	  } else {
@@ -2609,6 +2609,19 @@
 	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
 	
 	var listKeywords = document.querySelector('#list-keywords-list');
+	var listKeywordsCard = document.querySelector('#list-keywords-card');
+	var listKeywordsReturnBtn = document.querySelector('#list-keywords-card-return-btn');
+	var listKeywordsHeader = document.querySelector('#list-keywords-header');
+	var listKeywordsBody = document.querySelector('#list-keywords-body');
+	
+	var onListKeywordsReturnBtnClick = function onListKeywordsReturnBtnClick() {
+	  listKeywordsCard.classList.add('d-none');
+	  listKeywordsHeader.classList.remove('d-none');
+	  listKeywordsHeader.classList.add('d-flex');
+	  listKeywordsBody.classList.remove('d-none');
+	};
+	
+	listKeywordsReturnBtn.addEventListener('click', onListKeywordsReturnBtnClick);
 	
 	var onSuccessKeywordsLoad = function onSuccessKeywordsLoad(loadedKeywords) {
 	  document.querySelector('#' + loaderSpinnerId).remove();
@@ -2629,6 +2642,7 @@
 	var getKeywords = function getKeywords() {
 	  _referenceKeywords2.default.cleanContainer();
 	  _referenceKeywords2.default.drawMarkupInContainer(loaderSpinnerMarkup);
+	  onListKeywordsReturnBtnClick();
 	
 	  _xhr2.default.request = {
 	    metod: 'POST',
@@ -2662,7 +2676,10 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	var listKeywordsHeader = document.querySelector('#list-keywords-header');
 	var listKeywordsBody = document.querySelector('#list-keywords-body');
+	var listKeywordsCard = document.querySelector('#list-keywords-card');
+	var listKeywordsCardEdit = document.querySelector('#list-keywords-card-edit');
 	
 	exports.default = {
 	  cleanContainer: function cleanContainer() {
@@ -2670,13 +2687,21 @@
 	  },
 	  getElement: function getElement(item) {
 	
-	    return '\n      <span class="badge" style="background-color: #' + item.hex_color + '">#' + item.name + '</span>';
+	    return '\n      <span class="badge" style="background-color: #' + item.hex_color + '; cursor: pointer;">#' + item.name + '</span>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(keywordsData) {
 	    var _this = this;
 	
 	    keywordsData.forEach(function (item) {
-	      return listKeywordsBody.insertAdjacentHTML('beforeend', _this.getElement(item));
+	      listKeywordsBody.insertAdjacentHTML('beforeend', _this.getElement(item));
+	
+	      listKeywordsBody.lastChild.addEventListener('click', function () {
+	        listKeywordsHeader.classList.add('d-none');
+	        listKeywordsHeader.classList.remove('d-flex');
+	        listKeywordsBody.classList.add('d-none');
+	        listKeywordsCard.classList.remove('d-none');
+	        listKeywordsCardEdit.innerHTML = '<div class="text-center"><button type="button" class="btn btn-lg text-white" style="background-color: #' + item.hex_color + '">#' + item.name + '</button></div>';
+	      });
 	    });
 	  },
 	  drawMarkupInContainer: function drawMarkupInContainer(markup) {
