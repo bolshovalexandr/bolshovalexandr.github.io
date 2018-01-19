@@ -18,11 +18,10 @@
   background-size: cover; }
 
 .icon-btn {
-  width: 30px;
-  height: 30px;
+  width: 44px;
+  height: 44px;
   border: none;
   margin-left: 5px;
-  border-radius: 0;
   cursor: pointer; }
 
 .icon-btn:disabled {
@@ -60,6 +59,16 @@
   min-height: 35px;
   border: 1px solid #ccc;
   margin-bottom: -1px; }
+
+.reference-header img {
+  width: 44px;
+  height: 44px; }
+
+.reference-header h2 {
+  margin-left: 5px; }
+
+.enterprise-card-block {
+  margin-left: 50px; }
 
 /*
 @import "src/sass/components/app.scss";

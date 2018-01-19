@@ -1721,10 +1721,13 @@
 	    listEnterprisesCardIsChecked.classList.remove('d-none');
 	  });
 	
+	  $('#enterprises-card-edit').on('show.bs.modal', function (e) {
+	    listEnterprisesCardEditName.value = loadedEnterpriseCard.data.name;
+	  });
+	
 	  listEnterprisesCardName.innerText = loadedEnterpriseCard.data.name;
 	  listEnterprisesCardDate.innerText = new Date(+(loadedEnterpriseCard.data.time_activity + '000')).toLocaleString();
 	  listEnterprisesCardBalance.innerText = loadedEnterpriseCard.data.balance;
-	  listEnterprisesCardEditName.value = loadedEnterpriseCard.data.name;
 	  _storage2.default.currentEnterpriseId = loadedEnterpriseCard.data.id;
 	  _storage2.default.currentEnterpriseName = loadedEnterpriseCard.data.name;
 	};
@@ -2361,7 +2364,6 @@
 	  listContractorsCard.classList.add('d-none');
 	  listContractorsHeader.classList.add('d-flex');
 	  listContractorsHeader.classList.remove('d-none');
-	  listContractorsFormBill.classList.add('d-none');
 	};
 	
 	var hideBodyShowCard = function hideBodyShowCard() {
@@ -2477,6 +2479,10 @@
 	  };
 	};
 	
+	$('#contractors-add').on('hidden.bs.modal', function (e) {
+	  listContractorsFormBill.classList.add('d-none');
+	});
+	
 	exports.default = {
 	  start: function start() {
 	    listBuyers.addEventListener('click', getContractors.bind(null, ContractorType.BUYER));
@@ -2523,10 +2529,10 @@
 	    listContractorsBody.insertAdjacentHTML('beforeend', markup);
 	  },
 	  getBuyersHeader: function getBuyersHeader() {
-	    return '\n        <img src="img/buyers.png" width="42px" alt="">\n        <h2 class="mb-0">\u041F\u041E\u041A\u0423\u041F\u0410\u0422\u0415\u041B\u0418</h2>';
+	    return '\n        <img src="img/buyers.png" alt="">\n        <h2>\u041F\u041E\u041A\u0423\u041F\u0410\u0422\u0415\u041B\u0418</h2>';
 	  },
 	  getSuppliersHeader: function getSuppliersHeader() {
-	    return '\n        <img src="img/suppliers.png" width="42px" alt="">\n        <h2 class="mb-0">\u041F\u041E\u0421\u0422\u0410\u0412\u0429\u0418\u041A\u0418</h2>';
+	    return '\n        <img src="img/suppliers.png" alt="">\n        <h2>\u041F\u041E\u0421\u0422\u0410\u0412\u0429\u0418\u041A\u0418</h2>';
 	  }
 	};
 
