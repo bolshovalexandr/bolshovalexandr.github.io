@@ -53,7 +53,8 @@
 
 .icon-btn__return {
   background-image: url(../img/icons8-left-100.png);
-  background-size: cover; }
+  background-size: cover;
+  margin-right: 5px; }
 
 .reference-string {
   min-height: 35px;
@@ -68,7 +69,7 @@
   margin-left: 5px; }
 
 .enterprise-card-block {
-  margin-left: 50px; }
+  margin-left: 55px; }
 
 /*
 @import "src/sass/components/app.scss";

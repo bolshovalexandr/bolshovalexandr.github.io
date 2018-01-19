@@ -1668,9 +1668,6 @@
 	// const listEnterprisesCardNegativeBalance = document.querySelector('#list-enterprises-card-negative-balance');
 	
 	var listEnterprisesCardCheckBtn = document.querySelector('#list-enterprises-card-check-btn');
-	// const listEnterprisesCardEditBtn = document.querySelector('#list-enterprises-card-edit-btn');
-	// const listEnterprisesCardDeleteBtn = document.querySelector('#list-enterprises-card-delete-btn');
-	
 	var listEnterprisesCardEditName = document.querySelector('#enterprises-card-edit-name');
 	
 	var loaderSpinnerId = 'loader-enterprises';
