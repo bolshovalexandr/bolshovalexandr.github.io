@@ -1646,6 +1646,7 @@
 	
 	var listEnterprisesCardName = document.querySelector('#list-enterprises-card-name');
 	var listEnterprisesCardBalance = document.querySelector('#list-enterprises-card-balance');
+	var listEnterprisesCardIsChecked = document.querySelector('#list-enterprises-card-is-checked');
 	var listEnterprisesCardDate = document.querySelector('#list-enterprises-card-date');
 	// const listEnterprisesCardNegativeTailings = document.querySelector('#list-enterprises-card-negative-tailings');
 	// const listEnterprisesCardNegativeBalance = document.querySelector('#list-enterprises-card-negative-balance');
@@ -1690,13 +1691,17 @@
 	  console.log(loadedEnterpriseCard);
 	
 	  if (_storage2.default.data.currentBusiness === loadedEnterpriseCard.data.id) {
-	    listEnterprisesCardCheckBtn.setAttribute('disabled', 'disabled');
+	    listEnterprisesCardCheckBtn.classList.add('d-none');
+	    listEnterprisesCardIsChecked.classList.remove('d-none');
 	  } else {
-	    listEnterprisesCardCheckBtn.removeAttribute('disabled');
+	    listEnterprisesCardCheckBtn.classList.remove('d-none');
+	    listEnterprisesCardIsChecked.classList.add('d-none');
 	  }
 	
 	  listEnterprisesCardCheckBtn.addEventListener('click', function () {
 	    _storage2.default.currentBusiness = loadedEnterpriseCard.data.id;
+	    listEnterprisesCardCheckBtn.classList.add('d-none');
+	    listEnterprisesCardIsChecked.classList.remove('d-none');
 	  });
 	
 	  listEnterprisesCardName.innerText = loadedEnterpriseCard.data.name;
@@ -1712,20 +1717,23 @@
 	};
 	
 	var onListEnterprisesBodyClick = function onListEnterprisesBodyClick(evt) {
-	  if (evt.target.tagName === 'BUTTON' || evt.target.tagName === 'IMG') {
-	    listEnterprisesHeader.classList.remove('d-flex');
-	    listEnterprisesHeader.classList.add('d-none');
-	    listEnterprisesBody.classList.add('d-none');
-	    listEnterprisesCard.classList.remove('d-none');
-	
-	    _xhr2.default.request = {
-	      metod: 'POST',
-	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + evt.target.dataset.enterpriseId + '/info',
-	      data: 'view_last=0&token=' + _storage2.default.data.token,
-	      callbackSuccess: onSuccessEnterpriseCardLoad,
-	      callbackError: onErrorEnterpriseCardLoad
-	    };
+	  var currentStringElement = evt.target;
+	  while (!currentStringElement.dataset.enterpriseId) {
+	    currentStringElement = currentStringElement.parentNode;
 	  }
+	
+	  listEnterprisesHeader.classList.remove('d-flex');
+	  listEnterprisesHeader.classList.add('d-none');
+	  listEnterprisesBody.classList.add('d-none');
+	  listEnterprisesCard.classList.remove('d-none');
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + currentStringElement.dataset.enterpriseId + '/info',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessEnterpriseCardLoad,
+	    callbackError: onErrorEnterpriseCardLoad
+	  };
 	};
 	
 	var onListEnterprisesCardReturnBtn = function onListEnterprisesCardReturnBtn() {
@@ -1778,9 +1786,9 @@
 	    listEnterprisesBody.innerHTML = '';
 	  },
 	  getElement: function getElement(item) {
-	    var currentEnterpriseFlag = item.b_id === _storage2.default.data['currentBusiness'] ? '<button type="button" class="btn p-0 bg-white reference-icon""><img src="img/icons8-checked-96.png" alt=""></button>' : '';
+	    var currentEnterpriseFlag = item.b_id === _storage2.default.data['currentBusiness'] ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
 	
-	    return '\n    <div class="d-flex justify-content-between border rounded-0">\n      <div><b>ID: </b>' + item.b_id + ' <b>\u0418\u043C\u044F: </b>' + item.b_name + ' <b>\u041F\u043E\u0447\u0442\u0430: </b>' + item.b_owner_email + ' <b>\u0412\u0440\u0435\u043C\u044F: </b>' + new Date(+(item.b_time_activity + '000')).toLocaleString() + '</div>\n      <div>\n        ' + currentEnterpriseFlag + '\n\n        <button type="button" class="btn p-0 bg-white reference-icon" data-enterprise-id="' + item.b_id + '" style="background-image: url(img/arrow-right.png); background-size: cover;"></button>\n      </div>\n    </div>';
+	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-enterprise-id="' + item.b_id + '">\n      <div><b>ID: </b>' + item.b_id + ' <b>\u0418\u043C\u044F: </b>' + item.b_name + ' <b>\u041F\u043E\u0447\u0442\u0430: </b>' + item.b_owner_email + ' <b>\u0412\u0440\u0435\u043C\u044F: </b>' + new Date(+(item.b_time_activity + '000')).toLocaleString() + '</div>\n      <div class="d-flex justify-content-between align-items-center">\n        ' + currentEnterpriseFlag + '\n\n        <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>\n      </div>\n    </div>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(enterprisesData) {
 	    var _this = this;
@@ -2180,6 +2188,7 @@
 	  }
 	  selectedString = evt.target.labels[0];
 	  selectedString.classList.add('bg-light');
+	  _storage2.default.currentStockId = selectedString.dataset.stockId;
 	  enableCheckEditButtons();
 	});
 	
@@ -2250,9 +2259,10 @@
 	    listPointsBody.innerHTML = '';
 	  },
 	  getElement: function getElement(item) {
-	    var currentStockFlag = item.id === _storage2.default.data['currentStock'] ? 'V' : '';
+	    // const currentStockFlag = (item.id === auth.data['currentStock']) ? '<button type="button" class="btn p-0 bg-white icon-btn icon-btn__check--green"></button>' : '';
+	    var currentStockFlag = item.id === _storage2.default.data['currentStock'] ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
 	
-	    return '\n\n    <input type="radio" id="' + item.id + '" name="contact" value="email" class="d-none">\n    <label id="log-row" for="' + item.id + '"  class="d-flex justify-content-between border rounded-0 m-0" style="min-height: 33px;" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '">\n      <div><b>ID: </b>' + item.id + ' <b>\u0418\u043C\u044F: </b>' + item.name + '</div>\n      <div>\n        <span class="badge badge-pill badge-success">' + currentStockFlag + '</span>\n      </div>\n      </label>';
+	    return '\n\n    <input type="radio" id="' + item.id + '" name="contact" value="email" class="d-none">\n    <label for="' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '">\n      <div><b>ID: </b>' + item.id + ' <b>\u0418\u043C\u044F: </b>' + item.name + '</div>\n      <div class="d-flex justify-content-between align-items-center">\n        ' + currentStockFlag + '\n      </div>\n      </label>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(enterprisesData) {
 	    var _this = this;
@@ -2319,6 +2329,7 @@
 	var listContractorsFormEditDescribe = document.querySelector('#contractors-describe');
 	var listContractorsFormEditContact = document.querySelector('#contractors-contact');
 	var listContractorsFormEditEmail = document.querySelector('#contractors-email');
+	var listContractorsFormSubmit = document.querySelector('#contractors-add-submit');
 	
 	var ContractorType = {
 	  SUPPLIER: 1,
@@ -2351,6 +2362,7 @@
 	  if (loadedContractors.status === 200) {
 	    _referenceContractorsCard2.default.cleanContainer();
 	    _referenceContractors2.default.drawDataInContainer(loadedContractors.data);
+	    listContractorsFormSubmit.innerHTML = 'Создать';
 	  } else {
 	    _referenceContractors2.default.drawMarkupInContainer('<p>' + loadedContractors.message + '</p>');
 	  }
@@ -2365,12 +2377,13 @@
 	  if (loadedBuyerCard.status === 200) {
 	    console.log(loadedBuyerCard);
 	    _referenceContractorsCard2.default.drawDataInContainer(loadedBuyerCard.data);
+	    listContractorsFormSubmit.innerHTML = 'Изменить';
 	
 	    listContractorsCardEditBtn.addEventListener('click', function () {
-	      listContractorsFormEditName.value = loadedBuyerCard.data.name;
-	      listContractorsFormEditDescribe.value = loadedBuyerCard.data.description;
-	      listContractorsFormEditContact.value = loadedBuyerCard.data.contact;
-	      listContractorsFormEditEmail.value = loadedBuyerCard.data.email;
+	      listContractorsFormEditName.value = loadedBuyerCard.data.name ? loadedBuyerCard.data.name : '';
+	      listContractorsFormEditDescribe.value = loadedBuyerCard.data.description ? loadedBuyerCard.data.description : '';
+	      listContractorsFormEditContact.value = loadedBuyerCard.data.contact ? loadedBuyerCard.data.contact : '';
+	      listContractorsFormEditEmail.value = loadedBuyerCard.data.email ? loadedBuyerCard.data.email : '';
 	    });
 	  } else {
 	    _referenceContractorsCard2.default.drawMarkupInContainer('<p>' + loadedBuyerCard.message + '</p>');
@@ -2382,27 +2395,31 @@
 	};
 	
 	var onListContractorsBodyClick = function onListContractorsBodyClick(evt) {
-	  if (evt.target.tagName === 'BUTTON') {
-	    hideBodyShowCard();
-	    listContractorsHeader.classList.remove('d-flex');
-	    listContractorsHeader.classList.add('d-none');
-	    _referenceContractorsCard2.default.drawMarkupInContainer(loaderSpinnerMarkup);
+	  var currentStringElement = evt.target;
 	
-	    _xhr2.default.request = {
-	      metod: 'POST',
-	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/kontr_agent/' + evt.target.dataset.buyerId,
-	      data: 'token=' + _storage2.default.data.token + '&count_doc=4&shift_doc=2',
-	      callbackSuccess: onSuccessBuyerCardLoad,
-	      callbackError: onErrorBuyerCardLoad
-	    };
+	  while (!currentStringElement.dataset.buyerId) {
+	    currentStringElement = currentStringElement.parentNode;
 	  }
+	
+	  hideBodyShowCard();
+	  listContractorsHeader.classList.remove('d-flex');
+	  listContractorsHeader.classList.add('d-none');
+	  _referenceContractorsCard2.default.drawMarkupInContainer(loaderSpinnerMarkup);
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/kontr_agent/' + currentStringElement.dataset.buyerId,
+	    data: 'token=' + _storage2.default.data.token + '&count_doc=4&shift_doc=2',
+	    callbackSuccess: onSuccessBuyerCardLoad,
+	    callbackError: onErrorBuyerCardLoad
+	  };
 	};
 	
 	listContractorsBody.addEventListener('click', onListContractorsBodyClick);
 	
 	var getContractors = function getContractors(type) {
 	  showBodyHideCard();
-	  listContractorsHeaderType.innerHTML = type === ContractorType.SUPPLIER ? 'ПОСТАВЩИКИ' : 'ПОКУПАТЕЛИ';
+	  listContractorsHeaderType.innerHTML = type === ContractorType.SUPPLIER ? _referenceContractors2.default.getSuppliersHeader() : _referenceContractors2.default.getBuyersHeader();
 	  listContractorsFormEditLabel.innerHTML = type === ContractorType.SUPPLIER ? 'Поставщики' : 'Покупатели';
 	  _storage2.default.currentContractor = type;
 	
@@ -2451,7 +2468,7 @@
 	  },
 	  getElement: function getElement(item) {
 	
-	    return '\n\n    <div class="d-flex justify-content-between border rounded-0">\n      <div><b>ID: </b>' + item.id + ' <b>\u0418\u043C\u044F: </b>' + item.name + '</div>\n      <div>\n        <button type="button" class="btn btn-primary btn-sm" data-buyer-id="' + item.id + '"> &rarr; </button>\n      </div>\n    </div>';
+	    return '\n\n      <div class="d-flex justify-content-between align-items-center reference-string"  data-buyer-id="' + item.id + '">\n        <div><b>ID: </b>' + item.id + ' <b>\u0418\u043C\u044F: </b>' + item.name + '</div>\n        <div class="d-flex justify-content-between align-items-center">\n\n          <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>\n        </div>\n    </div>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(buyersBodyData) {
 	    var _this = this;
@@ -2462,6 +2479,12 @@
 	  },
 	  drawMarkupInContainer: function drawMarkupInContainer(markup) {
 	    listContractorsBody.insertAdjacentHTML('beforeend', markup);
+	  },
+	  getBuyersHeader: function getBuyersHeader() {
+	    return '\n        <img src="img/buyers.png" width="42px" alt="">\n        <h2 class="mb-0">\u041F\u041E\u041A\u0423\u041F\u0410\u0422\u0415\u041B\u0418</h2>';
+	  },
+	  getSuppliersHeader: function getSuppliersHeader() {
+	    return '\n        <img src="img/suppliers.png" width="42px" alt="">\n        <h2 class="mb-0">\u041F\u041E\u0421\u0422\u0410\u0412\u0429\u0418\u041A\u0418</h2>';
 	  }
 	};
 

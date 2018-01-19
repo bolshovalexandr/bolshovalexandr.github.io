@@ -9,16 +9,57 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9bdcbf', endColorstr='#4a9ad1',GradientType=1 );
   /* IE6-9 */ }
 
-.reference-icon {
-  width: 40px;
-  height: 40px;
-  margin-right: 5px;
+.icon {
+  width: 25px;
+  height: 25px; }
+
+.icon__check {
+  background-image: url("../img/icons8-checked-96.png");
+  background-size: cover; }
+
+.icon-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  margin-left: 5px;
+  border-radius: 0;
   cursor: pointer; }
 
-.reference-icon img {
-  width: 35px;
-  height: 35px;
-  cursor: pointer; }
+.icon-btn:disabled {
+  opacity: 0.3; }
+
+.icon-btn__check--green {
+  background-image: url("../img/icons8-checked-96.png");
+  background-size: cover; }
+
+.icon-btn__check--white {
+  background-image: url(../img/icons8-checked-48.png);
+  background-size: cover; }
+
+.icon-btn__add {
+  background-image: url(../img/plus-math-50.png);
+  background-size: cover; }
+
+.icon-btn__edit {
+  background-image: url(../img/icons8-edit-50.png);
+  background-size: cover; }
+
+.icon-btn__delete {
+  background-image: url(../img/trash-100.png);
+  background-size: cover; }
+
+.icon-btn__go {
+  background-image: url(../img/arrow-right.png);
+  background-size: cover; }
+
+.icon-btn__return {
+  background-image: url(../img/icons8-left-100.png);
+  background-size: cover; }
+
+.reference-string {
+  min-height: 35px;
+  border: 1px solid #ccc;
+  margin-bottom: -1px; }
 
 /*
 @import "src/sass/components/app.scss";
