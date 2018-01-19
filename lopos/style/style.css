@@ -65,6 +65,9 @@
   border: 1px solid #ccc;
   margin-bottom: -1px; }
 
+.reference-header {
+  margin-bottom: 15px; }
+
 .reference-header img {
   width: 44px;
   height: 44px; }
@@ -77,6 +80,14 @@
 
 .btn:disabled {
   opacity: 0.3; }
+
+.keywords-card-select-color {
+  width: 70px;
+  height: 40px;
+  margin-bottom: 5px; }
+
+input:checked + label {
+  border: 1px solid black; }
 
 /*
 @import "src/sass/components/app.scss";

@@ -290,6 +290,14 @@
 	
 	  get currentContractorOperation() {
 	    return sessionStorage.getItem('currentContractorOperation');
+	  },
+	
+	  set currentKeywordRgb(rgb) {
+	    sessionStorage.setItem('currentKeywordRgb', rgb);
+	  },
+	
+	  get currentKeywordRgb() {
+	    return sessionStorage.getItem('currentKeywordRgb');
 	  }
 	
 	};
@@ -2346,7 +2354,7 @@
 	var listContractorsFormEditDescribe = document.querySelector('#contractors-describe');
 	var listContractorsFormEditContact = document.querySelector('#contractors-contact');
 	var listContractorsFormEditEmail = document.querySelector('#contractors-email');
-	// const listContractorsFormSubmit = document.querySelector('#contractors-add-submit');
+	var listContractorsFormSubmit = document.querySelector('#contractors-add-submit');
 	var listContractorsFormBill = document.querySelector('#contractors-add-bill');
 	
 	var contractorsData = [];
@@ -2372,6 +2380,12 @@
 	  listContractorsAddForm.reset();
 	});
 	
+	/*
+	listContractorsCardEditBtn.addEventListener('click', function () {
+	  listContractorsFormSubmit.innerHTML = 'Изменить';
+	});
+	*/
+	
 	listContractorsCardReturnBtn.addEventListener('click', function () {
 	  showBodyHideCard();
 	  getContractors(_storage2.default.currentContractorType);
@@ -2384,7 +2398,7 @@
 	    contractorsData = loadedContractors.data.slice(0);
 	    _referenceContractorsCard2.default.cleanContainer();
 	    _referenceContractors2.default.drawDataInContainer(loadedContractors.data);
-	    // listContractorsFormSubmit.innerHTML = 'Создать';
+	    listContractorsFormSubmit.innerHTML = 'Создать';
 	    _storage2.default.currentContractorOperation = 'add';
 	  } else {
 	    _referenceContractors2.default.drawMarkupInContainer('<p>' + loadedContractors.message + '</p>');
@@ -2401,7 +2415,7 @@
 	    console.log(loadedBuyerCard);
 	    _referenceContractorsCard2.default.cleanContainer();
 	    _referenceContractorsCard2.default.drawDataInContainer(loadedBuyerCard.data);
-	    // listContractorsFormSubmit.innerHTML = 'Изменить';
+	    listContractorsFormSubmit.innerHTML = 'Изменить';
 	    _storage2.default.currentContractorId = loadedBuyerCard.id;
 	    _storage2.default.currentContractorOperation = 'edit';
 	  } else {
@@ -2435,6 +2449,7 @@
 	  listContractorsFormEditDescribe.value = description ? description : '';
 	  listContractorsFormEditContact.value = contact ? contact : '';
 	  listContractorsFormEditEmail.value = email ? email : '';
+	  listContractorsFormSubmit.innerHTML = 'Изменить';
 	
 	  listContractorsFormBill.classList.remove('d-none');
 	
@@ -2613,6 +2628,7 @@
 	var listKeywordsReturnBtn = document.querySelector('#list-keywords-card-return-btn');
 	var listKeywordsHeader = document.querySelector('#list-keywords-header');
 	var listKeywordsBody = document.querySelector('#list-keywords-body');
+	var listKeywordsCardEditRGBForm = document.querySelector('#keywords-card-edit-rgb-form');
 	
 	var onListKeywordsReturnBtnClick = function onListKeywordsReturnBtnClick() {
 	  listKeywordsCard.classList.add('d-none');
@@ -2622,6 +2638,17 @@
 	};
 	
 	listKeywordsReturnBtn.addEventListener('click', onListKeywordsReturnBtnClick);
+	
+	var onListKeywordsCardEditRGBFormSubmit = function onListKeywordsCardEditRGBFormSubmit(evt) {
+	  evt.preventDefault();
+	  var newRGB = listKeywordsCardEditRGBForm.querySelector('input:checked').value;
+	  _storage2.default.currentKeywordRgb = newRGB;
+	  console.log(document.querySelector('#list-keywords-card-edit > div > button'));
+	  document.querySelector('#list-keywords-card-edit > div > button').style.backgroundColor = '#' + _storage2.default.currentKeywordRgb;
+	  $('#keywords-card-edit-rgb').modal('hide');
+	};
+	
+	listKeywordsCardEditRGBForm.addEventListener('submit', onListKeywordsCardEditRGBFormSubmit);
 	
 	var onSuccessKeywordsLoad = function onSuccessKeywordsLoad(loadedKeywords) {
 	  document.querySelector('#' + loaderSpinnerId).remove();

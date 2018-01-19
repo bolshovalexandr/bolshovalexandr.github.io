@@ -352,8 +352,8 @@
                 <button id="list-keywords-card-return-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__return"></button>
                 <h2 id="list-keywords-card-name"></h2>
               </div>
-              <button id="list-keywords-card-check-btn" type="button" class="btn btn-link p-0 icon-btn icon-btn__rgb"></button>
-              <button id="list-keywords-card-edit-btn" type="button" class="btn btn-warning p-0 icon-btn icon-btn__edit" data-toggle="modal" data-target="#keywords-card-edit"></button>
+              <button id="list-keywords-card-check-btn" type="button" class="btn btn-link p-0 icon-btn icon-btn__rgb" data-toggle="modal" data-target="#keywords-card-edit-rgb"></button>
+              <button id="list-keywords-card-edit-btn" type="button" class="btn btn-warning p-0 icon-btn icon-btn__edit" data-toggle="modal" data-target="#keywords-card-edit-name"></button>
               <button id="list-keywords-card-delete-btn" type="button" class="btn btn-danger p-0 icon-btn icon-btn__delete"></button>
             </div>
             <div id="list-keywords-card-edit"></div>
@@ -365,6 +365,7 @@
         <div class="tab-pane fade" id="list-enterprises" role="tabpanel" aria-labelledby="list-enterprises-list">
           <div id="list-enterprises-header" class="d-flex justify-content-between align-items-center mb-2">
             <div class="d-flex align-items-center reference-header">
+              <img src="img/enterprises.png" alt="">
               <h2>ПРЕДПРИЯТИЯ</h2>
             </div>
             <button type="button" class="btn btn-success p-0 icon-btn icon-btn__add" data-toggle="modal" data-target="#enterprises-add"></button>
@@ -653,7 +654,7 @@
               <span id="points-add-valid" class="badge badge-danger w-100"></span>
             </div>
 
-            <div id="points-add-spinner" class="progress text-white mb-3 invisible">
+            <div id="keywords-add-spinner" class="progress text-white mb-3 invisible">
               <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
 
@@ -665,6 +666,89 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="keywords-card-edit-name" tabindex="-1" role="dialog" aria-labelledby="keywords-card-edit-name" aria-hidden="true" backdrop="static">
+    <div class="modal-dialog" style="width: 300px;" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="keywords-card-edit-name-label">Создать ключевое слово</h5>
+          <button id="keywords-card-edit-name-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+          <form id="keywords-card-edit-name-form" name="keywords-card-edit-name">
+            <div class="form-group">
+              <label for="keywords-card-edit-name">Новое название</label>
+              <input type="text" class="form-control" id="keywords-card-edit-name" aria-describedby="keywords-card-edit-name" placeholder="Название">
+              <span id="keywords-card-edit-name-valid" class="badge badge-danger w-100"></span>
+            </div>
+
+            <div id="keywords-card-edit-name-spinner" class="progress text-white mb-3 invisible">
+              <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+
+            <button id="keywords-card-edit-name-submit" type="submit" class="btn btn-primary w-100">Создать</button>
+
+            <button id="keywords-card-edit-name-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal">Отменить</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Справочники / создание ключевого слова -->
+  <div class="modal fade" id="keywords-card-edit-rgb" tabindex="-1" role="dialog" aria-labelledby="keywords-card-edit-rgb" aria-hidden="true" backdrop="static">
+    <div class="modal-dialog" style="width: 300px;" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="keywords-card-edit-rgb-label">Изменить цвет</h5>
+          <button id="keywords-card-edit-rgb-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+          <form id="keywords-card-edit-rgb-form" name="keywords-card-edit-rgb">
+            <div class="form-group keywords-card-select-color-container d-flex flex-wrap justify-content-around">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input d-none" type="radio" name="keywords-card-edit-rgb" id="E70027" value="E70027">
+                <label class="form-check-label keywords-card-select-color" style="background-color: #E70027" for="E70027"></label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input d-none" type="radio" name="keywords-card-edit-rgb" id="00A1B6" value="00A1B6">
+                <label class="form-check-label keywords-card-select-color" style="background-color: #00A1B6" for="00A1B6"></label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input d-none" type="radio" name="keywords-card-edit-rgb" id="DCB131" value="DCB131">
+                <label class="form-check-label keywords-card-select-color" style="background-color: #DCB131" for="DCB131"></label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input d-none" type="radio" name="keywords-card-edit-rgb" id="009F39" value="009F39">
+                <label class="form-check-label keywords-card-select-color" style="background-color: #009F39" for="009F39"></label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input d-none" type="radio" name="keywords-card-edit-rgb" id="B154DE" value="B154DE">
+                <label class="form-check-label keywords-card-select-color" style="background-color: #B154DE" for="B154DE"></label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input d-none" type="radio" name="keywords-card-edit-rgb" id="6E81E4" value="6E81E4">
+                <label class="form-check-label keywords-card-select-color" style="background-color: #6E81E4" for="6E81E4"></label>
+              </div>
+            </div>
+
+            <div id="keywords-card-edit-rgb-spinner" class="progress text-white mb-3 invisible">
+              <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+
+            <button id="keywords-card-edit-rgb-submit" type="submit" class="btn btn-primary w-100">Изменить</button>
+
+            <button id="keywords-card-edit-rgb-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal">Отменить</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
