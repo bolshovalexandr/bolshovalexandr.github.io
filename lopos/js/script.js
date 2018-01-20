@@ -78,13 +78,29 @@
 	
 	var _referencePoints2 = _interopRequireDefault(_referencePoints);
 	
-	var _referenceContractors = __webpack_require__(24);
+	var _referencePointsAdd = __webpack_require__(24);
+	
+	var _referencePointsAdd2 = _interopRequireDefault(_referencePointsAdd);
+	
+	var _referencePointsEdit = __webpack_require__(25);
+	
+	var _referencePointsEdit2 = _interopRequireDefault(_referencePointsEdit);
+	
+	var _referenceContractors = __webpack_require__(26);
 	
 	var _referenceContractors2 = _interopRequireDefault(_referenceContractors);
 	
-	var _referenceKeywords = __webpack_require__(27);
+	var _referenceContractorsAdd = __webpack_require__(29);
+	
+	var _referenceContractorsAdd2 = _interopRequireDefault(_referenceContractorsAdd);
+	
+	var _referenceKeywords = __webpack_require__(30);
 	
 	var _referenceKeywords2 = _interopRequireDefault(_referenceKeywords);
+	
+	var _referenceKeywordsAdd = __webpack_require__(32);
+	
+	var _referenceKeywordsAdd2 = _interopRequireDefault(_referenceKeywordsAdd);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -134,6 +150,11 @@
 	// ========== ОБНОВЛЕНИЕ/ОТКРЫТИЕ СТРАНИЦЫ ==========
 	var start = function start() {
 	  if (_storage2.default.isSetFlag) {
+	
+	    document.querySelector('#test').addEventListener('click', function () {
+	      console.dir(window.appFormCurrValue);
+	    });
+	
 	    showAppHideLogin();
 	    _onlineProfile2.default.start();
 	    _log2.default.start();
@@ -145,6 +166,10 @@
 	    hashObserver();
 	    _referenceEnterprisesAdd2.default.start();
 	    _referenceEnterprisesEdit2.default.start();
+	    _referencePointsAdd2.default.start();
+	    _referencePointsEdit2.default.start();
+	    _referenceContractorsAdd2.default.start();
+	    _referenceKeywordsAdd2.default.start();
 	  } else {
 	    showLoginHideApp();
 	    _main_login_window2.default.init();
@@ -298,6 +323,22 @@
 	
 	  get currentKeywordRgb() {
 	    return sessionStorage.getItem('currentKeywordRgb');
+	  },
+	
+	  set currentKeywordId(id) {
+	    sessionStorage.setItem('currentKeywordId', id);
+	  },
+	
+	  get currentKeywordId() {
+	    return sessionStorage.getItem('currentKeywordId');
+	  },
+	
+	  set currentKeywordName(name) {
+	    sessionStorage.setItem('currentKeywordName', name);
+	  },
+	
+	  get currentKeywordName() {
+	    return sessionStorage.getItem('currentKeywordName');
 	  }
 	
 	};
@@ -1676,7 +1717,42 @@
 	// const listEnterprisesCardNegativeBalance = document.querySelector('#list-enterprises-card-negative-balance');
 	
 	var listEnterprisesCardCheckBtn = document.querySelector('#list-enterprises-card-check-btn');
+	var listEnterprisesCardDeleteBtn = document.querySelector('#list-enterprises-card-delete-btn');
 	var listEnterprisesCardEditName = document.querySelector('#enterprises-card-edit-name');
+	
+	var onSuccessEnterprisesDelete = function onSuccessEnterprisesDelete(answer) {
+	  console.log(answer);
+	
+	  onListEnterprisesCardReturnBtn();
+	
+	  _tools2.default.informationtModal = {
+	    title: 'Уведомление',
+	    message: '\u041F\u0440\u0435\u0434\u043F\u0440\u0438\u044F\u0442\u0438\u0435 <b>' + _storage2.default.currentEnterpriseName + '</b> \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0443\u0434\u0430\u043B\u0435\u043D\u043E'
+	  };
+	};
+	
+	var onErrorEnterprisesDelete = function onErrorEnterprisesDelete(error) {
+	  console.log(error);
+	};
+	
+	var setRequestToDeleteEnterprise = function setRequestToDeleteEnterprise() {
+	  _xhr2.default.request = {
+	    metod: 'DELETE',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.currentEnterpriseId,
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessEnterprisesDelete,
+	    callbackError: onErrorEnterprisesDelete
+	  };
+	};
+	
+	listEnterprisesCardDeleteBtn.addEventListener('click', function () {
+	
+	  _tools2.default.actionRequestModal = {
+	    title: 'Удаление',
+	    message: '\u0412\u044B \u0442\u043E\u0447\u043D\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u043F\u0440\u0435\u0434\u043F\u0440\u0438\u044F\u0442\u0438\u0435 <b>' + _storage2.default.currentEnterpriseName + '</b>?',
+	    submitCallback: setRequestToDeleteEnterprise
+	  };
+	});
 	
 	var loaderSpinnerId = 'loader-enterprises';
 	var loaderSpinnerMessage = 'Загрузка';
@@ -1762,10 +1838,10 @@
 	};
 	
 	var onListEnterprisesCardReturnBtn = function onListEnterprisesCardReturnBtn() {
-	  listEnterprisesBody.classList.remove('d-none');
-	  listEnterprisesCard.classList.add('d-none');
 	  listEnterprisesHeader.classList.add('d-flex');
 	  listEnterprisesHeader.classList.remove('d-none');
+	  listEnterprisesBody.classList.remove('d-none');
+	  listEnterprisesCard.classList.add('d-none');
 	  listEnterprisesCardName.innerText = '';
 	  listEnterprisesCardDate.innerText = '';
 	  listEnterprisesCardBalance.innerText = '';
@@ -1831,21 +1907,46 @@
 /* 19 */
 /***/ (function(module, exports) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	var modalActionRequest = document.querySelector('#modal-action-request');
+	var modalActionRequestTitle = modalActionRequest.querySelector('#modal-action-request-title');
+	var modalActionRequestMessage = modalActionRequest.querySelector('#modal-action-request-message');
+	var modalActionRequestSubmit = modalActionRequest.querySelector('#modal-action-request-submit');
+	
+	var modalInformation = document.querySelector('#modal-information');
+	var modalInformationTitle = modalInformation.querySelector('#modal-information-title');
+	var modalInformationMessage = modalInformation.querySelector('#modal-information-message');
+	
 	exports.default = {
 	  getWaitSpinner: function getWaitSpinner(id, message) {
-	    return "\n      <div id=\"loader\" class=\"progress text-white\" style=\"height: 25px;\">\n        <div class=\"progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase bg-success\" style=\"width: 100%\" role=\"progressbar\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\">" + message + "</div>\n      </div>";
+	    return '\n      <div id="loader" class="progress text-white" style="height: 25px;">\n        <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase bg-success" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">' + message + '</div>\n      </div>';
 	  },
 	  getLoadSpinner: function getLoadSpinner(id, message) {
-	    return "\n      <div id=\"" + id + "\" class=\"progress text-white\" style=\"height: 25px;\">\n        <div class=\"progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase\" style=\"width: 100%\" role=\"progressbar\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\">" + message + "</div>\n      </div>";
+	    return '\n      <div id="' + id + '" class="progress text-white" style="height: 25px;">\n        <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">' + message + '</div>\n      </div>';
 	  },
 	  getError: function getError(id, message) {
-	    return "\n      <div id=\"loader-fail\" class=\"container-fluid bg-danger text-white text-center mb-5\" style=\"height: 25;\">" + message + "</div>";
+	    return '\n      <div id="loader-fail" class="container-fluid bg-danger text-white text-center mb-5" style="height: 25;">' + message + '</div>';
+	  },
+	
+	
+	  set actionRequestModal(setup) {
+	
+	    $(modalActionRequest).modal('show');
+	    modalActionRequestTitle.innerHTML = setup.title;
+	    modalActionRequestMessage.innerHTML = setup.message;
+	    modalActionRequestSubmit.addEventListener('click', setup.submitCallback);
+	  },
+	
+	  set informationtModal(setup) {
+	    $(modalInformation).modal('show');
+	    modalInformationTitle.innerHTML = setup.title;
+	    modalInformationMessage.innerHTML = setup.message;
 	  }
+	
 	};
 
 /***/ }),
@@ -2319,11 +2420,299 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _referenceContractors = __webpack_require__(25);
+	var _referencePoints = __webpack_require__(22);
+	
+	var _referencePoints2 = _interopRequireDefault(_referencePoints);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var appUrl = window.appSettings.formAddPoint.UrlApi;
+	var validNamePattern = window.appSettings.formAddPoint.validPatterns.name;
+	var validNameMessage = window.appSettings.formAddPoint.validMessage.name;
+	var messages = window.appSettings.formAddPoint.messages;
+	
+	var body = document.querySelector('body');
+	var enterprisesAdd = body.querySelector('#points-add');
+	var form = enterprisesAdd.querySelector('#points-add-form');
+	
+	var name = form.querySelector('#points-add-name');
+	var nameValid = form.querySelector('#points-add-valid');
+	
+	var spinner = form.querySelector('#points-add-spinner');
+	
+	var buttonSubmit = form.querySelector('#points-add-submit');
+	var buttonCancel = form.querySelector('#points-add-cancel');
+	var buttonClose = enterprisesAdd.querySelector('#points-add-close');
+	
+	var stor = _storage2.default.data;
+	
+	var formReset = function formReset() {
+	  form.reset();
+	  nameValid.innerHTML = '';
+	};
+	
+	var callbackXhrSuccess = function callbackXhrSuccess(response) {
+	
+	  hideSpinner();
+	  switch (response.status) {
+	    case 200:
+	      formReset();
+	      $('#points-add').modal('hide');
+	
+	      // Сюда метод перезагрузки списка
+	      _referencePoints2.default.redraw();
+	      break;
+	    case 400:
+	
+	      // Вывести response.message в красную ошибку
+	      alert(messages.mes400);
+	      break;
+	  }
+	};
+	
+	var callbackXhrError = function callbackXhrError() {
+	
+	  hideSpinner();
+	  // Вывести window.appSettings.messages.xhrError в красную ошибку
+	  alert(window.appSettings.messages.xhrError);
+	};
+	
+	var showSpinner = function showSpinner() {
+	  spinner.classList.remove('invisible');
+	  buttonSubmit.disabled = true;
+	  buttonCancel.disabled = true;
+	};
+	
+	var hideSpinner = function hideSpinner() {
+	  spinner.classList.add('invisible');
+	  buttonSubmit.disabled = false;
+	  buttonCancel.disabled = false;
+	};
+	
+	var validateForm = function validateForm() {
+	  var valid = true;
+	
+	  if (!validNamePattern.test(name.value)) {
+	    valid = false;
+	    nameValid.innerHTML = validNameMessage;
+	  }
+	
+	  return valid;
+	};
+	
+	var submitForm = function submitForm() {
+	  var postData = 'name=' + name.value + '&token=' + stor.token;
+	  var urlApp = appUrl.replace('{{dir}}', stor.directory);
+	  urlApp = urlApp.replace('{{oper}}', stor.operatorId);
+	  urlApp = urlApp.replace('{{busId}}', stor.currentBusiness);
+	
+	  var response = {
+	    url: urlApp,
+	    metod: 'POST',
+	    data: postData,
+	    callbackSuccess: callbackXhrSuccess,
+	    callbackError: callbackXhrError
+	  };
+	
+	  _xhr2.default.request = response;
+	};
+	
+	var formSubmitHandler = function formSubmitHandler(evt) {
+	  evt.preventDefault();
+	
+	  if (validateForm()) {
+	    showSpinner();
+	    submitForm();
+	  }
+	};
+	
+	exports.default = {
+	  start: function start() {
+	
+	    buttonCancel.addEventListener('click', function () {
+	      formReset();
+	    });
+	    buttonClose.addEventListener('click', function () {
+	      formReset();
+	    });
+	    form.addEventListener('submit', formSubmitHandler);
+	    form.addEventListener('change', function (evt) {
+	      if (evt.target.nextElementSibling) {
+	        evt.target.nextElementSibling.innerHTML = '';
+	      }
+	    });
+	  }
+	};
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _referencePoints = __webpack_require__(22);
+	
+	var _referencePoints2 = _interopRequireDefault(_referencePoints);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var appUrl = window.appSettings.formEditPoint.UrlApi;
+	var validNamePattern = window.appSettings.formEditPoint.validPatterns.name;
+	var validNameMessage = window.appSettings.formEditPoint.validMessage.name;
+	var messages = window.appSettings.formEditPoint.messages;
+	
+	var body = document.querySelector('body');
+	var enterprisesAdd = body.querySelector('#points-edit');
+	var form = enterprisesAdd.querySelector('#points-edit-form');
+	
+	var name = form.querySelector('#points-edit-name');
+	var nameValid = form.querySelector('#points-edit-valid');
+	
+	var spinner = form.querySelector('#points-edit-spinner');
+	
+	var buttonSubmit = form.querySelector('#points-edit-submit');
+	var buttonCancel = form.querySelector('#points-edit-cancel');
+	var buttonClose = enterprisesAdd.querySelector('#points-edit-close');
+	
+	var stor = _storage2.default.data;
+	
+	var formReset = function formReset() {
+	  form.reset();
+	  nameValid.innerHTML = '';
+	};
+	
+	var callbackXhrSuccess = function callbackXhrSuccess(response) {
+	  console.dir(response);
+	
+	  hideSpinner();
+	  switch (response.status) {
+	    case 200:
+	      formReset();
+	      $('#points-edit').modal('hide');
+	
+	      // Сюда метод перезагрузки списка
+	      _referencePoints2.default.redraw();
+	      break;
+	    case 400:
+	
+	      // Вывести response.message в красную ошибку
+	      alert(messages.mes400);
+	      break;
+	  }
+	};
+	
+	var callbackXhrError = function callbackXhrError() {
+	
+	  hideSpinner();
+	  // Вывести window.appSettings.messages.xhrError в красную ошибку
+	  alert(window.appSettings.messages.xhrError);
+	};
+	
+	var showSpinner = function showSpinner() {
+	  spinner.classList.remove('invisible');
+	  buttonSubmit.disabled = true;
+	  buttonCancel.disabled = true;
+	};
+	
+	var hideSpinner = function hideSpinner() {
+	  spinner.classList.add('invisible');
+	  buttonSubmit.disabled = false;
+	  buttonCancel.disabled = false;
+	};
+	
+	var validateForm = function validateForm() {
+	  var valid = true;
+	
+	  if (!validNamePattern.test(name.value)) {
+	    valid = false;
+	    nameValid.innerHTML = validNameMessage;
+	  }
+	
+	  return valid;
+	};
+	
+	var submitForm = function submitForm() {
+	  var postData = 'name=' + name.value + '&token=' + stor.token;
+	  var urlApp = appUrl.replace('{{dir}}', stor.directory);
+	  urlApp = urlApp.replace('{{oper}}', stor.operatorId);
+	  urlApp = urlApp.replace('{{busId}}', stor.currentBusiness);
+	  urlApp = urlApp.replace('{{stId}}', _storage2.default.currentStockId);
+	
+	  var response = {
+	    url: urlApp,
+	    metod: 'PUT',
+	    data: postData,
+	    callbackSuccess: callbackXhrSuccess,
+	    callbackError: callbackXhrError
+	  };
+	
+	  console.dir(response);
+	
+	  _xhr2.default.request = response;
+	};
+	
+	var formSubmitHandler = function formSubmitHandler(evt) {
+	  evt.preventDefault();
+	
+	  if (validateForm()) {
+	    showSpinner();
+	    submitForm();
+	  }
+	};
+	
+	exports.default = {
+	  start: function start() {
+	
+	    buttonCancel.addEventListener('click', function () {
+	      formReset();
+	    });
+	    buttonClose.addEventListener('click', function () {
+	      formReset();
+	    });
+	    form.addEventListener('submit', formSubmitHandler);
+	    form.addEventListener('change', function (evt) {
+	      if (evt.target.nextElementSibling) {
+	        evt.target.nextElementSibling.innerHTML = '';
+	      }
+	    });
+	  }
+	};
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _referenceContractors = __webpack_require__(27);
 	
 	var _referenceContractors2 = _interopRequireDefault(_referenceContractors);
 	
-	var _referenceContractorsCard = __webpack_require__(26);
+	var _referenceContractorsCard = __webpack_require__(28);
 	
 	var _referenceContractorsCard2 = _interopRequireDefault(_referenceContractorsCard);
 	
@@ -2353,6 +2742,7 @@
 	var listContractorsFormEditName = document.querySelector('#contractors-name');
 	var listContractorsFormEditDescribe = document.querySelector('#contractors-describe');
 	var listContractorsFormEditContact = document.querySelector('#contractors-contact');
+	var listContractorsFormEditPhone = document.querySelector('#contractors-phone');
 	var listContractorsFormEditEmail = document.querySelector('#contractors-email');
 	var listContractorsFormSubmit = document.querySelector('#contractors-add-submit');
 	var listContractorsFormBill = document.querySelector('#contractors-add-bill');
@@ -2415,9 +2805,7 @@
 	    console.log(loadedBuyerCard);
 	    _referenceContractorsCard2.default.cleanContainer();
 	    _referenceContractorsCard2.default.drawDataInContainer(loadedBuyerCard.data);
-	    listContractorsFormSubmit.innerHTML = 'Изменить';
-	    _storage2.default.currentContractorId = loadedBuyerCard.id;
-	    _storage2.default.currentContractorOperation = 'edit';
+	    // listContractorsFormSubmit.innerHTML = 'Изменить';
 	  } else {
 	    _referenceContractorsCard2.default.drawMarkupInContainer('<p>' + loadedBuyerCard.message + '</p>');
 	  }
@@ -2435,23 +2823,31 @@
 	  }
 	
 	  var _contractorsData$curr = contractorsData[currentStringElement.dataset.index],
+	      id = _contractorsData$curr.id,
 	      name = _contractorsData$curr.name,
 	      description = _contractorsData$curr.description,
+	      phone = _contractorsData$curr.phone,
 	      contact = _contractorsData$curr.contact,
 	      email = _contractorsData$curr.email;
 	
 	
 	  $('#contractors-add').modal('show');
 	
-	  console.log(contractorsData);
+	  _storage2.default.currentContractorId = id;
 	
 	  listContractorsFormEditName.value = name ? name : '';
 	  listContractorsFormEditDescribe.value = description ? description : '';
 	  listContractorsFormEditContact.value = contact ? contact : '';
+	  listContractorsFormEditPhone.value = phone ? phone : '';
 	  listContractorsFormEditEmail.value = email ? email : '';
 	  listContractorsFormSubmit.innerHTML = 'Изменить';
+	  _storage2.default.currentContractorOperation = 'edit';
 	
 	  listContractorsFormBill.classList.remove('d-none');
+	
+	  console.log(_storage2.default.currentContractorId);
+	  console.log(_storage2.default.currentContractorOperation);
+	  console.log(contractorsData);
 	
 	  listContractorsFormBill.addEventListener('click', function () {
 	    hideBodyShowCard();
@@ -2494,6 +2890,10 @@
 	$('#contractors-add').on('hidden.bs.modal', function (e) {
 	  listContractorsFormBill.classList.add('d-none');
 	});
+	$('#contractors-add').on('show.bs.modal', function (e) {
+	  console.log(_storage2.default.currentContractorId);
+	  console.log(_storage2.default.currentContractorOperation);
+	});
 	
 	exports.default = {
 	  start: function start() {
@@ -2512,7 +2912,7 @@
 	};
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -2549,7 +2949,7 @@
 	};
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -2592,7 +2992,7 @@
 	};
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2609,7 +3009,246 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _referenceKeywords = __webpack_require__(28);
+	var _referenceContractors = __webpack_require__(26);
+	
+	var _referenceContractors2 = _interopRequireDefault(_referenceContractors);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var appUrl = window.appSettings.formAddContractor.UrlApi;
+	var validPattern = window.appSettings.formAddContractor.validPatterns;
+	var validMessage = window.appSettings.formAddContractor.validMessage;
+	var messages = window.appSettings.formAddContractor.messages;
+	
+	var body = document.querySelector('body');
+	var contractorsAdd = body.querySelector('#contractors-add');
+	var form = contractorsAdd.querySelector('#contractors-add-form');
+	
+	var name = form.querySelector('#contractors-name');
+	var describe = form.querySelector('#contractors-describe');
+	var contact = form.querySelector('#contractors-contact');
+	var phone = form.querySelector('#contractors-phone');
+	var email = form.querySelector('#contractors-email');
+	
+	var nameValid = form.querySelector('#contractors-name-valid');
+	var describeValid = form.querySelector('#contractors-describe-valid');
+	var contactValid = form.querySelector('#contractors-contact-valid');
+	var phoneValid = form.querySelector('#contractors-phone-valid');
+	var emailValid = form.querySelector('#contractors-email-valid');
+	
+	var spinner = form.querySelector('#contractors-add-spinner');
+	
+	var buttonSubmit = form.querySelector('#contractors-add-submit');
+	var buttonCancel = form.querySelector('#contractors-add-cancel');
+	
+	var stor = _storage2.default.data;
+	
+	var showSpinner = function showSpinner() {
+	  spinner.classList.remove('invisible');
+	  buttonSubmit.disabled = true;
+	  buttonCancel.disabled = true;
+	};
+	
+	var hideSpinner = function hideSpinner() {
+	  spinner.classList.add('invisible');
+	  buttonSubmit.disabled = false;
+	  buttonCancel.disabled = false;
+	};
+	
+	var formReset = function formReset() {
+	  form.reset();
+	  nameValid.innerHTML = '';
+	  describeValid.innerHTML = '';
+	  contactValid.innerHTML = '';
+	  phoneValid.innerHTML = '';
+	  emailValid.innerHTML = '';
+	  buttonCancel.disabled = false;
+	  buttonSubmit.disabled = true;
+	  hideSpinner();
+	};
+	
+	var callbackXhrSuccess = function callbackXhrSuccess(response) {
+	  console.dir(response);
+	
+	  hideSpinner();
+	  switch (response.status) {
+	    case 200:
+	      formReset();
+	      $('#contractors-add').modal('hide');
+	      _referenceContractors2.default.redraw();
+	      break;
+	    case 400:
+	
+	      // Вывести response.message в красную ошибку
+	      alert(messages.mes400);
+	      break;
+	  }
+	};
+	
+	var callbackXhrError = function callbackXhrError() {
+	
+	  hideSpinner();
+	  // Вывести window.appSettings.messages.xhrError в красную ошибку
+	  alert(window.appSettings.messages.xhrError);
+	};
+	
+	var hideAlert = function hideAlert(el) {
+	  el.classList.remove('border');
+	  el.classList.remove('border-danger');
+	  el.classList.remove('border-primary');
+	  el.nextElementSibling.innerHTML = '';
+	};
+	
+	var showAert = function showAert(el, mess) {
+	  el.classList.add('border');
+	  el.classList.add('border-danger');
+	  el.nextElementSibling.innerHTML = mess;
+	};
+	
+	var showBorder = function showBorder(el) {
+	  el.classList.add('border');
+	  el.classList.add('border-primary');
+	};
+	
+	var validateForm = function validateForm() {
+	  var val = true;
+	  if (!validPattern.name.test(name.value)) {
+	    val = false;
+	    showBorder(name);
+	  }
+	  if (!validPattern.describe.test(describe.value)) {
+	    val = false;
+	    showBorder(describe);
+	  }
+	  if (!validPattern.contact.test(contact.value)) {
+	    val = false;
+	    showBorder(contact);
+	  }
+	  if (!validPattern.phone.test(phone.value)) {
+	    val = false;
+	    showBorder(phone);
+	  }
+	  if (!validPattern.email.test(email.value)) {
+	    val = false;
+	    showBorder(email);
+	  }
+	  return val;
+	};
+	
+	var validateInput = function validateInput(el) {
+	  var index = el.id.match(/[\w]+$/);
+	  if (validPattern[index].test(el.value)) {
+	    hideAlert(el);
+	    if (validateForm()) {
+	      buttonSubmit.disabled = false;
+	    }
+	    return true;
+	  }
+	  buttonSubmit.disabled = true;
+	  showAert(el, validMessage[index]);
+	  return false;
+	};
+	
+	var getUrl = function getUrl() {
+	  var url = '';
+	
+	  switch (_storage2.default.currentContractorOperation) {
+	    case 'add':
+	      url = appUrl.add.replace('{{dir}}', stor.directory);
+	      url = url.replace('{{oper}}', stor.operatorId);
+	      url = url.replace('{{busId}}', stor.currentBusiness);
+	      break;
+	    case 'edit':
+	      url = appUrl.add.replace('{{dir}}', stor.directory);
+	      url = url.replace('{{oper}}', stor.operatorId);
+	      url = url.replace('{{busId}}', stor.currentBusiness);
+	      url = url.replace('{{agentId}}', _storage2.default.currentContractorId);
+	      break;
+	  }
+	  return url;
+	};
+	
+	var submitForm = function submitForm() {
+	  var appLink = getUrl();
+	
+	  var postData = 'token=' + stor.token + '&type=' + _storage2.default.currentContractorType + '&name=' + name.value + '&email=' + email.value + '&description=' + describe.value + '&phone=' + phone.value + '&FIO=' + contact.value;
+	
+	  var response = {
+	    url: appLink,
+	    metod: _storage2.default.currentContractorOperation === 'add' ? 'POST' : 'PUT',
+	    data: postData,
+	    callbackSuccess: callbackXhrSuccess,
+	    callbackError: callbackXhrError
+	  };
+	
+	  console.log('response:');
+	  console.dir(response);
+	
+	  _xhr2.default.request = response;
+	};
+	
+	var formSubmitHandler = function formSubmitHandler(evt) {
+	  evt.preventDefault();
+	  showSpinner();
+	  submitForm();
+	};
+	
+	var addHandlers = function addHandlers() {
+	
+	  $('#contractors-add').on('hidden.bs.modal', function () {
+	    formReset();
+	  });
+	
+	  $('#contractors-add').on('shown.bs.modal', function () {
+	
+	    if (_storage2.default.currentContractorOperation === 'edit') {
+	      window.appFormCurrValue = {
+	        'name': name.value,
+	        'describe': describe.value,
+	        'contact': contact.value,
+	        'phone': phone.value,
+	        'email': email.value
+	      };
+	    }
+	  });
+	
+	  form.addEventListener('submit', formSubmitHandler);
+	  form.addEventListener('focusout', function (evt) {
+	
+	    validateInput(evt.target);
+	  });
+	
+	  form.addEventListener('focusin', function (evt) {
+	    console.log('!!^^');
+	    hideAlert(evt.target);
+	  });
+	
+	  buttonSubmit.addEventListener('mouseover', function () {});
+	};
+	
+	exports.default = {
+	  start: addHandlers
+	};
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _referenceKeywords = __webpack_require__(31);
 	
 	var _referenceKeywords2 = _interopRequireDefault(_referenceKeywords);
 	
@@ -2629,6 +3268,41 @@
 	var listKeywordsHeader = document.querySelector('#list-keywords-header');
 	var listKeywordsBody = document.querySelector('#list-keywords-body');
 	var listKeywordsCardEditRGBForm = document.querySelector('#keywords-card-edit-rgb-form');
+	var listKeywordsCardDeleteBtn = document.querySelector('#list-keywords-card-delete-btn');
+	
+	var onSuccessKeywordDelete = function onSuccessKeywordDelete(answer) {
+	  console.log(answer);
+	
+	  getKeywords();
+	
+	  _tools2.default.informationtModal = {
+	    title: 'Уведомление',
+	    message: '\u041A\u043B\u044E\u0447\u0435\u0432\u043E\u0435 \u0441\u043B\u043E\u0432\u043E <b>' + _storage2.default.currentKeywordName + '</b> \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0443\u0434\u0430\u043B\u0435\u043D\u043E'
+	  };
+	};
+	
+	var onErrorKeywordDelete = function onErrorKeywordDelete(error) {
+	  console.log(error);
+	};
+	
+	var setRequestToDeleteKeyword = function setRequestToDeleteKeyword() {
+	  _xhr2.default.request = {
+	    metod: 'DELETE',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.currentEnterpriseId + '/tag/' + _storage2.default.currentKeywordId,
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessKeywordDelete,
+	    callbackError: onErrorKeywordDelete
+	  };
+	};
+	
+	listKeywordsCardDeleteBtn.addEventListener('click', function () {
+	
+	  _tools2.default.actionRequestModal = {
+	    title: 'Удаление',
+	    message: '\u0412\u044B \u0442\u043E\u0447\u043D\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u043A\u043B\u044E\u0447\u0435\u0432\u043E\u0435 \u0441\u043B\u043E\u0432\u043E <b>' + _storage2.default.currentKeywordName + '</b>?',
+	    submitCallback: setRequestToDeleteKeyword
+	  };
+	});
 	
 	var onListKeywordsReturnBtnClick = function onListKeywordsReturnBtnClick() {
 	  listKeywordsCard.classList.add('d-none');
@@ -2639,6 +3313,16 @@
 	
 	listKeywordsReturnBtn.addEventListener('click', onListKeywordsReturnBtnClick);
 	
+	var onSuccessKeywordColorUpdate = function onSuccessKeywordColorUpdate(answer) {
+	  console.log(answer);
+	
+	  getKeywords();
+	};
+	
+	var onErrorKeywordColorUpdate = function onErrorKeywordColorUpdate(error) {
+	  console.log(error);
+	};
+	
 	var onListKeywordsCardEditRGBFormSubmit = function onListKeywordsCardEditRGBFormSubmit(evt) {
 	  evt.preventDefault();
 	  var newRGB = listKeywordsCardEditRGBForm.querySelector('input:checked').value;
@@ -2646,6 +3330,14 @@
 	  console.log(document.querySelector('#list-keywords-card-edit > div > button'));
 	  document.querySelector('#list-keywords-card-edit > div > button').style.backgroundColor = '#' + _storage2.default.currentKeywordRgb;
 	  $('#keywords-card-edit-rgb').modal('hide');
+	
+	  _xhr2.default.request = {
+	    metod: 'PUT',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.currentEnterpriseId + '/tag/' + _storage2.default.currentKeywordId,
+	    data: 'color=' + _storage2.default.currentKeywordRgb + '&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessKeywordColorUpdate,
+	    callbackError: onErrorKeywordColorUpdate
+	  };
 	};
 	
 	listKeywordsCardEditRGBForm.addEventListener('submit', onListKeywordsCardEditRGBFormSubmit);
@@ -2695,19 +3387,25 @@
 	};
 
 /***/ }),
-/* 28 */
-/***/ (function(module, exports) {
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	var listKeywordsHeader = document.querySelector('#list-keywords-header');
 	var listKeywordsBody = document.querySelector('#list-keywords-body');
 	var listKeywordsCard = document.querySelector('#list-keywords-card');
 	var listKeywordsCardEdit = document.querySelector('#list-keywords-card-edit');
-	
 	exports.default = {
 	  cleanContainer: function cleanContainer() {
 	    listKeywordsBody.innerHTML = '';
@@ -2728,11 +3426,157 @@
 	        listKeywordsBody.classList.add('d-none');
 	        listKeywordsCard.classList.remove('d-none');
 	        listKeywordsCardEdit.innerHTML = '<div class="text-center"><button type="button" class="btn btn-lg text-white" style="background-color: #' + item.hex_color + '">#' + item.name + '</button></div>';
+	        console.log(item.id);
+	        _storage2.default.currentKeywordId = item.id;
+	        _storage2.default.currentKeywordName = item.name;
+	        console.log(_storage2.default.currentKeywordId);
 	      });
 	    });
 	  },
 	  drawMarkupInContainer: function drawMarkupInContainer(markup) {
 	    listKeywordsBody.insertAdjacentHTML('beforeend', markup);
+	  }
+	};
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _referenceKeywords = __webpack_require__(30);
+	
+	var _referenceKeywords2 = _interopRequireDefault(_referenceKeywords);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var appUrl = window.appSettings.formAddKeywords.UrlApi;
+	var validNamePattern = window.appSettings.formAddKeywords.validPatterns.name;
+	var validNameMessage = window.appSettings.formAddKeywords.validMessage.name;
+	var messages = window.appSettings.formAddKeywords.messages;
+	
+	var body = document.querySelector('body');
+	var enterprisesAdd = body.querySelector('#keywords-add');
+	var form = enterprisesAdd.querySelector('#keywords-add-form');
+	
+	var name = form.querySelector('#keywords-add-name');
+	var nameValid = form.querySelector('#keywords-add-valid');
+	
+	var spinner = form.querySelector('#keywords-add-spinner');
+	
+	var buttonSubmit = form.querySelector('#keywords-add-submit');
+	var buttonCancel = form.querySelector('#keywords-add-cancel');
+	var buttonClose = enterprisesAdd.querySelector('#keywords-add-close');
+	
+	var stor = _storage2.default.data;
+	
+	var formReset = function formReset() {
+	  form.reset();
+	  nameValid.innerHTML = '';
+	};
+	
+	var callbackXhrSuccess = function callbackXhrSuccess(response) {
+	
+	  hideSpinner();
+	  switch (response.status) {
+	    case 200:
+	      formReset();
+	      $('#keywords-add').modal('hide');
+	
+	      // Сюда метод перезагрузки списка
+	      _referenceKeywords2.default.redraw();
+	      break;
+	    case 400:
+	
+	      // Вывести response.message в красную ошибку
+	      alert(messages.mes400);
+	      break;
+	  }
+	};
+	
+	var callbackXhrError = function callbackXhrError() {
+	
+	  hideSpinner();
+	  // Вывести window.appSettings.messages.xhrError в красную ошибку
+	  alert(window.appSettings.messages.xhrError);
+	};
+	
+	var showSpinner = function showSpinner() {
+	  spinner.classList.remove('invisible');
+	  buttonSubmit.disabled = true;
+	  buttonCancel.disabled = true;
+	};
+	
+	var hideSpinner = function hideSpinner() {
+	  spinner.classList.add('invisible');
+	  buttonSubmit.disabled = false;
+	  buttonCancel.disabled = false;
+	};
+	
+	var validateForm = function validateForm() {
+	  var valid = true;
+	
+	  if (!validNamePattern.test(name.value)) {
+	    valid = false;
+	    nameValid.innerHTML = validNameMessage;
+	  }
+	
+	  return valid;
+	};
+	
+	var submitForm = function submitForm() {
+	  var postData = 'name=' + name.value + '&token=' + stor.token;
+	  var urlApp = appUrl.replace('{{dir}}', stor.directory);
+	  urlApp = urlApp.replace('{{oper}}', stor.operatorId);
+	  urlApp = urlApp.replace('{{busId}}', stor.currentBusiness);
+	
+	  var response = {
+	    url: urlApp,
+	    metod: 'POST',
+	    data: postData,
+	    callbackSuccess: callbackXhrSuccess,
+	    callbackError: callbackXhrError
+	  };
+	
+	  _xhr2.default.request = response;
+	};
+	
+	var formSubmitHandler = function formSubmitHandler(evt) {
+	  evt.preventDefault();
+	
+	  if (validateForm()) {
+	    showSpinner();
+	    submitForm();
+	  }
+	};
+	
+	exports.default = {
+	  start: function start() {
+	
+	    buttonCancel.addEventListener('click', function () {
+	      formReset();
+	    });
+	    buttonClose.addEventListener('click', function () {
+	      formReset();
+	    });
+	    form.addEventListener('submit', formSubmitHandler);
+	    form.addEventListener('change', function (evt) {
+	      if (evt.target.nextElementSibling) {
+	        evt.target.nextElementSibling.innerHTML = '';
+	      }
+	    });
 	  }
 	};
 

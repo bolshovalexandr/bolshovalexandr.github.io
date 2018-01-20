@@ -445,7 +445,7 @@
   <!-- ========================= ФОРМЫ - МОДАЛЬНЫЕ ОКНА ========================= -->
 
   <!-- Справочники / добавление предприятия -->
-  <div class="modal fade" id="enterprises-add" tabindex="-1" role="dialog" aria-labelledby="enterprises-add" aria-hidden="true" backdrop="static">
+  <div class="modal fade" id="enterprises-add" tabindex="-1" role="dialog" aria-labelledby="enterprises-add" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog" style="width: 300px;" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -488,7 +488,7 @@
   </div>
 
   <!-- Справочники / редактирование карточки предприятия -->
-  <div class="modal fade" id="enterprises-card-edit" tabindex="-1" role="dialog" aria-labelledby="enterprises-card-edit" aria-hidden="true" backdrop="static">
+  <div class="modal fade" id="enterprises-card-edit" tabindex="-1" role="dialog" aria-labelledby="enterprises-card-edit" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog" style="width: 300px;" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -518,7 +518,7 @@
   </div>
 
   <!-- Справочники / создание новой точки -->
-  <div class="modal fade" id="points-add" tabindex="-1" role="dialog" aria-labelledby="points-add" aria-hidden="true" backdrop="static">
+  <div class="modal fade" id="points-add" tabindex="-1" role="dialog" aria-labelledby="points-add" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog" style="width: 300px;" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -549,7 +549,7 @@
   </div>
 
   <!-- Справочники / редактирование точки -->
-  <div class="modal fade" id="points-edit" tabindex="-1" role="dialog" aria-labelledby="points-edit" aria-hidden="true" backdrop="static">
+  <div class="modal fade" id="points-edit" tabindex="-1" role="dialog" aria-labelledby="points-edit" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog" style="width: 300px;" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -581,7 +581,7 @@
 
 
   <!-- Справочники / добавление покупателя -->
-  <div class="modal fade" id="contractors-add" tabindex="-1" role="dialog" aria-labelledby="contractors-add" aria-hidden="true" backdrop="static">
+  <div class="modal fade" id="contractors-add" tabindex="-1" role="dialog" aria-labelledby="contractors-add" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog" style="width: 300px;" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -637,7 +637,7 @@
   </div>
 
   <!-- Справочники / создание ключевого слова -->
-  <div class="modal fade" id="keywords-add" tabindex="-1" role="dialog" aria-labelledby="keywords-add" aria-hidden="true" backdrop="static">
+  <div class="modal fade" id="keywords-add" tabindex="-1" role="dialog" aria-labelledby="keywords-add" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog" style="width: 300px;" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -651,7 +651,7 @@
             <div class="form-group">
               <label for="keywords-add-name">Новое название</label>
               <input type="text" class="form-control" id="keywords-add-name" aria-describedby="keywords-add-name" placeholder="Название">
-              <span id="points-add-valid" class="badge badge-danger w-100"></span>
+              <span id="keywords-add-valid" class="badge badge-danger w-100"></span>
             </div>
 
             <div id="keywords-add-spinner" class="progress text-white mb-3 invisible">
@@ -667,7 +667,7 @@
     </div>
   </div>
 
-  <div class="modal fade" id="keywords-card-edit-name" tabindex="-1" role="dialog" aria-labelledby="keywords-card-edit-name" aria-hidden="true" backdrop="static">
+  <div class="modal fade" id="keywords-card-edit-name" tabindex="-1" role="dialog" aria-labelledby="keywords-card-edit-name" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog" style="width: 300px;" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -700,7 +700,7 @@
   </div>
 
   <!-- Справочники / создание ключевого слова -->
-  <div class="modal fade" id="keywords-card-edit-rgb" tabindex="-1" role="dialog" aria-labelledby="keywords-card-edit-rgb" aria-hidden="true" backdrop="static">
+  <div class="modal fade" id="keywords-card-edit-rgb" tabindex="-1" role="dialog" aria-labelledby="keywords-card-edit-rgb" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog" style="width: 300px;" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -750,6 +750,52 @@
       </div>
     </div>
   </div>
+
+
+  <!-- МОДАЛЬНЫЕ ОКНА ДЛЯ ВЫВОДА УВЕДОМЛЕНИЙ И ПОДТВЕРЖДЕНИЯ ДЕЙСТВИЙ -->
+
+  <!-- Окно подтверждения действия при удалении -->
+  <div class="modal" id="modal-action-request" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 id="modal-action-request-title" class="modal-title"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="modal-action-request-message"></p>
+        </div>
+        <div class="modal-footer">
+          <button id="modal-action-request-submit" type="button" class="btn btn-danger" data-dismiss="modal">Подтверждаю</button>
+          <button id="modal-action-request-cancel" type="button" class="btn btn-success" data-dismiss="modal">Ой, нет!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Окно уведомления о событии -->
+  <div class="modal" id="modal-information" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 id="modal-information-title" class="modal-title"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="modal-information-message"></p>
+        </div>
+        <div class="modal-footer">
+          <button id="modal-information-submit" type="button" class="btn btn-primary" data-dismiss="modal">Понятно</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button id="test">test</button>
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
