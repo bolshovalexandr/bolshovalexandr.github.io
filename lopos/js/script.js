@@ -2983,7 +2983,9 @@
 	      contractorsData = loadedContractors.data.slice(0);
 	    }
 	    _referenceContractorsCard2.default.cleanContainer();
-	    _referenceContractors2.default.drawDataInContainer(loadedContractors.data);
+	    if (loadedContractors.data) {
+	      _referenceContractors2.default.drawDataInContainer(loadedContractors.data);
+	    }
 	    // listContractorsFormSubmit.innerHTML = 'Создать';
 	    // auth.currentContractorOperation = 'add';
 	  } else {
@@ -3067,6 +3069,10 @@
 	
 	var getContractors = function getContractors(type) {
 	  showBodyHideCard();
+	  console.log('hi');
+	  console.log(type);
+	  console.log(_storage2.default.currentContractorType);
+	  type = type || _storage2.default.currentContractorType;
 	
 	  listContractorsHeaderType.innerHTML = type === ContractorType.SUPPLIER ? _referenceContractors2.default.getSuppliersHeader() : _referenceContractors2.default.getBuyersHeader();
 	  listContractorsFormEditLabel.innerHTML = type === ContractorType.SUPPLIER ? 'Поставщики' : 'Покупатели';
@@ -3711,7 +3717,7 @@
 	var buttonSubmit = form.querySelector('#keywords-add-submit');
 	var buttonCancel = form.querySelector('#keywords-add-cancel');
 	
-	var stor = _storage2.default.data;
+	// const stor = dataStorage.data;
 	
 	var showSpinner = function showSpinner() {
 	  spinner.classList.remove('invisible');
