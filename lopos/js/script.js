@@ -3073,9 +3073,10 @@
 	  console.log(type);
 	  console.log(_storage2.default.currentContractorType);
 	  type = type || _storage2.default.currentContractorType;
+	  console.log(type);
 	
-	  listContractorsHeaderType.innerHTML = type === ContractorType.SUPPLIER ? _referenceContractors2.default.getSuppliersHeader() : _referenceContractors2.default.getBuyersHeader();
-	  listContractorsFormEditLabel.innerHTML = type === ContractorType.SUPPLIER ? 'Поставщики' : 'Покупатели';
+	  listContractorsHeaderType.innerHTML = Number(type) === ContractorType.SUPPLIER ? _referenceContractors2.default.getSuppliersHeader() : _referenceContractors2.default.getBuyersHeader();
+	  listContractorsFormEditLabel.innerHTML = Number(type) === ContractorType.SUPPLIER ? 'Поставщики' : 'Покупатели';
 	  _storage2.default.currentContractorType = type;
 	
 	  _referenceContractors2.default.cleanContainer();
