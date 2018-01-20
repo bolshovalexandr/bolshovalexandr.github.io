@@ -76,7 +76,12 @@
   margin-left: 5px; }
 
 .enterprise-card-block {
-  margin-left: 55px; }
+  margin-left: 55px;
+  margin-right: 55px;
+  margin-top: 55px; }
+
+.reference-string:hover {
+  background-color: #ccc; }
 
 .btn:disabled {
   opacity: 0.3; }

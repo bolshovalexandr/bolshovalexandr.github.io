@@ -3648,7 +3648,7 @@
 	  },
 	  getElement: function getElement(item) {
 	
-	    return '\n      <span class="badge" style="background-color: #' + item.hex_color + '; cursor: pointer;">#' + item.name + '</span>';
+	    return '\n      <h3 style="display: inline-block;"><span class="badge" style="background-color: #' + item.hex_color + '; cursor: pointer; color: #fff">#' + item.name + '</span></h3>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(keywordsData) {
 	    var _this = this;
@@ -3661,7 +3661,7 @@
 	        listKeywordsHeader.classList.remove('d-flex');
 	        listKeywordsBody.classList.add('d-none');
 	        listKeywordsCard.classList.remove('d-none');
-	        listKeywordsCardEdit.innerHTML = '<div class="text-center"><button type="button" class="btn btn-lg text-white" style="background-color: #' + item.hex_color + '">#' + item.name + '</button></div>';
+	        listKeywordsCardEdit.innerHTML = '<div class="text-center"><button type="button" class="btn btn-lg text-white" style="background-color: #' + item.hex_color + '"><h3>#' + item.name + '</h3></button></div>';
 	        console.log(item.id);
 	        _storage2.default.currentKeywordId = item.id;
 	        _storage2.default.currentKeywordName = item.name;
