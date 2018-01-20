@@ -10,16 +10,16 @@
   /* IE6-9 */ }
 
 .icon {
-  width: 25px;
-  height: 25px; }
+  width: 35px;
+  height: 35px; }
 
 .icon__check {
   background-image: url("../img/icons8-checked-96.png");
   background-size: cover; }
 
 .icon-btn {
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border: none;
   margin-left: 5px;
   cursor: pointer; }
@@ -79,6 +79,9 @@
   margin-left: 55px;
   margin-right: 55px;
   margin-top: 55px; }
+
+.reference-string {
+  height: 44px; }
 
 .reference-string:hover {
   background-color: #ccc; }

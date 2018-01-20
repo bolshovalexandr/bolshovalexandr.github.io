@@ -3057,7 +3057,7 @@
 	
 	    _xhr2.default.request = {
 	      metod: 'POST',
-	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/kontr_agent/' + currentStringElement.dataset.buyerId,
+	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/kontr_agent/' + currentStringElement.dataset.buyerId + '/last_naklads',
 	      data: 'token=' + _storage2.default.data.token + '&count_doc=4&shift_doc=0',
 	      callbackSuccess: onSuccessBuyerCardLoad,
 	      callbackError: onErrorBuyerCardLoad
@@ -3182,9 +3182,10 @@
 	  drawDataInContainer: function drawDataInContainer(buyersCardData) {
 	    var _this = this;
 	
+	    console.log(buyersCardData);
 	    listContractorsCardBody.insertAdjacentHTML('beforeend', drawHeaderInContainer(buyersCardData));
-	    if (buyersCardData.naklads) {
-	      buyersCardData.naklads.forEach(function (item) {
+	    if (buyersCardData) {
+	      buyersCardData.forEach(function (item) {
 	        return listContractorsCardBody.insertAdjacentHTML('beforeend', _this.getElement(item));
 	      });
 	    } else {
