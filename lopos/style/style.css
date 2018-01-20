@@ -89,10 +89,19 @@
 .btn:disabled {
   opacity: 0.3; }
 
+.keywords-card-select-color-container div {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px; }
+
+.keyword-row {
+  border-radius: 8px;
+  margin-right: 10px; }
+
 .keywords-card-select-color {
-  width: 70px;
+  width: 40px;
   height: 40px;
-  margin-bottom: 5px; }
+  border-radius: 8px; }
 
 input:checked + label {
   border: 1px solid black; }

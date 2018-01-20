@@ -3026,7 +3026,7 @@
 	      name = _contractorsData$curr.name,
 	      description = _contractorsData$curr.description,
 	      phone = _contractorsData$curr.phone,
-	      contact = _contractorsData$curr.contact,
+	      fio = _contractorsData$curr.fio,
 	      email = _contractorsData$curr.email;
 	
 	
@@ -3036,7 +3036,7 @@
 	
 	  listContractorsFormEditName.value = name ? name : '';
 	  listContractorsFormEditDescribe.value = description ? description : '';
-	  listContractorsFormEditContact.value = contact ? contact : '';
+	  listContractorsFormEditContact.value = fio ? fio : '';
 	  listContractorsFormEditPhone.value = phone ? phone : '';
 	  listContractorsFormEditEmail.value = email ? email : '';
 	  listContractorsFormSubmit.innerHTML = 'Изменить';
@@ -3605,7 +3605,7 @@
 	var redrawCard = function redrawCard() {
 	  console.log('hi');
 	  console.log(listKeywordsCardEdit);
-	  listKeywordsCardEdit.innerHTML = '<div class="text-center"><button type="button" class="btn btn-lg text-white" style="background-color: #' + _storage2.default.currentKeywordRgb + '">#' + _storage2.default.currentKeywordName + '</button></div>';
+	  listKeywordsCardEdit.innerHTML = '<div class="text-center"><button type="button" class="btn btn-lg text-white" style="background-color: #' + _storage2.default.currentKeywordRgb + '"><h3>#' + _storage2.default.currentKeywordName + '</h3></button></div>';
 	};
 	
 	exports.default = {
@@ -3649,7 +3649,7 @@
 	  },
 	  getElement: function getElement(item) {
 	
-	    return '\n      <h3 style="display: inline-block;"><span class="badge" style="background-color: #' + item.hex_color + '; cursor: pointer; color: #fff">#' + item.name + '</span></h3>';
+	    return '\n      <h3 style="display: inline-block;"><span class="badge keyword-row" style="background-color: #' + item.hex_color + '; cursor: pointer; color: #fff">#' + item.name + '</span></h3>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(keywordsData) {
 	    var _this = this;
