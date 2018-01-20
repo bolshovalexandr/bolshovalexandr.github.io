@@ -104,8 +104,8 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	console.log('ver: 2D4');
-	console.log('ver: 2A3');
+	console.log('ver: 2D7');
+	console.log('ver: 2A5');
 	
 	var exit = document.querySelector('#profile-exit');
 	var app = document.querySelector('#app');
@@ -150,11 +150,6 @@
 	// ========== ОБНОВЛЕНИЕ/ОТКРЫТИЕ СТРАНИЦЫ ==========
 	var start = function start() {
 	  if (_storage2.default.isSetFlag) {
-	
-	    document.querySelector('#test').addEventListener('click', function () {
-	      console.dir(window.appFormCurrValue);
-	    });
-	
 	    showAppHideLogin();
 	    _onlineProfile2.default.start();
 	    _log2.default.start();
@@ -2595,11 +2590,9 @@
 	
 	var callbackXhrSuccess = function callbackXhrSuccess(response) {
 	  console.dir(response);
-	
-	  hideSpinner();
+	  formReset();
 	  switch (response.status) {
 	    case 200:
-	      formReset();
 	      $('#points-edit').modal('hide');
 	
 	      // Сюда метод перезагрузки списка
@@ -2768,10 +2761,13 @@
 	
 	listContractorsAddBtn.addEventListener('click', function () {
 	  listContractorsAddForm.reset();
+	  _storage2.default.currentContractorOperation = 'add';
+	  listContractorsFormSubmit.innerHTML = 'Создать';
 	});
 	
 	/*
 	listContractorsCardEditBtn.addEventListener('click', function () {
+	  auth.currentContractorOperation = 'edit';
 	  listContractorsFormSubmit.innerHTML = 'Изменить';
 	});
 	*/
@@ -2785,11 +2781,13 @@
 	  document.querySelector('#' + loaderSpinnerId).remove();
 	  if (loadedContractors.status === 200) {
 	    console.log(loadedContractors);
-	    contractorsData = loadedContractors.data.slice(0);
+	    if (loadedContractors.data.length) {
+	      contractorsData = loadedContractors.data.slice(0);
+	    }
 	    _referenceContractorsCard2.default.cleanContainer();
 	    _referenceContractors2.default.drawDataInContainer(loadedContractors.data);
-	    listContractorsFormSubmit.innerHTML = 'Создать';
-	    _storage2.default.currentContractorOperation = 'add';
+	    // listContractorsFormSubmit.innerHTML = 'Создать';
+	    // auth.currentContractorOperation = 'add';
 	  } else {
 	    _referenceContractors2.default.drawMarkupInContainer('<p>' + loadedContractors.message + '</p>');
 	  }
@@ -2805,6 +2803,7 @@
 	    console.log(loadedBuyerCard);
 	    _referenceContractorsCard2.default.cleanContainer();
 	    _referenceContractorsCard2.default.drawDataInContainer(loadedBuyerCard.data);
+	    // auth.currentContractorOperation = 'edit';
 	    // listContractorsFormSubmit.innerHTML = 'Изменить';
 	  } else {
 	    _referenceContractorsCard2.default.drawMarkupInContainer('<p>' + loadedBuyerCard.message + '</p>');
@@ -2891,6 +2890,7 @@
 	  listContractorsFormBill.classList.add('d-none');
 	});
 	$('#contractors-add').on('show.bs.modal', function (e) {
+	  listContractorsFormSubmit.innerHTML = _storage2.default.currentContractorOperation === 'edit' ? 'Изменить' : 'Создать';
 	  console.log(_storage2.default.currentContractorId);
 	  console.log(_storage2.default.currentContractorOperation);
 	});
@@ -3030,12 +3030,6 @@
 	var phone = form.querySelector('#contractors-phone');
 	var email = form.querySelector('#contractors-email');
 	
-	var nameValid = form.querySelector('#contractors-name-valid');
-	var describeValid = form.querySelector('#contractors-describe-valid');
-	var contactValid = form.querySelector('#contractors-contact-valid');
-	var phoneValid = form.querySelector('#contractors-phone-valid');
-	var emailValid = form.querySelector('#contractors-email-valid');
-	
 	var spinner = form.querySelector('#contractors-add-spinner');
 	
 	var buttonSubmit = form.querySelector('#contractors-add-submit');
@@ -3055,16 +3049,33 @@
 	  buttonCancel.disabled = false;
 	};
 	
+	var showAlert = function showAlert(input) {
+	  input.classList.add('border');
+	  input.classList.add('border-danger');
+	  input.nextElementSibling.innerHTML = validMessage[input.id.match(/[\w]+$/)];
+	};
+	
+	var hideAlert = function hideAlert(input) {
+	  input.classList.remove('border');
+	  input.classList.remove('border-danger');
+	  input.nextElementSibling.innerHTML = '';
+	};
+	
 	var formReset = function formReset() {
 	  form.reset();
-	  nameValid.innerHTML = '';
-	  describeValid.innerHTML = '';
-	  contactValid.innerHTML = '';
-	  phoneValid.innerHTML = '';
-	  emailValid.innerHTML = '';
-	  buttonCancel.disabled = false;
-	  buttonSubmit.disabled = true;
+	
+	  hideAlert(name);
+	  hideAlert(describe);
+	  hideAlert(contact);
+	  hideAlert(phone);
+	  hideAlert(email);
+	
 	  hideSpinner();
+	
+	  buttonSubmit.disabled = true;
+	  buttonCancel.disabled = false;
+	
+	  // dataStorage.currentContractorOperation = 'add';
 	};
 	
 	var callbackXhrSuccess = function callbackXhrSuccess(response) {
@@ -3092,60 +3103,49 @@
 	  alert(window.appSettings.messages.xhrError);
 	};
 	
-	var hideAlert = function hideAlert(el) {
-	  el.classList.remove('border');
-	  el.classList.remove('border-danger');
-	  el.classList.remove('border-primary');
-	  el.nextElementSibling.innerHTML = '';
-	};
-	
-	var showAert = function showAert(el, mess) {
-	  el.classList.add('border');
-	  el.classList.add('border-danger');
-	  el.nextElementSibling.innerHTML = mess;
-	};
-	
-	var showBorder = function showBorder(el) {
-	  el.classList.add('border');
-	  el.classList.add('border-primary');
-	};
-	
 	var validateForm = function validateForm() {
-	  var val = true;
+	  var valid = true;
+	
 	  if (!validPattern.name.test(name.value)) {
-	    val = false;
-	    showBorder(name);
+	    valid = false;
+	    showAlert(name);
 	  }
 	  if (!validPattern.describe.test(describe.value)) {
-	    val = false;
-	    showBorder(describe);
+	    valid = false;
+	    showAlert(describe);
 	  }
 	  if (!validPattern.contact.test(contact.value)) {
-	    val = false;
-	    showBorder(contact);
+	    valid = false;
+	    showAlert(contact);
 	  }
 	  if (!validPattern.phone.test(phone.value)) {
-	    val = false;
-	    showBorder(phone);
+	    valid = false;
+	    showAlert(phone);
 	  }
 	  if (!validPattern.email.test(email.value)) {
-	    val = false;
-	    showBorder(email);
+	    valid = false;
+	    showAlert(email);
 	  }
-	  return val;
+	
+	  return valid;
 	};
 	
-	var validateInput = function validateInput(el) {
-	  var index = el.id.match(/[\w]+$/);
-	  if (validPattern[index].test(el.value)) {
-	    hideAlert(el);
-	    if (validateForm()) {
-	      buttonSubmit.disabled = false;
-	    }
+	var formIsChange = function formIsChange() {
+	  if (name.value !== window.appFormCurrValue.name) {
 	    return true;
 	  }
-	  buttonSubmit.disabled = true;
-	  showAert(el, validMessage[index]);
+	  if (describe.value !== window.appFormCurrValue.describe) {
+	    return true;
+	  }
+	  if (contact.value !== window.appFormCurrValue.contact) {
+	    return true;
+	  }
+	  if (phone.value !== window.appFormCurrValue.phone) {
+	    return true;
+	  }
+	  if (email.value !== window.appFormCurrValue.email) {
+	    return true;
+	  }
 	  return false;
 	};
 	
@@ -3159,7 +3159,7 @@
 	      url = url.replace('{{busId}}', stor.currentBusiness);
 	      break;
 	    case 'edit':
-	      url = appUrl.add.replace('{{dir}}', stor.directory);
+	      url = appUrl.edit.replace('{{dir}}', stor.directory);
 	      url = url.replace('{{oper}}', stor.operatorId);
 	      url = url.replace('{{busId}}', stor.currentBusiness);
 	      url = url.replace('{{agentId}}', _storage2.default.currentContractorId);
@@ -3189,8 +3189,11 @@
 	
 	var formSubmitHandler = function formSubmitHandler(evt) {
 	  evt.preventDefault();
-	  showSpinner();
-	  submitForm();
+	
+	  if (validateForm()) {
+	    showSpinner();
+	    submitForm();
+	  }
 	};
 	
 	var addHandlers = function addHandlers() {
@@ -3212,18 +3215,21 @@
 	    }
 	  });
 	
-	  form.addEventListener('submit', formSubmitHandler);
-	  form.addEventListener('focusout', function (evt) {
-	
-	    validateInput(evt.target);
-	  });
-	
-	  form.addEventListener('focusin', function (evt) {
-	    console.log('!!^^');
+	  form.addEventListener('input', function (evt) {
 	    hideAlert(evt.target);
+	
+	    if (_storage2.default.currentContractorOperation === 'edit') {
+	      if (formIsChange()) {
+	        buttonSubmit.disabled = false;
+	      } else {
+	        buttonSubmit.disabled = true;
+	      }
+	    } else {
+	      buttonSubmit.disabled = false;
+	    }
 	  });
 	
-	  buttonSubmit.addEventListener('mouseover', function () {});
+	  form.addEventListener('submit', formSubmitHandler);
 	};
 	
 	exports.default = {
@@ -3288,7 +3294,7 @@
 	var setRequestToDeleteKeyword = function setRequestToDeleteKeyword() {
 	  _xhr2.default.request = {
 	    metod: 'DELETE',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.currentEnterpriseId + '/tag/' + _storage2.default.currentKeywordId,
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag/' + _storage2.default.currentKeywordId,
 	    data: 'view_last=0&token=' + _storage2.default.data.token,
 	    callbackSuccess: onSuccessKeywordDelete,
 	    callbackError: onErrorKeywordDelete
@@ -3333,7 +3339,7 @@
 	
 	  _xhr2.default.request = {
 	    metod: 'PUT',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.currentEnterpriseId + '/tag/' + _storage2.default.currentKeywordId,
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag/' + _storage2.default.currentKeywordId,
 	    data: 'color=' + _storage2.default.currentKeywordRgb + '&token=' + _storage2.default.data.token,
 	    callbackSuccess: onSuccessKeywordColorUpdate,
 	    callbackError: onErrorKeywordColorUpdate
