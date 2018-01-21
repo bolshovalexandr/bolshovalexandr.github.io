@@ -1,3 +1,4 @@
+// 2D11
 window.appSettings = {
   // SiteKey для капчи
   'reCaptchaSiteKey': '6Lct5j8UAAAAAJkVidQhkOxmBhI9uj28IQ5-Ltp9',
@@ -76,16 +77,16 @@ window.appSettings = {
     }
   },
 
-    // Форма добавления организации
+  // Форма добавления организации
   'formAddEnterprise': {
     'UrlApi': 'lopos_directory/{{dir}}/operator/{{oper}}/business',
     'validPatterns': {
       'name': /^[а-яёА-ЯЁA-Za-z\s\d]+$/,
-      'balance': /(^\d+$)|(^\d+\.\d{2}$)/
+      'balance': /^[а-яёА-ЯЁA-Za-z\s\d]+$/
     },
     'validMessage': {
-      'name': 'минимум 1 буква',
-      'balance': 'формат: 0.00 или 0'
+      'name': 'поле минимум 1 буква,<br>не должно содержать спецсимволы',
+      'balance': 'не должно содержать спецсимволы'
     },
     'messages': {
       'mes400': 'Некорректный запрос'
@@ -99,7 +100,7 @@ window.appSettings = {
       'name': /^[а-яёА-ЯЁA-Za-z\s\d]+$/,
     },
     'validMessage': {
-      'name': 'минимум 1 буква'
+      'name': 'поле минимум 1 буква,<br>не должно содержать спецсимволы'
     },
     'messages': {
       'mes400': 'Некорректный запрос'
@@ -113,7 +114,7 @@ window.appSettings = {
       'name': /^[а-яёА-ЯЁA-Za-z\s\d]+$/,
     },
     'validMessage': {
-      'name': 'минимум 1 буква',
+      'name': 'поле минимум 1 буква,<br>не должно содержать спецсимволы',
     },
     'messages': {
       'mes400': 'Некорректный запрос'
@@ -127,7 +128,7 @@ window.appSettings = {
       'name': /^[а-яёА-ЯЁA-Za-z\s\d]+$/,
     },
     'validMessage': {
-      'name': 'минимум 1 буква',
+      'name': 'поле минимум 1 буква,<br>не должно содержать спецсимволы',
     },
     'messages': {
       'mes400': 'Некорректный запрос'
@@ -142,17 +143,17 @@ window.appSettings = {
     },
     'validPatterns': {
       'name': /^[а-яёА-ЯЁA-Za-z\s\d]+$/,
-      'describe': /^[а-яёА-ЯЁA-Za-z\s\d]+$/,
-      'contact': /^[а-яёА-ЯЁA-Za-z\s]+$/,
-      'phone': /^[\d\s+-/(/)]+$/,
-      'email': /@/
+      'describe': /^[а-яёА-ЯЁA-Za-z\s\d]*$/,
+      'contact': /^[а-яёА-ЯЁA-Za-z\s\d]*$/,
+      'phone': /^[а-яёА-ЯЁA-Za-z\s\d]*$/,
+      'email': /^[а-яёА-ЯЁA-Za-z\s\d]*$/
     },
     'validMessage': {
-      'name': 'name',
-      'describe': 'describe',
-      'contact': 'contact',
-      'phone': 'phone',
-      'email': 'email'
+      'name': 'поле минимум 1 буква,<br>не должно содержать спецсимволы',
+      'describe': 'не должно содержать спецсимволы',
+      'contact': 'не должно содержать спецсимволы',
+      'phone': 'не должно содержать спецсимволы',
+      'email': 'не должно содержать спецсимволы'
     },
     'messages': {
       'mes400': 'Некорректный запрос'
@@ -166,7 +167,7 @@ window.appSettings = {
       'name': /^[а-яёА-ЯЁA-Za-z\s\d]+$/,
     },
     'validMessage': {
-      'name': 'минимум 1 буква',
+      'name': 'поле минимум 1 буква,<br>не должно содержать спецсимволы',
     },
     'messages': {
       'mes400': 'Некорректный запрос'
@@ -180,7 +181,7 @@ window.appSettings = {
       'name': /^[а-яёА-ЯЁA-Za-z\s\d]+$/,
     },
     'validMessage': {
-      'name': 'минимум 1 буква',
+      'name': 'поле минимум 1 буква,<br>не должно содержать спецсимволы',
     },
     'messages': {
       'mes400': 'Некорректный запрос'

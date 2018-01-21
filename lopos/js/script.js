@@ -1802,7 +1802,7 @@
 	  _xhr2.default.request = {
 	    metod: 'PUT',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.currentEnterpriseId + '/meta',
-	    data: '&token=' + _storage2.default.data.token,
+	    data: 'code=11&token=' + _storage2.default.data.token,
 	    callbackSuccess: onSuccessNegativeTailingsSwitch,
 	    callbackError: onErrorNegativeTailingsSwitch
 	  };
