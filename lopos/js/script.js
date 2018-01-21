@@ -3048,7 +3048,7 @@
 	  console.log(_storage2.default.currentContractorOperation);
 	  console.log(contractorsData);
 	
-	  listContractorsFormBill.addEventListener('click', function () {
+	  var onListContractorsFormBillClick = function onListContractorsFormBillClick() {
 	    hideBodyShowCard();
 	    listContractorsCardName.innerHTML = name;
 	    listContractorsHeader.classList.remove('d-flex');
@@ -3063,7 +3063,10 @@
 	      callbackSuccess: onSuccessBuyerCardLoad,
 	      callbackError: onErrorBuyerCardLoad
 	    };
-	  });
+	    listContractorsFormBill.removeEventListener('click', onListContractorsFormBillClick);
+	  };
+	
+	  listContractorsFormBill.addEventListener('click', onListContractorsFormBillClick);
 	};
 	
 	listContractorsBody.addEventListener('click', onListContractorsBodyClick);
