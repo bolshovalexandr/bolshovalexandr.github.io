@@ -1802,7 +1802,7 @@
 	  _xhr2.default.request = {
 	    metod: 'PUT',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.currentEnterpriseId + '/meta',
-	    data: 'code=11&token=' + _storage2.default.data.token,
+	    data: 'code=11&token=' + _storage2.default.data.token + '&value=0',
 	    callbackSuccess: onSuccessNegativeTailingsSwitch,
 	    callbackError: onErrorNegativeTailingsSwitch
 	  };
@@ -1932,16 +1932,16 @@
 	  cleanContainer: function cleanContainer() {
 	    listEnterprisesBody.innerHTML = '';
 	  },
-	  getElement: function getElement(item) {
+	  getElement: function getElement(item, index) {
 	    var currentEnterpriseFlag = item.b_id === _storage2.default.data['currentBusiness'] ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
 	
-	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-enterprise-id="' + item.b_id + '">\n      <div><b>ID: </b>' + item.b_id + ' <b>\u0418\u043C\u044F: </b>' + item.b_name + ' <b>\u041F\u043E\u0447\u0442\u0430: </b>' + item.b_owner_email + ' <b>\u0412\u0440\u0435\u043C\u044F: </b>' + new Date(+(item.b_time_activity + '000')).toLocaleString() + '</div>\n      <div class="d-flex justify-content-between align-items-center">\n        ' + currentEnterpriseFlag + '\n\n        <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>\n      </div>\n    </div>';
+	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-enterprise-id="' + item.b_id + '">\n      <div style="padding-left: 44px;"><span class="reference-row-number">' + (index + 1) + '</span> <span>' + item.b_name + '</span></div>\n      <div class="d-flex justify-content-between align-items-center">\n        ' + currentEnterpriseFlag + '\n\n        <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>\n      </div>\n    </div>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(enterprisesData) {
 	    var _this = this;
 	
-	    enterprisesData.forEach(function (item) {
-	      return listEnterprisesBody.insertAdjacentHTML('beforeend', _this.getElement(item));
+	    enterprisesData.forEach(function (item, index) {
+	      return listEnterprisesBody.insertAdjacentHTML('beforeend', _this.getElement(item, index));
 	    });
 	  },
 	  drawMarkupInContainer: function drawMarkupInContainer(markup) {
@@ -2518,17 +2518,17 @@
 	  cleanContainer: function cleanContainer() {
 	    listPointsBody.innerHTML = '';
 	  },
-	  getElement: function getElement(item) {
+	  getElement: function getElement(item, index) {
 	    // const currentStockFlag = (item.id === auth.data['currentStock']) ? '<button type="button" class="btn p-0 bg-white icon-btn icon-btn__check--green"></button>' : '';
 	    var currentStockFlag = item.id === _storage2.default.data['currentStock'] ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
 	
-	    return '\n\n    <input type="radio" id="' + item.id + '" name="contact" value="email" class="d-none">\n    <label for="' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '">\n      <div><b>ID: </b>' + item.id + ' <b>\u0418\u043C\u044F: </b>' + item.name + '</div>\n      <div class="d-flex justify-content-between align-items-center">\n        ' + currentStockFlag + '\n      </div>\n      </label>';
+	    return '\n\n    <input type="radio" id="' + item.id + '" name="contact" value="email" class="d-none">\n\n    <label style="padding-left: 44px;" for="' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '">\n      <div><span class="reference-row-number">' + (index + 1) + '</span> ' + item.name + '</div>\n      <div class="d-flex justify-content-between align-items-center">\n        ' + currentStockFlag + '\n      </div>\n      </label>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(enterprisesData) {
 	    var _this = this;
 	
-	    enterprisesData.forEach(function (item) {
-	      return listPointsBody.insertAdjacentHTML('beforeend', _this.getElement(item));
+	    enterprisesData.forEach(function (item, index) {
+	      return listPointsBody.insertAdjacentHTML('beforeend', _this.getElement(item, index));
 	    });
 	  },
 	  drawMarkupInContainer: function drawMarkupInContainer(markup) {
@@ -3172,7 +3172,7 @@
 	  },
 	  getElement: function getElement(item, index) {
 	
-	    return '\n\n      <div class="d-flex justify-content-between align-items-center reference-string"  data-buyer-id="' + item.id + '"  data-index="' + index + '">\n        <div><b>ID: </b>' + item.id + ' <b>\u0418\u043C\u044F: </b>' + item.name + '</div>\n        <div class="d-flex justify-content-between align-items-center">\n\n          <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>\n        </div>\n    </div>';
+	    return '\n\n      <div class="d-flex justify-content-between align-items-center reference-string"  data-buyer-id="' + item.id + '"  data-index="' + index + '">\n        <div style="padding-left: 44px;"><span class="reference-row-number">' + (index + 1) + '</span> <span>' + item.name + '</span></div>\n        <div class="d-flex justify-content-between align-items-center">\n\n          <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>\n        </div>\n    </div>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(buyersBodyData) {
 	    var _this = this;

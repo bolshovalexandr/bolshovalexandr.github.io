@@ -109,6 +109,13 @@
 input:checked + label {
   border: 1px solid black; }
 
+.reference-row-number {
+  display: inline-block;
+  width: 25px;
+  text-align: right;
+  margin-right: 5px;
+  font-weight: bold; }
+
 /*
 @import "src/sass/components/app.scss";
 @import "src/sass/components/font.scss";
