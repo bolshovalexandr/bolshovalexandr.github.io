@@ -1713,8 +1713,10 @@
 	var listEnterprisesCardBalance = document.querySelector('#list-enterprises-card-balance');
 	var listEnterprisesCardIsChecked = document.querySelector('#list-enterprises-card-is-checked');
 	var listEnterprisesCardDate = document.querySelector('#list-enterprises-card-date');
-	// const listEnterprisesCardNegativeTailings = document.querySelector('#list-enterprises-card-negative-tailings');
-	// const listEnterprisesCardNegativeBalance = document.querySelector('#list-enterprises-card-negative-balance');
+	var listEnterprisesCardNegativeTailings = document.querySelector('#list-enterprises-card-negative-tailings');
+	var listEnterprisesCardNegativeBalance = document.querySelector('#list-enterprises-card-negative-balance');
+	var listEnterprisesCardNegativeTailingsSwitch = document.querySelector('#list-enterprises-card-negative-tailings-switch');
+	var listEnterprisesCardNegativeBalanceSwitch = document.querySelector('#list-enterprises-card-negative-balance-switch');
 	
 	var listEnterprisesCardCheckBtn = document.querySelector('#list-enterprises-card-check-btn');
 	var listEnterprisesCardDeleteBtn = document.querySelector('#list-enterprises-card-delete-btn');
@@ -1785,6 +1787,28 @@
 	  };
 	};
 	
+	var onSuccessNegativeTailingsSwitch = function onSuccessNegativeTailingsSwitch(loadedEnterpriseCard) {
+	  console.log(loadedEnterpriseCard);
+	};
+	
+	var onErrorNegativeTailingsSwitch = function onErrorNegativeTailingsSwitch(error) {
+	  console.log(error);
+	};
+	
+	listEnterprisesCardNegativeTailingsSwitch.addEventListener('click', function () {
+	  _referenceEnterprises2.default.cleanContainer();
+	  _referenceEnterprises2.default.drawMarkupInContainer(loaderSpinnerMarkup);
+	
+	  _xhr2.default.request = {
+	    metod: 'PUT',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.currentEnterpriseId + '/meta',
+	    data: '&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessNegativeTailingsSwitch,
+	    callbackError: onErrorNegativeTailingsSwitch
+	  };
+	});
+	
+	// listEnterprisesCardNegativeBalanceSwitch
 	var onSuccessEnterpriseCardLoad = function onSuccessEnterpriseCardLoad(loadedEnterpriseCard) {
 	  console.log(loadedEnterpriseCard);
 	
@@ -1815,6 +1839,17 @@
 	  listEnterprisesCardName.innerText = loadedEnterpriseCard.data.name;
 	  listEnterprisesCardDate.innerText = new Date(+(loadedEnterpriseCard.data.time_activity + '000')).toLocaleString();
 	  listEnterprisesCardBalance.innerText = loadedEnterpriseCard.data.balance;
+	
+	  for (var i = 0; i < loadedEnterpriseCard.data.meta.length; i++) {
+	    if (loadedEnterpriseCard.data.meta[i].meta_code === '11') {
+	      listEnterprisesCardNegativeTailings.innerHTML = 'Включено';
+	      listEnterprisesCardNegativeTailingsSwitch.innerHTML = 'Выключить';
+	    } else if (loadedEnterpriseCard.data.meta[i].meta_code === '12') {
+	      listEnterprisesCardNegativeBalance.innerHTML = 'Включено';
+	      listEnterprisesCardNegativeBalanceSwitch.innerHTML = 'Выключить';
+	    }
+	  }
+	
 	  // auth.currentEnterpriseId = loadedEnterpriseCard.data.id;
 	};
 	
