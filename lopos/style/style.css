@@ -89,6 +89,9 @@
 .btn:disabled {
   opacity: 0.3; }
 
+#list-contractors-card > h2 {
+  margin-left: 52px; }
+
 .keywords-card-select-color-container div {
   display: flex;
   justify-content: space-between;

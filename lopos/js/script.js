@@ -2927,7 +2927,7 @@
 	var listContractorsBody = document.querySelector('#list-contractors-body');
 	var listContractorsCard = document.querySelector('#list-contractors-card');
 	var listContractorsCardReturnBtn = document.querySelector('#list-contractors-card-return-btn');
-	// const listContractorsCardEditBtn = document.querySelector('#list-contractors-card-edit-btn');
+	var listContractorsCardName = document.querySelector('#list-contractors-card-name');
 	
 	var listContractorsFormEditLabel = document.querySelector('#contractors-add-label');
 	var listContractorsFormEditName = document.querySelector('#contractors-name');
@@ -3050,6 +3050,7 @@
 	
 	  listContractorsFormBill.addEventListener('click', function () {
 	    hideBodyShowCard();
+	    listContractorsCardName.innerHTML = name;
 	    listContractorsHeader.classList.remove('d-flex');
 	    listContractorsHeader.classList.add('d-none');
 	
@@ -3163,13 +3164,29 @@
 	  value: true
 	});
 	var listContractorsCardBody = document.querySelector('#list-contractors-card-body');
-	
 	// import auth from '../tools/storage.js';
 	
-	
-	var drawHeaderInContainer = function drawHeaderInContainer(data) {
-	  return '\n    <div class="d-flex justify-content-between">\n      <div class="border">' + data.name + '</div>\n      <div class="border">' + data.phone + '</div>\n      <div class="border">' + data.email + '</div>\n    </div>\n    <div class="d-flex border">' + data.description + '</div>\n  ';
+	/*
+	const drawHeaderInContainer = (data) => {
+	  return `
+	    <div class="d-flex justify-content-between">
+	      <div class="border">${data.name}</div>
+	      <div class="border">${data.phone}</div>
+	      <div class="border">${data.email}</div>
+	    </div>
+	    <div class="d-flex border">${data.description}</div>
+	  `;
 	};
+	*/
+	/*
+	const drawHeaderInContainer = (data) => {
+	  return `
+	    <div class="d-flex justify-content-between">
+	      <div class="border">${auth.currentContractorName}</div>
+	    </div>
+	  `;
+	};
+	*/
 	exports.default = {
 	  cleanContainer: function cleanContainer() {
 	    listContractorsCardBody.innerHTML = '';
@@ -3183,7 +3200,7 @@
 	    var _this = this;
 	
 	    console.log(buyersCardData);
-	    listContractorsCardBody.insertAdjacentHTML('beforeend', drawHeaderInContainer(buyersCardData));
+	    // listContractorsCardBody.insertAdjacentHTML('beforeend', drawHeaderInContainer(buyersCardData));
 	    if (buyersCardData) {
 	      buyersCardData.forEach(function (item) {
 	        return listContractorsCardBody.insertAdjacentHTML('beforeend', _this.getElement(item));
