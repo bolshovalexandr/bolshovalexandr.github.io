@@ -106,7 +106,7 @@
   height: 40px;
   border-radius: 8px; }
 
-input:checked + label {
+input[name="contact"]:checked + label {
   border: 1px solid black; }
 
 .reference-row-number {
@@ -115,6 +115,9 @@ input:checked + label {
   text-align: right;
   margin-right: 5px;
   font-weight: bold; }
+
+.negative-switch {
+  margin-left: 10px; }
 
 /*
 @import "src/sass/components/app.scss";

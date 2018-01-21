@@ -1713,8 +1713,8 @@
 	var listEnterprisesCardBalance = document.querySelector('#list-enterprises-card-balance');
 	var listEnterprisesCardIsChecked = document.querySelector('#list-enterprises-card-is-checked');
 	var listEnterprisesCardDate = document.querySelector('#list-enterprises-card-date');
-	var listEnterprisesCardNegativeTailings = document.querySelector('#list-enterprises-card-negative-tailings');
-	var listEnterprisesCardNegativeBalance = document.querySelector('#list-enterprises-card-negative-balance');
+	// const listEnterprisesCardNegativeTailings = document.querySelector('#list-enterprises-card-negative-tailings');
+	// const listEnterprisesCardNegativeBalance = document.querySelector('#list-enterprises-card-negative-balance');
 	var listEnterprisesCardNegativeTailingsSwitch = document.querySelector('#list-enterprises-card-negative-tailings-switch');
 	var listEnterprisesCardNegativeBalanceSwitch = document.querySelector('#list-enterprises-card-negative-balance-switch');
 	
@@ -1795,14 +1795,33 @@
 	  console.log(error);
 	};
 	
-	listEnterprisesCardNegativeTailingsSwitch.addEventListener('click', function () {
-	  _referenceEnterprises2.default.cleanContainer();
-	  _referenceEnterprises2.default.drawMarkupInContainer(loaderSpinnerMarkup);
+	listEnterprisesCardNegativeBalanceSwitch.addEventListener('change', function (evt) {
+	
+	  // enterprisesMarkup.cleanContainer();
+	  // enterprisesMarkup.drawMarkupInContainer(loaderSpinnerMarkup);
+	  var value = evt.target.checked ? 1 : 0;
+	  // console.log(value);
 	
 	  _xhr2.default.request = {
 	    metod: 'PUT',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.currentEnterpriseId + '/meta',
-	    data: 'code=11&token=' + _storage2.default.data.token + '&value=0',
+	    data: 'code=12&token=' + _storage2.default.data.token + '&value=' + value,
+	    callbackSuccess: onSuccessNegativeTailingsSwitch,
+	    callbackError: onErrorNegativeTailingsSwitch
+	  };
+	});
+	
+	listEnterprisesCardNegativeTailingsSwitch.addEventListener('change', function (evt) {
+	
+	  // enterprisesMarkup.cleanContainer();
+	  // enterprisesMarkup.drawMarkupInContainer(loaderSpinnerMarkup);
+	  var value = evt.target.checked ? 1 : 0;
+	  // console.log(value);
+	
+	  _xhr2.default.request = {
+	    metod: 'PUT',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.currentEnterpriseId + '/meta',
+	    data: 'code=11&token=' + _storage2.default.data.token + '&value=' + value,
 	    callbackSuccess: onSuccessNegativeTailingsSwitch,
 	    callbackError: onErrorNegativeTailingsSwitch
 	  };
@@ -1841,12 +1860,24 @@
 	  listEnterprisesCardBalance.innerText = loadedEnterpriseCard.data.balance;
 	
 	  for (var i = 0; i < loadedEnterpriseCard.data.meta.length; i++) {
-	    if (loadedEnterpriseCard.data.meta[i].meta_code === '11') {
-	      listEnterprisesCardNegativeTailings.innerHTML = 'Включено';
-	      listEnterprisesCardNegativeTailingsSwitch.innerHTML = 'Выключить';
-	    } else if (loadedEnterpriseCard.data.meta[i].meta_code === '12') {
-	      listEnterprisesCardNegativeBalance.innerHTML = 'Включено';
-	      listEnterprisesCardNegativeBalanceSwitch.innerHTML = 'Выключить';
+	    console.log(loadedEnterpriseCard.data.meta[i].meta_code === '11' && loadedEnterpriseCard.data.meta[i].meta_value === '1');
+	    if (loadedEnterpriseCard.data.meta[i].meta_code === '11' && loadedEnterpriseCard.data.meta[i].meta_value === '1') {
+	      listEnterprisesCardNegativeTailingsSwitch.setAttribute('checked', 'checked');
+	      // listEnterprisesCardNegativeTailingsSwitch.innerHTML = 'Выключить';
+	      listEnterprisesCardNegativeTailingsSwitch.checked = true;
+	      break;
+	    } else {
+	      listEnterprisesCardNegativeTailingsSwitch.checked = false;
+	    }
+	  }
+	
+	  for (var _i = 0; _i < loadedEnterpriseCard.data.meta.length; _i++) {
+	    if (loadedEnterpriseCard.data.meta[_i].meta_code === '12' && loadedEnterpriseCard.data.meta[_i].meta_value === '1') {
+	      listEnterprisesCardNegativeBalanceSwitch.setAttribute('checked', 'checked');
+	      listEnterprisesCardNegativeBalanceSwitch.checked = true;
+	      break;
+	    } else {
+	      listEnterprisesCardNegativeBalanceSwitch.checked = false;
 	    }
 	  }
 	
