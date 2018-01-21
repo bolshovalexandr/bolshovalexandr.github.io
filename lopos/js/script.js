@@ -3187,6 +3187,15 @@
 	  `;
 	};
 	*/
+	
+	var BillTypes = {
+	  'type0': 'suppliers',
+	  'type1': 'admission',
+	  'type2': 'buyers',
+	  'type3': 'sale',
+	  'type8': 'ic_my_production'
+	};
+	
 	exports.default = {
 	  cleanContainer: function cleanContainer() {
 	    listContractorsCardBody.innerHTML = '';
@@ -3194,7 +3203,17 @@
 	  getElement: function getElement(item) {
 	    // const currentStockFlag = (item.id === auth.data['currentStock']) ? 'V' : '';
 	
-	    return '\n        <div class="border">\n          <b>ID: </b>' + item.id + '\n          <b> \u0421\u0442\u0430\u0442\u0443\u0441: </b>' + item.status + '\n          <b> \u0412\u0440\u0435\u043C\u044F: </b>' + new Date(+(item.time_activity + '000')).toLocaleString() + '\n          <b> \u0412\u0441\u0435\u0433\u043E: </b>' + item.total + '\n          <b> \u0422\u0438\u043F: </b>' + item.type + '\n        </div>\n';
+	    return '\n    <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n      <div class="media">\n        <img class="mr-3" src="img/' + BillTypes['type' + item.type] + '.png" width="30" alt="Generic placeholder image">\n        <div class="media-body">\n          <b>ID: </b>' + item.id + '\n          <b> \u0421\u0442\u0430\u0442\u0443\u0441: </b>' + item.status + '\n          <b> \u0412\u0440\u0435\u043C\u044F: </b>' + new Date(+(item.time_activity + '000')).toLocaleString() + '\n          <b> \u0412\u0441\u0435\u0433\u043E: </b>' + item.total + '\n          <b> \u0422\u0438\u043F: </b>' + item.type + '\n        </div>\n      </div>';
+	    /*
+	        return `
+	            <div class="border">
+	              <b>ID: </b>${item.id}
+	              <b> Статус: </b>${item.status}
+	              <b> Время: </b>${new Date(+(item.time_activity + '000')).toLocaleString()}
+	              <b> Всего: </b>${item.total}
+	              <b> Тип: </b>${item.type}
+	            </div>
+	    `;*/
 	  },
 	  drawDataInContainer: function drawDataInContainer(buyersCardData) {
 	    var _this = this;

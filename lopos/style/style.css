@@ -89,8 +89,8 @@
 .btn:disabled {
   opacity: 0.3; }
 
-#list-contractors-card > h2 {
-  margin-left: 52px; }
+#list-contractors-card > h3 {
+  margin-left: 54px; }
 
 .keywords-card-select-color-container div {
   display: flex;
