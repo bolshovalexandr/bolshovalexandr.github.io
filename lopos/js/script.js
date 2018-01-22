@@ -106,6 +106,10 @@
 	
 	var _referenceKeywordsEdit2 = _interopRequireDefault(_referenceKeywordsEdit);
 	
+	var _catalogGroups = __webpack_require__(34);
+	
+	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	console.log('ver: 2D9');
@@ -151,18 +155,17 @@
 	  }
 	};
 	
+	var mainMenuButtons = [_onlineProfile2.default, _log2.default, _referenceEnterprises2.default, _referencePoints2.default, _referenceContractors2.default, _referenceKeywords2.default, _catalogGroups2.default];
+	
 	// ========== ОБНОВЛЕНИЕ/ОТКРЫТИЕ СТРАНИЦЫ ==========
 	var start = function start() {
 	  if (_storage2.default.isSetFlag) {
 	    showAppHideLogin();
-	    _onlineProfile2.default.start();
-	    _log2.default.start();
-	    _referenceEnterprises2.default.start();
-	    _referencePoints2.default.start();
-	    _referenceContractors2.default.start();
-	    _referenceKeywords2.default.start();
 	    initMarkup();
 	    hashObserver();
+	    mainMenuButtons.forEach(function (item) {
+	      return item.start();
+	    });
 	    _referenceEnterprisesAdd2.default.start();
 	    _referenceEnterprisesEdit2.default.start();
 	    _referencePointsAdd2.default.start();
@@ -179,9 +182,10 @@
 	// ========== ВЫХОД ==========
 	var stop = function stop() {
 	  showLoginHideApp();
-	  _log2.default.stop();
-	  _onlineProfile2.default.stop();
 	  _storage2.default.clean();
+	  mainMenuButtons.forEach(function (item) {
+	    return item.stop();
+	  });
 	  window.location.hash = '';
 	  document.dispatchEvent(new Event('logoutSuccess'));
 	};
@@ -340,6 +344,14 @@
 	
 	  get currentKeywordName() {
 	    return sessionStorage.getItem('currentKeywordName');
+	  },
+	
+	  set goodsViewMode(mode) {
+	    sessionStorage.setItem('goodsViewMode', mode);
+	  },
+	
+	  get goodsViewMode() {
+	    return sessionStorage.getItem('goodsViewMode');
 	  }
 	
 	};
@@ -866,10 +878,15 @@
 	
 	  set actionRequestModal(setup) {
 	
+	    var requestHandler = function requestHandler() {
+	      setup.submitCallback();
+	      modalActionRequestSubmit.removeEventListener('click', requestHandler);
+	    };
+	
 	    $(modalActionRequest).modal('show');
 	    modalActionRequestTitle.innerHTML = setup.title;
 	    modalActionRequestMessage.innerHTML = setup.message;
-	    modalActionRequestSubmit.addEventListener('click', setup.submitCallback);
+	    modalActionRequestSubmit.addEventListener('click', requestHandler);
 	  },
 	
 	  set informationtModal(setup) {
@@ -1807,17 +1824,12 @@
 	  };
 	};
 	
-	var onErrorEnterprisesDelete = function onErrorEnterprisesDelete(error) {
-	  console.log(error);
-	};
-	
 	var setRequestToDeleteEnterprise = function setRequestToDeleteEnterprise() {
 	  _xhr2.default.request = {
 	    metod: 'DELETE',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.currentEnterpriseId,
 	    data: 'view_last=0&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessEnterprisesDelete,
-	    callbackError: onErrorEnterprisesDelete
+	    callbackSuccess: onSuccessEnterprisesDelete
 	  };
 	};
 	
@@ -4204,6 +4216,334 @@
 	
 	exports.default = {
 	  start: addHandlers
+	};
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _catalogGroups = __webpack_require__(35);
+	
+	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
+	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var listGroups = document.querySelector('#list-groups-list');
+	// const listGroupsCardAddBtn = document.querySelector('#list-groups-card-add-btn');
+	var listGroupsCardDeleteBtn = document.querySelector('#list-groups-card-delete-btn');
+	var listGroupsCardEditBtn = document.querySelector('#list-groups-card-edit-btn');
+	var listGroupsCard = document.querySelector('#list-groups-card');
+	var listGroupsCardBody = document.querySelector('#list-groups-card-body');
+	var listGroupsCardCheckMessage = document.querySelector('#list-groups-header-check-message');
+	var groupsEditForm = document.querySelector('#groups-edit');
+	var groupsEditName = document.querySelector('#groups-edit-name');
+	var groupGoodsCard = document.querySelector('#group-goods-card');
+	var groupGoodsReturnBtn = document.querySelector('#group-goods-return-btn');
+	var groupGoodsViewBtn = document.querySelector('#group-goods-view-btn');
+	var groupName = document.querySelector('#group-name');
+	
+	var goodsSortModal = document.querySelector('#group-goods-sort');
+	var goodsSortAbcUpBtn = document.querySelector('#group-goods-sort-abc-up');
+	var goodsSortAbcDownBtn = document.querySelector('#group-goods-sort-abc-down');
+	var goodsSortTailingsUpBtn = document.querySelector('#group-goods-sort-tailings-up');
+	var goodsSortTailingsDownBtn = document.querySelector('#group-goods-sort-tailings-down');
+	
+	var SELECT_DELAY = 2000;
+	
+	var loaderSpinnerId = 'loader-groups';
+	var loaderSpinnerMessage = 'Загрузка';
+	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
+	var loadedData = [];
+	var loadedGoods = [];
+	var currentGroupName = '';
+	
+	var onSuccessGroupDelete = function onSuccessGroupDelete(answer) {
+	
+	  // onListEnterprisesCardReturnBtn();
+	  console.log(answer);
+	  var message = '';
+	
+	  if (answer.status === 271) {
+	    message = answer.message + ', удалить никак невозможно-с';
+	  } else {
+	    message = 'Группа успешно удалена';
+	    getGroups();
+	  }
+	
+	  _tools2.default.informationtModal = {
+	    title: 'Уведомление',
+	    message: message
+	  };
+	};
+	
+	var setRequestToDeleteGroup = function setRequestToDeleteGroup(groupNumber) {
+	  console.log('lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.currentEnterpriseId + '/group/' + groupNumber);
+	  _xhr2.default.request = {
+	    metod: 'DELETE',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.currentEnterpriseId + '/group/' + groupNumber,
+	    data: 'token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessGroupDelete
+	  };
+	};
+	
+	var onListGroupsCardBodyClickEdit = function onListGroupsCardBodyClickEdit(evt) {
+	  console.log(evt.target);
+	  var currentStringElement = evt.target;
+	  while (!currentStringElement.dataset.groupIndex) {
+	    currentStringElement = currentStringElement.parentNode;
+	  }
+	  $(groupsEditForm).modal('show');
+	  groupsEditName.value = loadedData.data[currentStringElement.dataset.groupIndex].name;
+	};
+	
+	var onListGroupsCardBodyClickRemove = function onListGroupsCardBodyClickRemove(evt, clickedAction) {
+	  console.log(evt.target);
+	  var currentStringElement = evt.target;
+	  while (!currentStringElement.dataset.groupIndex) {
+	    currentStringElement = currentStringElement.parentNode;
+	  }
+	
+	  _tools2.default.actionRequestModal = {
+	    title: 'Удаление',
+	    message: '\u0412\u044B \u0442\u043E\u0447\u043D\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u0433\u0440\u0443\u043F\u043F\u0443 <b>' + loadedData.data[currentStringElement.dataset.groupIndex].name + '</b>?',
+	    submitCallback: setRequestToDeleteGroup.bind(null, currentStringElement.dataset.groupId)
+	  };
+	
+	  groupsEditName.value = loadedData.data[currentStringElement.dataset.groupIndex].name;
+	};
+	
+	var onSuccessGroupsLoad = function onSuccessGroupsLoad(loadedGroups) {
+	  console.log(loadedGroups);
+	  loadedData = loadedGroups;
+	  document.querySelector('#' + loaderSpinnerId).remove();
+	  _catalogGroups2.default.drawDataInContainer(loadedGroups.data);
+	};
+	
+	var getGroups = function getGroups() {
+	  _catalogGroups2.default.cleanContainer();
+	  _catalogGroups2.default.drawMarkupInContainer(loaderSpinnerMarkup);
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/group',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessGroupsLoad
+	  };
+	};
+	
+	var onListGroupsCardEditBtnClick = function onListGroupsCardEditBtnClick(evt) {
+	  listGroupsCardCheckMessage.innerHTML = 'Выберите группу';
+	  listGroupsCardBody.removeEventListener('click', onListGroupsCardBodyClick);
+	  listGroupsCardBody.addEventListener('click', onListGroupsCardBodyClickEdit);
+	  window.setTimeout(function () {
+	    listGroupsCardCheckMessage.innerHTML = '';
+	    listGroupsCardBody.addEventListener('click', onListGroupsCardBodyClick);
+	    listGroupsCardBody.removeEventListener('click', onListGroupsCardBodyClickEdit);
+	  }, SELECT_DELAY);
+	};
+	
+	var onListGroupsCardDeleteBtnClick = function onListGroupsCardDeleteBtnClick(evt) {
+	
+	  listGroupsCardBody.removeEventListener('click', onListGroupsCardBodyClick);
+	  listGroupsCardCheckMessage.innerHTML = 'Выберите группу';
+	  listGroupsCardBody.addEventListener('click', onListGroupsCardBodyClickRemove);
+	  window.setTimeout(function () {
+	    listGroupsCardCheckMessage.innerHTML = '';
+	    listGroupsCardBody.addEventListener('click', onListGroupsCardBodyClick);
+	    listGroupsCardBody.removeEventListener('click', onListGroupsCardBodyClickRemove);
+	  }, SELECT_DELAY);
+	};
+	
+	listGroupsCardEditBtn.addEventListener('click', onListGroupsCardEditBtnClick);
+	listGroupsCardDeleteBtn.addEventListener('click', onListGroupsCardDeleteBtnClick);
+	
+	var drawGoods = function drawGoods() {
+	  if (_storage2.default.goodsViewMode === 'string') {
+	    _catalogGroups2.default.drawGoodsTable(loadedGoods.data);
+	  } else if (_storage2.default.goodsViewMode === 'metro') {
+	    _catalogGroups2.default.drawGoodsMetro(loadedGoods.data);
+	  }
+	};
+	
+	var onSuccessGroupGood = function onSuccessGroupGood(goodsData) {
+	  console.log(goodsData);
+	  loadedGoods = goodsData;
+	  _storage2.default.goodsViewMode = _storage2.default.goodsViewMode === 'false' ? 'string' : _storage2.default.goodsViewMode;
+	  drawGoods();
+	  // groupsMarkup.drawGoodsTable(loadedGoods.data);
+	  // groupsMarkup.drawGoodsMetro(loadedGoods.data);
+	};
+	
+	var onListGroupsCardBodyClick = function onListGroupsCardBodyClick(evt) {
+	  groupGoodsCard.classList.remove('d-none');
+	  listGroupsCard.classList.add('d-none');
+	
+	  var currentStringElement = evt.target;
+	  while (!currentStringElement.dataset.groupId) {
+	    currentStringElement = currentStringElement.parentNode;
+	  }
+	
+	  currentGroupName = loadedData.data[currentStringElement.dataset.groupIndex].name;
+	  groupName.innerHTML = currentGroupName;
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/group/' + currentStringElement.dataset.groupId + '/goods',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessGroupGood
+	  };
+	};
+	
+	var onGroupGoodsReturnBtnClick = function onGroupGoodsReturnBtnClick() {
+	  groupGoodsCard.classList.add('d-none');
+	  listGroupsCard.classList.remove('d-none');
+	};
+	
+	var onGroupGoodsViewBtnClick = function onGroupGoodsViewBtnClick() {
+	  if (_storage2.default.goodsViewMode === 'string') {
+	    _catalogGroups2.default.drawGoodsMetro(loadedGoods.data);
+	    _storage2.default.goodsViewMode = 'metro';
+	  } else if (_storage2.default.goodsViewMode === 'metro') {
+	    _catalogGroups2.default.drawGoodsTable(loadedGoods.data);
+	    _storage2.default.goodsViewMode = 'string';
+	  }
+	};
+	
+	listGroupsCardBody.addEventListener('click', onListGroupsCardBodyClick);
+	groupGoodsReturnBtn.addEventListener('click', onGroupGoodsReturnBtnClick);
+	
+	groupGoodsViewBtn.addEventListener('click', onGroupGoodsViewBtnClick);
+	
+	goodsSortAbcUpBtn.addEventListener('click', function () {
+	  loadedGoods.data.sort(function (a, b) {
+	    return a.name > b.name ? 1 : -1;
+	  });
+	  drawGoods();
+	  $(goodsSortModal).modal('hide');
+	});
+	
+	goodsSortAbcDownBtn.addEventListener('click', function () {
+	  loadedGoods.data.sort(function (a, b) {
+	    return b.name > a.name ? 1 : -1;
+	  });
+	  drawGoods();
+	  $(goodsSortModal).modal('hide');
+	});
+	
+	goodsSortTailingsUpBtn.addEventListener('click', function () {
+	  loadedGoods.data.sort(function (a, b) {
+	    return a.count - b.count;
+	  });
+	  drawGoods();
+	  $(goodsSortModal).modal('hide');
+	});
+	
+	goodsSortTailingsDownBtn.addEventListener('click', function () {
+	  loadedGoods.data.sort(function (a, b) {
+	    return b.count - a.count;
+	  });
+	  drawGoods();
+	  $(goodsSortModal).modal('hide');
+	});
+	
+	exports.default = {
+	  start: function start() {
+	    listGroups.addEventListener('click', getGroups);
+	  },
+	
+	
+	  redraw: getGroups,
+	
+	  stop: function stop() {
+	    _catalogGroups2.default.cleanContainer();
+	    listGroups.removeEventListener('click', getGroups);
+	  }
+	};
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	var listGroupsBody = document.querySelector('#list-groups-card-body');
+	var groupGoodsBody = document.querySelector('#group-goods-card-body');
+	// import auth from '../tools/storage.js';
+	
+	exports.default = {
+	  cleanContainer: function cleanContainer() {
+	    listGroupsBody.innerHTML = '';
+	  },
+	  getElement: function getElement(item, index) {
+	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
+	    // ${currentEnterpriseFlag}
+	
+	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '" data-group-index="' + index + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.id + '</span> ||\n        <span>' + item.level + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
+	  },
+	  getGoodString: function getGoodString(item, index) {
+	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
+	    // ${currentEnterpriseFlag}
+	
+	    return '\n    <div class="goods-string">\n      <div>\n        <span class="reference-row-number">' + (index + 1) + '</span> <span>' + item.name + '</span>\n      </div>\n      <div>\n        ' + item.count + '\n        <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>\n      </div>\n    </div>';
+	  },
+	  getGoodTile: function getGoodTile(item, index) {
+	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
+	    // ${currentEnterpriseFlag}
+	
+	    return '\n    <div class="card goods-tile-card">\n      <img class="card-img-top" src="./img/st_fon_selected.png" alt="' + item.name + '" title="' + item.name + '">\n      <div class="card-body goods-tile-title">\n        <p class="card-text">' + item.count + '</p>\n      </div>\n    </div>';
+	  },
+	  drawDataInContainer: function drawDataInContainer(groupsData) {
+	    var _this = this;
+	
+	    groupsData.forEach(function (item, index) {
+	      return listGroupsBody.insertAdjacentHTML('beforeend', _this.getElement(item, index));
+	    });
+	  },
+	  drawMarkupInContainer: function drawMarkupInContainer(markup) {
+	    listGroupsBody.insertAdjacentHTML('beforeend', markup);
+	  },
+	  drawGoodsTable: function drawGoodsTable(goodsData) {
+	    var _this2 = this;
+	
+	    console.log(goodsData);
+	    console.log(typeof goodsData === 'undefined' ? 'undefined' : _typeof(goodsData));
+	    groupGoodsBody.innerHTML = '';
+	    goodsData.forEach(function (item, index) {
+	      return groupGoodsBody.insertAdjacentHTML('beforeend', _this2.getGoodString(item, index));
+	    });
+	  },
+	  drawGoodsMetro: function drawGoodsMetro(goodsData) {
+	    var _this3 = this;
+	
+	    groupGoodsBody.innerHTML = '<div class="goods-tile"></div>';
+	    goodsData.forEach(function (item, index) {
+	      return groupGoodsBody.firstChild.insertAdjacentHTML('beforeend', _this3.getGoodTile(item, index));
+	    });
+	  }
 	};
 
 /***/ })

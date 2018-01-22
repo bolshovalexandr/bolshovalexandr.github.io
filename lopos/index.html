@@ -19,7 +19,7 @@
   <div id="login" class="container-fluid mx-auto d-none" style="min-height: 920px; height: 100vh">
     <div id="globalAlert" class="position-absolute w-75 ml-3"></div>
 
-    <section id='sectionLoginFormMain' class="pt-5">
+    <section id="sectionLoginFormMain" class="pt-5">
 
       <section id="sectionLogin" class="d-none">
 
@@ -29,8 +29,8 @@
 
         <div class="container-fluid">
           <h3 class="text-center text-primary">Вход</h3>
-          <form id=loginForm class="mx-auto" style="max-width: 400px;">
-            <div id='loginCaptcha'></div>
+          <form id="loginForm" class="mx-auto" style="max-width: 400px;">
+            <div id="loginCaptcha"></div>
             <div class="form-group">
               <label for="loginInputLogin">Введите ID или email</label>
               <input class="form-control" type="text" id="loginInputLogin" placeholder="Введите ID или email" data-erreset="loginLogin">
@@ -48,15 +48,15 @@
             </div>
 
             <div>
-              <button id='loginButtonSubmit' type="submit" class="btn btn-danger w-100">
+              <button id="loginButtonSubmit" type="submit" class="btn btn-danger w-100">
                 Войти
               </button>
-              <button id='loginButtonForgot' type="button" class="btn btn-info w-100 mt-3">Забыли пароль?</button>
+              <button id="loginButtonForgot" type="button" class="btn btn-info w-100 mt-3">Забыли пароль?</button>
             </div>
 
             <div>
 
-              <button id='loginButtonRegister' type="button" class="btn btn-info w-100 mt-5">Регистрация</button>
+              <button id="loginButtonRegister" type="button" class="btn btn-info w-100 mt-5">Регистрация</button>
             </div>
           </form>
         </div>
@@ -68,7 +68,7 @@
           <article>
             <h3 class="text-center text-primary">Регистрация нового пользователя</h3>
             <form id="registerForm" class="mx-auto" style="max-width: 27rem">
-              <div id='registerCaptcha'></div>
+              <div id="registerCaptcha"></div>
               <div class="form-group">
                 <label for="registerInputName">Введите имя ваше имя</label>
                 <input id="registerInputName" class="form-control" type="text" placeholder="Enter name" data-erreset="registerLogin">
@@ -96,14 +96,14 @@
 
               <div class="form-group">
 
-                <button id='registerButtonSubmit' type="submit" class="btn btn-danger w-100" data-sitekey="6LcCxT8UAAAAADePAfRygUpreEvUj6J8oMWRE0JW" data-callback='onSubmit'>Регистрация</button>
+                <button id="registerButtonSubmit" type="submit" class="btn btn-danger w-100" data-sitekey="6LcCxT8UAAAAADePAfRygUpreEvUj6J8oMWRE0JW" data-callback="onSubmit">Регистрация</button>
                 <button id="registerButtonCancel" type="button" class="btn btn-info w-100 mt-3">Отмена</button>
 
               </div>
 
               <div class="form-group mt-5">
 
-                <button id='registerButtonUserAgreement' type="button" class="btn btn-info w-100" data-toggle="modal" data-target="#exampleModalLong">
+                <button id="registerButtonUserAgreement" type="button" class="btn btn-info w-100" data-toggle="modal" data-target="#exampleModalLong">
                   <b>Cоглашение использования</b>
                 </button>
 
@@ -124,7 +124,7 @@
       <section id="sectionConfirmEmail" class="d-none">
         <div class="container-fluid" style="max-width: 27rem">
           <h3 class="text-center text-primary">Подтверждение адреса электронной почты</h3>
-          <form id='emailConfirmForm' class="mx-auto" style="max-width: 27rem">
+          <form id="emailConfirmForm" class="mx-auto" style="max-width: 27rem">
             <div id="emailConfirmCaptcha" class="form-group"></div>
             <div class="form-group">
               <label for="emailConfirmInputKey">Введите ключ, полученный по электронной почте</label>
@@ -137,8 +137,8 @@
             </div>
 
             <div class="form-group">
-              <button id='emailConfirmButtonSubmit' type="submit" class="btn btn-danger w-100">Подтвердить</button>
-              <button id='emailConfirmButtonCancel' type="button" class="btn btn-info w-100 mt-3">Отмена</button>
+              <button id="emailConfirmButtonSubmit" type="submit" class="btn btn-danger w-100">Подтвердить</button>
+              <button id="emailConfirmButtonCancel" type="button" class="btn btn-info w-100 mt-3">Отмена</button>
             </div>
           </form>
         </div>
@@ -147,7 +147,7 @@
       <section id="sectionForgot" class="mx-auto d-none" style="max-width: 27rem">
         <div class="container-fluid">
           <h3 class="text-center text-primary">Восстановление пароля</h3>
-          <form id='forgotForm' class="mx-auto" style="max-width: 27rem">
+          <form id="forgotForm" class="mx-auto" style="max-width: 27rem">
             <div id="forgotCaptcha" class="form-group"></div>
             <div class="form-group">
               <label for="emailConfirmInputKey">Введите адрес электронной почты </label>
@@ -160,8 +160,8 @@
             </div>
 
             <div class="form-group">
-              <button id='forgotButtonSubmit' type="submit" class="btn btn-danger w-100">Восстановить</button>
-              <button id='forgotButtonCancel' type="button" class="btn btn-info w-100 mt-3">Отмена</button>
+              <button id="forgotButtonSubmit" type="submit" class="btn btn-danger w-100">Восстановить</button>
+              <button id="forgotButtonCancel" type="button" class="btn btn-info w-100 mt-3">Отмена</button>
             </div>
 
           </form>
@@ -275,12 +275,53 @@
         </div>
 
         <!-- ==================== КОНТЕЙНЕРЫ / Каталог ==================== -->
+
+        <!-- =========== КОНТЕЙНЕРЫ / Каталог / Витрина товаров =========== -->
         <div class="tab-pane fade" id="list-showcase" role="tabpanel" aria-labelledby="list-showcase-list">
           <p>ВИТРИНА ТОВАРОВ (UNDER CONSTRUCTION)</p>
         </div>
+
+        <!-- =========== КОНТЕЙНЕРЫ / Справочники / Группы товаров =========== -->
         <div class="tab-pane fade" id="list-groups" role="tabpanel" aria-labelledby="list-groups-list">
-          <p>ГРУППЫ ТОВАРОВ (UNDER CONSTRUCTION)</p>
+
+          <div id="list-groups-card">
+
+            <div id="list-groups-header" class="catalog-header">
+              <div class="catalog-header-title">
+                <img src="img/groups.png" alt="">
+                <h2>ГРУППЫ ТОВАРОВ</h2>
+              </div>
+              <div id="list-groups-header-check-message"></div>
+              <div class="catalog-header-buttons">
+                <button id="list-groups-card-add-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__add" data-toggle="modal" data-target="#groups-add"></button>
+                <button id="list-groups-card-edit-btn" type="button" class="btn btn-warning p-0 icon-btn icon-btn__edit"></button>
+                <button id="list-groups-card-delete-btn" type="button" class="btn btn-danger p-0 icon-btn icon-btn__delete"></button>
+              </div>
+            </div>
+            <div id="list-groups-card-body" class="groups-card-block"></div>
+          </div>
+
+          <div id="group-goods-card" class="d-none">
+            <div id="group-goods-card-header" class="catalog-header">
+              <div class="catalog-header-title">
+                <button id="group-goods-return-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__return"></button>
+                <h2 id="group-name"></h2>
+              </div>
+              <div class="catalog-header-buttons">
+                <button id="group-goods-add-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__add" data-toggle="modal" data-target="#group-goods-add"></button>
+                <button id="group-goods-copy-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__copy" data-toggle="modal" data-target="#"></button>
+                <button id="group-goods-view-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__view"></button>
+                <button id="group-goods-sort-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__sort" data-toggle="modal" data-target="#group-goods-sort"></button>
+
+              </div>
+            </div>
+            <div id="group-goods-card-body"></div>
+          </div>
+
+
         </div>
+
+        <!-- =========== КОНТЕЙНЕРЫ / Справочники / Группы товаров =========== -->
         <div class="tab-pane fade" id="list-cards" role="tabpanel" aria-labelledby="list-cards-list">
           <p>ПРОИЗВОДСТВЕННЫЕ КАРТОЧКИ (UNDER CONSTRUCTION)</p>
         </div>
@@ -400,11 +441,11 @@
                 <ul>
                   <li>
                     <span>Отрицательные остатки</span>
-                    <input id="list-enterprises-card-negative-tailings-switch" class="form-check-input position-static negative-switch" type="checkbox" id="blankCheckbox" value="option1" aria-label="...">
+                    <input id="list-enterprises-card-negative-tailings-switch" class="form-check-input position-static negative-switch" type="checkbox" value="option1" aria-label="...">
                   </li>
                   <li>
                     <span>Отрицательный баланс</span>
-                    <input id="list-enterprises-card-negative-balance-switch" class="form-check-input position-static negative-switch" type="checkbox" id="blankCheckbox" value="option1" aria-label="...">
+                    <input id="list-enterprises-card-negative-balance-switch" class="form-check-input position-static negative-switch" type="checkbox" value="option1" aria-label="...">
                   </li>
                 </ul>
               </div>
@@ -462,9 +503,10 @@
               <input type="text" class="form-control" id="enterprise-name" aria-describedby="enterprise-name" placeholder="Название предприятия">
               <span id="enterprises-name-valid" class="badge badge-danger w-100"></span>
             </div>
+
             <div class="form-group">
               <label for="enterprise-balance">Баланс</label>
-              <input type="text" class="form-control" id="enterprise-balance" placeholder="Баланс" value=0>
+              <input type="text" class="form-control" id="enterprise-balance" placeholder="Баланс" value="0">
               <span id="enterprise-balance-valid" class="badge badge-danger w-100"></span>
             </div>
             <div class="form-group d-flex justify-content-between">
@@ -554,7 +596,7 @@
     <div class="modal-dialog" style="width: 300px;" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="points-add-label">Редактировать точку</h5>
+          <h5 class="modal-title" id="points-edit-label">Редактировать точку</h5>
           <button id="points-edit-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -643,7 +685,7 @@
     <div class="modal-dialog" style="width: 300px;" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="points-add-label">Создать ключевое слово</h5>
+          <h5 class="modal-title" id="keywords-add-label">Создать ключевое слово</h5>
           <button id="keywords-add-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -752,6 +794,159 @@
     </div>
   </div>
 
+
+  <!-- Каталог / создание группы -->
+  <div class="modal fade" id="groups-add" tabindex="-1" role="dialog" aria-labelledby="groups-add" aria-hidden="true" backdrop="static">
+    <div class="modal-dialog" style="width: 300px;" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="groups-add-label">Создать группу</h5>
+          <button id="groups-add-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+          <form id="groups-add-form" name="groups-add">
+            <div class="form-group">
+              <label for="groups-add-name">Новое название</label>
+              <input type="text" class="form-control" id="groups-add-name" aria-describedby="groups-add-name" placeholder="Название">
+              <span id="groups-add-valid" class="badge badge-danger w-100"></span>
+            </div>
+
+            <div id="groups-add-spinner" class="progress text-white mb-3 invisible">
+              <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+
+            <button id="groups-add-submit" type="submit" class="btn btn-primary w-100">Создать</button>
+
+            <button id="groups-add-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal">Отменить</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Каталог / Редактирование группы -->
+
+  <div class="modal fade" id="groups-edit" tabindex="-1" role="dialog" aria-labelledby="groups-edit" aria-hidden="true" backdrop="static">
+    <div class="modal-dialog" style="width: 300px;" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="groups-edit-label">Редактировать группу</h5>
+          <button id="groups-edit-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+          <form id="groups-edit-form" name="groups-edit">
+            <div class="form-group">
+              <label for="groups-edit-name">Новое название</label>
+              <input type="text" class="form-control" id="groups-edit-name" aria-describedby="groups-edit-name" placeholder="Название">
+              <span id="groups-edit-valid" class="badge badge-danger w-100"></span>
+            </div>
+
+            <div id="groups-edit-spinner" class="progress text-white mb-3 invisible">
+              <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+
+            <button id="groups-edit-submit" type="submit" class="btn btn-primary w-100">Изменить</button>
+
+            <button id="groups-edit-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal">Отменить</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Каталог / Группы товаров / сортировка -->
+
+  <div class="modal fade" id="group-goods-sort" tabindex="-1" role="dialog" aria-labelledby="groups-edit" aria-hidden="true" backdrop="static">
+    <div class="modal-dialog" style="width: 300px;" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="group-goods-sort-label">Сортировать</h5>
+          <button id="group-goods-sort-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+
+
+            <button id="group-goods-sort-abc-up" type="submit" class="btn btn-primary w-100 mb-2">А - Я</button>
+            <button id="group-goods-sort-abc-down" type="submit" class="btn btn-primary w-100 mb-2">Я - А</button>
+            <button id="group-goods-sort-tailings-up" type="submit" class="btn btn-primary w-100 mb-2">Остатки (по возрастанию)</button>
+            <button id="group-goods-sort-tailings-down" type="submit" class="btn btn-primary w-100 mb-2">Остатки (по убыванию)</button>
+
+            <button id="group-goods-sort-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal">Отменить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Справочники / Группы товаров / Добавление товара -->
+  <div class="modal fade" id="group-goods-add" tabindex="-1" role="dialog" aria-labelledby="group-goods-add" aria-hidden="true" backdrop="static">
+    <div class="modal-dialog" style="width: 300px;" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="group-goods-add-label">Создание товара</h5>
+          <button id="group-goods-add-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+          <form id="group-goods-add-form" name="group-goods-add">
+
+            <div class="form-group">
+              <label for="group-goods-name">Название</label>
+              <input type="text" class="form-control" id="group-goods-name" aria-describedby="group-goods-name" placeholder="Название">
+              <span id="group-goods-name-valid" class="badge badge-danger w-100"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="group-goods-describe">Описание</label>
+              <input type="text" class="form-control" id="group-goods-describe" aria-describedby="group-goods-describe" placeholder="Описание">
+              <span id="group-goods-describe-valid" class="badge badge-danger w-100"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="group-goods-contact">Группа</label>
+              <input type="text" class="form-control" id="group-goods-group" aria-describedby="group-goods-group" placeholder="Группа">
+              <span id="group-goods-congrouptact-valid" class="badge badge-danger w-100"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="group-goods-price">Цена</label>
+              <div class="d-flex">
+                <input type="text" class="form-control m-1" id="group-goods-price-purchase" aria-describedby="group-goods-price" placeholder="Цена">
+                <input type="text" class="form-control m-1" id="group-goods-price-extra" aria-describedby="group-goods-price" placeholder="Наценка">
+                <input type="text" class="form-control m-1" id="group-goods-price-sell" aria-describedby="group-goods-price" placeholder="Цена">
+              </div>
+              <div class="d-flex">
+                <label class="w-100 m-1" for="group-goods-price-purchase"><small class="form-text text-muted text-center">Закупки</small></label>
+                <label class="w-100 m-1" for="group-goods-price-extra"><small class="form-text text-muted text-center">Наценка</small></label>
+                <label class="w-100 m-1" for="group-goods-price-sell"><small class="form-text text-muted text-center">Продажи</small></label>
+              </div>
+              <span id="group-goods-price-valid" class="badge badge-danger w-100"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="group-goods-barcode">Штрихкод</label>
+              <input type="text" class="form-control" id="group-goods-barcode" aria-describedby="group-goods-barcode" placeholder="Штрихкод">
+              <span id="group-goods-barcode-valid" class="badge badge-danger w-100"></span>
+            </div>
+
+            <div id="group-goods-add-spinner" class="progress text-white mb-3 invisible">
+              <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+
+            <button id="group-goods-add-submit" type="submit" class="btn btn-primary w-100" disabled>Создание</button>
+
+            <button id="group-goods-add-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal">Отменить</button>
+            <button id="group-goods-add-bill" type="button" class="btn btn-info w-100 mt-3 d-none" data-dismiss="modal">Последние накладные</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- МОДАЛЬНЫЕ ОКНА ДЛЯ ВЫВОДА УВЕДОМЛЕНИЙ И ПОДТВЕРЖДЕНИЯ ДЕЙСТВИЙ -->
 
