@@ -4386,7 +4386,7 @@
 	var onSuccessGroupGood = function onSuccessGroupGood(goodsData) {
 	  console.log(goodsData);
 	  loadedGoods = goodsData;
-	  _storage2.default.goodsViewMode = _storage2.default.goodsViewMode === 'false' ? 'string' : _storage2.default.goodsViewMode;
+	  _storage2.default.goodsViewMode = _storage2.default.goodsViewMode === 'null' ? 'string' : _storage2.default.goodsViewMode;
 	  drawGoods();
 	  // groupsMarkup.drawGoodsTable(loadedGoods.data);
 	  // groupsMarkup.drawGoodsMetro(loadedGoods.data);
