@@ -54,15 +54,15 @@
 	
 	var _main_login_window2 = _interopRequireDefault(_main_login_window);
 	
-	var _log = __webpack_require__(13);
+	var _log = __webpack_require__(14);
 	
 	var _log2 = _interopRequireDefault(_log);
 	
-	var _onlineProfile = __webpack_require__(15);
+	var _onlineProfile = __webpack_require__(16);
 	
 	var _onlineProfile2 = _interopRequireDefault(_onlineProfile);
 	
-	var _referenceEnterprises = __webpack_require__(17);
+	var _referenceEnterprises = __webpack_require__(18);
 	
 	var _referenceEnterprises2 = _interopRequireDefault(_referenceEnterprises);
 	
@@ -191,6 +191,7 @@
 	hashObserver();
 	start();
 	document.addEventListener('loginSuccess', start);
+	document.addEventListener('authError', stop);
 	
 	// ========== ЗАВЕРШЕНИЕ РАБОТЫ ==========
 	exit.addEventListener('click', stop);
@@ -357,19 +358,19 @@
 	
 	var _form_login2 = _interopRequireDefault(_form_login);
 	
-	var _form_register = __webpack_require__(7);
+	var _form_register = __webpack_require__(8);
 	
 	var _form_register2 = _interopRequireDefault(_form_register);
 	
-	var _form_confirm_email = __webpack_require__(9);
+	var _form_confirm_email = __webpack_require__(10);
 	
 	var _form_confirm_email2 = _interopRequireDefault(_form_confirm_email);
 	
-	var _form_forgot = __webpack_require__(11);
+	var _form_forgot = __webpack_require__(12);
 	
 	var _form_forgot2 = _interopRequireDefault(_form_forgot);
 	
-	var _captcha = __webpack_require__(6);
+	var _captcha = __webpack_require__(7);
 	
 	var _captcha2 = _interopRequireDefault(_captcha);
 	
@@ -527,7 +528,7 @@
 	
 	var _login2 = _interopRequireDefault(_login);
 	
-	var _captcha = __webpack_require__(6);
+	var _captcha = __webpack_require__(7);
 	
 	var _captcha2 = _interopRequireDefault(_captcha);
 	
@@ -738,13 +739,20 @@
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	exports.default = {
 	
 	  set request(requestParameters) {
@@ -773,8 +781,14 @@
 	        var response = '';
 	
 	        try {
-	
 	          response = JSON.parse(xhr.response);
+	          if (response.status === 280 && response.message === 'Invalid token') {
+	            _tools2.default.informationtModal = {
+	              title: 'Что-то пошло не так...',
+	              message: 'Пожалуйста, авторизуйтесь заново'
+	            };
+	            document.dispatchEvent(new Event('authError'));
+	          }
 	        } catch (error) {
 	          requestParameters.callbackError(getError(ErrorAttr.MESSADGE.JSON_ERR, 26, error));
 	        }
@@ -786,11 +800,25 @@
 	    });
 	
 	    xhr.addEventListener('error', function () {
-	      requestParameters.callbackError(getError(ErrorAttr.MESSADGE.CONNECT_ERR + ' ' + xhr.statusText, 42, ''));
+	      if (requestParameters.callbackError && typeof requestParameters.callbackError === 'function') {
+	        requestParameters.callbackError(getError(ErrorAttr.MESSADGE.CONNECT_ERR + ' ' + xhr.statusText, 42, ''));
+	      } else {
+	        _tools2.default.informationtModal = {
+	          title: '400',
+	          message: getError(ErrorAttr.MESSADGE.CONNECT_ERR + ' ' + xhr.statusText, 42, '')
+	        };
+	      }
 	    });
 	
 	    xhr.addEventListener('timeout', function () {
-	      requestParameters.callbackError(getError(ErrorAttr.MESSADGE.CONNECT_ERR + ' (' + xhr.timeout + 'ms.)', 50, ''));
+	      if (requestParameters.callbackError && typeof requestParameters.callbackError === 'function') {
+	        requestParameters.callbackError(getError(ErrorAttr.MESSADGE.CONNECT_ERR + ' (' + xhr.timeout + 'ms.)', 50, ''));
+	      } else {
+	        _tools2.default.informationtModal = {
+	          title: '400',
+	          message: getError(ErrorAttr.MESSADGE.CONNECT_ERR + ' (' + xhr.timeout + 'ms.)', 50, '')
+	        };
+	      }
 	    });
 	
 	    xhr.timeout = window.appSettings.xhrSettings.timeout;
@@ -808,6 +836,52 @@
 
 /***/ }),
 /* 6 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var modalActionRequest = document.querySelector('#modal-action-request');
+	var modalActionRequestTitle = modalActionRequest.querySelector('#modal-action-request-title');
+	var modalActionRequestMessage = modalActionRequest.querySelector('#modal-action-request-message');
+	var modalActionRequestSubmit = modalActionRequest.querySelector('#modal-action-request-submit');
+	
+	var modalInformation = document.querySelector('#modal-information');
+	var modalInformationTitle = modalInformation.querySelector('#modal-information-title');
+	var modalInformationMessage = modalInformation.querySelector('#modal-information-message');
+	
+	exports.default = {
+	  getWaitSpinner: function getWaitSpinner(id, message) {
+	    return '\n      <div id="loader" class="progress text-white" style="height: 25px;">\n        <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase bg-success" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">' + message + '</div>\n      </div>';
+	  },
+	  getLoadSpinner: function getLoadSpinner(id, message) {
+	    return '\n      <div id="' + id + '" class="progress text-white" style="height: 25px;">\n        <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">' + message + '</div>\n      </div>';
+	  },
+	  getError: function getError(id, message) {
+	    return '\n      <div id="loader-fail" class="container-fluid bg-danger text-white text-center mb-5" style="height: 25;">' + message + '</div>';
+	  },
+	
+	
+	  set actionRequestModal(setup) {
+	
+	    $(modalActionRequest).modal('show');
+	    modalActionRequestTitle.innerHTML = setup.title;
+	    modalActionRequestMessage.innerHTML = setup.message;
+	    modalActionRequestSubmit.addEventListener('click', setup.submitCallback);
+	  },
+	
+	  set informationtModal(setup) {
+	    $(modalInformation).modal('show');
+	    modalInformationTitle.innerHTML = setup.title;
+	    modalInformationMessage.innerHTML = setup.message;
+	  }
+	
+	};
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -816,7 +890,7 @@
 	  value: true
 	});
 	
-	var _form_register = __webpack_require__(7);
+	var _form_register = __webpack_require__(8);
 	
 	var _form_register2 = _interopRequireDefault(_form_register);
 	
@@ -824,11 +898,11 @@
 	
 	var _form_login2 = _interopRequireDefault(_form_login);
 	
-	var _form_confirm_email = __webpack_require__(9);
+	var _form_confirm_email = __webpack_require__(10);
 	
 	var _form_confirm_email2 = _interopRequireDefault(_form_confirm_email);
 	
-	var _form_forgot = __webpack_require__(11);
+	var _form_forgot = __webpack_require__(12);
 	
 	var _form_forgot2 = _interopRequireDefault(_form_forgot);
 	
@@ -875,7 +949,7 @@
 	};
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -888,11 +962,11 @@
 	
 	var _main_login_window2 = _interopRequireDefault(_main_login_window);
 	
-	var _register = __webpack_require__(8);
+	var _register = __webpack_require__(9);
 	
 	var _register2 = _interopRequireDefault(_register);
 	
-	var _captcha = __webpack_require__(6);
+	var _captcha = __webpack_require__(7);
 	
 	var _captcha2 = _interopRequireDefault(_captcha);
 	
@@ -973,7 +1047,7 @@
 	};
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1103,7 +1177,7 @@
 	};
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1116,11 +1190,11 @@
 	
 	var _main_login_window2 = _interopRequireDefault(_main_login_window);
 	
-	var _confirm_email = __webpack_require__(10);
+	var _confirm_email = __webpack_require__(11);
 	
 	var _confirm_email2 = _interopRequireDefault(_confirm_email);
 	
-	var _captcha = __webpack_require__(6);
+	var _captcha = __webpack_require__(7);
 	
 	var _captcha2 = _interopRequireDefault(_captcha);
 	
@@ -1189,7 +1263,7 @@
 	};
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1270,7 +1344,7 @@
 	};
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1283,11 +1357,11 @@
 	
 	var _main_login_window2 = _interopRequireDefault(_main_login_window);
 	
-	var _forgot = __webpack_require__(12);
+	var _forgot = __webpack_require__(13);
 	
 	var _forgot2 = _interopRequireDefault(_forgot);
 	
-	var _captcha = __webpack_require__(6);
+	var _captcha = __webpack_require__(7);
 	
 	var _captcha2 = _interopRequireDefault(_captcha);
 	
@@ -1356,7 +1430,7 @@
 	};
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1428,7 +1502,7 @@
 	};
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1437,7 +1511,7 @@
 	  value: true
 	});
 	
-	var _log = __webpack_require__(14);
+	var _log = __webpack_require__(15);
 	
 	var _log2 = _interopRequireDefault(_log);
 	
@@ -1560,7 +1634,7 @@
 	};
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -1620,7 +1694,7 @@
 	};
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1629,7 +1703,7 @@
 	  value: true
 	});
 	
-	var _onlineProfile = __webpack_require__(16);
+	var _onlineProfile = __webpack_require__(17);
 	
 	var _onlineProfile2 = _interopRequireDefault(_onlineProfile);
 	
@@ -1645,7 +1719,7 @@
 	};
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1676,7 +1750,7 @@
 	};
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1693,11 +1767,11 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _referenceEnterprises = __webpack_require__(18);
+	var _referenceEnterprises = __webpack_require__(19);
 	
 	var _referenceEnterprises2 = _interopRequireDefault(_referenceEnterprises);
 	
-	var _tools = __webpack_require__(19);
+	var _tools = __webpack_require__(6);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
@@ -1943,7 +2017,7 @@
 	};
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1981,52 +2055,6 @@
 	};
 
 /***/ }),
-/* 19 */
-/***/ (function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var modalActionRequest = document.querySelector('#modal-action-request');
-	var modalActionRequestTitle = modalActionRequest.querySelector('#modal-action-request-title');
-	var modalActionRequestMessage = modalActionRequest.querySelector('#modal-action-request-message');
-	var modalActionRequestSubmit = modalActionRequest.querySelector('#modal-action-request-submit');
-	
-	var modalInformation = document.querySelector('#modal-information');
-	var modalInformationTitle = modalInformation.querySelector('#modal-information-title');
-	var modalInformationMessage = modalInformation.querySelector('#modal-information-message');
-	
-	exports.default = {
-	  getWaitSpinner: function getWaitSpinner(id, message) {
-	    return '\n      <div id="loader" class="progress text-white" style="height: 25px;">\n        <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase bg-success" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">' + message + '</div>\n      </div>';
-	  },
-	  getLoadSpinner: function getLoadSpinner(id, message) {
-	    return '\n      <div id="' + id + '" class="progress text-white" style="height: 25px;">\n        <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">' + message + '</div>\n      </div>';
-	  },
-	  getError: function getError(id, message) {
-	    return '\n      <div id="loader-fail" class="container-fluid bg-danger text-white text-center mb-5" style="height: 25;">' + message + '</div>';
-	  },
-	
-	
-	  set actionRequestModal(setup) {
-	
-	    $(modalActionRequest).modal('show');
-	    modalActionRequestTitle.innerHTML = setup.title;
-	    modalActionRequestMessage.innerHTML = setup.message;
-	    modalActionRequestSubmit.addEventListener('click', setup.submitCallback);
-	  },
-	
-	  set informationtModal(setup) {
-	    $(modalInformation).modal('show');
-	    modalInformationTitle.innerHTML = setup.title;
-	    modalInformationMessage.innerHTML = setup.message;
-	  }
-	
-	};
-
-/***/ }),
 /* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2044,11 +2072,11 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _tools = __webpack_require__(19);
+	var _tools = __webpack_require__(6);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _referenceEnterprises = __webpack_require__(17);
+	var _referenceEnterprises = __webpack_require__(18);
 	
 	var _referenceEnterprises2 = _interopRequireDefault(_referenceEnterprises);
 	
@@ -2232,11 +2260,11 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _tools = __webpack_require__(19);
+	var _tools = __webpack_require__(6);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _referenceEnterprises = __webpack_require__(17);
+	var _referenceEnterprises = __webpack_require__(18);
 	
 	var _referenceEnterprises2 = _interopRequireDefault(_referenceEnterprises);
 	
@@ -2429,7 +2457,7 @@
 	
 	var _referencePoints2 = _interopRequireDefault(_referencePoints);
 	
-	var _tools = __webpack_require__(19);
+	var _tools = __webpack_require__(6);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
@@ -2585,7 +2613,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _tools = __webpack_require__(19);
+	var _tools = __webpack_require__(6);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
@@ -2769,7 +2797,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _tools = __webpack_require__(19);
+	var _tools = __webpack_require__(6);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
@@ -2973,7 +3001,7 @@
 	
 	var _referenceContractorsCard2 = _interopRequireDefault(_referenceContractorsCard);
 	
-	var _tools = __webpack_require__(19);
+	var _tools = __webpack_require__(6);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
@@ -3324,7 +3352,7 @@
 	
 	var _referenceContractors2 = _interopRequireDefault(_referenceContractors);
 	
-	var _tools = __webpack_require__(19);
+	var _tools = __webpack_require__(6);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
@@ -3578,7 +3606,7 @@
 	
 	var _referenceKeywords2 = _interopRequireDefault(_referenceKeywords);
 	
-	var _tools = __webpack_require__(19);
+	var _tools = __webpack_require__(6);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
@@ -3798,7 +3826,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _tools = __webpack_require__(19);
+	var _tools = __webpack_require__(6);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
@@ -3998,7 +4026,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _tools = __webpack_require__(19);
+	var _tools = __webpack_require__(6);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
