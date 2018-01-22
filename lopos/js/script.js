@@ -4295,10 +4295,10 @@
 	};
 	
 	var setRequestToDeleteGroup = function setRequestToDeleteGroup(groupNumber) {
-	  console.log('lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.currentEnterpriseId + '/group/' + groupNumber);
+	  console.log('lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/group/' + groupNumber);
 	  _xhr2.default.request = {
 	    metod: 'DELETE',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.currentEnterpriseId + '/group/' + groupNumber,
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/group/' + groupNumber,
 	    data: 'token=' + _storage2.default.data.token,
 	    callbackSuccess: onSuccessGroupDelete
 	  };
