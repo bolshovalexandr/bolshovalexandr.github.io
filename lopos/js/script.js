@@ -352,6 +352,30 @@
 	
 	  get goodsViewMode() {
 	    return sessionStorage.getItem('goodsViewMode');
+	  },
+	
+	  set currentGroupId(id) {
+	    sessionStorage.setItem('currentGroupId', id);
+	  },
+	
+	  get currentGroupId() {
+	    return sessionStorage.getItem('currentGroupId');
+	  },
+	
+	  set currentGroupName(name) {
+	    sessionStorage.setItem('currentGroupName', name);
+	  },
+	
+	  get currentGroupName() {
+	    return sessionStorage.getItem('currentGroupName');
+	  },
+	
+	  set currentGoodId(id) {
+	    sessionStorage.setItem('currentGoodId', id);
+	  },
+	
+	  get currentGoodId() {
+	    return sessionStorage.getItem('currentGoodId');
 	  }
 	
 	};
@@ -4244,6 +4268,10 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
+	var _catalogGroupsGoods = __webpack_require__(36);
+	
+	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var listGroups = document.querySelector('#list-groups-list');
@@ -4265,6 +4293,8 @@
 	var goodsSortAbcDownBtn = document.querySelector('#group-goods-sort-abc-down');
 	var goodsSortTailingsUpBtn = document.querySelector('#group-goods-sort-tailings-up');
 	var goodsSortTailingsDownBtn = document.querySelector('#group-goods-sort-tailings-down');
+	
+	var groupGoodsCardBody = document.querySelector('#group-goods-card-body');
 	
 	var SELECT_DELAY = 2000;
 	
@@ -4388,8 +4418,6 @@
 	  loadedGoods = goodsData;
 	  _storage2.default.goodsViewMode = _storage2.default.goodsViewMode === 'null' ? 'string' : _storage2.default.goodsViewMode;
 	  drawGoods();
-	  // groupsMarkup.drawGoodsTable(loadedGoods.data);
-	  // groupsMarkup.drawGoodsMetro(loadedGoods.data);
 	};
 	
 	var onListGroupsCardBodyClick = function onListGroupsCardBodyClick(evt) {
@@ -4403,6 +4431,9 @@
 	
 	  currentGroupName = loadedData.data[currentStringElement.dataset.groupIndex].name;
 	  groupName.innerHTML = currentGroupName;
+	
+	  _storage2.default.currentGroupId = currentStringElement.dataset.groupId;
+	  _storage2.default.currentGroupName = currentGroupName;
 	
 	  _xhr2.default.request = {
 	    metod: 'POST',
@@ -4464,6 +4495,17 @@
 	  $(goodsSortModal).modal('hide');
 	});
 	
+	var onGroupGoodsCardBodyClick = function onGroupGoodsCardBodyClick(evt) {
+	  console.log(evt.target);
+	  var currentStringElement = evt.target;
+	  while (!currentStringElement.dataset.goodId) {
+	    currentStringElement = currentStringElement.parentNode;
+	  }
+	  _catalogGroupsGoods2.default.fill(currentStringElement.dataset.goodId);
+	};
+	
+	groupGoodsCardBody.addEventListener('click', onGroupGoodsCardBodyClick);
+	
 	exports.default = {
 	  start: function start() {
 	    listGroups.addEventListener('click', getGroups);
@@ -4508,13 +4550,13 @@
 	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
 	    // ${currentEnterpriseFlag}
 	
-	    return '\n    <div class="goods-string">\n      <div>\n        <span class="reference-row-number">' + (index + 1) + '</span> <span>' + item.name + '</span>\n      </div>\n      <div>\n        ' + item.count + '\n        <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>\n      </div>\n    </div>';
+	    return '\n    <div class="goods-string" data-good-id="' + item.id + '">\n      <div>\n        <span class="reference-row-number">' + (index + 1) + '</span> <span>' + item.name + '</span>\n      </div>\n      <div>\n        ' + item.count + '\n        <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>\n      </div>\n    </div>';
 	  },
 	  getGoodTile: function getGoodTile(item, index) {
 	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
 	    // ${currentEnterpriseFlag}
 	
-	    return '\n    <div class="card goods-tile-card">\n      <img class="card-img-top" src="./img/st_fon_selected.png" alt="' + item.name + '" title="' + item.name + '">\n      <div class="card-body goods-tile-title">\n        <p class="card-text">' + item.count + '</p>\n      </div>\n    </div>';
+	    return '\n    <div class="card goods-tile-card" data-good-id="' + item.id + '">\n      <img class="card-img-top" src="./img/st_fon_selected.png" alt="' + item.name + '" title="' + item.name + '">\n      <div class="card-body goods-tile-title">\n        <p class="card-text">' + item.count + '</p>\n      </div>\n    </div>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(groupsData) {
 	    var _this = this;
@@ -4543,6 +4585,116 @@
 	    goodsData.forEach(function (item, index) {
 	      return groupGoodsBody.firstChild.insertAdjacentHTML('beforeend', _this3.getGoodTile(item, index));
 	    });
+	  }
+	};
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var goodsCard = document.querySelector('#goods-card');
+	
+	var goodsCardName = document.querySelector('#goods-card-name');
+	var goodsCardDescribe = document.querySelector('#goods-card-describe');
+	var goodsCardBarcode = document.querySelector('#goods-card-barcode');
+	var goodsCardGroup = document.querySelector('#goods-card-group');
+	
+	var goodsCardPrice = document.querySelector('#goods-card-price-purchase');
+	// const goodsCardPriceExtra = document.querySelector('#goods-card-price-extra');
+	var goodsCardSell = document.querySelector('#goods-card-price-sell');
+	var goodsStock = document.querySelector('#goods-stock');
+	
+	/*
+	              <div class="row border">
+	                <div class="col-8 border">11</div>
+	                <div class="col-4 d-flex justify-content-between border">
+	                  <div class="w-100 text-center border">22</div>
+	                  <div class="w-100 text-center border">33</div>
+	                  <div class="w-100 text-center border">44</div>
+	                </div>
+	              </div>
+	*/
+	var onSuccessGroupsLoad = function onSuccessGroupsLoad(loadedGood) {
+	  console.log(loadedGood);
+	  var _loadedGood$data = loadedGood.data,
+	      name = _loadedGood$data.name,
+	      description = _loadedGood$data.description,
+	      barcode = _loadedGood$data.barcode,
+	      allGroups = _loadedGood$data.all_groups,
+	      allStocks = _loadedGood$data.all_stocks,
+	      currentValue = _loadedGood$data.current_value,
+	      purchasePrice = _loadedGood$data.purchase_price,
+	      sellingPrice = _loadedGood$data.selling_price;
+	
+	  goodsCardName.value = name;
+	  goodsCardDescribe.value = description;
+	  goodsCardBarcode.value = barcode;
+	  goodsCardGroup.insertAdjacentHTML('beforeend', allGroups.map(function (item) {
+	    return '<option value="' + item.id + '">' + item.name + '</option>';
+	  }).join(''));
+	
+	  var stocksMarkup = ['<div class="w-100 text-center border"></div>', '<div class="w-100 text-center border"></div>', '<div class="w-100 text-center border"></div>'];
+	
+	  var getStocksTable = function getStocksTable(stockId) {
+	    // console.log(currentValue);
+	    var result = currentValue.find(function (item) {
+	      return item.stock_id === stockId;
+	    });
+	    var resArr = stocksMarkup.slice(0);
+	    if (result) {
+	      resArr[Number(result.type) - 1] = '<div class="w-100 text-center border">' + result.value + '</div>';
+	    }
+	    return resArr;
+	  };
+	
+	  goodsStock.insertAdjacentHTML('beforeend', allStocks.map(function (item, index) {
+	    return '\n    <div class="row border">\n      <div class="col-8 border">' + item.id + ' - ' + item.name + '</div>\n      <div class="col-4 d-flex justify-content-between border">\n        ' + getStocksTable(item.id).join('') + '\n      </div>\n    </div>';
+	  }).join(''));
+	  goodsCardPrice.value = purchasePrice;
+	  goodsCardSell.value = sellingPrice;
+	};
+	
+	var getGood = function getGood(id) {
+	  $(goodsCard).modal('show');
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + id + '/card_info',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessGroupsLoad
+	  };
+	};
+	
+	exports.default = {
+	  start: function start() {
+	    // вешаем обработчики на кнопки
+	    // listGroups.addEventListener('click', getGroups);
+	  },
+	
+	
+	  // заполняем карточку
+	  fill: getGood,
+	
+	  stop: function stop() {
+	    // снимаем обработчики
+	    // groupsMarkup.cleanContainer();
+	    // listGroups.removeEventListener('click', getGroups);
 	  }
 	};
 
