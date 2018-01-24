@@ -4503,6 +4503,7 @@
 	  while (!currentStringElement.dataset.goodId) {
 	    currentStringElement = currentStringElement.parentNode;
 	  }
+	  _storage2.default.currentGoodId = currentStringElement.dataset.goodId;
 	  _catalogGroupsGoods2.default.fill(currentStringElement.dataset.goodId);
 	};
 	
@@ -4617,14 +4618,18 @@
 	var goodsCardBarcode = document.querySelector('#goods-card-barcode');
 	var goodsCardGroup = document.querySelector('#goods-card-group');
 	
-	var goodsCardPrice = document.querySelector('#goods-card-price-purchase');
+	var goodsCardPurchase = document.querySelector('#goods-card-price-purchase');
+	var goodsCardImage = document.querySelector('#goods-card-image');
 	// const goodsCardPriceExtra = document.querySelector('#goods-card-price-extra');
 	var goodsCardSell = document.querySelector('#goods-card-price-sell');
 	var goodsStock = document.querySelector('#goods-stock-body');
 	var goodsKeywords = document.querySelector('#goods-keywords');
 	var expressContainer = document.querySelector('#express-container');
-	var expressPurchase = document.querySelector('#express-purchase');
-	var expressSell = document.querySelector('#express-sell');
+	var expressModal = document.querySelector('#express-modal');
+	var expressModalLabel = document.querySelector('#express-modal-label');
+	var expressModalStock = document.querySelector('#express-modal-stock');
+	// const expressPurchase = document.querySelector('#express-purchase');
+	// const expressSell = document.querySelector('#express-sell');
 	// import keywordsMarkup from '../markup/reference-keywords.js';
 	
 	var onSuccessGroupsLoad = function onSuccessGroupsLoad(loadedGood) {
@@ -4638,14 +4643,19 @@
 	      currentValue = _loadedGood$data.current_value,
 	      purchasePrice = _loadedGood$data.purchase_price,
 	      sellingPrice = _loadedGood$data.selling_price,
-	      tags = _loadedGood$data.tags;
+	      tags = _loadedGood$data.tags,
+	      imgUrl = _loadedGood$data.img_url;
 	
 	  goodsCardName.value = name;
 	  goodsCardDescribe.value = description;
 	  goodsCardBarcode.value = barcode;
+	  goodsCardPurchase.value = purchasePrice;
+	  goodsCardSell.value = sellingPrice;
 	  goodsCardGroup.insertAdjacentHTML('beforeend', allGroups.map(function (item) {
 	    return '<option value="' + item.id + '">' + item.name + '</option>';
 	  }).join(''));
+	  console.log(goodsCardImage);
+	  goodsCardImage.src = imgUrl ? 'https://lopos.bidone.ru/users/600a5357/images/' + imgUrl + '_preview150.jpg' : './img/not-available.png';
 	
 	  var stocksMarkup = ['<div class="w-100 text-center border">0</div>', '<div class="w-100 text-center border">0</div>', '<div class="w-100 text-center border">0</div>'];
 	
@@ -4664,7 +4674,7 @@
 	      }
 	      return resArr.join('');
 	    }
-	    return 0;
+	    return stocksMarkup.join('');
 	  };
 	
 	  var checkedStock = false;
@@ -4687,11 +4697,13 @@
 	  if (checkedStock) {
 	    goodsStock.querySelector('#stock-' + checkedStock).checked = true;
 	    _storage2.default.currentStockId = checkedStock;
+	    _storage2.default.currentStockName = goodsStock.querySelector('#stock-' + checkedStock).nextElementSibling.dataset.stockName;
 	  } else {
 	    goodsStock.firstChild.checked = true;
 	    _storage2.default.currentStockId = goodsStock.firstChild.id.split('-')[1];
+	    _storage2.default.currentStockName = goodsStock.children[1].dataset.stockName;
 	  }
-	  goodsCardPrice.value = purchasePrice;
+	  goodsCardPurchase.value = purchasePrice;
 	  goodsCardSell.value = sellingPrice;
 	  goodsKeywords.innerHTML = '';
 	  goodsKeywords.insertAdjacentHTML('beforeend', tags.length ? tags.map(function (item) {
@@ -4700,7 +4712,10 @@
 	};
 	
 	goodsStock.addEventListener('change', function (evt) {
-	  return console.log(evt);
+	  console.log(evt);
+	  console.log(evt.target.labels[0].innerText);
+	  _storage2.default.currentStockId = Number(evt.target.id.split('-')[1]);
+	  _storage2.default.currentStockName = evt.target.labels[0].dataset.stockName;
 	});
 	
 	var onSuccessExpressExecute = function onSuccessExpressExecute(answer) {
@@ -4713,36 +4728,41 @@
 	  var price = null;
 	  console.log(evt.target.id);
 	  console.log(evt.target.id.indexOf('express-operation'));
-	  if (evt.target.tagName === 'BUTTON' && evt.target.id.indexOf('express-operation') !== -1) {
-	    multiplier = evt.target.id.indexOf('minus') !== -1 ? -1 : 1;
-	    value = Number(evt.target.id.split('-')[3]) * multiplier;
-	    if (evt.target.id.indexOf('sell') !== -1) {
-	      price = Number(expressSell.innerHTML);
-	    } else if (evt.target.id.indexOf('purchase') !== -1) {
-	      price = Number(expressPurchase.innerHTML);
-	    }
+	  if (evt.target.tagName === 'BUTTON') {
+	    var currentBtnId = evt.target.id;
+	    multiplier = currentBtnId.indexOf('minus') !== -1 ? -1 : 1;
+	    price = currentBtnId.indexOf('purchase') !== -1 ? Number(goodsCardPurchase.value) : Number(goodsCardSell.value);
+	    value = currentBtnId.indexOf('express-operation') !== -1 ? Number(currentBtnId.split('-')[3]) * multiplier : '';
+	
 	    console.log('lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + _storage2.default.currentGoodId + '/stock/' + _storage2.default.currentStockId + '/express');
 	    console.log('value=' + value + '&price=' + price + '&token=' + _storage2.default.data.token);
-	    _xhr2.default.request = {
-	      metod: 'POST',
-	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + _storage2.default.currentGoodId + '/stock/' + _storage2.default.currentStockId + '/express',
-	      data: 'value=' + value + '&price=' + price + '&token=' + _storage2.default.data.token,
-	      callbackSuccess: onSuccessExpressExecute
-	    };
+	
+	    if (currentBtnId.indexOf('operation') !== -1) {
+	      _xhr2.default.request = {
+	        metod: 'POST',
+	        url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + _storage2.default.currentGoodId + '/stock/' + _storage2.default.currentStockId + '/express',
+	        data: 'value=' + value + '&price=' + price + '&token=' + _storage2.default.data.token,
+	        callbackSuccess: onSuccessExpressExecute
+	      };
+	    } else if (currentBtnId.indexOf('custom') !== -1) {
+	      $(expressModal).modal('show');
+	      expressModalLabel.innerHTML = currentBtnId.indexOf('purchase') !== -1 ? 'Экспресс-закупка' : 'Экспресс-продажа';
+	      expressModalStock.innerHTML = _storage2.default.currentStockName;
+	    }
 	  }
 	};
 	
 	expressContainer.addEventListener('click', onExpressContainerClick);
 	
-	var getGood = function getGood(id) {
+	var getGood = function getGood() {
 	  $(goodsCard).modal('show');
 	  goodsStock.innerHTML = '';
 	
-	  console.log('lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + id + '/card_info');
+	  console.log('lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + _storage2.default.currentGoodId + '/card_info');
 	
 	  _xhr2.default.request = {
 	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + id + '/card_info',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + _storage2.default.currentGoodId + '/card_info',
 	    data: 'view_last=0&token=' + _storage2.default.data.token,
 	    callbackSuccess: onSuccessGroupsLoad
 	  };
