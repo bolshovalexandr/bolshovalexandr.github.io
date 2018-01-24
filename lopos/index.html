@@ -1015,48 +1015,30 @@
                 </div>
                 <span id="goods-card-price-valid" class="badge badge-danger w-100"></span>
               </div>
-              <div class="ml-3">
+              <div id="express-container" class="express-container ml-3">
 
                 <div>
                   <h4>Экспресс-операции</h4>
                 </div>
                 <div id="express-purchase">
                   <span>Покупка</span>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="express-purchase-radio" id="express-purchase-5" value="option1">
-                    <label class="form-check-label" for="express-purchase-5">5 шт.</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="express-purchase-radio" id="express-purchase-10" value="option2">
-                    <label class="form-check-label" for="express-purchase-10">10 шт.</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="express-purchase-radio" id="express-purchase-15" value="option3">
-                    <label class="form-check-label" for="express-purchase-15">15 шт.</label>
-                  </div>
-                  <button type="button" class="btn btn-danger">...</button>
+                  <button id="express-operation-purchase-5" type="button" class="btn btn-danger mt-3">5 шт.</button>
+                  <button id="express-operation-purchase-10" type="button" class="btn btn-danger mt-3">10 шт.</button>
+                  <button id="express-operation-purchase-15" type="button" class="btn btn-danger mt-3">15 шт.</button>
+                  <button id="express-custom" type="button" class="btn btn-danger mt-3">...</button>
                 </div>
 
                 <div id="express-sell">
                   <span>Продажа</span>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="express-sell-radio" id="express-sell-5" value="option1">
-                    <label class="form-check-label" for="express-sell-5">5 шт.</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="express-sell-radio" id="express-sell-10" value="option2">
-                    <label class="form-check-label" for="express-sell-10">10 шт.</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="express-sell-radio" id="express-sell-15" value="option3">
-                    <label class="form-check-label" for="express-sell-15">15 шт.</label>
-                  </div>
-                  <button type="button" class="btn btn-danger">...</button>
+                  <button id="express-operation-sell-5-minus" type="button" class="btn btn-success mt-3">5 шт.</button>
+                  <button id="express-operation-sell-10-minus" type="button" class="btn btn-success mt-3">10 шт.</button>
+                  <button id="express-operation-sell-15-minus" type="button" class="btn btn-success mt-3">15 шт.</button>
+                  <button id="express-custom-minus" type="button" class="btn btn-success mt-3">...</button>
                 </div>
 
               </div>
             </div>
-            <div id="goods-stock">
+            <div id="goods-stock-header">
               <div class="row">
                 <div class="col-8 d-flex">
                   <h4>Остатки</h4>
@@ -1074,8 +1056,8 @@
                   </div>
                 </div>
               </div>
-
             </div>
+            <div id="goods-stock-body"></div>
 
             <div class="catalog-header">
               <div class="catalog-header-title">

@@ -211,8 +211,12 @@ input[name="express-sell-radio"] {
   display: none; }
 
 input[name="express-purchase-radio"]:checked + label,
+input[name="stock"]:checked + label,
 input[name="express-sell-radio"]:checked + label {
   background-color: #eee; }
+
+.express-container.express-container__muted {
+  opacity: 0.3; }
 
 /*
 @import "src/sass/components/app.scss";

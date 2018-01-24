@@ -113,7 +113,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	console.log('ver: 2D9');
-	console.log('ver: 3A1');
+	console.log('ver: 3A2');
 	
 	var exit = document.querySelector('#profile-exit');
 	var app = document.querySelector('#app');
@@ -4342,6 +4342,9 @@
 	  }
 	  $(groupsEditForm).modal('show');
 	  groupsEditName.value = loadedData.data[currentStringElement.dataset.groupIndex].name;
+	
+	  _storage2.default.currentGroupId = loadedData.data[currentStringElement.dataset.groupIndex].id;
+	  _storage2.default.currentGroupName = loadedData.data[currentStringElement.dataset.groupIndex].name;
 	};
 	
 	var onListGroupsCardBodyClickRemove = function onListGroupsCardBodyClickRemove(evt, clickedAction) {
@@ -4617,20 +4620,13 @@
 	var goodsCardPrice = document.querySelector('#goods-card-price-purchase');
 	// const goodsCardPriceExtra = document.querySelector('#goods-card-price-extra');
 	var goodsCardSell = document.querySelector('#goods-card-price-sell');
-	var goodsStock = document.querySelector('#goods-stock');
+	var goodsStock = document.querySelector('#goods-stock-body');
 	var goodsKeywords = document.querySelector('#goods-keywords');
+	var expressContainer = document.querySelector('#express-container');
+	var expressPurchase = document.querySelector('#express-purchase');
+	var expressSell = document.querySelector('#express-sell');
 	// import keywordsMarkup from '../markup/reference-keywords.js';
 	
-	/*
-	              <div class="row border">
-	                <div class="col-8 border">11</div>
-	                <div class="col-4 d-flex justify-content-between border">
-	                  <div class="w-100 text-center border">22</div>
-	                  <div class="w-100 text-center border">33</div>
-	                  <div class="w-100 text-center border">44</div>
-	                </div>
-	              </div>
-	*/
 	var onSuccessGroupsLoad = function onSuccessGroupsLoad(loadedGood) {
 	  console.log(loadedGood);
 	  var _loadedGood$data = loadedGood.data,
@@ -4651,32 +4647,98 @@
 	    return '<option value="' + item.id + '">' + item.name + '</option>';
 	  }).join(''));
 	
-	  var stocksMarkup = ['<div class="w-100 text-center border"></div>', '<div class="w-100 text-center border"></div>', '<div class="w-100 text-center border"></div>'];
+	  var stocksMarkup = ['<div class="w-100 text-center border">0</div>', '<div class="w-100 text-center border">0</div>', '<div class="w-100 text-center border">0</div>'];
+	
+	  var totalCount = 0;
 	
 	  var getStocksTable = function getStocksTable(stockId) {
 	    // console.log(currentValue);
-	    var result = currentValue.find(function (item) {
-	      return item.stock_id === stockId;
-	    });
-	    var resArr = stocksMarkup.slice(0);
-	    if (result) {
-	      resArr[Number(result.type) - 1] = '<div class="w-100 text-center border">' + result.value + '</div>';
+	    if (currentValue) {
+	      var result = currentValue.find(function (item) {
+	        return item.stock_id === stockId;
+	      });
+	      var resArr = stocksMarkup.slice(0);
+	      if (result) {
+	        totalCount += Number(result.value);
+	        resArr[Number(result.type) - 1] = '<div class="w-100 text-center border">' + result.value + '</div>';
+	      }
+	      return resArr.join('');
 	    }
-	    return resArr;
+	    return 0;
 	  };
 	
-	  goodsStock.insertAdjacentHTML('beforeend', allStocks.map(function (item, index) {
-	    return '\n    <div class="row border">\n      <div class="col-8 border">' + item.id + ' - ' + item.name + ' ' + (item.id === _storage2.default.data.currentStock ? '<b>V</b>' : '') + '</div>\n      <div class="col-4 d-flex justify-content-between border">\n        ' + getStocksTable(item.id).join('') + '\n      </div>\n    </div>';
-	  }).join(''));
+	  var checkedStock = false;
+	
+	  if (allStocks.length) {
+	    goodsStock.insertAdjacentHTML('beforeend', allStocks.map(function (item, index) {
+	      checkedStock = item.id === _storage2.default.data.currentStock ? item.id : checkedStock;
+	      return '\n      <input type="radio" id="stock-' + item.id + '" name="stock" value="email" class="d-none">\n      <label style="padding-left: 34px;" for="stock-' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '">\n        <div class="row w-100">\n          <div class="col-8">' + item.id + ' - ' + item.name + '</div>\n          <div class="col-4 d-flex justify-content-between border">\n            ' + getStocksTable(item.id) + '\n          </div>\n          </div>\n        </label>';
+	    }).join(''));
+	  } else {
+	    goodsStock.insertAdjacentHTML('beforeend', '\n      <div class="row border">\n        <div class="col-8 border"></div>\n        <div class="col-4 d-flex justify-content-between border">\n          ' + stocksMarkup.join('') + '\n        </div>\n      </div>');
+	    expressContainer.classList.add('express-container__muted');
+	  }
+	
+	  if (allStocks.length > 1) {
+	    goodsStock.insertAdjacentHTML('beforeend', '\n      <div class="row border">\n        <div class="col-8 border">\u0418\u0442\u043E\u0433\u043E</div>\n        <div class="col-4 text-center">\n          ' + totalCount + '\n        </div>\n      </div>');
+	  }
+	
+	  console.log(checkedStock);
+	  if (checkedStock) {
+	    goodsStock.querySelector('#stock-' + checkedStock).checked = true;
+	    _storage2.default.currentStockId = checkedStock;
+	  } else {
+	    goodsStock.firstChild.checked = true;
+	    _storage2.default.currentStockId = goodsStock.firstChild.id.split('-')[1];
+	  }
 	  goodsCardPrice.value = purchasePrice;
 	  goodsCardSell.value = sellingPrice;
+	  goodsKeywords.innerHTML = '';
 	  goodsKeywords.insertAdjacentHTML('beforeend', tags.length ? tags.map(function (item) {
 	    return '<h3 style="display: inline-block;"><span class="badge keyword-row" style="background-color: #' + item.color + '; cursor: pointer; color: #fff">#' + item.name + '</span></h3>';
 	  }) : 'Ключевых слов нет');
 	};
 	
+	goodsStock.addEventListener('change', function (evt) {
+	  return console.log(evt);
+	});
+	
+	var onSuccessExpressExecute = function onSuccessExpressExecute(answer) {
+	  console.log(answer);
+	};
+	
+	var onExpressContainerClick = function onExpressContainerClick(evt) {
+	  var multiplier = null;
+	  var value = null;
+	  var price = null;
+	  console.log(evt.target.id);
+	  console.log(evt.target.id.indexOf('express-operation'));
+	  if (evt.target.tagName === 'BUTTON' && evt.target.id.indexOf('express-operation') !== -1) {
+	    multiplier = evt.target.id.indexOf('minus') !== -1 ? -1 : 1;
+	    value = Number(evt.target.id.split('-')[3]) * multiplier;
+	    if (evt.target.id.indexOf('sell') !== -1) {
+	      price = Number(expressSell.innerHTML);
+	    } else if (evt.target.id.indexOf('purchase') !== -1) {
+	      price = Number(expressPurchase.innerHTML);
+	    }
+	    console.log('lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + _storage2.default.currentGoodId + '/stock/' + _storage2.default.currentStockId + '/express');
+	    console.log('value=' + value + '&price=' + price + '&token=' + _storage2.default.data.token);
+	    _xhr2.default.request = {
+	      metod: 'POST',
+	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + _storage2.default.currentGoodId + '/stock/' + _storage2.default.currentStockId + '/express',
+	      data: 'value=' + value + '&price=' + price + '&token=' + _storage2.default.data.token,
+	      callbackSuccess: onSuccessExpressExecute
+	    };
+	  }
+	};
+	
+	expressContainer.addEventListener('click', onExpressContainerClick);
+	
 	var getGood = function getGood(id) {
 	  $(goodsCard).modal('show');
+	  goodsStock.innerHTML = '';
+	
+	  console.log('lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + id + '/card_info');
 	
 	  _xhr2.default.request = {
 	    metod: 'POST',
