@@ -113,7 +113,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	console.log('ver: 2D9');
-	console.log('ver: 2A5');
+	console.log('ver: 3A1');
 	
 	var exit = document.querySelector('#profile-exit');
 	var app = document.querySelector('#app');
@@ -4496,7 +4496,6 @@
 	});
 	
 	var onGroupGoodsCardBodyClick = function onGroupGoodsCardBodyClick(evt) {
-	  console.log(evt.target);
 	  var currentStringElement = evt.target;
 	  while (!currentStringElement.dataset.goodId) {
 	    currentStringElement = currentStringElement.parentNode;
@@ -4619,6 +4618,8 @@
 	// const goodsCardPriceExtra = document.querySelector('#goods-card-price-extra');
 	var goodsCardSell = document.querySelector('#goods-card-price-sell');
 	var goodsStock = document.querySelector('#goods-stock');
+	var goodsKeywords = document.querySelector('#goods-keywords');
+	// import keywordsMarkup from '../markup/reference-keywords.js';
 	
 	/*
 	              <div class="row border">
@@ -4640,7 +4641,8 @@
 	      allStocks = _loadedGood$data.all_stocks,
 	      currentValue = _loadedGood$data.current_value,
 	      purchasePrice = _loadedGood$data.purchase_price,
-	      sellingPrice = _loadedGood$data.selling_price;
+	      sellingPrice = _loadedGood$data.selling_price,
+	      tags = _loadedGood$data.tags;
 	
 	  goodsCardName.value = name;
 	  goodsCardDescribe.value = description;
@@ -4664,10 +4666,13 @@
 	  };
 	
 	  goodsStock.insertAdjacentHTML('beforeend', allStocks.map(function (item, index) {
-	    return '\n    <div class="row border">\n      <div class="col-8 border">' + item.id + ' - ' + item.name + '</div>\n      <div class="col-4 d-flex justify-content-between border">\n        ' + getStocksTable(item.id).join('') + '\n      </div>\n    </div>';
+	    return '\n    <div class="row border">\n      <div class="col-8 border">' + item.id + ' - ' + item.name + ' ' + (item.id === _storage2.default.data.currentStock ? '<b>V</b>' : '') + '</div>\n      <div class="col-4 d-flex justify-content-between border">\n        ' + getStocksTable(item.id).join('') + '\n      </div>\n    </div>';
 	  }).join(''));
 	  goodsCardPrice.value = purchasePrice;
 	  goodsCardSell.value = sellingPrice;
+	  goodsKeywords.insertAdjacentHTML('beforeend', tags.length ? tags.map(function (item) {
+	    return '<h3 style="display: inline-block;"><span class="badge keyword-row" style="background-color: #' + item.color + '; cursor: pointer; color: #fff">#' + item.name + '</span></h3>';
+	  }) : 'Ключевых слов нет');
 	};
 	
 	var getGood = function getGood(id) {
