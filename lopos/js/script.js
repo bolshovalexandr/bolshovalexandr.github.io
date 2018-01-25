@@ -110,9 +110,21 @@
 	
 	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
 	
+	var _catalogGroupsAdd = __webpack_require__(37);
+	
+	var _catalogGroupsAdd2 = _interopRequireDefault(_catalogGroupsAdd);
+	
+	var _catalogGroupsEdit = __webpack_require__(38);
+	
+	var _catalogGroupsEdit2 = _interopRequireDefault(_catalogGroupsEdit);
+	
+	var _catalogGroupsGoodsAdd = __webpack_require__(39);
+	
+	var _catalogGroupsGoodsAdd2 = _interopRequireDefault(_catalogGroupsGoodsAdd);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	console.log('ver: 2D9');
+	console.log('ver: 3D1');
 	console.log('ver: 3A2');
 	
 	var exit = document.querySelector('#profile-exit');
@@ -173,6 +185,9 @@
 	    _referenceContractorsAdd2.default.start();
 	    _referenceKeywordsAdd2.default.start();
 	    _referenceKeywordsEdit2.default.start();
+	    _catalogGroupsAdd2.default.start();
+	    _catalogGroupsEdit2.default.start();
+	    _catalogGroupsGoodsAdd2.default.start();
 	  } else {
 	    showLoginHideApp();
 	    _main_login_window2.default.init();
@@ -4826,7 +4841,7 @@
 	
 	  if (loadedKeywords.status === 200 && loadedKeywords.data) {
 	    loadedKeywords.data.forEach(function (item) {
-	      goodsCardKeywordsBody.insertAdjacentHTML('beforeend', '<h3 style="display: inline-block;"><span class="badge keyword-row" style="background-color: #' + item.hex_color + '; cursor: pointer; color: #fff; ' + (goodTags.every(function (tagItem) {
+	      goodsCardKeywordsBody.insertAdjacentHTML('beforeend', '<h3 style="display: inline-block;"><span class="badge keyword-row" style="background-color: #' + item.color + '; cursor: pointer; color: #fff; ' + (goodTags.every(function (tagItem) {
 	        return tagItem.id !== item.id;
 	      }) ? 'opacity: 0.4;' : '') + '" data-keyword-Id=' + item.id + '>#' + item.name + '</span></h3>');
 	
@@ -4894,6 +4909,609 @@
 	    // groupsMarkup.cleanContainer();
 	    // listGroups.removeEventListener('click', getGroups);
 	  }
+	};
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	var _catalogGroups = __webpack_require__(34);
+	
+	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var appUrl = window.appSettings.formAddGroups.UrlApi;
+	var messages = window.appSettings.formAddGroups.message;
+	
+	var validPattern = window.appSettings.formAddGroups.validPatterns;
+	var validMessage = window.appSettings.formAddGroups.validMessage;
+	
+	var body = document.querySelector('body');
+	var enterprisesAdd = body.querySelector('#groups-add');
+	var form = enterprisesAdd.querySelector('#groups-add-form');
+	
+	var name = form.querySelector('#groups-add-name');
+	
+	var spinner = form.querySelector('#groups-add-spinner');
+	
+	var buttonSubmit = form.querySelector('#groups-add-submit');
+	var buttonCancel = form.querySelector('#groups-add-cancel');
+	
+	var showSpinner = function showSpinner() {
+	  spinner.classList.remove('invisible');
+	  buttonSubmit.disabled = true;
+	  buttonCancel.disabled = true;
+	};
+	
+	var hideSpinner = function hideSpinner() {
+	  spinner.classList.add('invisible');
+	  buttonSubmit.disabled = false;
+	  buttonCancel.disabled = false;
+	};
+	
+	var showAlert = function showAlert(input) {
+	  if (input.type === 'text') {
+	    input.classList.add('border');
+	    input.classList.add('border-danger');
+	    input.nextElementSibling.innerHTML = validMessage[input.id.match(/[\w]+$/)];
+	  }
+	};
+	
+	var hideAlert = function hideAlert(input) {
+	  if (input.type === 'text') {
+	    input.classList.remove('border');
+	    input.classList.remove('border-danger');
+	    input.nextElementSibling.innerHTML = '';
+	  }
+	};
+	
+	var formReset = function formReset() {
+	  form.reset();
+	
+	  hideAlert(name);
+	
+	  hideSpinner();
+	
+	  buttonSubmit.disabled = true;
+	  buttonCancel.disabled = false;
+	};
+	
+	var callbackXhrSuccess = function callbackXhrSuccess(response) {
+	
+	  hideSpinner();
+	  formReset();
+	  $('#groups-add').modal('hide');
+	
+	  switch (response.status) {
+	    case 200:
+	      _catalogGroups2.default.redraw();
+	      break;
+	    case 400:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'messages': messages.mes400
+	      };
+	      break;
+	    case 271:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'messages': response.messages
+	      };
+	      break;
+	  }
+	};
+	
+	var callbackXhrError = function callbackXhrError() {
+	  hideSpinner();
+	  formReset();
+	  $('#groups-add').modal('hide');
+	
+	  _tools2.default.informationtModal = {
+	    'title': 'Error',
+	    'messages': window.appSettings.messagess.xhrError
+	  };
+	};
+	
+	var validateForm = function validateForm() {
+	  var valid = true;
+	
+	  if (!validPattern.name.test(name.value)) {
+	    valid = false;
+	    showAlert(name);
+	  }
+	
+	  return valid;
+	};
+	
+	var submitForm = function submitForm() {
+	  var stor = _storage2.default.data;
+	
+	  var postData = 'name=' + name.value + '&token=' + stor.token;
+	  var urlApp = appUrl.replace('{{dir}}', stor.directory);
+	  urlApp = urlApp.replace('{{oper}}', stor.operatorId);
+	  urlApp = urlApp.replace('{{busId}}', stor.currentBusiness);
+	
+	  var response = {
+	    url: urlApp,
+	    metod: 'POST',
+	    data: postData,
+	    callbackSuccess: callbackXhrSuccess,
+	    callbackError: callbackXhrError
+	  };
+	
+	  _xhr2.default.request = response;
+	};
+	
+	var formSubmitHandler = function formSubmitHandler(evt) {
+	  evt.preventDefault();
+	
+	  if (validateForm()) {
+	    showSpinner();
+	    submitForm();
+	  }
+	};
+	
+	var addHandlers = function addHandlers() {
+	
+	  $('#groups-add').on('hidden.bs.modal', function () {
+	    formReset();
+	  });
+	
+	  $('#groups-add').on('shown.bs.modal', function () {
+	    window.appFormCurrValue = {
+	      'name': name.value
+	    };
+	  });
+	
+	  form.addEventListener('input', function (evt) {
+	    hideAlert(evt.target);
+	    buttonSubmit.disabled = false;
+	  });
+	
+	  form.addEventListener('submit', formSubmitHandler);
+	};
+	
+	exports.default = {
+	  start: addHandlers
+	};
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	var _catalogGroups = __webpack_require__(34);
+	
+	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var appUrl = window.appSettings.formEditGroups.UrlApi;
+	
+	var validPattern = window.appSettings.formEditGroups.validPatterns;
+	var validMessage = window.appSettings.formEditGroups.validMessage;
+	
+	var messages = window.appSettings.formEditGroups.messages;
+	
+	var body = document.querySelector('body');
+	var enterprisesAdd = body.querySelector('#groups-edit');
+	var form = enterprisesAdd.querySelector('#groups-edit-form');
+	
+	var name = form.querySelector('#groups-edit-name');
+	
+	var spinner = form.querySelector('#groups-edit-spinner');
+	
+	var buttonSubmit = form.querySelector('#groups-edit-submit');
+	var buttonCancel = form.querySelector('#groups-edit-cancel');
+	
+	var showSpinner = function showSpinner() {
+	  spinner.classList.remove('invisible');
+	  buttonSubmit.disabled = true;
+	  buttonCancel.disabled = true;
+	};
+	
+	var hideSpinner = function hideSpinner() {
+	  spinner.classList.add('invisible');
+	  buttonSubmit.disabled = false;
+	  buttonCancel.disabled = false;
+	};
+	
+	var showAlert = function showAlert(input) {
+	  input.classList.add('border');
+	  input.classList.add('border-danger');
+	  input.nextElementSibling.innerHTML = validMessage[input.id.match(/[\w]+$/)];
+	};
+	
+	var hideAlert = function hideAlert(input) {
+	  input.classList.remove('border');
+	  input.classList.remove('border-danger');
+	  input.nextElementSibling.innerHTML = '';
+	};
+	
+	var formReset = function formReset() {
+	  form.reset();
+	
+	  hideAlert(name);
+	
+	  hideSpinner();
+	
+	  buttonSubmit.disabled = true;
+	  buttonCancel.disabled = false;
+	};
+	
+	var callbackXhrSuccess = function callbackXhrSuccess(response) {
+	
+	  hideSpinner();
+	  formReset();
+	  $('#groups-edit').modal('hide');
+	
+	  switch (response.status) {
+	    case 200:
+	      _catalogGroups2.default.redraw();
+	      break;
+	    case 400:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'messages': messages.mes400
+	      };
+	      break;
+	    case 271:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'messages': response.messages
+	      };
+	      break;
+	  }
+	};
+	
+	var callbackXhrError = function callbackXhrError() {
+	
+	  hideSpinner();
+	  formReset();
+	  $('#groups-edit').modal('hide');
+	
+	  _tools2.default.informationtModal = {
+	    'title': 'Error',
+	    'messages': window.appSettings.messagess.xhrError
+	  };
+	};
+	
+	var formIsChange = function formIsChange() {
+	  if (name.value !== window.appFormCurrValue.name) {
+	    return true;
+	  }
+	  return false;
+	};
+	
+	var validateForm = function validateForm() {
+	  var valid = true;
+	
+	  if (!validPattern.name.test(name.value)) {
+	    valid = false;
+	    showAlert(name);
+	  }
+	
+	  return valid;
+	};
+	
+	var submitForm = function submitForm() {
+	  var stor = _storage2.default.data;
+	
+	  var postData = 'name=' + name.value + '&token=' + stor.token;
+	  var urlApp = appUrl.replace('{{dir}}', stor.directory);
+	  urlApp = urlApp.replace('{{oper}}', stor.operatorId);
+	  urlApp = urlApp.replace('{{busId}}', stor.currentBusiness);
+	  urlApp = urlApp.replace('{{groupId}}', _storage2.default.currentGroupId);
+	
+	  var response = {
+	    url: urlApp,
+	    metod: 'PUT',
+	    data: postData,
+	    callbackSuccess: callbackXhrSuccess,
+	    callbackError: callbackXhrError
+	  };
+	
+	  console.dir(response);
+	
+	  _xhr2.default.request = response;
+	};
+	
+	var formSubmitHandler = function formSubmitHandler(evt) {
+	  evt.preventDefault();
+	
+	  if (validateForm()) {
+	    showSpinner();
+	    submitForm();
+	  }
+	};
+	
+	var addHandlers = function addHandlers() {
+	
+	  $('#groups-edit').on('hidden.bs.modal', function () {
+	    formReset();
+	  });
+	
+	  $('#groups-edit').on('shown.bs.modal', function () {
+	    window.appFormCurrValue = {
+	      'name': name.value
+	    };
+	  });
+	
+	  form.addEventListener('input', function (evt) {
+	    hideAlert(evt.target);
+	
+	    if (formIsChange()) {
+	      buttonSubmit.disabled = false;
+	    } else {
+	      buttonSubmit.disabled = true;
+	    }
+	  });
+	
+	  form.addEventListener('submit', formSubmitHandler);
+	};
+	
+	exports.default = {
+	  start: addHandlers
+	};
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	var _catalogGroupsGoods = __webpack_require__(36);
+	
+	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var appUrl = window.appSettings.formAddGoods.UrlApi;
+	var messages = window.appSettings.formAddGoods.message;
+	
+	var validPattern = window.appSettings.formAddGoods.validPatterns;
+	var validMessage = window.appSettings.formAddGoods.validMessage;
+	
+	var body = document.querySelector('body');
+	var groupGoodsAdd = body.querySelector('#group-goods-add');
+	var form = groupGoodsAdd.querySelector('#group-goods-add-form');
+	
+	var name = form.querySelector('#group-goods-name');
+	var describe = form.querySelector('#group-goods-describe');
+	var group = form.querySelector('#group-goods-group');
+	var purchase = form.querySelector('#group-goods-price-purchase');
+	var extra = form.querySelector('#group-goods-price-extra');
+	var sell = form.querySelector('#group-goods-price-sell');
+	var barcode = form.querySelector('#group-goods-barcode');
+	
+	var spinner = form.querySelector('#group-goods-add-spinner');
+	var priceValid = form.querySelector('#group-goods-price-valid');
+	
+	var buttonSubmit = form.querySelector('#group-goods-add-submit');
+	var buttonCancel = form.querySelector('#group-goods-add-cancel');
+	
+	var showSpinner = function showSpinner() {
+	  spinner.classList.remove('invisible');
+	  buttonSubmit.disabled = true;
+	  buttonCancel.disabled = true;
+	};
+	
+	var hideSpinner = function hideSpinner() {
+	  spinner.classList.add('invisible');
+	  buttonSubmit.disabled = false;
+	  buttonCancel.disabled = false;
+	};
+	
+	var showAlert = function showAlert(input) {
+	  if (input.type === 'text') {
+	    input.classList.add('border');
+	    input.classList.add('border-danger');
+	    input.nextElementSibling.innerHTML = validMessage[input.id.match(/[\w]+$/)];
+	  }
+	};
+	
+	var hideAlert = function hideAlert(input) {
+	  if (input.type === 'text') {
+	    switch (input.id) {
+	      case 'group-goods-price-purchase':
+	        priceValid.innerHTML = '';break;
+	      case 'group-goods-price-extra':
+	        priceValid.innerHTML = '';break;
+	      case 'group-goods-price-sell':
+	        priceValid.innerHTML = '';break;
+	      default:
+	        input.nextElementSibling.innerHTML = '';break;
+	    }
+	
+	    input.classList.remove('border');
+	    input.classList.remove('border-danger');
+	  }
+	};
+	
+	var formReset = function formReset() {
+	  form.reset();
+	
+	  hideAlert(name);
+	
+	  hideSpinner();
+	
+	  buttonSubmit.disabled = true;
+	  buttonCancel.disabled = false;
+	};
+	
+	var callbackXhrSuccess = function callbackXhrSuccess(response) {
+	
+	  hideSpinner();
+	  formReset();
+	  $('#group-goods-add').modal('hide');
+	
+	  switch (response.status) {
+	    case 200:
+	      _catalogGroupsGoods2.default.redraw();
+	      break;
+	    case 400:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'messages': messages.mes400
+	      };
+	      break;
+	    case 271:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'messages': response.messages
+	      };
+	      break;
+	  }
+	};
+	
+	var callbackXhrError = function callbackXhrError() {
+	  hideSpinner();
+	  formReset();
+	  $('#group-goods-add').modal('hide');
+	
+	  _tools2.default.informationtModal = {
+	    'title': 'Error',
+	    'messages': window.appSettings.messagess.xhrError
+	  };
+	};
+	
+	var validateForm = function validateForm() {
+	  var valid = true;
+	
+	  if (!validPattern.name.test(name.value)) {
+	    valid = false;
+	    showAlert(name);
+	  }
+	
+	  if (!validPattern.description.test(describe.value)) {
+	    valid = false;
+	    showAlert(describe);
+	  }
+	
+	  if (!validPattern.group.test(group.value)) {
+	    valid = false;
+	    showAlert(group);
+	  }
+	  if (!validPattern.purchasePrice.test(purchase.value)) {
+	    valid = false;
+	    priceValid.innerHTML = '!!';
+	  }
+	  if (!validPattern.extra.test(extra.value)) {
+	    valid = false;
+	    priceValid.innerHTML = '!!';
+	  }
+	  if (!validPattern.sellingPrice.test(sell.value)) {
+	    valid = false;
+	    priceValid.innerHTML = '!!';
+	  }
+	  if (!validPattern.barcode.test(barcode.value)) {
+	    valid = false;
+	    showAlert(barcode);
+	  }
+	  return valid;
+	};
+	
+	var submitForm = function submitForm() {
+	  var stor = _storage2.default.data;
+	  var groupId = _storage2.default.currentGroupId;
+	
+	  var postData = 'token=' + stor.token + '&name=' + name.value + '&description=' + describe.value + '&purchase_price=' + purchase.value + '&selling_price=' + sell.value + '&group=' + groupId + '&barcode=' + barcode.value;
+	  var urlApp = appUrl.replace('{{dir}}', stor.directory);
+	  urlApp = urlApp.replace('{{oper}}', stor.operatorId);
+	  urlApp = urlApp.replace('{{busId}}', stor.currentBusiness);
+	
+	  var response = {
+	    url: urlApp,
+	    metod: 'POST',
+	    data: postData,
+	    callbackSuccess: callbackXhrSuccess,
+	    callbackError: callbackXhrError
+	  };
+	
+	  _xhr2.default.request = response;
+	};
+	
+	var formSubmitHandler = function formSubmitHandler(evt) {
+	  evt.preventDefault();
+	
+	  if (validateForm()) {
+	    showSpinner();
+	    submitForm();
+	  }
+	};
+	
+	var addHandlers = function addHandlers() {
+	
+	  $('#group-goods-add').on('hidden.bs.modal', function () {
+	    formReset();
+	  });
+	
+	  $('#group-goods-add').on('shown.bs.modal', function () {
+	    group.value = _storage2.default.currentGroupName;
+	  });
+	
+	  form.addEventListener('input', function (evt) {
+	    hideAlert(evt.target);
+	    buttonSubmit.disabled = false;
+	  });
+	
+	  form.addEventListener('submit', formSubmitHandler);
+	};
+	
+	exports.default = {
+	  start: addHandlers
 	};
 
 /***/ })
