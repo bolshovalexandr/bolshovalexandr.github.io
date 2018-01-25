@@ -376,6 +376,14 @@
 	
 	  get currentGoodId() {
 	    return sessionStorage.getItem('currentGoodId');
+	  },
+	
+	  set currentStockQuantityT2(quantity) {
+	    sessionStorage.setItem('currentStockQuantityT2', quantity);
+	  },
+	
+	  get currentStockQuantityT2() {
+	    return sessionStorage.getItem('currentStockQuantityT2');
 	  }
 	
 	};
@@ -4609,6 +4617,10 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var goodsCard = document.querySelector('#goods-card');
@@ -4624,13 +4636,25 @@
 	var goodsCardSell = document.querySelector('#goods-card-price-sell');
 	var goodsStock = document.querySelector('#goods-stock-body');
 	var goodsKeywords = document.querySelector('#goods-keywords');
+	var goodsCardKeywordsModal = document.querySelector('#goods-card-keywords');
+	var goodsCardKeywordsBody = document.querySelector('#goods-card-keywords-body');
 	var expressContainer = document.querySelector('#express-container');
 	var expressModal = document.querySelector('#express-modal');
 	var expressModalLabel = document.querySelector('#express-modal-label');
 	var expressModalStock = document.querySelector('#express-modal-stock');
+	var expressModalPrice = document.querySelector('#express-modal-price');
+	var expressModalQuantity = document.querySelector('#express-modal-quantity');
+	var stockModal = document.querySelector('#set-stock-modal');
+	var stockModalName = document.querySelector('#set-stock-modal-stock');
+	var stockModalQuantity = document.querySelector('#set-stock-modal-quantity');
 	// const expressPurchase = document.querySelector('#express-purchase');
 	// const expressSell = document.querySelector('#express-sell');
 	// import keywordsMarkup from '../markup/reference-keywords.js';
+	
+	var loaderSpinnerId = 'loader-goods';
+	var loaderSpinnerMessage = 'Загрузка';
+	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
+	var goodTags = [];
 	
 	var onSuccessGroupsLoad = function onSuccessGroupsLoad(loadedGood) {
 	  console.log(loadedGood);
@@ -4644,49 +4668,49 @@
 	      purchasePrice = _loadedGood$data.purchase_price,
 	      sellingPrice = _loadedGood$data.selling_price,
 	      tags = _loadedGood$data.tags,
-	      imgUrl = _loadedGood$data.img_url;
+	      imgUrl = _loadedGood$data.img_url,
+	      groupId = _loadedGood$data.group_id;
 	
 	  goodsCardName.value = name;
 	  goodsCardDescribe.value = description;
 	  goodsCardBarcode.value = barcode;
 	  goodsCardPurchase.value = purchasePrice;
 	  goodsCardSell.value = sellingPrice;
-	  goodsCardGroup.insertAdjacentHTML('beforeend', allGroups.map(function (item) {
-	    return '<option value="' + item.id + '">' + item.name + '</option>';
-	  }).join(''));
+	  goodTags = tags ? tags : [];
+	  /*
+	  goodsCardGroup.innerHTML = '<option selected>Выберите группу</option>';
+	  goodsCardGroup.insertAdjacentHTML('beforeend', allGroups.map((item) => `<option value="${item.id}">${item.name}</option>`).join(''));
+	  */
+	  goodsCardGroup.innerHTML = allGroups.map(function (item) {
+	    return '<option value="' + item.id + '" ' + (item.id === groupId ? 'selected' : '') + '>' + item.name + '</option>';
+	  }).join('');
+	  /*
+	  goodsCardGroup.innerHTML = allGroups.map((item) => {
+	    if
+	    return `<option value="${item.id}">${item.name}</option>`;
+	  }.join('');
+	  */
 	  console.log(goodsCardImage);
-	  goodsCardImage.src = imgUrl ? 'https://lopos.bidone.ru/users/600a5357/images/' + imgUrl + '_preview150.jpg' : './img/not-available.png';
-	
-	  var stocksMarkup = ['<div class="w-100 text-center border">0</div>', '<div class="w-100 text-center border">0</div>', '<div class="w-100 text-center border">0</div>'];
+	  goodsCardImage.title = name;
+	  goodsCardImage.alt = name;
+	  goodsCardImage.src = imgUrl ? 'https://lopos.bidone.ru/users/600a5357/images/' + imgUrl + '.jpg' : './img/not-available.png';
 	
 	  var totalCount = 0;
-	
-	  var getStocksTable = function getStocksTable(stockId) {
-	    // console.log(currentValue);
-	    if (currentValue) {
-	      var result = currentValue.find(function (item) {
-	        return item.stock_id === stockId;
-	      });
-	      var resArr = stocksMarkup.slice(0);
-	      if (result) {
-	        totalCount += Number(result.value);
-	        resArr[Number(result.type) - 1] = '<div class="w-100 text-center border">' + result.value + '</div>';
-	      }
-	      return resArr.join('');
-	    }
-	    return stocksMarkup.join('');
-	  };
-	
 	  var checkedStock = false;
 	
 	  if (allStocks.length) {
-	    goodsStock.insertAdjacentHTML('beforeend', allStocks.map(function (item, index) {
+	    allStocks.forEach(function (stockItem) {
+	      stockItem.values = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]];
+	      currentValue.map(function (valueItem) {
+	        return valueItem.stock_id === stockItem.id ? stockItem.values[valueItem.type] = [valueItem.value, valueItem.type] : '';
+	      });
+	    });
+	    goodsStock.insertAdjacentHTML('beforeend', allStocks.map(function (item) {
+	      totalCount += +item.values[4][0] + +item.values[2][0] + +item.values[3][0];
 	      checkedStock = item.id === _storage2.default.data.currentStock ? item.id : checkedStock;
-	      return '\n      <input type="radio" id="stock-' + item.id + '" name="stock" value="email" class="d-none">\n      <label style="padding-left: 34px;" for="stock-' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '">\n        <div class="row w-100">\n          <div class="col-8">' + item.id + ' - ' + item.name + '</div>\n          <div class="col-4 d-flex justify-content-between border">\n            ' + getStocksTable(item.id) + '\n          </div>\n          </div>\n        </label>';
+	      return '\n      <input type="radio" id="stock-' + item.id + '" name="stock" value="email" class="d-none">\n      <label style="padding-left: 34px;" for="stock-' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '" data-stock-t2="' + item.values[2][0] + '">\n        <div class="row w-100">\n          <div class="col-8">' + item.id + ' - ' + item.name + '</div>\n          <div class="col-4 d-flex justify-content-between border">\n            <div class="w-100 text-center border">' + item.values[4][0] + '</div>\n            <div class="w-100 text-center border">' + item.values[2][0] + '</div>\n            <div class="w-100 text-center border">' + item.values[3][0] + '</div>\n          </div>\n          </div>\n        </label>';
 	    }).join(''));
-	  } else {
-	    goodsStock.insertAdjacentHTML('beforeend', '\n      <div class="row border">\n        <div class="col-8 border"></div>\n        <div class="col-4 d-flex justify-content-between border">\n          ' + stocksMarkup.join('') + '\n        </div>\n      </div>');
-	    expressContainer.classList.add('express-container__muted');
+	    console.log(allStocks);
 	  }
 	
 	  if (allStocks.length > 1) {
@@ -4702,13 +4726,14 @@
 	    goodsStock.firstChild.checked = true;
 	    _storage2.default.currentStockId = goodsStock.firstChild.id.split('-')[1];
 	    _storage2.default.currentStockName = goodsStock.children[1].dataset.stockName;
+	    _storage2.default.currentStockQuantityT2 = goodsStock.children[1].dataset.stockT2;
 	  }
-	  goodsCardPurchase.value = purchasePrice;
-	  goodsCardSell.value = sellingPrice;
+	  // goodsCardPurchase.value = purchasePrice;
+	  // goodsCardSell.value = sellingPrice;
 	  goodsKeywords.innerHTML = '';
 	  goodsKeywords.insertAdjacentHTML('beforeend', tags.length ? tags.map(function (item) {
 	    return '<h3 style="display: inline-block;"><span class="badge keyword-row" style="background-color: #' + item.color + '; cursor: pointer; color: #fff">#' + item.name + '</span></h3>';
-	  }) : 'Ключевых слов нет');
+	  }).join('') : 'Ключевых слов нет');
 	};
 	
 	goodsStock.addEventListener('change', function (evt) {
@@ -4716,10 +4741,20 @@
 	  console.log(evt.target.labels[0].innerText);
 	  _storage2.default.currentStockId = Number(evt.target.id.split('-')[1]);
 	  _storage2.default.currentStockName = evt.target.labels[0].dataset.stockName;
+	  _storage2.default.currentStockQuantityT2 = evt.target.labels[0].dataset.stockT2;
 	});
+	
+	var currentExpressBtn = '';
 	
 	var onSuccessExpressExecute = function onSuccessExpressExecute(answer) {
 	  console.log(answer);
+	  $(currentExpressBtn).popover({
+	    content: answer.message,
+	    placement: 'top'
+	  }).popover('show');
+	  window.setTimeout(function () {
+	    $(currentExpressBtn).popover('dispose');
+	  }, 2000);
 	};
 	
 	var onExpressContainerClick = function onExpressContainerClick(evt) {
@@ -4733,6 +4768,7 @@
 	    multiplier = currentBtnId.indexOf('minus') !== -1 ? -1 : 1;
 	    price = currentBtnId.indexOf('purchase') !== -1 ? Number(goodsCardPurchase.value) : Number(goodsCardSell.value);
 	    value = currentBtnId.indexOf('express-operation') !== -1 ? Number(currentBtnId.split('-')[3]) * multiplier : '';
+	    currentExpressBtn = evt.target;
 	
 	    console.log('lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + _storage2.default.currentGoodId + '/stock/' + _storage2.default.currentStockId + '/express');
 	    console.log('value=' + value + '&price=' + price + '&token=' + _storage2.default.data.token);
@@ -4745,14 +4781,25 @@
 	        callbackSuccess: onSuccessExpressExecute
 	      };
 	    } else if (currentBtnId.indexOf('custom') !== -1) {
-	      $(expressModal).modal('show');
+	      // $(goodsCard).modal('hide');
+	      $(expressModal).modal('toggle');
+	      $(goodsCard).modal('toggle');
+	
 	      expressModalLabel.innerHTML = currentBtnId.indexOf('purchase') !== -1 ? 'Экспресс-закупка' : 'Экспресс-продажа';
 	      expressModalStock.innerHTML = _storage2.default.currentStockName;
+	      expressModalPrice.value = currentBtnId.indexOf('purchase') !== -1 ? goodsCardPurchase.value : goodsCardSell.value;
+	      expressModalQuantity.focus();
 	    }
 	  }
 	};
 	
 	expressContainer.addEventListener('click', onExpressContainerClick);
+	
+	// $(expressModal).on('hide.bs.modal', () => $(goodsCard).modal({focus: true}));
+	$(expressModal).on('hidden.bs.modal', function () {
+	  $(goodsCard).modal('toggle');
+	  // $(goodsCard).modal('show');
+	});
 	
 	var getGood = function getGood() {
 	  $(goodsCard).modal('show');
@@ -4767,6 +4814,70 @@
 	    callbackSuccess: onSuccessGroupsLoad
 	  };
 	};
+	
+	var onSuccessKeywordsLoad = function onSuccessKeywordsLoad(loadedKeywords) {
+	
+	  document.querySelector('#' + loaderSpinnerId).remove();
+	  console.log(loadedKeywords);
+	
+	  var onSuccessKeywordsCompare = function onSuccessKeywordsCompare(keywordNode, opacity) {
+	    keywordNode.style.opacity = opacity;
+	  };
+	
+	  if (loadedKeywords.status === 200 && loadedKeywords.data) {
+	    loadedKeywords.data.forEach(function (item) {
+	      goodsCardKeywordsBody.insertAdjacentHTML('beforeend', '<h3 style="display: inline-block;"><span class="badge keyword-row" style="background-color: #' + item.hex_color + '; cursor: pointer; color: #fff; ' + (goodTags.every(function (tagItem) {
+	        return tagItem.id !== item.id;
+	      }) ? 'opacity: 0.4;' : '') + '" data-keyword-Id=' + item.id + '>#' + item.name + '</span></h3>');
+	
+	      goodsCardKeywordsBody.lastChild.addEventListener('click', function (evt) {
+	        var xhrType = goodTags.every(function (tagItem) {
+	          return tagItem.id !== item.id;
+	        }) ? 'POST' : 'DELETE';
+	        _xhr2.default.request = {
+	          metod: xhrType,
+	          url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag/' + item.id + '/compare_meta',
+	          data: 'good=' + _storage2.default.currentGoodId + '&token=' + _storage2.default.data.token,
+	          callbackSuccess: onSuccessKeywordsCompare.bind(null, evt.target, goodTags.every(function (tagItem) {
+	            return tagItem.id !== item.id;
+	          }) ? '1' : '0.4')
+	        };
+	      });
+	    });
+	  } else if (loadedKeywords.status === 200 && !loadedKeywords.data) {
+	    goodsCardKeywordsBody.innerHTML = '<p>' + (loadedKeywords.message || 'Что-то в поле message пусто и в data лежит false') + '</p>';
+	  }
+	};
+	
+	var getKeywords = function getKeywords() {
+	  goodsCardKeywordsBody.innerHTML = loaderSpinnerMarkup;
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessKeywordsLoad
+	  };
+	};
+	
+	$(goodsCardKeywordsModal).on('shown.bs.modal', function () {
+	  getKeywords();
+	  $(goodsCard).modal('hide');
+	});
+	
+	$(goodsCardKeywordsModal).on('hidden.bs.modal', function () {
+	  getGood();
+	});
+	
+	$(stockModal).on('hidden.bs.modal', function () {
+	  getGood();
+	});
+	
+	$(stockModal).on('shown.bs.modal', function () {
+	  $(goodsCard).modal('hide');
+	  stockModalName.innerHTML = _storage2.default.currentStockName;
+	  stockModalQuantity.value = _storage2.default.currentStockQuantityT2;
+	});
 	
 	exports.default = {
 	  start: function start() {
