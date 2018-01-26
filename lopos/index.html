@@ -327,7 +327,62 @@
 
         <!-- =========== КОНТЕЙНЕРЫ / Справочники / Группы товаров =========== -->
         <div class="tab-pane fade" id="list-cards" role="tabpanel" aria-labelledby="list-cards-list">
-          <p>ПРОИЗВОДСТВЕННЫЕ КАРТОЧКИ (UNDER CONSTRUCTION)</p>
+          <div id="list-cards-card">
+
+            <div id="list-cards-header" class="catalog-header">
+              <div class="catalog-header-title">
+                <img src="img/groups.png" alt="">
+                <h2>ПРОИЗВОДСТВЕННЫЕ КАРТОЧКИ</h2>
+              </div>
+              <div class="catalog-header-buttons">
+                <button id="list-cards-card-add-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__add" data-toggle="modal" data-target="#cards-add"></button>
+              </div>
+            </div>
+            <div id="list-cards-card-body" class="groups-card-block"></div>
+          </div>
+
+
+          <div id="card-resources" class="d-none">
+            <div id="card-resources-header" class="catalog-header">
+              <div class="catalog-header-title">
+                <button id="card-resources-return-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__return"></button>
+                <h2 id="card-resources-name"></h2>
+              </div>
+              <div class="catalog-header-buttons">
+                <button id="card-resources-edit-btn" type="button" class="btn btn-warning p-0 icon-btn icon-btn__edit"></button>
+                <button id="card-resources-delete-btn" type="button" class="btn btn-danger p-0 icon-btn icon-btn__delete"></button>
+              </div>
+            </div>
+            <div id="card-resources-body" class="catalog-header-title">
+
+              <div class="w-100 border">
+                <div class="catalog-header">
+                  <div class="catalog-header-title">
+                    <h2>Ресуры</h2>
+                    <div class="catalog-header-buttons">
+                      <button id="list-cards-card-add-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__add" data-toggle="modal" data-target="#cards-add"></button>
+                    </div>
+                  </div>
+                  <div id="card-resources-old-cost"></div>
+                </div>
+                <div id="card-resources-body-resources"></div>
+              </div>
+
+              <div class="w-100 ml-4 border">
+                <div class="catalog-header">
+                  <div class="catalog-header-title">
+                    <h2>Продукт</h2>
+                    <div class="catalog-header-buttons">
+                      <button id="list-cards-card-add-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__add" data-toggle="modal" data-target="#cards-add"></button>
+                    </div>
+                  </div>
+                  <div id="card-resources-new-price"></div>
+                </div>
+                <div id="card-resources-body-product"></div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
         <!-- ==================== КОНТЕЙНЕРЫ / Учет ==================== -->
@@ -1055,7 +1110,7 @@
               <div class="row">
                 <div class="col-8 d-flex">
                   <h4>Остатки</h4>
-                  <button type="button" class="btn btn-warning p-0 icon-btn icon-btn__edit"  data-toggle="modal" data-target="#set-stock-modal"></button>
+                  <button type="button" class="btn btn-warning p-0 icon-btn icon-btn__edit" data-toggle="modal" data-target="#set-stock-modal"></button>
                 </div>
                 <div class="col-4 d-flex justify-content-between">
                   <div class="w-100 text-center">

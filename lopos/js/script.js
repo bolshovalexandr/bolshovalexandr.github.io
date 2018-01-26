@@ -130,10 +130,15 @@
 	
 	var _catalogGroupsGoodsStock2 = _interopRequireDefault(_catalogGroupsGoodsStock);
 	
+	var _catalogGroupsCards = __webpack_require__(42);
+	
+	var _catalogGroupsCards2 = _interopRequireDefault(_catalogGroupsCards);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// Отправка без валидации
 	console.log('ver: 3D1');
+	// Отправка без валидации
+	
 	console.log('ver: 3A2');
 	
 	var exit = document.querySelector('#profile-exit');
@@ -176,7 +181,7 @@
 	  }
 	};
 	
-	var mainMenuButtons = [_onlineProfile2.default, _log2.default, _referenceEnterprises2.default, _referencePoints2.default, _referenceContractors2.default, _referenceKeywords2.default, _catalogGroups2.default, _catalogGroupsGoodsExpress2.default, _catalogGroupsGoodsStock2.default];
+	var mainMenuButtons = [_onlineProfile2.default, _log2.default, _referenceEnterprises2.default, _referencePoints2.default, _referenceContractors2.default, _referenceKeywords2.default, _catalogGroups2.default, _catalogGroupsGoodsExpress2.default, _catalogGroupsGoodsStock2.default, _catalogGroupsCards2.default];
 	
 	// ========== ОБНОВЛЕНИЕ/ОТКРЫТИЕ СТРАНИЦЫ ==========
 	var start = function start() {
@@ -424,6 +429,22 @@
 	
 	  get expressOperationType() {
 	    return sessionStorage.getItem('expressOperationType');
+	  },
+	
+	  set currentCardId(id) {
+	    sessionStorage.setItem('currentCardId', id);
+	  },
+	
+	  get currentCardId() {
+	    return sessionStorage.getItem('currentCardId');
+	  },
+	
+	  set currentCardName(name) {
+	    sessionStorage.setItem('currentCardName', name);
+	  },
+	
+	  get currentCardName() {
+	    return sessionStorage.getItem('currentCardName');
 	  }
 	
 	};
@@ -5776,6 +5797,177 @@
 	exports.default = {
 	  start: start,
 	  stop: stop
+	};
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _catalogCards = __webpack_require__(43);
+	
+	var _catalogCards2 = _interopRequireDefault(_catalogCards);
+	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var listCards = document.querySelector('#list-cards-list');
+	var listCardsCard = document.querySelector('#list-cards-card');
+	var listCardBody = document.querySelector('#list-cards-card-body');
+	var cardResources = document.querySelector('#card-resources');
+	var cardResourcesReturnBtn = document.querySelector('#card-resources-return-btn');
+	var cardName = document.querySelector('#card-resources-name');
+	
+	var cardResourcesResources = document.querySelector('#card-resources-body-resources');
+	var cardResourcesProduct = document.querySelector('#card-resources-body-product');
+	
+	var cardResourcesOldCost = document.querySelector('#card-resources-old-cost');
+	var cardResourcesNewPrice = document.querySelector('#card-resources-new-price');
+	
+	var loaderSpinnerId = 'loader-cards';
+	var loaderSpinnerMessage = 'Загрузка';
+	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
+	
+	var cardData = [];
+	
+	var onSuccessCardResourcesLoad = function onSuccessCardResourcesLoad(cardResourcesData) {
+	  console.log(cardResourcesData);
+	  cardResourcesResources.innerHTML = '';
+	  cardResourcesProduct.innerHTML = '';
+	  cardResourcesOldCost.innerHTML = +cardResourcesData.data.old_cost ? cardResourcesData.data.old_cost : '';
+	  cardResourcesNewPrice.innerHTML = +cardResourcesData.data.new_price ? cardResourcesData.data.new_price : '';
+	  if (cardResourcesData.data.resours.length) {
+	    cardResourcesData.data.resours.forEach(function (item) {
+	      if (item.value < 0) {
+	        cardResourcesResources.insertAdjacentHTML('beforeend', _catalogCards2.default.getResourceElement(item));
+	      } else {
+	        cardResourcesProduct.insertAdjacentHTML('beforeend', _catalogCards2.default.getResourceElement(item));
+	      }
+	    });
+	  } else {
+	    cardResourcesResources.innerHTML = 'Nothig left, but hope';
+	    cardResourcesProduct.innerHTML = 'Nothig left, but hope';
+	  }
+	};
+	
+	var onCardResourcesReturnBtn = function onCardResourcesReturnBtn() {
+	  cardResources.classList.add('d-none');
+	  listCardsCard.classList.remove('d-none');
+	  getCards();
+	};
+	
+	cardResourcesReturnBtn.addEventListener('click', onCardResourcesReturnBtn);
+	
+	var onListCardBodyClick = function onListCardBodyClick(evt) {
+	  cardResources.classList.remove('d-none');
+	  listCardsCard.classList.add('d-none');
+	
+	  var currentStringElement = evt.target;
+	  while (!currentStringElement.dataset.cardId) {
+	    currentStringElement = currentStringElement.parentNode;
+	  }
+	
+	  var currentCardName = cardData.data[currentStringElement.dataset.cardIndex].name;
+	  cardName.innerHTML = currentCardName;
+	  _storage2.default.currentCardId = currentStringElement.dataset.cardId;
+	  _storage2.default.currentCardName = currentCardName;
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/nomenclature_card/' + _storage2.default.currentCardId + '/card_info',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessCardResourcesLoad
+	  };
+	};
+	
+	listCardBody.addEventListener('click', onListCardBodyClick);
+	
+	var onSuccessCardsLoad = function onSuccessCardsLoad(loadedCards) {
+	  document.querySelector('#' + loaderSpinnerId).remove();
+	  console.log(loadedCards);
+	  cardData = loadedCards;
+	  _catalogCards2.default.drawDataInContainer(loadedCards.data);
+	};
+	
+	var getCards = function getCards() {
+	  listCardBody.innerHTML = loaderSpinnerMarkup;
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/nomenclature_card',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessCardsLoad
+	  };
+	};
+	
+	exports.default = {
+	  start: function start() {
+	    listCards.addEventListener('click', getCards);
+	  },
+	
+	
+	  redraw: getCards,
+	
+	  stop: function stop() {
+	    _catalogCards2.default.cleanContainer();
+	    listCards.removeEventListener('click', getCards);
+	  }
+	};
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var listCardsBody = document.querySelector('#list-cards-card-body');
+	// import auth from '../tools/storage.js';
+	
+	exports.default = {
+	  cleanContainer: function cleanContainer() {
+	    listCardsBody.innerHTML = '';
+	  },
+	  getElement: function getElement(item, index) {
+	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
+	    // ${currentEnterpriseFlag}
+	
+	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-card-id="' + item.id + '" data-card-index="' + index + '"">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.id + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
+	  },
+	  drawDataInContainer: function drawDataInContainer(cardsData) {
+	    var _this = this;
+	
+	    cardsData.forEach(function (item, index) {
+	      return listCardsBody.insertAdjacentHTML('beforeend', _this.getElement(item, index));
+	    });
+	  },
+	  getResourceElement: function getResourceElement(item) {
+	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
+	    // ${currentEnterpriseFlag}
+	
+	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-card-id="' + item.id + '"">\n      <div style="padding-left: 34px;">\n        <span>' + item.good_id + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.value + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
+	  },
+	  drawMarkupInContainer: function drawMarkupInContainer(markup) {
+	    listCardsBody.insertAdjacentHTML('beforeend', markup);
+	  }
 	};
 
 /***/ })
