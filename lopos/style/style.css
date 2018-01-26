@@ -192,9 +192,11 @@ input[name="contact"]:checked + label {
   flex-wrap: wrap; }
 
 .goods-tile-card {
-  width: 8rem;
-  margin: 7px;
-  border: none; }
+  width: 150px;
+  height: 150px;
+  margin: 10px;
+  border: 1px solid gray;
+  border-radius: 20px; }
 
 .goods-tile-title {
   position: absolute;

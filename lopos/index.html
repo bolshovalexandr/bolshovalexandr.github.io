@@ -298,6 +298,9 @@
                 <button id="list-groups-card-delete-btn" type="button" class="btn btn-danger p-0 icon-btn icon-btn__delete"></button>
               </div>
             </div>
+            <div id="list-groups-search" class="catalog-header">
+              <input id="list-groups-search-input" type="text" placeholder="поискъ">
+            </div>
             <div id="list-groups-card-body" class="groups-card-block"></div>
           </div>
 
@@ -307,6 +310,7 @@
                 <button id="group-goods-return-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__return"></button>
                 <h2 id="group-name"></h2>
               </div>
+              <div id="list-groups-goods-header-check-message"></div>
               <div class="catalog-header-buttons">
                 <button id="group-goods-add-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__add" data-toggle="modal" data-target="#group-goods-add"></button>
                 <button id="group-goods-copy-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__copy" data-toggle="modal" data-target="#"></button>
@@ -1007,10 +1011,7 @@
 
             <div class="d-flex">
               <div class="form-group row w-50">
-                <label class="col-sm-2 col-form-label" for="goods-card-price-purchase">Цена</label>
-                <div class="col-sm-10">
-                  <input type="text" class="form-control m-1" id="goods-card-price-total" aria-describedby="goods-card-price" disabled>
-                </div>
+                <div class="col-sm-10" id="goods-card-price-total"><span class="text-danger">Здесь будет вычисленная цена %%</span></div>
                 <input type="text" class="form-control m-1" id="goods-card-price-purchase" aria-describedby="goods-card-price" placeholder="Наценка">
                 <input type="text" class="form-control m-1" id="goods-card-price-sell" aria-describedby="goods-card-price" placeholder="Цена">
 
