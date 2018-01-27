@@ -122,24 +122,32 @@
 	
 	var _catalogGroupsGoodsAdd2 = _interopRequireDefault(_catalogGroupsGoodsAdd);
 	
-	var _catalogGroupsGoodsExpress = __webpack_require__(40);
+	var _catalogGroupsCards = __webpack_require__(40);
+	
+	var _catalogGroupsCards2 = _interopRequireDefault(_catalogGroupsCards);
+	
+	var _catalogSearch = __webpack_require__(42);
+	
+	var _catalogSearch2 = _interopRequireDefault(_catalogSearch);
+	
+	var _catalogGroupsGoodsExpress = __webpack_require__(43);
 	
 	var _catalogGroupsGoodsExpress2 = _interopRequireDefault(_catalogGroupsGoodsExpress);
 	
-	var _catalogGroupsGoodsStock = __webpack_require__(41);
+	var _catalogGroupsGoodsStock = __webpack_require__(44);
 	
 	var _catalogGroupsGoodsStock2 = _interopRequireDefault(_catalogGroupsGoodsStock);
 	
-	var _catalogGroupsCards = __webpack_require__(42);
+	var _catalogGroupsCardsResourceAdd = __webpack_require__(45);
 	
-	var _catalogGroupsCards2 = _interopRequireDefault(_catalogGroupsCards);
+	var _catalogGroupsCardsResourceAdd2 = _interopRequireDefault(_catalogGroupsCardsResourceAdd);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	console.log('ver: 3D1');
 	// Отправка без валидации
 	
-	console.log('ver: 3A2');
+	console.log('ver: 3A4');
 	
 	var exit = document.querySelector('#profile-exit');
 	var app = document.querySelector('#app');
@@ -181,7 +189,7 @@
 	  }
 	};
 	
-	var mainMenuButtons = [_onlineProfile2.default, _log2.default, _referenceEnterprises2.default, _referencePoints2.default, _referenceContractors2.default, _referenceKeywords2.default, _catalogGroups2.default, _catalogGroupsGoodsExpress2.default, _catalogGroupsGoodsStock2.default, _catalogGroupsCards2.default];
+	var mainMenuButtons = [_onlineProfile2.default, _log2.default, _referenceEnterprises2.default, _referencePoints2.default, _referenceContractors2.default, _referenceKeywords2.default, _catalogGroups2.default, _catalogGroupsGoodsExpress2.default, _catalogGroupsGoodsStock2.default, _catalogGroupsCards2.default, _catalogGroupsCardsResourceAdd2.default, _catalogSearch2.default];
 	
 	// ========== ОБНОВЛЕНИЕ/ОТКРЫТИЕ СТРАНИЦЫ ==========
 	var start = function start() {
@@ -445,6 +453,14 @@
 	
 	  get currentCardName() {
 	    return sessionStorage.getItem('currentCardName');
+	  },
+	
+	  set currentCardOperation(type) {
+	    sessionStorage.setItem('currentCardOperation', type);
+	  },
+	
+	  get currentCardOperation() {
+	    return sessionStorage.getItem('currentCardOperation');
 	  }
 	
 	};
@@ -957,6 +973,13 @@
 	var modalInformationTitle = modalInformation.querySelector('#modal-information-title');
 	var modalInformationMessage = modalInformation.querySelector('#modal-information-message');
 	
+	var modalUniversalAdd = document.querySelector('#universal-add');
+	var modalUniversalAddLabel = document.querySelector('#universal-add-label');
+	var modalUniversalAddForm = document.querySelector('#universal-add-form');
+	var modalUniversalAddName = document.querySelector('#universal-add-name');
+	var modalUniversalAddNameLabel = document.querySelector('#universal-add-name-label');
+	var modalUniversalAddSubmit = document.querySelector('#universal-add-submit');
+	
 	exports.default = {
 	  getWaitSpinner: function getWaitSpinner(id, message) {
 	    return '\n      <div id="loader" class="progress text-white" style="height: 25px;">\n        <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase bg-success" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">' + message + '</div>\n      </div>';
@@ -986,6 +1009,23 @@
 	    $(modalInformation).modal('show');
 	    modalInformationTitle.innerHTML = setup.title;
 	    modalInformationMessage.innerHTML = setup.message;
+	  },
+	
+	  set runUniversalAdd(setup) {
+	    var requestHandler = function requestHandler(evt) {
+	      evt.preventDefault();
+	      setup.submitCallback(modalUniversalAddName.value);
+	      modalUniversalAddForm.removeEventListener('submit', requestHandler);
+	      $(modalUniversalAdd).modal('hide');
+	    };
+	
+	    $(modalUniversalAdd).modal('show');
+	    modalUniversalAddLabel.innerHTML = setup.title;
+	    modalUniversalAddNameLabel.innerHTML = setup.inputLabel;
+	    modalUniversalAddName.setAttribute('placeholder', setup.inputPlaceholder);
+	    modalUniversalAddName.value = setup.inputValue ? setup.inputValue : '';
+	    modalUniversalAddSubmit.innerHTML = setup.submitBtnName;
+	    modalUniversalAddForm.addEventListener('submit', requestHandler);
 	  }
 	
 	};
@@ -3882,20 +3922,24 @@
 	var listKeywordsCard = document.querySelector('#list-keywords-card');
 	var listKeywordsCardEdit = document.querySelector('#list-keywords-card-edit');
 	exports.default = {
-	  cleanContainer: function cleanContainer() {
-	    listKeywordsBody.innerHTML = '';
+	  cleanContainer: function cleanContainer(container) {
+	    container = container || listKeywordsBody;
+	    container.innerHTML = '';
 	  },
 	  getElement: function getElement(item) {
 	
 	    return '\n      <h3 style="display: inline-block;"><span class="badge keyword-row" style="background-color: #' + item.color + '; cursor: pointer; color: #fff">#' + item.name + '</span></h3>';
 	  },
-	  drawDataInContainer: function drawDataInContainer(keywordsData) {
+	  drawDataInContainer: function drawDataInContainer(keywordsData, container) {
 	    var _this = this;
 	
 	    keywordsData.forEach(function (item) {
-	      listKeywordsBody.insertAdjacentHTML('beforeend', _this.getElement(item));
 	
-	      listKeywordsBody.lastChild.addEventListener('click', function () {
+	      container = container || listKeywordsBody;
+	
+	      container.insertAdjacentHTML('beforeend', _this.getElement(item));
+	
+	      container.lastChild.addEventListener('click', function () {
 	        listKeywordsHeader.classList.add('d-none');
 	        listKeywordsHeader.classList.remove('d-flex');
 	        listKeywordsBody.classList.add('d-none');
@@ -4716,7 +4760,7 @@
 	  getElement: function getElement(item, index) {
 	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
 	    // ${currentEnterpriseFlag}
-	
+	    console.log(item, index);
 	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '" data-group-index="' + index + '" data-group-level="' + item.level + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.id + '</span> ||\n        <span>' + item.level + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
 	  },
 	  getGoodString: function getGoodString(item, index) {
@@ -4899,6 +4943,7 @@
 	    goodsStock.querySelector('#stock-' + checkedStock).checked = true;
 	    _storage2.default.currentStockId = checkedStock;
 	    _storage2.default.currentStockName = goodsStock.querySelector('#stock-' + checkedStock).nextElementSibling.dataset.stockName;
+	    _storage2.default.currentStockQuantityT2 = goodsStock.children[1].dataset.stockT2;
 	  } else if (goodsStock.firstChild.id) {
 	    goodsStock.firstChild.checked = true;
 	    _storage2.default.currentStockId = goodsStock.firstChild.id.split('-')[1];
@@ -5700,6 +5745,438 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
+	var _catalogCards = __webpack_require__(41);
+	
+	var _catalogCards2 = _interopRequireDefault(_catalogCards);
+	
+	var _catalogGroups = __webpack_require__(35);
+	
+	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
+	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var listCards = document.querySelector('#list-cards-list');
+	var listCardsCard = document.querySelector('#list-cards-card');
+	var listCardBody = document.querySelector('#list-cards-card-body');
+	var listCardAddBtn = document.querySelector('#list-cards-card-add-btn');
+	var listCardEditBtn = document.querySelector('#card-resources-edit-btn');
+	var cardResources = document.querySelector('#card-resources');
+	var cardResourcesReturnBtn = document.querySelector('#card-resources-return-btn');
+	var cardResourcesDeleteBtn = document.querySelector('#card-resources-delete-btn');
+	var cardName = document.querySelector('#card-resources-name');
+	
+	var cardResourcesResources = document.querySelector('#card-resources-body-resources');
+	var cardResourcesProduct = document.querySelector('#card-resources-body-product');
+	
+	var cardResourcesOldCost = document.querySelector('#card-resources-old-cost');
+	var cardResourcesNewPrice = document.querySelector('#card-resources-new-price');
+	
+	var resourcesAddBtn = document.querySelector('#resources-add-btn');
+	var productAddBtn = document.querySelector('#product-add-btn');
+	var cardResourcesGroupModal = document.querySelector('#card-resources-group');
+	var cardResourcesGroupModalTitle = document.querySelector('#card-resources-title');
+	var cardResourcesGroupModalBody = document.querySelector('#card-resources-groups-body');
+	
+	var addResourcesModal = document.querySelector('#add-resources-modal');
+	var addResourcesModalLabel = document.querySelector('#add-resources-modal-label');
+	
+	var onSuccessGroupGood = function onSuccessGroupGood(goodsData) {
+	  console.log(goodsData);
+	  cardResourcesGroupModalTitle.innerHTML = '\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0442\u043E\u0432\u0430\u0440 \u0432 \u0433\u0440\u0443\u043F\u043F\u0435 "' + _storage2.default.currentGroupName + '"';
+	  cardResourcesGroupModalBody.innerHTML = '\n    <div class="catalog-header-title">\n      <button id="group-goods-return-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__return"></button>\n        <h2 id="group-name"></h2>\n      </div>';
+	  cardResourcesGroupModalBody.lastChild.addEventListener('click', getGroups);
+	
+	  goodsData.data.forEach(function (item, index) {
+	    cardResourcesGroupModalBody.insertAdjacentHTML('beforeend', _catalogGroups2.default.getGoodString(item, index));
+	
+	    cardResourcesGroupModalBody.lastChild.addEventListener('click', function (evt) {
+	      console.log(evt);
+	
+	      var currentStringElement = evt.target;
+	      while (!currentStringElement.dataset.goodId) {
+	        currentStringElement = currentStringElement.parentNode;
+	      }
+	
+	      $(cardResourcesGroupModal).modal('hide');
+	      $(addResourcesModal).modal('show');
+	      addResourcesModalLabel.innerHTML = item.name;
+	      // groupName.innerHTML = currentGroupName;
+	
+	      _storage2.default.currentGoodId = currentStringElement.dataset.goodId;
+	      // auth.currentGroupName = currentGroupName;
+	    });
+	  });
+	};
+	
+	$(addResourcesModal).on('hidden.bs.modal', function () {
+	  $(cardResourcesGroupModal).modal('show');
+	});
+	
+	var onSuccessGroupsLoad = function onSuccessGroupsLoad(loadedGroups) {
+	
+	  cardResourcesGroupModalBody.innerHTML = '';
+	  cardResourcesGroupModalTitle.innerHTML = 'Выберите группу';
+	  loadedGroups.data.forEach(function (item, index) {
+	    cardResourcesGroupModalBody.insertAdjacentHTML('beforeend', _catalogGroups2.default.getElement(item, index));
+	    cardResourcesGroupModalBody.lastChild.addEventListener('click', function (evt) {
+	
+	      var currentStringElement = evt.target;
+	      while (!currentStringElement.dataset.groupId) {
+	        currentStringElement = currentStringElement.parentNode;
+	      }
+	
+	      var currentGroupName = loadedGroups.data[currentStringElement.dataset.groupIndex].name;
+	      // groupName.innerHTML = currentGroupName;
+	
+	      _storage2.default.currentGroupId = currentStringElement.dataset.groupId;
+	      _storage2.default.currentGroupName = currentGroupName;
+	
+	      _xhr2.default.request = {
+	        metod: 'POST',
+	        url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/group/' + _storage2.default.currentGroupId + '/goods_light',
+	        data: 'view_last=0&token=' + _storage2.default.data.token,
+	        callbackSuccess: onSuccessGroupGood
+	      };
+	    });
+	  });
+	  // cardResourcesGroupModalBody.insertAdjacentHTML('beforeend', loadedGroups.data.forEach((item, index) => groupsMarkup.getElement(item, index)));
+	};
+	
+	var getGroups = function getGroups() {
+	  // groupsMarkup.cleanContainer();
+	  // groupsMarkup.drawMarkupInContainer(loaderSpinnerMarkup);
+	  _storage2.default.currentGroupId = false;
+	  $(cardResourcesGroupModal).modal('show');
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/group',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessGroupsLoad
+	  };
+	};
+	
+	var onResourcesAddBtn = function onResourcesAddBtn() {
+	  _storage2.default.currentCardOperation = -1;
+	  getGroups();
+	};
+	
+	var onProductAddBtn = function onProductAddBtn() {
+	  _storage2.default.currentCardOperation = 1;
+	  getGroups();
+	};
+	
+	resourcesAddBtn.addEventListener('click', onResourcesAddBtn);
+	productAddBtn.addEventListener('click', onProductAddBtn);
+	
+	var loaderSpinnerId = 'loader-cards';
+	var loaderSpinnerMessage = 'Загрузка';
+	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
+	
+	var cardData = [];
+	
+	var onSuccessCardResourcesLoad = function onSuccessCardResourcesLoad(cardResourcesData) {
+	  console.log(cardResourcesData);
+	  cardResourcesResources.innerHTML = '';
+	  cardResourcesProduct.innerHTML = '';
+	  cardResourcesOldCost.innerHTML = +cardResourcesData.data.old_cost ? cardResourcesData.data.old_cost : '';
+	  cardResourcesNewPrice.innerHTML = +cardResourcesData.data.new_price ? cardResourcesData.data.new_price : '';
+	  if (cardResourcesData.data.resours.length) {
+	    cardResourcesData.data.resours.forEach(function (item) {
+	      if (item.value < 0) {
+	        cardResourcesResources.insertAdjacentHTML('beforeend', _catalogCards2.default.getResourceElement(item));
+	      } else {
+	        cardResourcesProduct.insertAdjacentHTML('beforeend', _catalogCards2.default.getResourceElement(item));
+	      }
+	    });
+	  } else {
+	    cardResourcesResources.innerHTML = 'Nothig left, but hope';
+	    cardResourcesProduct.innerHTML = 'Nothig left, but hope';
+	  }
+	};
+	
+	var onCardResourcesReturnBtn = function onCardResourcesReturnBtn() {
+	  cardResources.classList.add('d-none');
+	  listCardsCard.classList.remove('d-none');
+	  getCards();
+	};
+	
+	cardResourcesReturnBtn.addEventListener('click', onCardResourcesReturnBtn);
+	
+	var onListCardBodyClick = function onListCardBodyClick(evt) {
+	
+	  if (evt) {
+	
+	    cardResources.classList.remove('d-none');
+	    listCardsCard.classList.add('d-none');
+	
+	    var currentStringElement = evt.target;
+	    while (!currentStringElement.dataset.cardId) {
+	      currentStringElement = currentStringElement.parentNode;
+	    }
+	
+	    var currentCardName = cardData.data[currentStringElement.dataset.cardIndex].name;
+	    cardName.innerHTML = currentCardName;
+	    _storage2.default.currentCardName = currentCardName;
+	    _storage2.default.currentCardId = currentStringElement.dataset.cardId;
+	  }
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/nomenclature_card/' + _storage2.default.currentCardId + '/card_info',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessCardResourcesLoad
+	  };
+	};
+	
+	listCardBody.addEventListener('click', onListCardBodyClick);
+	
+	var onSuccessCardsLoad = function onSuccessCardsLoad(loadedCards) {
+	  document.querySelector('#' + loaderSpinnerId).remove();
+	  console.log(loadedCards);
+	  cardData = loadedCards;
+	  _catalogCards2.default.drawDataInContainer(loadedCards.data);
+	};
+	
+	var getCards = function getCards() {
+	  listCardBody.innerHTML = loaderSpinnerMarkup;
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/nomenclature_card',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessCardsLoad
+	  };
+	};
+	
+	var onSuccessCardResourcesDelete = function onSuccessCardResourcesDelete(answer) {
+	  console.log(answer);
+	
+	  onCardResourcesReturnBtn();
+	
+	  _tools2.default.informationtModal = {
+	    title: 'Уведомление',
+	    message: '\u041A\u0430\u0440\u0442\u043E\u0447\u043A\u0430 <b>' + _storage2.default.currentCardName + '</b> \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0443\u0434\u0430\u043B\u0435\u043D\u0430'
+	  };
+	};
+	
+	var setRequestToDeleteCardResources = function setRequestToDeleteCardResources(evt) {
+	  _xhr2.default.request = {
+	    metod: 'DELETE',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/nomenclature_card/' + _storage2.default.currentCardId,
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessCardResourcesDelete
+	  };
+	};
+	
+	var onCardResourcesDeleteBtnClick = function onCardResourcesDeleteBtnClick(evt) {
+	
+	  _tools2.default.actionRequestModal = {
+	    title: 'Удаление',
+	    message: '\u0412\u044B \u0442\u043E\u0447\u043D\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u043A\u0430\u0440\u0442\u043E\u0447\u043A\u0443 <b>' + _storage2.default.currentCardName + '</b>?',
+	    submitCallback: setRequestToDeleteCardResources
+	  };
+	};
+	
+	cardResourcesDeleteBtn.addEventListener('click', onCardResourcesDeleteBtnClick);
+	
+	var setRequestToAddCard = function setRequestToAddCard(name) {
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/nomenclature_card',
+	    data: 'name=' + name + '&token=' + _storage2.default.data.token,
+	    callbackSuccess: getCards
+	  };
+	};
+	
+	var setupUniversalAdd = function setupUniversalAdd() {
+	  _tools2.default.runUniversalAdd = {
+	    title: 'Создание карточки (БЕЗ ВАЛИДАЦИИ)',
+	    inputLabel: 'Название',
+	    inputPlaceholder: 'введите название',
+	    submitBtnName: 'Создать',
+	    submitCallback: setRequestToAddCard
+	  };
+	};
+	
+	var setRequestToAddEditCard = function setRequestToAddEditCard(name) {
+	  _xhr2.default.request = {
+	    metod: 'PUT',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/nomenclature_card/' + _storage2.default.currentCardId,
+	    data: 'name=' + name + '&token=' + _storage2.default.data.token,
+	    callbackSuccess: function callbackSuccess() {
+	      cardName.innerHTML = name;
+	      _storage2.default.currentCardName = name;
+	    }
+	  };
+	};
+	
+	var setupUniversalAddEdit = function setupUniversalAddEdit() {
+	  _tools2.default.runUniversalAdd = {
+	    title: 'Редактирование карточки (БЕЗ ВАЛИДАЦИИ)',
+	    inputLabel: 'Название',
+	    inputPlaceholder: 'введите название',
+	    inputValue: _storage2.default.currentCardName,
+	    submitBtnName: 'Изменить',
+	    submitCallback: setRequestToAddEditCard
+	  };
+	};
+	
+	listCardAddBtn.addEventListener('click', setupUniversalAdd);
+	listCardEditBtn.addEventListener('click', setupUniversalAddEdit);
+	
+	exports.default = {
+	  start: function start() {
+	    listCards.addEventListener('click', getCards);
+	  },
+	
+	
+	  redraw: onListCardBodyClick,
+	
+	  stop: function stop() {
+	    _catalogCards2.default.cleanContainer();
+	    listCards.removeEventListener('click', getCards);
+	  }
+	};
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var listCardsBody = document.querySelector('#list-cards-card-body');
+	// import auth from '../tools/storage.js';
+	
+	exports.default = {
+	  cleanContainer: function cleanContainer() {
+	    listCardsBody.innerHTML = '';
+	  },
+	  getElement: function getElement(item, index) {
+	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
+	    // ${currentEnterpriseFlag}
+	
+	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-card-id="' + item.id + '" data-card-index="' + index + '"">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.id + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
+	  },
+	  drawDataInContainer: function drawDataInContainer(cardsData) {
+	    var _this = this;
+	
+	    cardsData.forEach(function (item, index) {
+	      return listCardsBody.insertAdjacentHTML('beforeend', _this.getElement(item, index));
+	    });
+	  },
+	  getResourceElement: function getResourceElement(item) {
+	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
+	    // ${currentEnterpriseFlag}
+	
+	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-card-id="' + item.good_id + '"">\n      <div style="padding-left: 34px;">\n        <span>' + item.good_id + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.value + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
+	  },
+	  drawMarkupInContainer: function drawMarkupInContainer(markup) {
+	    listCardsBody.insertAdjacentHTML('beforeend', markup);
+	  }
+	};
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _catalogCards = __webpack_require__(41);
+	
+	var _catalogCards2 = _interopRequireDefault(_catalogCards);
+	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	var _catalogGroups = __webpack_require__(35);
+	
+	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// const listSearch = document.querySelector('#list-search-list');
+	var listSearchBody = document.querySelector('#list-search-card-body');
+	var listSearchBtn = document.querySelector('#list-search-btn');
+	var listSearchInput = document.querySelector('#list-search-input');
+	
+	var loaderSpinnerId = 'loader-cards';
+	var loaderSpinnerMessage = 'Загрузка';
+	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
+	
+	var onSuccessSearchLoad = function onSuccessSearchLoad(searchLoad) {
+	  document.querySelector('#' + loaderSpinnerId).remove();
+	  console.log(searchLoad);
+	  // cardData = loadedCards;
+	  searchLoad.data.forEach(function (item, index) {
+	    return listSearchBody.insertAdjacentHTML('beforeend', _catalogGroups2.default.getGoodString(item, index));
+	  });
+	};
+	
+	var getSearch = function getSearch() {
+	  listSearchBody.innerHTML = loaderSpinnerMarkup;
+	  console.log(listSearchInput);
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good_search',
+	    data: 'token=' + _storage2.default.data.token + '&name=' + listSearchInput.value,
+	    callbackSuccess: onSuccessSearchLoad
+	  };
+	};
+	
+	exports.default = {
+	  start: function start() {
+	    listSearchBtn.addEventListener('click', getSearch);
+	  },
+	
+	
+	  // redraw: onListCardBodyClick,
+	
+	  stop: function stop() {
+	    _catalogCards2.default.cleanContainer();
+	    listSearchBtn.removeEventListener('click', getSearch);
+	  }
+	};
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
 	var _catalogGroupsGoods = __webpack_require__(36);
 	
 	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
@@ -5744,7 +6221,7 @@
 	};
 
 /***/ }),
-/* 41 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5800,7 +6277,7 @@
 	};
 
 /***/ }),
-/* 42 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5817,157 +6294,52 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogCards = __webpack_require__(43);
+	var _catalogGroupsCards = __webpack_require__(40);
 	
-	var _catalogCards2 = _interopRequireDefault(_catalogCards);
-	
-	var _tools = __webpack_require__(6);
-	
-	var _tools2 = _interopRequireDefault(_tools);
+	var _catalogGroupsCards2 = _interopRequireDefault(_catalogGroupsCards);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var listCards = document.querySelector('#list-cards-list');
-	var listCardsCard = document.querySelector('#list-cards-card');
-	var listCardBody = document.querySelector('#list-cards-card-body');
-	var cardResources = document.querySelector('#card-resources');
-	var cardResourcesReturnBtn = document.querySelector('#card-resources-return-btn');
-	var cardName = document.querySelector('#card-resources-name');
+	var addResourcesModal = document.querySelector('#add-resources-modal'); // Экспресс-операция БЕЗ ВАЛИДАЦИИ
 	
-	var cardResourcesResources = document.querySelector('#card-resources-body-resources');
-	var cardResourcesProduct = document.querySelector('#card-resources-body-product');
+	var addResourcesModalForm = document.querySelector('#add-resources-modal-form');
+	var addResourcesModalSubmit = document.querySelector('#add-resources-modal-submit');
+	var addResourcesModalQuantity = document.querySelector('#add-resources-modal-quantity');
 	
-	var cardResourcesOldCost = document.querySelector('#card-resources-old-cost');
-	var cardResourcesNewPrice = document.querySelector('#card-resources-new-price');
+	/*
+	const expressModal = document.querySelector('#express-modal');
+	const expressModalPrice = document.querySelector('#express-modal-price');
+	*/
 	
-	var loaderSpinnerId = 'loader-cards';
-	var loaderSpinnerMessage = 'Загрузка';
-	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
-	
-	var cardData = [];
-	
-	var onSuccessCardResourcesLoad = function onSuccessCardResourcesLoad(cardResourcesData) {
-	  console.log(cardResourcesData);
-	  cardResourcesResources.innerHTML = '';
-	  cardResourcesProduct.innerHTML = '';
-	  cardResourcesOldCost.innerHTML = +cardResourcesData.data.old_cost ? cardResourcesData.data.old_cost : '';
-	  cardResourcesNewPrice.innerHTML = +cardResourcesData.data.new_price ? cardResourcesData.data.new_price : '';
-	  if (cardResourcesData.data.resours.length) {
-	    cardResourcesData.data.resours.forEach(function (item) {
-	      if (item.value < 0) {
-	        cardResourcesResources.insertAdjacentHTML('beforeend', _catalogCards2.default.getResourceElement(item));
-	      } else {
-	        cardResourcesProduct.insertAdjacentHTML('beforeend', _catalogCards2.default.getResourceElement(item));
-	      }
-	    });
-	  } else {
-	    cardResourcesResources.innerHTML = 'Nothig left, but hope';
-	    cardResourcesProduct.innerHTML = 'Nothig left, but hope';
-	  }
+	var onSuccessExpressExecute = function onSuccessExpressExecute(answer) {
+	  console.log(answer);
+	  $(addResourcesModal).modal('hide');
+	  _catalogGroupsCards2.default.redraw();
 	};
 	
-	var onCardResourcesReturnBtn = function onCardResourcesReturnBtn() {
-	  cardResources.classList.add('d-none');
-	  listCardsCard.classList.remove('d-none');
-	  getCards();
-	};
-	
-	cardResourcesReturnBtn.addEventListener('click', onCardResourcesReturnBtn);
-	
-	var onListCardBodyClick = function onListCardBodyClick(evt) {
-	  cardResources.classList.remove('d-none');
-	  listCardsCard.classList.add('d-none');
-	
-	  var currentStringElement = evt.target;
-	  while (!currentStringElement.dataset.cardId) {
-	    currentStringElement = currentStringElement.parentNode;
-	  }
-	
-	  var currentCardName = cardData.data[currentStringElement.dataset.cardIndex].name;
-	  cardName.innerHTML = currentCardName;
-	  _storage2.default.currentCardId = currentStringElement.dataset.cardId;
-	  _storage2.default.currentCardName = currentCardName;
-	
+	var onExpressModalSubmit = function onExpressModalSubmit(evt) {
+	  evt.preventDefault();
 	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/nomenclature_card/' + _storage2.default.currentCardId + '/card_info',
-	    data: 'view_last=0&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessCardResourcesLoad
+	    metod: 'PUT',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/nomenclature_card/' + _storage2.default.currentCardId + '/compare',
+	    data: 'good=' + _storage2.default.currentGoodId + '&value=' + addResourcesModalQuantity.value * +_storage2.default.currentCardOperation + '&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessExpressExecute
 	  };
 	};
 	
-	listCardBody.addEventListener('click', onListCardBodyClick);
-	
-	var onSuccessCardsLoad = function onSuccessCardsLoad(loadedCards) {
-	  document.querySelector('#' + loaderSpinnerId).remove();
-	  console.log(loadedCards);
-	  cardData = loadedCards;
-	  _catalogCards2.default.drawDataInContainer(loadedCards.data);
+	var start = function start() {
+	  addResourcesModalSubmit.removeAttribute('disabled');
+	  addResourcesModalForm.addEventListener('submit', onExpressModalSubmit);
 	};
 	
-	var getCards = function getCards() {
-	  listCardBody.innerHTML = loaderSpinnerMarkup;
-	
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/nomenclature_card',
-	    data: 'view_last=0&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessCardsLoad
-	  };
+	var stop = function stop() {
+	  addResourcesModalSubmit.addAttribute('disabled', 'disabled');
+	  addResourcesModalForm.addEventListener('submit', onExpressModalSubmit);
 	};
 	
 	exports.default = {
-	  start: function start() {
-	    listCards.addEventListener('click', getCards);
-	  },
-	
-	
-	  redraw: getCards,
-	
-	  stop: function stop() {
-	    _catalogCards2.default.cleanContainer();
-	    listCards.removeEventListener('click', getCards);
-	  }
-	};
-
-/***/ }),
-/* 43 */
-/***/ (function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var listCardsBody = document.querySelector('#list-cards-card-body');
-	// import auth from '../tools/storage.js';
-	
-	exports.default = {
-	  cleanContainer: function cleanContainer() {
-	    listCardsBody.innerHTML = '';
-	  },
-	  getElement: function getElement(item, index) {
-	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
-	    // ${currentEnterpriseFlag}
-	
-	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-card-id="' + item.id + '" data-card-index="' + index + '"">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.id + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
-	  },
-	  drawDataInContainer: function drawDataInContainer(cardsData) {
-	    var _this = this;
-	
-	    cardsData.forEach(function (item, index) {
-	      return listCardsBody.insertAdjacentHTML('beforeend', _this.getElement(item, index));
-	    });
-	  },
-	  getResourceElement: function getResourceElement(item) {
-	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
-	    // ${currentEnterpriseFlag}
-	
-	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-card-id="' + item.id + '"">\n      <div style="padding-left: 34px;">\n        <span>' + item.good_id + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.value + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
-	  },
-	  drawMarkupInContainer: function drawMarkupInContainer(markup) {
-	    listCardsBody.insertAdjacentHTML('beforeend', markup);
-	  }
+	  start: start,
+	  stop: stop
 	};
 
 /***/ })
