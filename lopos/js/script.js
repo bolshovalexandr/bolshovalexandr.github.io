@@ -4434,7 +4434,7 @@
 	  console.log(evt);
 	  var selectedData = [];
 	  loadedData.data.forEach(function (item) {
-	    if (item.name.indexOf(listGroupSearchInput.value) !== -1) {
+	    if (item.name.toLowerCase().indexOf(listGroupSearchInput.value.toLowerCase()) !== -1) {
 	      selectedData.push(item);
 	    }
 	  });
@@ -4767,7 +4767,7 @@
 	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
 	    // ${currentEnterpriseFlag}
 	
-	    return '\n    <div class="goods-string" data-good-id="' + item.id + '">\n      <div>\n        <span class="reference-row-number">' + (index + 1) + '</span> <span>' + item.name + '</span>\n      </div>\n      <div>\n        ' + item.count + '\n        <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>\n      </div>\n    </div>';
+	    return '\n    <div class="goods-string" data-good-id="' + item.id + '">\n      <div>\n        <span class="reference-row-number">' + (index + 1) + '</span> <span>' + item.name + '</span>\n      </div>\n      <div>\n        ' + (item.count ? item.count : '') + '\n        <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>\n      </div>\n    </div>';
 	  },
 	  getGoodTile: function getGoodTile(item, index) {
 	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
@@ -6115,25 +6115,86 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// const listSearch = document.querySelector('#list-search-list');
+	var listSearch = document.querySelector('#list-search-list');
 	var listSearchBody = document.querySelector('#list-search-card-body');
 	var listSearchBtn = document.querySelector('#list-search-btn');
+	var listSearchForm = document.querySelector('#list-search-form');
 	var listSearchInput = document.querySelector('#list-search-input');
 	
 	var loaderSpinnerId = 'loader-cards';
 	var loaderSpinnerMessage = 'Загрузка';
 	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
 	
+	var fullSearch = [];
+	
+	var onlistSearchFormSubmit = function onlistSearchFormSubmit(evt) {
+	  evt.preventDefault();
+	  listSearchBody.innerHTML = '';
+	  var selectedData = [];
+	  console.log(!listSearchInput.value);
+	  if (!listSearchInput.value) {
+	    listSearchBody.innerHTML = 'Ну скажите хоть что-нибудь...';
+	  } else {
+	    fullSearch.data.forEach(function (item) {
+	      if (item.name.toLowerCase().indexOf(listSearchInput.value.toLowerCase()) !== -1) {
+	        selectedData.push(item);
+	      }
+	    });
+	
+	    if (selectedData.length) {
+	      selectedData.forEach(function (item, index) {
+	        return listSearchBody.insertAdjacentHTML('beforeend', _catalogGroups2.default.getGoodString(item, index));
+	      });
+	    } else {
+	      listSearchBody.innerHTML = '\u041D\u0435 \u0437\u0430\u0432\u0435\u0437\u043B\u0438 \u043F\u043E\u043A\u0430 <b>' + listSearchInput.value + '</b>';
+	    }
+	  }
+	};
+	
+	var onSuccessFullSearchLoad = function onSuccessFullSearchLoad(fullSearchLoad) {
+	  console.log(fullSearchLoad);
+	  fullSearch = fullSearchLoad;
+	  document.querySelector('#' + loaderSpinnerId).remove();
+	  listSearchBody.innerHTML = '';
+	  /*
+	  document.querySelector(`#${loaderSpinnerId}`).remove();
+	  console.log(searchLoad);
+	  // cardData = loadedCards;
+	  if (searchLoad.status === 271) {
+	    listSearchBody.innerHTML = searchLoad.message;
+	  } else {
+	    searchLoad.data.forEach((item, index) => listSearchBody.insertAdjacentHTML('beforeend', groupsMarkup.getGoodString(item, index)));
+	  }
+	  */
+	};
+	
 	var onSuccessSearchLoad = function onSuccessSearchLoad(searchLoad) {
 	  document.querySelector('#' + loaderSpinnerId).remove();
 	  console.log(searchLoad);
 	  // cardData = loadedCards;
-	  searchLoad.data.forEach(function (item, index) {
-	    return listSearchBody.insertAdjacentHTML('beforeend', _catalogGroups2.default.getGoodString(item, index));
-	  });
+	  if (searchLoad.status === 271) {
+	    listSearchBody.innerHTML = searchLoad.message;
+	  } else {
+	    searchLoad.data.forEach(function (item, index) {
+	      return listSearchBody.insertAdjacentHTML('beforeend', _catalogGroups2.default.getGoodString(item, index));
+	    });
+	  }
 	};
 	
-	var getSearch = function getSearch() {
+	var getFullSearch = function getFullSearch() {
+	  listSearchBody.innerHTML = loaderSpinnerMarkup;
+	  console.log(listSearchInput);
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good_full_list',
+	    data: 'token=' + _storage2.default.data.token + '&name=' + listSearchInput.value,
+	    callbackSuccess: onSuccessFullSearchLoad
+	  };
+	};
+	
+	var getSearch = function getSearch(evt) {
+	  evt.preventDefault();
 	  listSearchBody.innerHTML = loaderSpinnerMarkup;
 	  console.log(listSearchInput);
 	
@@ -6147,7 +6208,11 @@
 	
 	exports.default = {
 	  start: function start() {
-	    listSearchBtn.addEventListener('click', getSearch);
+	    // listSearchBtn.addEventListener('click', getSearch);
+	    // listSearchForm.addEventListener('submit', getSearch);
+	    listSearchBtn.addEventListener('click', onlistSearchFormSubmit);
+	    listSearchForm.addEventListener('submit', onlistSearchFormSubmit);
+	    listSearch.addEventListener('click', getFullSearch);
 	  },
 	
 	
