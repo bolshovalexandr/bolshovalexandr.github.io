@@ -232,6 +232,28 @@ input[name="express-sell-radio"]:checked + label {
   display: block;
   width: 300px; }
 
+.informaion-light {
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  top: 20px;
+  left: 20px;
+  width: 360px;
+  height: 50px;
+  z-index: 9999; }
+
+.informaion-light p {
+  margin: 0; }
+
+.informaion-light button {
+  display: block;
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  z-index: 9999; }
+
 /*
 @import "src/sass/components/app.scss";
 @import "src/sass/components/font.scss";

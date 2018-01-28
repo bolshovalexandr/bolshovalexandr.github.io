@@ -110,35 +110,35 @@
 	
 	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
 	
-	var _catalogGroupsAdd = __webpack_require__(37);
+	var _catalogGroupsAdd = __webpack_require__(38);
 	
 	var _catalogGroupsAdd2 = _interopRequireDefault(_catalogGroupsAdd);
 	
-	var _catalogGroupsEdit = __webpack_require__(38);
+	var _catalogGroupsEdit = __webpack_require__(39);
 	
 	var _catalogGroupsEdit2 = _interopRequireDefault(_catalogGroupsEdit);
 	
-	var _catalogGroupsGoodsAdd = __webpack_require__(39);
+	var _catalogGroupsGoodsAdd = __webpack_require__(40);
 	
 	var _catalogGroupsGoodsAdd2 = _interopRequireDefault(_catalogGroupsGoodsAdd);
 	
-	var _catalogGroupsCards = __webpack_require__(40);
+	var _catalogGroupsCards = __webpack_require__(41);
 	
 	var _catalogGroupsCards2 = _interopRequireDefault(_catalogGroupsCards);
 	
-	var _catalogSearch = __webpack_require__(42);
+	var _catalogSearch = __webpack_require__(43);
 	
 	var _catalogSearch2 = _interopRequireDefault(_catalogSearch);
 	
-	var _catalogGroupsGoodsExpress = __webpack_require__(43);
+	var _catalogGroupsGoodsExpress = __webpack_require__(44);
 	
 	var _catalogGroupsGoodsExpress2 = _interopRequireDefault(_catalogGroupsGoodsExpress);
 	
-	var _catalogGroupsGoodsStock = __webpack_require__(44);
+	var _catalogGroupsGoodsStock = __webpack_require__(45);
 	
 	var _catalogGroupsGoodsStock2 = _interopRequireDefault(_catalogGroupsGoodsStock);
 	
-	var _catalogGroupsCardsResourceAdd = __webpack_require__(45);
+	var _catalogGroupsCardsResourceAdd = __webpack_require__(46);
 	
 	var _catalogGroupsCardsResourceAdd2 = _interopRequireDefault(_catalogGroupsCardsResourceAdd);
 	
@@ -1010,6 +1010,8 @@
 	    modalInformationTitle.innerHTML = setup.title;
 	    modalInformationMessage.innerHTML = setup.message;
 	  },
+	
+	  set informationModalLight(setup) {},
 	
 	  set runUniversalAdd(setup) {
 	    var requestHandler = function requestHandler(evt) {
@@ -4831,9 +4833,9 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _tools = __webpack_require__(6);
+	var _catalogUnivarsalKeywords = __webpack_require__(37);
 	
-	var _tools2 = _interopRequireDefault(_tools);
+	var _catalogUnivarsalKeywords2 = _interopRequireDefault(_catalogUnivarsalKeywords);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -4846,12 +4848,10 @@
 	
 	var goodsCardPurchase = document.querySelector('#goods-card-price-purchase');
 	var goodsCardImage = document.querySelector('#goods-card-image');
-	// const goodsCardPriceExtra = document.querySelector('#goods-card-price-extra');
 	var goodsCardSell = document.querySelector('#goods-card-price-sell');
 	var goodsStock = document.querySelector('#goods-stock-body');
 	var goodsKeywords = document.querySelector('#goods-keywords');
 	var goodsCardKeywordsModal = document.querySelector('#goods-card-keywords');
-	var goodsCardKeywordsBody = document.querySelector('#goods-card-keywords-body');
 	var expressContainer = document.querySelector('#express-container');
 	var expressModal = document.querySelector('#express-modal');
 	var expressModalLabel = document.querySelector('#express-modal-label');
@@ -4861,13 +4861,7 @@
 	var stockModal = document.querySelector('#set-stock-modal');
 	var stockModalName = document.querySelector('#set-stock-modal-stock');
 	var stockModalQuantity = document.querySelector('#set-stock-modal-quantity');
-	// const expressPurchase = document.querySelector('#express-purchase');
-	// const expressSell = document.querySelector('#express-sell');
-	// import keywordsMarkup from '../markup/reference-keywords.js';
 	
-	var loaderSpinnerId = 'loader-goods';
-	var loaderSpinnerMessage = 'Загрузка';
-	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
 	var goodTags = [];
 	
 	var onSuccessGroupsLoad = function onSuccessGroupsLoad(loadedGood) {
@@ -4891,20 +4885,11 @@
 	  goodsCardPurchase.value = purchasePrice;
 	  goodsCardSell.value = sellingPrice;
 	  goodTags = tags ? tags : [];
-	  /*
-	  goodsCardGroup.innerHTML = '<option selected>Выберите группу</option>';
-	  goodsCardGroup.insertAdjacentHTML('beforeend', allGroups.map((item) => `<option value="${item.id}">${item.name}</option>`).join(''));
-	  */
+	
 	  goodsCardGroup.innerHTML = allGroups.map(function (item) {
 	    return '<option value="' + item.id + '" ' + (item.id === groupId ? 'selected' : '') + '>' + item.name + '</option>';
 	  }).join('');
-	  /*
-	  goodsCardGroup.innerHTML = allGroups.map((item) => {
-	    if
-	    return `<option value="${item.id}">${item.name}</option>`;
-	  }.join('');
-	  */
-	  console.log(goodsCardImage);
+	
 	  goodsCardImage.title = name;
 	  goodsCardImage.alt = name;
 	  goodsCardImage.src = imgUrl ? 'https://lopos.bidone.ru/users/600a5357/images/' + imgUrl + '.jpg' : './img/not-available.png';
@@ -4950,13 +4935,18 @@
 	    _storage2.default.currentStockName = goodsStock.children[1].dataset.stockName;
 	    _storage2.default.currentStockQuantityT2 = goodsStock.children[1].dataset.stockT2;
 	  }
-	  // goodsCardPurchase.value = purchasePrice;
-	  // goodsCardSell.value = sellingPrice;
-	  goodsKeywords.innerHTML = '';
-	  goodsKeywords.insertAdjacentHTML('beforeend', tags.length ? tags.map(function (item) {
-	    return '<h3 style="display: inline-block;"><span class="badge keyword-row" style="background-color: #' + item.color + '; cursor: pointer; color: #fff">#' + item.name + '</span></h3>';
-	  }).join('') : 'Ключевых слов нет');
+	  _catalogUnivarsalKeywords2.default.getKeywords(goodTags);
+	  _catalogUnivarsalKeywords2.default.draw(goodsKeywords);
 	};
+	
+	$(goodsCardKeywordsModal).on('shown.bs.modal', function () {
+	  _catalogUnivarsalKeywords2.default.getKeywords(goodTags);
+	  $(goodsCard).modal('hide');
+	});
+	
+	$(goodsCardKeywordsModal).on('hidden.bs.modal', function () {
+	  getGood();
+	});
 	
 	goodsStock.addEventListener('change', function (evt) {
 	  console.log(evt);
@@ -5021,10 +5011,8 @@
 	
 	expressContainer.addEventListener('click', onExpressContainerClick);
 	
-	// $(expressModal).on('hide.bs.modal', () => $(goodsCard).modal({focus: true}));
 	$(expressModal).on('hidden.bs.modal', function () {
 	  $(goodsCard).modal('toggle');
-	  // $(goodsCard).modal('show');
 	});
 	
 	var getGood = function getGood(getGoodForCopyCb) {
@@ -5033,8 +5021,6 @@
 	    goodsStock.innerHTML = '';
 	  }
 	
-	  console.log('lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + _storage2.default.currentGoodId + '/card_info');
-	
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + _storage2.default.currentGoodId + '/card_info',
@@ -5042,6 +5028,65 @@
 	    callbackSuccess: getGoodForCopyCb || onSuccessGroupsLoad
 	  };
 	};
+	
+	$(stockModal).on('hidden.bs.modal', function () {
+	  getGood();
+	});
+	
+	$(stockModal).on('shown.bs.modal', function () {
+	  $(goodsCard).modal('hide');
+	  stockModalName.innerHTML = _storage2.default.currentStockName;
+	  stockModalQuantity.value = _storage2.default.currentStockQuantityT2;
+	});
+	
+	exports.default = {
+	  start: function start() {
+	    // вешаем обработчики на кнопки
+	    // listGroups.addEventListener('click', getGroups);
+	  },
+	
+	
+	  // заполняем карточку
+	  fill: getGood,
+	
+	  stop: function stop() {
+	    // снимаем обработчики
+	    // groupsMarkup.cleanContainer();
+	    // listGroups.removeEventListener('click', getGroups);
+	  }
+	};
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var goodsCardKeywordsBody = document.querySelector('#goods-card-keywords-body');
+	
+	var loaderSpinnerId = 'loader-goods';
+	var loaderSpinnerMessage = 'Загрузка';
+	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
+	
+	var goodTags = [];
 	
 	var onSuccessKeywordsLoad = function onSuccessKeywordsLoad(loadedKeywords) {
 	
@@ -5077,7 +5122,16 @@
 	  }
 	};
 	
-	var getKeywords = function getKeywords() {
+	var draw = function draw(container) {
+	  container.innerHTML = '';
+	  container.insertAdjacentHTML('beforeend', goodTags.length ? goodTags.map(function (item) {
+	    return '<h3 style="display: inline-block;"><span class="badge keyword-row" style="background-color: #' + item.color + '; cursor: pointer; color: #fff">#' + item.name + '</span></h3>';
+	  }).join('') : 'Ключевых слов нет');
+	};
+	
+	var getKeywords = function getKeywords(tags) {
+	  goodTags = tags;
+	
 	  goodsCardKeywordsBody.innerHTML = loaderSpinnerMarkup;
 	
 	  _xhr2.default.request = {
@@ -5088,44 +5142,13 @@
 	  };
 	};
 	
-	$(goodsCardKeywordsModal).on('shown.bs.modal', function () {
-	  getKeywords();
-	  $(goodsCard).modal('hide');
-	});
-	
-	$(goodsCardKeywordsModal).on('hidden.bs.modal', function () {
-	  getGood();
-	});
-	
-	$(stockModal).on('hidden.bs.modal', function () {
-	  getGood();
-	});
-	
-	$(stockModal).on('shown.bs.modal', function () {
-	  $(goodsCard).modal('hide');
-	  stockModalName.innerHTML = _storage2.default.currentStockName;
-	  stockModalQuantity.value = _storage2.default.currentStockQuantityT2;
-	});
-	
 	exports.default = {
-	  start: function start() {
-	    // вешаем обработчики на кнопки
-	    // listGroups.addEventListener('click', getGroups);
-	  },
-	
-	
-	  // заполняем карточку
-	  fill: getGood,
-	
-	  stop: function stop() {
-	    // снимаем обработчики
-	    // groupsMarkup.cleanContainer();
-	    // listGroups.removeEventListener('click', getGroups);
-	  }
+	  getKeywords: getKeywords,
+	  draw: draw
 	};
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5308,7 +5331,7 @@
 	};
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5504,7 +5527,7 @@
 	};
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5728,7 +5751,7 @@
 	};
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5745,7 +5768,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogCards = __webpack_require__(41);
+	var _catalogCards = __webpack_require__(42);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
 	
@@ -6044,7 +6067,7 @@
 	};
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -6084,7 +6107,7 @@
 	};
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6101,7 +6124,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogCards = __webpack_require__(41);
+	var _catalogCards = __webpack_require__(42);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
 	
@@ -6146,7 +6169,7 @@
 	        return listSearchBody.insertAdjacentHTML('beforeend', _catalogGroups2.default.getGoodString(item, index));
 	      });
 	    } else {
-	      listSearchBody.innerHTML = '\u041D\u0435 \u0437\u0430\u0432\u0435\u0437\u043B\u0438 \u043F\u043E\u043A\u0430 <b>' + listSearchInput.value + '</b>';
+	      listSearchBody.innerHTML = '\u041D\u0435 \u0437\u0430\u0432\u0435\u0437\u043B\u0438 \u043F\u043E\u043A\u0430 <b>' + listSearchInput.value + '</b>, \u0445\u043E\u0442\u044F \u0438 \u0436\u0434\u0430\u043B\u0438 \u043D\u0430\u043C\u0435\u0434\u043D\u0438...';
 	    }
 	  }
 	};
@@ -6225,7 +6248,7 @@
 	};
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6286,7 +6309,7 @@
 	};
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6342,7 +6365,7 @@
 	};
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6359,7 +6382,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogGroupsCards = __webpack_require__(40);
+	var _catalogGroupsCards = __webpack_require__(41);
 	
 	var _catalogGroupsCards2 = _interopRequireDefault(_catalogGroupsCards);
 	
