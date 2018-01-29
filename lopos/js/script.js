@@ -4820,7 +4820,7 @@
 	      if (imgUrl) {
 	        return 'https://lopos.bidone.ru/users/600a5357/images/' + imgUrl + '_preview150.jpg';
 	      } else {
-	        return '../img/not-available.png';
+	        return './img/not-available.png';
 	      }
 	    };
 	
