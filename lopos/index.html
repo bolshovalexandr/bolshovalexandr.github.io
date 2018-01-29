@@ -293,9 +293,9 @@
                 </form>
               </div>
               <div class="catalog-header-buttons">
-                <button id="list-search-card-edit-btn" type="button" class="btn btn-danger m-2 p-2">Ключевое слово</button>
-                <button id="list-search-card-edit-btn" type="button" class="btn btn-danger m-2 p-2" disabled> Х </button>
-                <button id="list-search-card-edit-btn" type="button" class="btn btn-danger m-2 p-2">|||</button>
+                <button id="list-search-keywords-btn" type="button" class="btn btn-danger m-2 p-2">Ключевое слово</button>
+                <button id="list-search-card-reset-btn" type="button" class="btn btn-danger m-2 p-2" disabled> Х </button>
+                <button id="list-search-card-barcode-btn" type="button" class="btn btn-danger m-2 p-2">|||</button>
               </div>
             </div>
             <div id="list-search-card-body" class="groups-card-block"></div>
@@ -1135,13 +1135,13 @@
                 </div>
                 <div class="col-4 d-flex justify-content-between">
                   <div class="w-100 text-center">
-                    <button type="button" class="btn btn-success p-0 icon icon__truck"></button>
+                    <span class="icon icon__truck"></span>
                   </div>
                   <div class="w-100 text-center">
-                    <button type="button" class="btn btn-success p-0 icon icon__box"></button>
+                    <span class="icon icon__box"></span>
                   </div>
                   <div class="w-100 text-center">
-                    <button type="button" class="btn btn-success p-0 icon icon__male"></button>
+                    <span class="icon icon__male"></span>
                   </div>
                 </div>
               </div>
@@ -1283,6 +1283,26 @@
         <div id="goods-card-keywords-body"></div>
         <div class="modal-footer">
           <button id="goods-card-keywords-submit" type="button" class="btn btn-danger" data-dismiss="modal">Завершить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Справочники / Группы товаров / Карточка товара -->
+  <div id="search-card-keywords" class="modal" tabindex="-1" role="dialog" aria-labelledby="search-card-keywords" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="search-card-keywords-label">Выбрать ключевые слова для поиска</h5>
+          <button id="goods-card-keywords-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div id="search-card-keywords-body"></div>
+        <div class="modal-footer">
+          <button id="search-card-keywords-submit" type="button" class="btn btn-danger" data-dismiss="modal">Поиск</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Завершить</button>
         </div>
       </div>
     </div>

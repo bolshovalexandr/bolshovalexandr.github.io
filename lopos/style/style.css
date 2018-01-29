@@ -18,14 +18,20 @@
   background-size: cover; }
 
 .icon__box {
+  display: block;
+  background-color: #ccc;
   background-image: url("../img/cardboard-box-filled-32.png");
   background-size: cover; }
 
 .icon__truck {
+  display: block;
+  background-color: #ccc;
   background-image: url("../img/truck-filled-32.png");
   background-size: cover; }
 
 .icon__male {
+  display: block;
+  background-color: #ccc;
   background-image: url("../img/user-male-filled-32.png");
   background-size: cover; }
 
@@ -114,6 +120,28 @@
 .reference-header h2 {
   margin-left: 5px; }
 
+.keywords-card-select-color-container div {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px; }
+
+.keywords-card-select-color {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px; }
+
+.keyword {
+  display: inline-block;
+  border-radius: 8px;
+  margin: 5px;
+  padding: 5px;
+  cursor: pointer;
+  color: #fff;
+  opacity: 1; }
+
+.keyword__mute {
+  opacity: 0.4; }
+
 .enterprise-card-block {
   margin-left: 55px;
   margin-right: 55px;
@@ -130,20 +158,6 @@
 
 #list-contractors-card > h3 {
   margin-left: 54px; }
-
-.keywords-card-select-color-container div {
-  display: flex;
-  justify-content: space-between;
-  margin: 5px; }
-
-.keyword-row {
-  border-radius: 8px;
-  margin-right: 10px; }
-
-.keywords-card-select-color {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px; }
 
 input[name="contact"]:checked + label {
   border: 1px solid black; }

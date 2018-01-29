@@ -110,35 +110,35 @@
 	
 	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
 	
-	var _catalogGroupsAdd = __webpack_require__(38);
+	var _catalogGroupsAdd = __webpack_require__(37);
 	
 	var _catalogGroupsAdd2 = _interopRequireDefault(_catalogGroupsAdd);
 	
-	var _catalogGroupsEdit = __webpack_require__(39);
+	var _catalogGroupsEdit = __webpack_require__(38);
 	
 	var _catalogGroupsEdit2 = _interopRequireDefault(_catalogGroupsEdit);
 	
-	var _catalogGroupsGoodsAdd = __webpack_require__(40);
+	var _catalogGroupsGoodsAdd = __webpack_require__(39);
 	
 	var _catalogGroupsGoodsAdd2 = _interopRequireDefault(_catalogGroupsGoodsAdd);
 	
-	var _catalogGroupsCards = __webpack_require__(41);
+	var _catalogGroupsCards = __webpack_require__(40);
 	
 	var _catalogGroupsCards2 = _interopRequireDefault(_catalogGroupsCards);
 	
-	var _catalogSearch = __webpack_require__(43);
+	var _catalogSearch = __webpack_require__(42);
 	
 	var _catalogSearch2 = _interopRequireDefault(_catalogSearch);
 	
-	var _catalogGroupsGoodsExpress = __webpack_require__(44);
+	var _catalogGroupsGoodsExpress = __webpack_require__(43);
 	
 	var _catalogGroupsGoodsExpress2 = _interopRequireDefault(_catalogGroupsGoodsExpress);
 	
-	var _catalogGroupsGoodsStock = __webpack_require__(45);
+	var _catalogGroupsGoodsStock = __webpack_require__(44);
 	
 	var _catalogGroupsGoodsStock2 = _interopRequireDefault(_catalogGroupsGoodsStock);
 	
-	var _catalogGroupsCardsResourceAdd = __webpack_require__(46);
+	var _catalogGroupsCardsResourceAdd = __webpack_require__(45);
 	
 	var _catalogGroupsCardsResourceAdd2 = _interopRequireDefault(_catalogGroupsCardsResourceAdd);
 	
@@ -3749,50 +3749,71 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _referenceKeywords = __webpack_require__(31);
-	
-	var _referenceKeywords2 = _interopRequireDefault(_referenceKeywords);
-	
 	var _tools = __webpack_require__(6);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
+	var _universalKeywords = __webpack_require__(31);
+	
+	var _universalKeywords2 = _interopRequireDefault(_universalKeywords);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var loaderSpinnerId = 'loader-enterprises';
-	var loaderSpinnerMessage = 'Загрузка';
-	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
-	
 	var listKeywords = document.querySelector('#list-keywords-list');
-	var listKeywordsCard = document.querySelector('#list-keywords-card');
 	var listKeywordsReturnBtn = document.querySelector('#list-keywords-card-return-btn');
-	var listKeywordsHeader = document.querySelector('#list-keywords-header');
-	var listKeywordsBody = document.querySelector('#list-keywords-body');
 	var listKeywordsCardEditRGBForm = document.querySelector('#keywords-card-edit-rgb-form');
 	var listKeywordsCardDeleteBtn = document.querySelector('#list-keywords-card-delete-btn');
 	var listKeywordsCardEditBtn = document.querySelector('#list-keywords-card-edit-btn');
 	var listKeywordsCardEditName = document.querySelector('#keywords-card-edit-name');
+	
+	// здесь был дубль в модуле с разметкой
+	var listKeywordsHeader = document.querySelector('#list-keywords-header');
+	var listKeywordsBody = document.querySelector('#list-keywords-body');
+	var listKeywordsCard = document.querySelector('#list-keywords-card');
 	var listKeywordsCardEdit = document.querySelector('#list-keywords-card-edit');
 	
-	var onSuccessKeywordDelete = function onSuccessKeywordDelete(answer) {
-	  console.log(answer);
+	// ================== вытащили из модуля с разметкой ============================
+	var cleanContainer = function cleanContainer(container) {
+	  container = container || listKeywordsBody;
+	  container.innerHTML = '';
+	};
 	
+	// функция прячет страницу "справочники -> ключевые слова"
+	var hideReferenceKeywordsMain = function hideReferenceKeywordsMain() {
+	  listKeywordsHeader.classList.add('d-none');
+	  listKeywordsHeader.classList.remove('d-flex');
+	  listKeywordsBody.classList.add('d-none');
+	};
+	// функция показывает страницу "справочники -> ключевые слова"
+	var showReferenceKeywordsMain = function showReferenceKeywordsMain() {
+	  listKeywordsHeader.classList.remove('d-none');
+	  listKeywordsHeader.classList.add('d-flex');
+	  listKeywordsBody.classList.remove('d-none');
+	};
+	
+	// функция показывает карточку редактирования ключевого слова
+	var showEditKeywordCard = function showEditKeywordCard(keyword) {
+	  listKeywordsCard.classList.remove('d-none');
+	  listKeywordsCardEdit.innerHTML = '<div class="text-center">\n    <button type="button" class="btn btn-lg text-white" style="background-color: #' + _storage2.default.currentKeywordRgb + '">\n      <h3>#' + _storage2.default.currentKeywordName + '</h3>\n    </button></div>';
+	};
+	
+	// обработчик
+	var onKeywordClick = function onKeywordClick(evt) {
+	  var clickedKeywordNode = evt.target;
+	  _storage2.default.currentKeywordId = clickedKeywordNode.dataset.keywordId;
+	  _storage2.default.currentKeywordName = clickedKeywordNode.innerText.slice(1);
+	  _storage2.default.currentKeywordRgb = clickedKeywordNode.dataset.keywordRgb;
+	  hideReferenceKeywordsMain();
+	  showEditKeywordCard();
+	};
+	
+	// ================== удаление ключевго слова ============================
+	var onSuccessKeywordDelete = function onSuccessKeywordDelete() {
 	  getKeywords();
-	
 	  _tools2.default.informationtModal = {
 	    title: 'Уведомление',
 	    message: '\u041A\u043B\u044E\u0447\u0435\u0432\u043E\u0435 \u0441\u043B\u043E\u0432\u043E <b>' + _storage2.default.currentKeywordName + '</b> \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0443\u0434\u0430\u043B\u0435\u043D\u043E'
 	  };
-	};
-	
-	listKeywordsCardEditBtn.addEventListener('click', function () {
-	  console.log(listKeywordsCardEditName);
-	  console.log(_storage2.default.currentKeywordName);
-	  listKeywordsCardEditName.value = _storage2.default.currentKeywordName;
-	});
-	
-	var onErrorKeywordDelete = function onErrorKeywordDelete(error) {
-	  console.log(error);
 	};
 	
 	var setRequestToDeleteKeyword = function setRequestToDeleteKeyword() {
@@ -3800,13 +3821,11 @@
 	    metod: 'DELETE',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag/' + _storage2.default.currentKeywordId,
 	    data: 'view_last=0&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessKeywordDelete,
-	    callbackError: onErrorKeywordDelete
+	    callbackSuccess: onSuccessKeywordDelete
 	  };
 	};
 	
 	listKeywordsCardDeleteBtn.addEventListener('click', function () {
-	
 	  _tools2.default.actionRequestModal = {
 	    title: 'Удаление',
 	    message: '\u0412\u044B \u0442\u043E\u0447\u043D\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u043A\u043B\u044E\u0447\u0435\u0432\u043E\u0435 \u0441\u043B\u043E\u0432\u043E <b>' + _storage2.default.currentKeywordName + '</b>?',
@@ -3814,17 +3833,13 @@
 	  };
 	});
 	
-	// listKeywordsReturnBtn.addEventListener('click', onListKeywordsReturnBtnClick);
-	listKeywordsReturnBtn.addEventListener('click', getKeywords);
+	// ================== редактирование ключевго слова ============================
+	listKeywordsCardEditBtn.addEventListener('click', function () {
+	  listKeywordsCardEditName.value = _storage2.default.currentKeywordName;
+	});
 	
-	var onSuccessKeywordColorUpdate = function onSuccessKeywordColorUpdate(answer) {
-	  console.log(answer);
-	
+	var onSuccessKeywordColorUpdate = function onSuccessKeywordColorUpdate() {
 	  redrawCard();
-	};
-	
-	var onErrorKeywordColorUpdate = function onErrorKeywordColorUpdate(error) {
-	  console.log(error);
 	};
 	
 	var onListKeywordsCardEditRGBFormSubmit = function onListKeywordsCardEditRGBFormSubmit(evt) {
@@ -3839,53 +3854,30 @@
 	    metod: 'PUT',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag/' + _storage2.default.currentKeywordId,
 	    data: 'color=' + _storage2.default.currentKeywordRgb + '&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessKeywordColorUpdate,
-	    callbackError: onErrorKeywordColorUpdate
+	    callbackSuccess: onSuccessKeywordColorUpdate
 	  };
 	};
 	
 	listKeywordsCardEditRGBForm.addEventListener('submit', onListKeywordsCardEditRGBFormSubmit);
-	
-	var onSuccessKeywordsLoad = function onSuccessKeywordsLoad(loadedKeywords) {
-	  document.querySelector('#' + loaderSpinnerId).remove();
-	  console.log(loadedKeywords);
-	  if (loadedKeywords.status === 200 && loadedKeywords.data) {
-	    _referenceKeywords2.default.drawDataInContainer(loadedKeywords.data);
-	  } else if (loadedKeywords.status === 200 && !loadedKeywords.data) {
-	    _referenceKeywords2.default.drawMarkupInContainer('<p>' + (loadedKeywords.message || 'Что-то в поле message пусто и в data лежит false') + '</p>');
-	  } else {
-	    _referenceKeywords2.default.drawMarkupInContainer('<p>' + loadedKeywords.message + '</p>');
-	  }
-	};
-	
-	var onErrorKeywordsLoad = function onErrorKeywordsLoad(error) {
-	  console.log(error);
-	};
+	listKeywordsReturnBtn.addEventListener('click', getKeywords);
 	
 	var getKeywords = function getKeywords() {
-	  _referenceKeywords2.default.cleanContainer();
-	  _referenceKeywords2.default.drawMarkupInContainer(loaderSpinnerMarkup);
-	  // onListKeywordsReturnBtnClick();
-	  listKeywordsCard.classList.add('d-none');
-	  listKeywordsHeader.classList.remove('d-none');
-	  listKeywordsHeader.classList.add('d-flex');
-	  listKeywordsBody.classList.remove('d-none');
-	  listKeywordsReturnBtn.addEventListener('click', getKeywords);
-	  console.log(_storage2.default.data.currentBusiness);
+	  _universalKeywords2.default.getKeywords(listKeywordsBody, onKeywordClick);
+	  showReferenceKeywordsMain();
 	
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag',
-	    data: 'view_last=0&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessKeywordsLoad,
-	    callbackError: onErrorKeywordsLoad
-	  };
+	  listKeywordsCard.classList.add('d-none');
+	  listKeywordsReturnBtn.addEventListener('click', getKeywords);
 	};
 	
 	var redrawCard = function redrawCard() {
-	  console.log('hi');
-	  console.log(listKeywordsCardEdit);
 	  listKeywordsCardEdit.innerHTML = '<div class="text-center"><button type="button" class="btn btn-lg text-white" style="background-color: #' + _storage2.default.currentKeywordRgb + '"><h3>#' + _storage2.default.currentKeywordName + '</h3></button></div>';
+	};
+	
+	// функция для перехода из других модулей, меняет обработчик возврата
+	var showKeywordEdit = function showKeywordEdit(evt, handler) {
+	  onKeywordClick(evt);
+	  listKeywordsReturnBtn.removeEventListener('click', getKeywords);
+	  listKeywordsReturnBtn.addEventListener('click', handler);
 	};
 	
 	exports.default = {
@@ -3896,9 +3888,10 @@
 	
 	  redraw: redrawCard,
 	  update: getKeywords,
+	  showKeywordEdit: showKeywordEdit,
 	
 	  stop: function stop() {
-	    _referenceKeywords2.default.cleanContainer();
+	    cleanContainer();
 	    listKeywords.removeEventListener('click', getKeywords);
 	  }
 	};
@@ -3913,50 +3906,98 @@
 	  value: true
 	});
 	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
 	var _storage = __webpack_require__(1);
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var listKeywordsHeader = document.querySelector('#list-keywords-header');
-	var listKeywordsBody = document.querySelector('#list-keywords-body');
-	var listKeywordsCard = document.querySelector('#list-keywords-card');
-	var listKeywordsCardEdit = document.querySelector('#list-keywords-card-edit');
-	exports.default = {
-	  cleanContainer: function cleanContainer(container) {
-	    container = container || listKeywordsBody;
-	    container.innerHTML = '';
-	  },
-	  getElement: function getElement(item) {
+	// Вызываем спиннер
+	var loaderSpinnerId = 'loader-goods';
+	var loaderSpinnerMessage = 'Загрузка';
+	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
 	
-	    return '\n      <h3 style="display: inline-block;"><span class="badge keyword-row" style="background-color: #' + item.color + '; cursor: pointer; color: #fff">#' + item.name + '</span></h3>';
-	  },
-	  drawDataInContainer: function drawDataInContainer(keywordsData, container) {
-	    var _this = this;
+	// контейнер для отрисовки
+	var container = null;
 	
-	    keywordsData.forEach(function (item) {
+	// обработчик клика по клюслову
+	var keywordHandler = null;
 	
-	      container = container || listKeywordsBody;
+	// модификатор отображения при отрисовке ключевого слова
+	var keywordModificator = null;
 	
-	      container.insertAdjacentHTML('beforeend', _this.getElement(item));
+	// теги, которые приходят с каждым товаром, с ними мы сравниваем весь список клюслов
+	// let goodTags = [];
 	
-	      container.lastChild.addEventListener('click', function () {
-	        listKeywordsHeader.classList.add('d-none');
-	        listKeywordsHeader.classList.remove('d-flex');
-	        listKeywordsBody.classList.add('d-none');
-	        listKeywordsCard.classList.remove('d-none');
-	        listKeywordsCardEdit.innerHTML = '<div class="text-center"><button type="button" class="btn btn-lg text-white" style="background-color: #' + item.color + '"><h3>#' + item.name + '</h3></button></div>';
-	        console.log(item.id);
-	        _storage2.default.currentKeywordId = item.id;
-	        _storage2.default.currentKeywordName = item.name;
-	        console.log(_storage2.default.currentKeywordId);
-	      });
-	    });
-	  },
-	  drawMarkupInContainer: function drawMarkupInContainer(markup) {
-	    listKeywordsBody.insertAdjacentHTML('beforeend', markup);
+	
+	// установка прозрачности
+	var setKeywordModificator = function setKeywordModificator(keywordId, keywordNode) {
+	  if (keywordModificator) {
+	    keywordModificator(keywordId, keywordNode);
 	  }
+	};
+	
+	// УНИФИЦИРОВАННАЯ ОТРИСОВКА КЛЮЧЕВОГО СЛОВА
+	var getKeywordMarkup = function getKeywordMarkup(keyword) {
+	  return '<h3 class="keyword" style="background-color: #' + keyword.color + ';"; data-keyword-Id=' + keyword.id + ' data-keyword-rgb=' + keyword.color + '>#' + keyword.name + '</h3>';
+	};
+	
+	// принимает необязательный параметр handler на тот случай, когда массив не загружается обычным способом (например, ключевые слова, ассоциированные с товаром)
+	var drawKeywordsToContainerExternalData = function drawKeywordsToContainerExternalData(containerToDraw, handler, keyword) {
+	  containerToDraw.insertAdjacentHTML('beforeend', getKeywordMarkup(keyword));
+	  containerToDraw.lastChild.addEventListener('click', handler);
+	};
+	
+	// принимает необязательный параметр handler на тот случай, когда массив не загружается обычным способом (например, ключевые слова, ассоциированные с товаром)
+	var drawKeywordsToContainer = function drawKeywordsToContainer(keyword) {
+	  container.insertAdjacentHTML('beforeend', getKeywordMarkup(keyword));
+	  setKeywordModificator(keyword.id, container.lastChild);
+	  container.lastChild.addEventListener('click', keywordHandler);
+	};
+	
+	// обработка успеха загрузки клюслов для ситуации с тегами товаров
+	var onSuccessKeywordsLoad = function onSuccessKeywordsLoad(loadedKeywords) {
+	
+	  document.querySelector('#' + loaderSpinnerId).remove();
+	
+	  if (loadedKeywords.status === 200 && loadedKeywords.data) {
+	    loadedKeywords.data.forEach(function (keyword) {
+	      return drawKeywordsToContainer(keyword);
+	    });
+	  } else if (loadedKeywords.status === 200 && !loadedKeywords.data) {
+	    container.innerHTML = '<p>' + (loadedKeywords.message || 'Что-то в поле message пусто и в data лежит false') + '</p>';
+	  }
+	};
+	
+	var getKeywords = function getKeywords(containerToDraw, handler, modificator) {
+	
+	  container = containerToDraw;
+	  console.log(container);
+	  keywordHandler = handler;
+	  keywordModificator = modificator;
+	  container.innerHTML = loaderSpinnerMarkup;
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessKeywordsLoad
+	  };
+	};
+	
+	exports.default = {
+	  getKeywords: getKeywords,
+	  drawKeywordsToContainerExternalData: drawKeywordsToContainerExternalData,
+	  // draw,
+	  getKeywordMarkup: getKeywordMarkup
 	};
 
 /***/ }),
@@ -4775,7 +4816,15 @@
 	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
 	    // ${currentEnterpriseFlag}
 	
-	    return '\n    <div class="card goods-tile-card" data-good-id="' + item.id + '">\n      <img class="card-img-top" src="https://lopos.bidone.ru/users/600a5357/images/' + (item.img_url ? item.img_url + '_preview150.jpg' : '') + '" alt="' + item.name + '" title="' + item.name + '">\n      <div class="card-body goods-tile-title">\n        <p class="card-text">' + item.count + '</p>\n      </div>\n    </div>';
+	    var getImg = function getImg(imgUrl) {
+	      if (imgUrl) {
+	        return 'https://lopos.bidone.ru/users/600a5357/images/' + imgUrl + '_preview150.jpg';
+	      } else {
+	        return '../img/not-available.png';
+	      }
+	    };
+	
+	    return '\n    <div class="card goods-tile-card" data-good-id="' + item.id + '">\n      <img class="card-img-top" src="' + getImg(item.img_url) + '" alt="' + item.name + '" title="' + item.name + '">\n      <div class="card-body goods-tile-title">\n        <p class="card-text">' + item.count + '</p>\n      </div>\n    </div>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(groupsData) {
 	    var _this = this;
@@ -4833,9 +4882,13 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogUnivarsalKeywords = __webpack_require__(37);
+	var _universalKeywords = __webpack_require__(31);
 	
-	var _catalogUnivarsalKeywords2 = _interopRequireDefault(_catalogUnivarsalKeywords);
+	var _universalKeywords2 = _interopRequireDefault(_universalKeywords);
+	
+	var _referenceKeywords = __webpack_require__(30);
+	
+	var _referenceKeywords2 = _interopRequireDefault(_referenceKeywords);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -4852,6 +4905,8 @@
 	var goodsStock = document.querySelector('#goods-stock-body');
 	var goodsKeywords = document.querySelector('#goods-keywords');
 	var goodsCardKeywordsModal = document.querySelector('#goods-card-keywords');
+	var goodsCardKeywordsBody = document.querySelector('#goods-card-keywords-body');
+	
 	var expressContainer = document.querySelector('#express-container');
 	var expressModal = document.querySelector('#express-modal');
 	var expressModalLabel = document.querySelector('#express-modal-label');
@@ -4864,7 +4919,7 @@
 	
 	var goodTags = [];
 	
-	var onSuccessGroupsLoad = function onSuccessGroupsLoad(loadedGood) {
+	var onSuccessGoodsLoad = function onSuccessGoodsLoad(loadedGood) {
 	  console.log(loadedGood);
 	  var _loadedGood$data = loadedGood.data,
 	      name = _loadedGood$data.name,
@@ -4935,12 +4990,61 @@
 	    _storage2.default.currentStockName = goodsStock.children[1].dataset.stockName;
 	    _storage2.default.currentStockQuantityT2 = goodsStock.children[1].dataset.stockT2;
 	  }
-	  _catalogUnivarsalKeywords2.default.getKeywords(goodTags);
-	  _catalogUnivarsalKeywords2.default.draw(goodsKeywords);
+	
+	  _universalKeywords2.default.getKeywords(goodsCardKeywordsBody, onKeywordClick, keywordModificator);
+	
+	  var onGoodKeywordClick = function onGoodKeywordClick(evt) {
+	    var returnHandler = function returnHandler(e) {
+	      // $('#list-keywords-list').tab('hide');
+	      getGood();
+	      $('#list-groups-list').tab('show');
+	      $('#goods-card').modal('show');
+	      e.target.removeEventListener('click', returnHandler);
+	    };
+	    _referenceKeywords2.default.showKeywordEdit(evt, returnHandler);
+	    $('#goods-card').modal('hide');
+	    $('#list-keywords-list').tab('show');
+	  };
+	
+	  goodsKeywords.innerHTML = '';
+	  if (goodTags.length) {
+	    goodTags.forEach(function (item) {
+	      return _universalKeywords2.default.drawKeywordsToContainerExternalData(goodsKeywords, onGoodKeywordClick, item);
+	    });
+	  } else {
+	    goodsKeywords.innerHTML = 'Ключевых слов нет';
+	  }
+	  // goodsKeywords.insertAdjacentHTML('beforeend', goodTags.length ? goodTags.map((item) => keywordsUniversal.getKeywordMarkup(item)).join('') : 'Ключевых слов нет');
+	};
+	
+	// обработчик клика по ключевому слову (пока внутри карточки связей "товар-слово")
+	var onKeywordClick = function onKeywordClick(evt) {
+	  var clickedKeywordNode = evt.target;
+	  var onSuccessKeywordsCompare = function onSuccessKeywordsCompare(keywordNode) {
+	    return clickedKeywordNode.classList.toggle('keyword__mute');
+	  };
+	  var xhrType = goodTags.every(function (tagItem) {
+	    return tagItem.id !== clickedKeywordNode.dataset.keywordId;
+	  }) ? 'POST' : 'DELETE';
+	  _xhr2.default.request = {
+	    metod: xhrType,
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag/' + clickedKeywordNode.dataset.keywordId + '/compare_meta',
+	    data: 'good=' + _storage2.default.currentGoodId + '&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessKeywordsCompare
+	  };
+	};
+	
+	// установка прозрачности
+	var keywordModificator = function keywordModificator(keywordId, keywordNode) {
+	  if (goodTags.every(function (tagItem) {
+	    return tagItem.id !== keywordId;
+	  })) {
+	    keywordNode.classList.add('keyword__mute');
+	  }
 	};
 	
 	$(goodsCardKeywordsModal).on('shown.bs.modal', function () {
-	  _catalogUnivarsalKeywords2.default.getKeywords(goodTags);
+	  _universalKeywords2.default.getKeywords(goodsCardKeywordsBody, onKeywordClick, keywordModificator);
 	  $(goodsCard).modal('hide');
 	});
 	
@@ -4949,8 +5053,6 @@
 	});
 	
 	goodsStock.addEventListener('change', function (evt) {
-	  console.log(evt);
-	  console.log(evt.target.labels[0].innerText);
 	  _storage2.default.currentStockId = Number(evt.target.id.split('-')[1]);
 	  _storage2.default.currentStockName = evt.target.labels[0].dataset.stockName;
 	  _storage2.default.currentStockQuantityT2 = evt.target.labels[0].dataset.stockT2;
@@ -5025,7 +5127,7 @@
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + _storage2.default.currentGoodId + '/card_info',
 	    data: 'view_last=0&token=' + _storage2.default.data.token,
-	    callbackSuccess: getGoodForCopyCb || onSuccessGroupsLoad
+	    callbackSuccess: getGoodForCopyCb || onSuccessGoodsLoad
 	  };
 	};
 	
@@ -5058,97 +5160,6 @@
 
 /***/ }),
 /* 37 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _xhr = __webpack_require__(5);
-	
-	var _xhr2 = _interopRequireDefault(_xhr);
-	
-	var _storage = __webpack_require__(1);
-	
-	var _storage2 = _interopRequireDefault(_storage);
-	
-	var _tools = __webpack_require__(6);
-	
-	var _tools2 = _interopRequireDefault(_tools);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var goodsCardKeywordsBody = document.querySelector('#goods-card-keywords-body');
-	
-	var loaderSpinnerId = 'loader-goods';
-	var loaderSpinnerMessage = 'Загрузка';
-	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
-	
-	var goodTags = [];
-	
-	var onSuccessKeywordsLoad = function onSuccessKeywordsLoad(loadedKeywords) {
-	
-	  document.querySelector('#' + loaderSpinnerId).remove();
-	  console.log(loadedKeywords);
-	
-	  var onSuccessKeywordsCompare = function onSuccessKeywordsCompare(keywordNode, opacity) {
-	    keywordNode.style.opacity = opacity;
-	  };
-	
-	  if (loadedKeywords.status === 200 && loadedKeywords.data) {
-	    loadedKeywords.data.forEach(function (item) {
-	      goodsCardKeywordsBody.insertAdjacentHTML('beforeend', '<h3 style="display: inline-block;"><span class="badge keyword-row" style="background-color: #' + item.color + '; cursor: pointer; color: #fff; ' + (goodTags.every(function (tagItem) {
-	        return tagItem.id !== item.id;
-	      }) ? 'opacity: 0.4;' : '') + '" data-keyword-Id=' + item.id + '>#' + item.name + '</span></h3>');
-	
-	      goodsCardKeywordsBody.lastChild.addEventListener('click', function (evt) {
-	        var xhrType = goodTags.every(function (tagItem) {
-	          return tagItem.id !== item.id;
-	        }) ? 'POST' : 'DELETE';
-	        _xhr2.default.request = {
-	          metod: xhrType,
-	          url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag/' + item.id + '/compare_meta',
-	          data: 'good=' + _storage2.default.currentGoodId + '&token=' + _storage2.default.data.token,
-	          callbackSuccess: onSuccessKeywordsCompare.bind(null, evt.target, goodTags.every(function (tagItem) {
-	            return tagItem.id !== item.id;
-	          }) ? '1' : '0.4')
-	        };
-	      });
-	    });
-	  } else if (loadedKeywords.status === 200 && !loadedKeywords.data) {
-	    goodsCardKeywordsBody.innerHTML = '<p>' + (loadedKeywords.message || 'Что-то в поле message пусто и в data лежит false') + '</p>';
-	  }
-	};
-	
-	var draw = function draw(container) {
-	  container.innerHTML = '';
-	  container.insertAdjacentHTML('beforeend', goodTags.length ? goodTags.map(function (item) {
-	    return '<h3 style="display: inline-block;"><span class="badge keyword-row" style="background-color: #' + item.color + '; cursor: pointer; color: #fff">#' + item.name + '</span></h3>';
-	  }).join('') : 'Ключевых слов нет');
-	};
-	
-	var getKeywords = function getKeywords(tags) {
-	  goodTags = tags;
-	
-	  goodsCardKeywordsBody.innerHTML = loaderSpinnerMarkup;
-	
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag',
-	    data: 'view_last=0&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessKeywordsLoad
-	  };
-	};
-	
-	exports.default = {
-	  getKeywords: getKeywords,
-	  draw: draw
-	};
-
-/***/ }),
-/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5331,7 +5342,7 @@
 	};
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5527,7 +5538,7 @@
 	};
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5751,7 +5762,7 @@
 	};
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5768,7 +5779,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogCards = __webpack_require__(42);
+	var _catalogCards = __webpack_require__(41);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
 	
@@ -6067,7 +6078,7 @@
 	};
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -6107,7 +6118,7 @@
 	};
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6124,7 +6135,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogCards = __webpack_require__(42);
+	var _catalogCards = __webpack_require__(41);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
 	
@@ -6136,6 +6147,14 @@
 	
 	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
 	
+	var _catalogGroupsGoods = __webpack_require__(36);
+	
+	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
+	
+	var _universalKeywords = __webpack_require__(31);
+	
+	var _universalKeywords2 = _interopRequireDefault(_universalKeywords);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var listSearch = document.querySelector('#list-search-list');
@@ -6144,11 +6163,57 @@
 	var listSearchForm = document.querySelector('#list-search-form');
 	var listSearchInput = document.querySelector('#list-search-input');
 	
+	var listSearchKeywordsBtn = document.querySelector('#list-search-keywords-btn');
+	var listSearchKeywordsModal = document.querySelector('#search-card-keywords');
+	var listSearchKeywordsModalBody = document.querySelector('#search-card-keywords-body');
+	var listSearchKeywordsResetBtn = document.querySelector('#list-search-card-reset-btn');
+	var listSearchKeywordsModalSubmit = document.querySelector('#search-card-keywords-submit');
+	
+	var listSearchBarcodeBtn = document.querySelector('#list-search-card-barcode-btn');
+	
 	var loaderSpinnerId = 'loader-cards';
 	var loaderSpinnerMessage = 'Загрузка';
 	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
 	
+	/*
+	const onSuccessSearchLoad = (searchLoad) => {
+	  document.querySelector(`#${loaderSpinnerId}`).remove();
+	  console.log(searchLoad);
+	  // cardData = loadedCards;
+	  if (searchLoad.status === 271) {
+	    listSearchBody.innerHTML = searchLoad.message;
+	  } else {
+	    searchLoad.data.forEach((item, index) => listSearchBody.insertAdjacentHTML('beforeend', groupsMarkup.getGoodString(item, index)));
+	  }
+	};
+	*/
+	
+	/*
+	const getSearch = (evt) => {
+	  evt.preventDefault();
+	  listSearchBody.innerHTML = loaderSpinnerMarkup;
+	  console.log(listSearchInput);
+	
+	  xhr.request = {
+	    metod: 'POST',
+	    url: `lopos_directory/${auth.data.directory}/operator/1/business/${auth.data.currentBusiness}/good_search`,
+	    data: `token=${auth.data.token}&name=${listSearchInput.value}`,
+	    callbackSuccess: onSuccessSearchLoad,
+	  };
+	};
+	*/
+	
 	var fullSearch = [];
+	
+	var drawResult = function drawResult(selectedData) {
+	  if (selectedData.length) {
+	    selectedData.forEach(function (item, index) {
+	      return listSearchBody.insertAdjacentHTML('beforeend', _catalogGroups2.default.getGoodString(item, index));
+	    });
+	  } else {
+	    listSearchBody.innerHTML = '\u041D\u0435 \u0437\u0430\u0432\u0435\u0437\u043B\u0438 \u043F\u043E\u043A\u0430 <b>' + listSearchInput.value + '</b>, \u0445\u043E\u0442\u044F \u0438 \u0436\u0434\u0430\u043B\u0438 \u043D\u0430\u043C\u0435\u0434\u043D\u0438...';
+	  }
+	};
 	
 	var onlistSearchFormSubmit = function onlistSearchFormSubmit(evt) {
 	  evt.preventDefault();
@@ -6163,14 +6228,7 @@
 	        selectedData.push(item);
 	      }
 	    });
-	
-	    if (selectedData.length) {
-	      selectedData.forEach(function (item, index) {
-	        return listSearchBody.insertAdjacentHTML('beforeend', _catalogGroups2.default.getGoodString(item, index));
-	      });
-	    } else {
-	      listSearchBody.innerHTML = '\u041D\u0435 \u0437\u0430\u0432\u0435\u0437\u043B\u0438 \u043F\u043E\u043A\u0430 <b>' + listSearchInput.value + '</b>, \u0445\u043E\u0442\u044F \u0438 \u0436\u0434\u0430\u043B\u0438 \u043D\u0430\u043C\u0435\u0434\u043D\u0438...';
-	    }
+	    drawResult(selectedData);
 	  }
 	};
 	
@@ -6178,30 +6236,10 @@
 	  console.log(fullSearchLoad);
 	  fullSearch = fullSearchLoad;
 	  document.querySelector('#' + loaderSpinnerId).remove();
+	  if (fullSearchLoad.status === 271) {
+	    listSearchBody.innerHTML = fullSearchLoad.message;
+	  }
 	  listSearchBody.innerHTML = '';
-	  /*
-	  document.querySelector(`#${loaderSpinnerId}`).remove();
-	  console.log(searchLoad);
-	  // cardData = loadedCards;
-	  if (searchLoad.status === 271) {
-	    listSearchBody.innerHTML = searchLoad.message;
-	  } else {
-	    searchLoad.data.forEach((item, index) => listSearchBody.insertAdjacentHTML('beforeend', groupsMarkup.getGoodString(item, index)));
-	  }
-	  */
-	};
-	
-	var onSuccessSearchLoad = function onSuccessSearchLoad(searchLoad) {
-	  document.querySelector('#' + loaderSpinnerId).remove();
-	  console.log(searchLoad);
-	  // cardData = loadedCards;
-	  if (searchLoad.status === 271) {
-	    listSearchBody.innerHTML = searchLoad.message;
-	  } else {
-	    searchLoad.data.forEach(function (item, index) {
-	      return listSearchBody.insertAdjacentHTML('beforeend', _catalogGroups2.default.getGoodString(item, index));
-	    });
-	  }
 	};
 	
 	var getFullSearch = function getFullSearch() {
@@ -6216,18 +6254,86 @@
 	  };
 	};
 	
-	var getSearch = function getSearch(evt) {
-	  evt.preventDefault();
-	  listSearchBody.innerHTML = loaderSpinnerMarkup;
-	  console.log(listSearchInput);
+	var selectedKeywords = [];
 	
+	listSearchKeywordsModalSubmit.addEventListener('click', function () {
+	  listSearchBody.innerHTML = loaderSpinnerMarkup;
+	  var selectedKeywordsNodes = listSearchKeywordsModalBody.querySelectorAll('.keyword:not(.keyword__mute)');
+	  selectedKeywords = [];
+	  selectedKeywordsNodes.forEach(function (keywordNode) {
+	    return selectedKeywords.push(keywordNode.dataset.keywordId);
+	  });
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good_search',
-	    data: 'token=' + _storage2.default.data.token + '&name=' + listSearchInput.value,
-	    callbackSuccess: onSuccessSearchLoad
+	    data: 'token=' + _storage2.default.data.token + '&tags=[' + selectedKeywords + ']',
+	    callbackSuccess: onSuccessFullSearchLoad
+	  };
+	});
+	
+	// обработчик клика по ключевому слову (пока внутри карточки связей "товар-слово")
+	var onKeywordClick = function onKeywordClick(evt) {
+	  return evt.target.classList.toggle('keyword__mute');
+	};
+	
+	// установка прозрачности
+	var keywordModificator = function keywordModificator(keywordId, keywordNode) {
+	  if (selectedKeywords.every(function (tagItem) {
+	    return tagItem !== keywordId;
+	  })) {
+	    keywordNode.classList.add('keyword__mute');
+	  }
+	};
+	
+	listSearchKeywordsBtn.addEventListener('click', function () {
+	  _universalKeywords2.default.getKeywords(listSearchKeywordsModalBody, onKeywordClick, keywordModificator);
+	  $(listSearchKeywordsModal).modal('show');
+	  listSearchKeywordsResetBtn.removeAttribute('disabled');
+	  // keywordsUniversal.draw(listSearchBody);
+	});
+	
+	listSearchKeywordsResetBtn.addEventListener('click', function () {
+	  selectedKeywords = [];
+	  listSearchInput.value = '';
+	  getFullSearch();
+	  listSearchKeywordsResetBtn.setAttribute('disabled', 'disabled');
+	});
+	
+	var onBarcodeSuccessLoad = function onBarcodeSuccessLoad(barcodeResult) {
+	  document.querySelector('#' + loaderSpinnerId).remove();
+	  $('#universal-add').on('hidden.bs.modal', function (e) {
+	    console.log(barcodeResult.data.length);
+	    if (barcodeResult.data.length === 1) {
+	      _storage2.default.currentGoodId = barcodeResult.data[0].id;
+	      _catalogGroupsGoods2.default.fill();
+	      barcodeResult.data = 0;
+	    } else if (barcodeResult.data.length > 1) {
+	      drawResult(barcodeResult.data);
+	    }
+	  });
+	};
+	
+	var setRequestToFindBarcode = function setRequestToFindBarcode(barcode) {
+	  listSearchBody.innerHTML = loaderSpinnerMarkup;
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good_search',
+	    data: 'token=' + _storage2.default.data.token + '&barcode=' + barcode,
+	    callbackSuccess: onBarcodeSuccessLoad
 	  };
 	};
+	
+	listSearchBarcodeBtn.addEventListener('click', function () {
+	  selectedKeywords = [];
+	  listSearchInput.value = '';
+	  _tools2.default.runUniversalAdd = {
+	    title: 'Поиск по штрихкоду',
+	    inputLabel: 'Штрихкод',
+	    inputPlaceholder: 'введите штрихкод',
+	    submitBtnName: 'Поиск',
+	    submitCallback: setRequestToFindBarcode
+	  };
+	});
 	
 	exports.default = {
 	  start: function start() {
@@ -6243,12 +6349,12 @@
 	
 	  stop: function stop() {
 	    _catalogCards2.default.cleanContainer();
-	    listSearchBtn.removeEventListener('click', getSearch);
+	    // listSearchBtn.removeEventListener('click', getSearch);
 	  }
 	};
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6309,7 +6415,7 @@
 	};
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6365,7 +6471,7 @@
 	};
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6382,7 +6488,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogGroupsCards = __webpack_require__(41);
+	var _catalogGroupsCards = __webpack_require__(40);
 	
 	var _catalogGroupsCards2 = _interopRequireDefault(_catalogGroupsCards);
 	
