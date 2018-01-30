@@ -4589,6 +4589,8 @@
 	      purchasePrice = _loadedGoodData$data.purchase_price,
 	      sellingPrice = _loadedGoodData$data.selling_price;
 	
+	  purchasePrice = Number(purchasePrice).toFixed(2);
+	  sellingPrice = Number(sellingPrice).toFixed(2);
 	  listGroupGoodsAddModalName.value = name;
 	  listGroupGoodsAddModalDescribe.value = description;
 	  listGroupGoodsAddModalPurchase.value = +purchasePrice;
@@ -4918,11 +4920,14 @@
 	      imgUrl = _loadedGood$data.img_url,
 	      groupId = _loadedGood$data.group_id;
 	
+	  purchasePrice = Number(purchasePrice).toFixed(2);
+	  sellingPrice = Number(sellingPrice).toFixed(2);
 	  goodsCardName.value = name;
 	  goodsCardDescribe.value = description;
 	  goodsCardBarcode.value = barcode;
 	  goodsCardPurchase.value = purchasePrice;
 	  goodsCardSell.value = sellingPrice;
+	
 	  goodTags = tags ? tags : [];
 	
 	  goodsCardGroup.innerHTML = allGroups.map(function (item) {
@@ -6154,6 +6159,7 @@
 	var fullSearch = [];
 	
 	var drawResult = function drawResult(selectedData) {
+	  listSearchBody.innerHTML = '';
 	  if (selectedData.length) {
 	    selectedData.forEach(function (item, index) {
 	      return listSearchBody.insertAdjacentHTML('beforeend', _catalogGroups2.default.getGoodString(item, index));
