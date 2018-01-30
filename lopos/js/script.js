@@ -4887,6 +4887,7 @@
 	
 	var goodsCardPurchase = document.querySelector('#goods-card-price-purchase');
 	var goodsCardImage = document.querySelector('#goods-card-image');
+	var goodsCardImageUpload = document.querySelector('#goods-card-image-upload');
 	var goodsCardSell = document.querySelector('#goods-card-price-sell');
 	var goodsStock = document.querySelector('#goods-stock-body');
 	var goodsKeywords = document.querySelector('#goods-keywords');
@@ -5102,6 +5103,7 @@
 	expressContainer.addEventListener('click', onExpressContainerClick);
 	
 	$(expressModal).on('hidden.bs.modal', function () {
+	  getGood();
 	  $(goodsCard).modal('toggle');
 	});
 	
@@ -5128,6 +5130,34 @@
 	  stockModalName.innerHTML = _storage2.default.currentStockName;
 	  stockModalQuantity.value = _storage2.default.currentStockQuantityT2;
 	});
+	
+	var showPreview = function showPreview(file) {
+	  var fileName = file.name.toLowerCase();
+	  var fileSize = (file.size / 1024 / 1024).toFixed(2);
+	
+	  if (fileName.endsWith('jpg') && fileSize < 2) {
+	    var reader = new FileReader();
+	
+	    reader.addEventListener('load', function () {
+	      goodsCardImage.src = reader.result;
+	    });
+	    reader.readAsDataURL(file);
+	  } else if (!fileName.endsWith('jpg')) {
+	    goodsCardImage.src = '';
+	    goodsCardImageUpload.value = '';
+	    goodsCardImage.alt = '\u0424\u043E\u0440\u043C\u0430\u0442 ' + fileName.slice(-3) + ' \u043D\u0435 \u043A\u0430\u0442\u0438\u0442, \u0442\u043E\u043B\u044C\u043A\u043E jpg';
+	  } else if (fileSize > 2) {
+	    goodsCardImage.src = '';
+	    goodsCardImageUpload.value = '';
+	    goodsCardImage.alt = '\u0420\u0430\u0437\u043C\u0435\u0440 ' + fileSize + 'Mb \u0441\u043B\u0438\u0448\u043A\u043E\u043C \u0432\u0435\u043B\u0438\u043A';
+	  }
+	};
+	
+	goodsCardImageUpload.addEventListener('change', function () {
+	  showPreview(goodsCardImageUpload.files[0]);
+	});
+	
+	// ================= превью картинки =================
 	
 	exports.default = {
 	  start: function start() {
