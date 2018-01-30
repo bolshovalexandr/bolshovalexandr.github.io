@@ -5169,11 +5169,11 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var appUrl = window.appSettings.formAddGroups.UrlApi;
-	var messages = window.appSettings.formAddGroups.message;
+	var appUrl = window.appSettings.formAddGroup.UrlApi;
+	var messages = window.appSettings.formAddGroup.message;
 	
-	var validPattern = window.appSettings.formAddGroups.validPatterns;
-	var validMessage = window.appSettings.formAddGroups.validMessage;
+	var validPattern = window.appSettings.formAddGroup.validPatterns;
+	var validMessage = window.appSettings.formAddGroup.validMessage;
 	
 	var body = document.querySelector('body');
 	var enterprisesAdd = body.querySelector('#groups-add');
@@ -5626,9 +5626,9 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalogGroupsGoods = __webpack_require__(36);
+	var _catalogGroups = __webpack_require__(34);
 	
-	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
+	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
 	
 	var _formTools = __webpack_require__(39);
 	
@@ -5656,7 +5656,7 @@
 	
 	  switch (response.status) {
 	    case 200:
-	      _catalogGroupsGoods2.default.fill();
+	      _catalogGroups2.default.redrawGoods();
 	      break;
 	    case 400:
 	      _tools2.default.informationtModal = {
