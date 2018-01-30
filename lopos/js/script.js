@@ -3862,7 +3862,7 @@
 	listKeywordsReturnBtn.addEventListener('click', getKeywords);
 	
 	var getKeywords = function getKeywords() {
-	  _universalKeywords2.default.getKeywords(listKeywordsBody, onKeywordClick);
+	  _universalKeywords2.default.downloadAndDraw(listKeywordsBody, onKeywordClick);
 	  showReferenceKeywordsMain();
 	
 	  listKeywordsCard.classList.add('d-none');
@@ -3994,10 +3994,9 @@
 	};
 	
 	exports.default = {
-	  getKeywords: getKeywords,
-	  drawKeywordsToContainerExternalData: drawKeywordsToContainerExternalData,
-	  // draw,
-	  getKeywordMarkup: getKeywordMarkup
+	  downloadAndDraw: getKeywords,
+	  getDataAndDraw: drawKeywordsToContainerExternalData,
+	  getElementMarkup: getKeywordMarkup
 	};
 
 /***/ }),
@@ -4969,7 +4968,7 @@
 	        checkedStock = _storage2.default.currentStockId;
 	      }
 	      console.log('draw stocks');
-	      return '\n      <input type="radio" id="stock-' + item.id + '" name="stock" value="email" class="d-none">\n      <label style="padding-left: 34px;" for="stock-' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '" data-stock-t2="' + item.values[2][0] + '">\n        <div class="row w-100">\n          <div class="col-8">' + item.id + ' - ' + item.name + '</div>\n          <div class="col-4 d-flex justify-content-between border">\n            <div class="w-100 text-center border">' + item.values[3][0] + '</div>\n            <div class="w-100 text-center border">' + item.values[2][0] + '</div>\n            <div class="w-100 text-center border">' + item.values[4][0] + '</div>\n          </div>\n          </div>\n        </label>';
+	      return '\n      <input type="radio" id="stock-' + item.id + '" name="stock" value="email" class="d-none">\n      <label style="padding-left: 34px;" for="stock-' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '" data-stock-t2="' + item.values[2][0] + '">\n        <div class="row w-100">\n          <div class="col-8">' + item.name + '</div>\n          <div class="col-4 d-flex justify-content-between border">\n            <div class="w-100 text-center">' + item.values[3][0] + '</div>\n            <div class="w-100 text-center">' + item.values[2][0] + '</div>\n            <div class="w-100 text-center">' + item.values[4][0] + '</div>\n          </div>\n          </div>\n        </label>';
 	    }).join(''));
 	    console.log(allStocks);
 	  }
@@ -4991,7 +4990,7 @@
 	    _storage2.default.currentStockQuantityT2 = goodsStock.children[1].dataset.stockT2;
 	  }
 	
-	  _universalKeywords2.default.getKeywords(goodsCardKeywordsBody, onKeywordClick, keywordModificator);
+	  _universalKeywords2.default.downloadAndDraw(goodsCardKeywordsBody, onKeywordClick, keywordModificator);
 	
 	  var onGoodKeywordClick = function onGoodKeywordClick(evt) {
 	    var returnHandler = function returnHandler(e) {
@@ -5009,12 +5008,11 @@
 	  goodsKeywords.innerHTML = '';
 	  if (goodTags.length) {
 	    goodTags.forEach(function (item) {
-	      return _universalKeywords2.default.drawKeywordsToContainerExternalData(goodsKeywords, onGoodKeywordClick, item);
+	      return _universalKeywords2.default.getDataAndDraw(goodsKeywords, onGoodKeywordClick, item);
 	    });
 	  } else {
 	    goodsKeywords.innerHTML = 'Ключевых слов нет';
 	  }
-	  // goodsKeywords.insertAdjacentHTML('beforeend', goodTags.length ? goodTags.map((item) => keywordsUniversal.getKeywordMarkup(item)).join('') : 'Ключевых слов нет');
 	};
 	
 	// обработчик клика по ключевому слову (пока внутри карточки связей "товар-слово")
@@ -5044,7 +5042,7 @@
 	};
 	
 	$(goodsCardKeywordsModal).on('shown.bs.modal', function () {
-	  _universalKeywords2.default.getKeywords(goodsCardKeywordsBody, onKeywordClick, keywordModificator);
+	  _universalKeywords2.default.downloadAndDraw(goodsCardKeywordsBody, onKeywordClick, keywordModificator);
 	  $(goodsCard).modal('hide');
 	});
 	
@@ -6175,34 +6173,6 @@
 	var loaderSpinnerMessage = 'Загрузка';
 	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
 	
-	/*
-	const onSuccessSearchLoad = (searchLoad) => {
-	  document.querySelector(`#${loaderSpinnerId}`).remove();
-	  console.log(searchLoad);
-	  // cardData = loadedCards;
-	  if (searchLoad.status === 271) {
-	    listSearchBody.innerHTML = searchLoad.message;
-	  } else {
-	    searchLoad.data.forEach((item, index) => listSearchBody.insertAdjacentHTML('beforeend', groupsMarkup.getGoodString(item, index)));
-	  }
-	};
-	*/
-	
-	/*
-	const getSearch = (evt) => {
-	  evt.preventDefault();
-	  listSearchBody.innerHTML = loaderSpinnerMarkup;
-	  console.log(listSearchInput);
-	
-	  xhr.request = {
-	    metod: 'POST',
-	    url: `lopos_directory/${auth.data.directory}/operator/1/business/${auth.data.currentBusiness}/good_search`,
-	    data: `token=${auth.data.token}&name=${listSearchInput.value}`,
-	    callbackSuccess: onSuccessSearchLoad,
-	  };
-	};
-	*/
-	
 	var fullSearch = [];
 	
 	var drawResult = function drawResult(selectedData) {
@@ -6286,7 +6256,7 @@
 	};
 	
 	listSearchKeywordsBtn.addEventListener('click', function () {
-	  _universalKeywords2.default.getKeywords(listSearchKeywordsModalBody, onKeywordClick, keywordModificator);
+	  _universalKeywords2.default.downloadAndDraw(listSearchKeywordsModalBody, onKeywordClick, keywordModificator);
 	  $(listSearchKeywordsModal).modal('show');
 	  listSearchKeywordsResetBtn.removeAttribute('disabled');
 	  // keywordsUniversal.draw(listSearchBody);
@@ -6334,6 +6304,19 @@
 	    submitCallback: setRequestToFindBarcode
 	  };
 	});
+	
+	var onListSearchBodyClick = function onListSearchBodyClick(evt) {
+	
+	  var currentStringElement = evt.target;
+	  while (!currentStringElement.dataset.goodId) {
+	    currentStringElement = currentStringElement.parentNode;
+	  }
+	
+	  _storage2.default.currentGoodId = currentStringElement.dataset.goodId;
+	  _catalogGroupsGoods2.default.fill();
+	};
+	
+	listSearchBody.addEventListener('click', onListSearchBodyClick);
 	
 	exports.default = {
 	  start: function start() {

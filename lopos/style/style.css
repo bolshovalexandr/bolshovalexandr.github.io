@@ -246,6 +246,13 @@ input[name="express-sell-radio"]:checked + label {
   display: block;
   width: 300px; }
 
+.goods-card-btns-container {
+  display: flex;
+  justify-content: space-between; }
+
+.goods-card-btns-container > button {
+  width: 200px; }
+
 .informaion-light {
   display: flex;
   position: absolute;
