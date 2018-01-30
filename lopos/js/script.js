@@ -118,35 +118,34 @@
 	
 	var _catalogGroupsEdit2 = _interopRequireDefault(_catalogGroupsEdit);
 	
-	var _catalogGroupsGoodsAdd = __webpack_require__(39);
+	var _catalogGroupsGoodsAdd = __webpack_require__(40);
 	
 	var _catalogGroupsGoodsAdd2 = _interopRequireDefault(_catalogGroupsGoodsAdd);
 	
-	var _catalogGroupsCards = __webpack_require__(40);
+	var _catalogGroupsCards = __webpack_require__(41);
 	
 	var _catalogGroupsCards2 = _interopRequireDefault(_catalogGroupsCards);
 	
-	var _catalogSearch = __webpack_require__(42);
+	var _catalogSearch = __webpack_require__(43);
 	
 	var _catalogSearch2 = _interopRequireDefault(_catalogSearch);
 	
-	var _catalogGroupsGoodsExpress = __webpack_require__(43);
+	var _catalogGroupsGoodsExpress = __webpack_require__(44);
 	
 	var _catalogGroupsGoodsExpress2 = _interopRequireDefault(_catalogGroupsGoodsExpress);
 	
-	var _catalogGroupsGoodsStock = __webpack_require__(44);
+	var _catalogGroupsGoodsStock = __webpack_require__(45);
 	
 	var _catalogGroupsGoodsStock2 = _interopRequireDefault(_catalogGroupsGoodsStock);
 	
-	var _catalogGroupsCardsResourceAdd = __webpack_require__(45);
+	var _catalogGroupsCardsResourceAdd = __webpack_require__(46);
 	
 	var _catalogGroupsCardsResourceAdd2 = _interopRequireDefault(_catalogGroupsCardsResourceAdd);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	console.log('ver: 3D1');
 	// Отправка без валидации
-	
+	console.log('ver: 3D1');
 	console.log('ver: 3A4');
 	
 	var exit = document.querySelector('#profile-exit');
@@ -3772,12 +3771,6 @@
 	var listKeywordsCard = document.querySelector('#list-keywords-card');
 	var listKeywordsCardEdit = document.querySelector('#list-keywords-card-edit');
 	
-	// ================== вытащили из модуля с разметкой ============================
-	var cleanContainer = function cleanContainer(container) {
-	  container = container || listKeywordsBody;
-	  container.innerHTML = '';
-	};
-	
 	// функция прячет страницу "справочники -> ключевые слова"
 	var hideReferenceKeywordsMain = function hideReferenceKeywordsMain() {
 	  listKeywordsHeader.classList.add('d-none');
@@ -3792,9 +3785,10 @@
 	};
 	
 	// функция показывает карточку редактирования ключевого слова
-	var showEditKeywordCard = function showEditKeywordCard(keyword) {
+	var showEditKeywordCard = function showEditKeywordCard() {
+	  listKeywordsCardEdit.innerHTML = '';
 	  listKeywordsCard.classList.remove('d-none');
-	  listKeywordsCardEdit.innerHTML = '<div class="text-center">\n    <button type="button" class="btn btn-lg text-white" style="background-color: #' + _storage2.default.currentKeywordRgb + '">\n      <h3>#' + _storage2.default.currentKeywordName + '</h3>\n    </button></div>';
+	  _universalKeywords2.default.getDataAndDraw(listKeywordsCardEdit, null, { color: _storage2.default.currentKeywordRgb, name: _storage2.default.currentKeywordName });
 	};
 	
 	// обработчик
@@ -3838,23 +3832,18 @@
 	  listKeywordsCardEditName.value = _storage2.default.currentKeywordName;
 	});
 	
-	var onSuccessKeywordColorUpdate = function onSuccessKeywordColorUpdate() {
-	  redrawCard();
-	};
-	
 	var onListKeywordsCardEditRGBFormSubmit = function onListKeywordsCardEditRGBFormSubmit(evt) {
 	  evt.preventDefault();
 	  var newRGB = listKeywordsCardEditRGBForm.querySelector('input:checked').value;
 	  _storage2.default.currentKeywordRgb = newRGB;
-	  console.log(document.querySelector('#list-keywords-card-edit > div > button'));
-	  document.querySelector('#list-keywords-card-edit > div > button').style.backgroundColor = '#' + _storage2.default.currentKeywordRgb;
+	  document.querySelector('#list-keywords-card-edit > h3').style.backgroundColor = '#' + _storage2.default.currentKeywordRgb;
 	  $('#keywords-card-edit-rgb').modal('hide');
 	
 	  _xhr2.default.request = {
 	    metod: 'PUT',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag/' + _storage2.default.currentKeywordId,
 	    data: 'color=' + _storage2.default.currentKeywordRgb + '&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessKeywordColorUpdate
+	    callbackSuccess: showEditKeywordCard
 	  };
 	};
 	
@@ -3867,10 +3856,6 @@
 	
 	  listKeywordsCard.classList.add('d-none');
 	  listKeywordsReturnBtn.addEventListener('click', getKeywords);
-	};
-	
-	var redrawCard = function redrawCard() {
-	  listKeywordsCardEdit.innerHTML = '<div class="text-center"><button type="button" class="btn btn-lg text-white" style="background-color: #' + _storage2.default.currentKeywordRgb + '"><h3>#' + _storage2.default.currentKeywordName + '</h3></button></div>';
 	};
 	
 	// функция для перехода из других модулей, меняет обработчик возврата
@@ -3886,12 +3871,12 @@
 	  },
 	
 	
-	  redraw: redrawCard,
+	  redraw: showEditKeywordCard,
 	  update: getKeywords,
 	  showKeywordEdit: showKeywordEdit,
 	
 	  stop: function stop() {
-	    cleanContainer();
+	    listKeywordsBody.innerHTML = '';
 	    listKeywords.removeEventListener('click', getKeywords);
 	  }
 	};
@@ -3958,6 +3943,7 @@
 	
 	// принимает необязательный параметр handler на тот случай, когда массив не загружается обычным способом (например, ключевые слова, ассоциированные с товаром)
 	var drawKeywordsToContainer = function drawKeywordsToContainer(keyword) {
+	  console.log(keyword);
 	  container.insertAdjacentHTML('beforeend', getKeywordMarkup(keyword));
 	  setKeywordModificator(keyword.id, container.lastChild);
 	  container.lastChild.addEventListener('click', keywordHandler);
@@ -3995,8 +3981,7 @@
 	
 	exports.default = {
 	  downloadAndDraw: getKeywords,
-	  getDataAndDraw: drawKeywordsToContainerExternalData,
-	  getElementMarkup: getKeywordMarkup
+	  getDataAndDraw: drawKeywordsToContainerExternalData
 	};
 
 /***/ }),
@@ -4968,7 +4953,7 @@
 	        checkedStock = _storage2.default.currentStockId;
 	      }
 	      console.log('draw stocks');
-	      return '\n      <input type="radio" id="stock-' + item.id + '" name="stock" value="email" class="d-none">\n      <label style="padding-left: 34px;" for="stock-' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '" data-stock-t2="' + item.values[2][0] + '">\n        <div class="row w-100">\n          <div class="col-8">' + item.name + '</div>\n          <div class="col-4 d-flex justify-content-between border">\n            <div class="w-100 text-center">' + item.values[3][0] + '</div>\n            <div class="w-100 text-center">' + item.values[2][0] + '</div>\n            <div class="w-100 text-center">' + item.values[4][0] + '</div>\n          </div>\n          </div>\n        </label>';
+	      return '\n      <input type="radio" id="stock-' + item.id + '" name="stock" value="email" class="d-none">\n      <label style="padding-left: 34px;" for="stock-' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '" data-stock-t2="' + item.values[2][0] + '">\n        <div class="row w-100 h-100">\n          <div class="col-8">' + item.name + '</div>\n          <div class="col-4 d-flex justify-content-between">\n            <div class="w-100 text-center">' + item.values[3][0] + '</div>\n            <div class="w-100 text-center">' + item.values[2][0] + '</div>\n            <div class="w-100 text-center">' + item.values[4][0] + '</div>\n          </div>\n          </div>\n        </label>';
 	    }).join(''));
 	    console.log(allStocks);
 	  }
@@ -5349,10 +5334,6 @@
 	  value: true
 	});
 	
-	var _xhr = __webpack_require__(5);
-	
-	var _xhr2 = _interopRequireDefault(_xhr);
-	
 	var _storage = __webpack_require__(1);
 	
 	var _storage2 = _interopRequireDefault(_storage);
@@ -5365,65 +5346,20 @@
 	
 	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
 	
+	var _formTools = __webpack_require__(39);
+	
+	var _formTools2 = _interopRequireDefault(_formTools);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var appUrl = window.appSettings.formEditGroups.UrlApi;
-	
-	var validPattern = window.appSettings.formEditGroups.validPatterns;
-	var validMessage = window.appSettings.formEditGroups.validMessage;
-	
 	var messages = window.appSettings.formEditGroups.messages;
-	
-	var body = document.querySelector('body');
-	var enterprisesAdd = body.querySelector('#groups-edit');
-	var form = enterprisesAdd.querySelector('#groups-edit-form');
-	
+	var form = document.querySelector('#groups-edit-form');
 	var name = form.querySelector('#groups-edit-name');
-	
-	var spinner = form.querySelector('#groups-edit-spinner');
-	
-	var buttonSubmit = form.querySelector('#groups-edit-submit');
-	var buttonCancel = form.querySelector('#groups-edit-cancel');
-	
-	var showSpinner = function showSpinner() {
-	  spinner.classList.remove('invisible');
-	  buttonSubmit.disabled = true;
-	  buttonCancel.disabled = true;
-	};
-	
-	var hideSpinner = function hideSpinner() {
-	  spinner.classList.add('invisible');
-	  buttonSubmit.disabled = false;
-	  buttonCancel.disabled = false;
-	};
-	
-	var showAlert = function showAlert(input) {
-	  input.classList.add('border');
-	  input.classList.add('border-danger');
-	  input.nextElementSibling.innerHTML = validMessage[input.id.match(/[\w]+$/)];
-	};
-	
-	var hideAlert = function hideAlert(input) {
-	  input.classList.remove('border');
-	  input.classList.remove('border-danger');
-	  input.nextElementSibling.innerHTML = '';
-	};
-	
-	var formReset = function formReset() {
-	  form.reset();
-	
-	  hideAlert(name);
-	
-	  hideSpinner();
-	
-	  buttonSubmit.disabled = true;
-	  buttonCancel.disabled = false;
-	};
 	
 	var callbackXhrSuccess = function callbackXhrSuccess(response) {
 	
-	  hideSpinner();
-	  formReset();
+	  _formTools2.default.reset();
 	  $('#groups-edit').modal('hide');
 	
 	  switch (response.status) {
@@ -5445,36 +5381,6 @@
 	  }
 	};
 	
-	var callbackXhrError = function callbackXhrError() {
-	
-	  hideSpinner();
-	  formReset();
-	  $('#groups-edit').modal('hide');
-	
-	  _tools2.default.informationtModal = {
-	    'title': 'Error',
-	    'messages': window.appSettings.messagess.xhrError
-	  };
-	};
-	
-	var formIsChange = function formIsChange() {
-	  if (name.value !== window.appFormCurrValue.name) {
-	    return true;
-	  }
-	  return false;
-	};
-	
-	var validateForm = function validateForm() {
-	  var valid = true;
-	
-	  if (!validPattern.name.test(name.value)) {
-	    valid = false;
-	    showAlert(name);
-	  }
-	
-	  return valid;
-	};
-	
 	var submitForm = function submitForm() {
 	  var stor = _storage2.default.data;
 	
@@ -5484,51 +5390,22 @@
 	  urlApp = urlApp.replace('{{busId}}', stor.currentBusiness);
 	  urlApp = urlApp.replace('{{groupId}}', _storage2.default.currentGroupId);
 	
-	  var response = {
+	  _formTools2.default.submit({
 	    url: urlApp,
 	    metod: 'PUT',
 	    data: postData,
-	    callbackSuccess: callbackXhrSuccess,
-	    callbackError: callbackXhrError
-	  };
-	
-	  console.dir(response);
-	
-	  _xhr2.default.request = response;
-	};
-	
-	var formSubmitHandler = function formSubmitHandler(evt) {
-	  evt.preventDefault();
-	
-	  if (validateForm()) {
-	    showSpinner();
-	    submitForm();
-	  }
+	    callbackSuccess: callbackXhrSuccess
+	  });
 	};
 	
 	var addHandlers = function addHandlers() {
 	
 	  $('#groups-edit').on('hidden.bs.modal', function () {
-	    formReset();
+	    _formTools2.default.reset();
 	  });
-	
 	  $('#groups-edit').on('shown.bs.modal', function () {
-	    window.appFormCurrValue = {
-	      'name': name.value
-	    };
+	    _formTools2.default.work(form, submitForm);
 	  });
-	
-	  form.addEventListener('input', function (evt) {
-	    hideAlert(evt.target);
-	
-	    if (formIsChange()) {
-	      buttonSubmit.disabled = false;
-	    } else {
-	      buttonSubmit.disabled = true;
-	    }
-	  });
-	
-	  form.addEventListener('submit', formSubmitHandler);
 	};
 	
 	exports.default = {
@@ -5549,6 +5426,198 @@
 	
 	var _xhr2 = _interopRequireDefault(_xhr);
 	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var butSubmit = void 0; // теги в разметке:
+	//   <form>
+	//      data-formName = appSettings.{formName}
+	//   <input>
+	//      data-valid = appSettings.formName.validPatterns.{valid}
+	//      data-validLabelName = data-validLabel на сообщении о валидации
+	//   <сообщение>
+	//      data-validLabel = appSettings.formName.validMessage.{data-validLabel}
+	//   <спиннер>
+	//      data-spinner
+	//   <кнопка отмены>
+	//      data-butCancel
+	
+	
+	// Параметры work:
+	// -----------------------------------------------------------------------------
+	//   remoteForm - форма
+	// -----------------------------------------------------------------------------
+	//   remoteSubmitCallback - массив функций должны возвращать объект:
+	//     {
+	//       url: ссылка на апи,
+	//       metod: метод http,
+	//       data: строка data,
+	//     }
+	//   Массив нужен для отправок отправок разных полей по разным адресам
+	// -----------------------------------------------------------------------------
+	//   remoteXhrCallbackSuccess - функция, в которую передается управление при
+	//      успешном запросе
+	// -----------------------------------------------------------------------------
+	//   remoteValidCallback - параметр validCallback передается для дополнительной
+	//      проверки
+	//     (когда недостаточно проверить текстовые поля по шаблонам).
+	//     Должен возвращать true или false.
+	//
+	
+	var butCancel = void 0;
+	var spinner = void 0;
+	
+	var form = void 0;
+	var pattern = void 0;
+	var message = void 0;
+	var submitCallback = void 0;
+	var validCallback = void 0;
+	
+	var elSaveValues = void 0;
+	
+	var showAlert = function showAlert(el) {
+	  if (el.type === 'text') {
+	    el.classList.add('border');
+	    el.classList.add('border-danger');
+	    form.querySelector('*[data-validLabel="' + el.dataset.validlabelname + '"]').innerHTML = message[el.dataset.valid];
+	  }
+	};
+	
+	var hideAlert = function hideAlert(el) {
+	  if (el.type === 'text') {
+	    el.classList.remove('border');
+	    el.classList.remove('border-danger');
+	    form.querySelector('*[data-validLabel="' + el.dataset.validlabelname + '"]').innerHTML = '';
+	  }
+	};
+	
+	var showSpinner = function showSpinner() {
+	  spinner.classList.remove('invisible');
+	  butSubmit.disabled = true;
+	  butCancel.disabled = true;
+	};
+	
+	var hideSpinner = function hideSpinner() {
+	  spinner.classList.add('invisible');
+	  butSubmit.disabled = false;
+	  butCancel.disabled = false;
+	};
+	
+	var delHandlers = function delHandlers() {
+	  form.removeEventListener('submit', formSubmitHandler);
+	  form.removeEventListener('input', formInputHandler);
+	};
+	
+	var formReset = function formReset() {
+	  form.reset();
+	
+	  form.querySelectorAll('*[data-valid]').forEach(function (el) {
+	    hideAlert(el);
+	  });
+	
+	  hideSpinner();
+	  butSubmit.disabled = true;
+	  delHandlers();
+	};
+	
+	var validateForm = function validateForm() {
+	
+	  var valid = true;
+	  var otherValid = validCallback ? validCallback() : true;
+	  var elements = form.querySelectorAll('*[data-valid]');
+	
+	  elements.forEach(function (el) {
+	    if (!pattern[el.dataset.valid].test(el.value)) {
+	      valid = false;
+	      showAlert(el);
+	    }
+	  });
+	
+	  return valid && otherValid;
+	};
+	
+	var formIsChange = function formIsChange() {
+	  var change = false;
+	
+	  form.querySelectorAll('*[data-valid]').forEach(function (el, index) {
+	    if (el.value !== elSaveValues[index]) {
+	      change = true;
+	    }
+	  });
+	
+	  return change;
+	};
+	
+	var formSubmitHandler = function formSubmitHandler(evt) {
+	  evt.preventDefault();
+	
+	  if (validateForm()) {
+	    showSpinner();
+	    submitCallback();
+	  }
+	};
+	
+	var submitForm = function submitForm(data) {
+	  _xhr2.default.request = data;
+	};
+	
+	var formInputHandler = function formInputHandler(evt) {
+	  hideAlert(evt.target);
+	
+	  if (formIsChange()) {
+	    butSubmit.disabled = false;
+	  } else {
+	    butSubmit.disabled = true;
+	  }
+	};
+	
+	var addHandlersFunc = function addHandlersFunc(remoteForm, remoteSubmitCallback, remoteValidCallback) {
+	
+	  form = remoteForm;
+	  submitCallback = remoteSubmitCallback;
+	  validCallback = remoteValidCallback;
+	  pattern = window.appSettings[form.dataset.formname].validPatterns;
+	  message = window.appSettings[form.dataset.formname].validMessage;
+	
+	  butSubmit = form.querySelector('button[type="submit"]');
+	  butCancel = form.querySelector('*[data-butCancel]');
+	  spinner = form.querySelector('*[data-spinner]');
+	
+	  elSaveValues = [];
+	
+	  form.querySelectorAll('*[data-valid]').forEach(function (el) {
+	    elSaveValues.push(el.value);
+	  });
+	
+	  form.addEventListener('submit', formSubmitHandler);
+	  form.addEventListener('input', formInputHandler);
+	};
+	
+	var valEl = function valEl(el) {
+	  if (pattern[el.dataset.valid].test(el.value)) {
+	    return true;
+	  }
+	  showAlert(el);
+	  return false;
+	};
+	
+	exports.default = {
+	
+	  work: addHandlersFunc,
+	  reset: formReset,
+	  validElement: valEl,
+	  submit: submitForm
+	};
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
 	var _storage = __webpack_require__(1);
 	
 	var _storage2 = _interopRequireDefault(_storage);
@@ -5557,94 +5626,37 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalogGroups = __webpack_require__(34);
+	var _catalogGroupsGoods = __webpack_require__(36);
 	
-	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
+	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
+	
+	var _formTools = __webpack_require__(39);
+	
+	var _formTools2 = _interopRequireDefault(_formTools);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var appUrl = window.appSettings.formAddGoods.UrlApi;
 	var messages = window.appSettings.formAddGoods.message;
 	
-	var validPattern = window.appSettings.formAddGoods.validPatterns;
-	var validMessage = window.appSettings.formAddGoods.validMessage;
-	
-	var body = document.querySelector('body');
-	var groupGoodsAdd = body.querySelector('#group-goods-add');
-	var form = groupGoodsAdd.querySelector('#group-goods-add-form');
+	var form = document.querySelector('#group-goods-add-form');
 	
 	var name = form.querySelector('#group-goods-name');
 	var describe = form.querySelector('#group-goods-describe');
-	var group = form.querySelector('#group-goods-group');
+	var priceGroup = form.querySelector('#group-goods-price');
 	var purchase = form.querySelector('#group-goods-price-purchase');
 	var extra = form.querySelector('#group-goods-price-extra');
 	var sell = form.querySelector('#group-goods-price-sell');
 	var barcode = form.querySelector('#group-goods-barcode');
 	
-	var spinner = form.querySelector('#group-goods-add-spinner');
-	var priceValid = form.querySelector('#group-goods-price-valid');
-	
-	var buttonSubmit = form.querySelector('#group-goods-add-submit');
-	var buttonCancel = form.querySelector('#group-goods-add-cancel');
-	
-	var showSpinner = function showSpinner() {
-	  spinner.classList.remove('invisible');
-	  buttonSubmit.disabled = true;
-	  buttonCancel.disabled = true;
-	};
-	
-	var hideSpinner = function hideSpinner() {
-	  spinner.classList.add('invisible');
-	  buttonSubmit.disabled = false;
-	  buttonCancel.disabled = false;
-	};
-	
-	var showAlert = function showAlert(input) {
-	  if (input.type === 'text') {
-	    input.classList.add('border');
-	    input.classList.add('border-danger');
-	    input.nextElementSibling.innerHTML = validMessage[input.id.match(/[\w]+$/)];
-	  }
-	};
-	
-	var hideAlert = function hideAlert(input) {
-	  if (input.type === 'text') {
-	    switch (input.id) {
-	      case 'group-goods-price-purchase':
-	        priceValid.innerHTML = '';break;
-	      case 'group-goods-price-extra':
-	        priceValid.innerHTML = '';break;
-	      case 'group-goods-price-sell':
-	        priceValid.innerHTML = '';break;
-	      default:
-	        input.nextElementSibling.innerHTML = '';break;
-	    }
-	
-	    input.classList.remove('border');
-	    input.classList.remove('border-danger');
-	  }
-	};
-	
-	var formReset = function formReset() {
-	  form.reset();
-	
-	  hideAlert(name);
-	
-	  hideSpinner();
-	
-	  buttonSubmit.disabled = true;
-	  buttonCancel.disabled = false;
-	};
-	
 	var callbackXhrSuccess = function callbackXhrSuccess(response) {
 	
-	  hideSpinner();
-	  formReset();
+	  _formTools2.default.reset();
 	  $('#group-goods-add').modal('hide');
 	
 	  switch (response.status) {
 	    case 200:
-	      _catalogGroups2.default.redrawGoods();
+	      _catalogGroupsGoods2.default.fill();
 	      break;
 	    case 400:
 	      _tools2.default.informationtModal = {
@@ -5661,53 +5673,6 @@
 	  }
 	};
 	
-	var callbackXhrError = function callbackXhrError() {
-	  hideSpinner();
-	  formReset();
-	  $('#group-goods-add').modal('hide');
-	
-	  _tools2.default.informationtModal = {
-	    'title': 'Error',
-	    'messages': window.appSettings.messagess.xhrError
-	  };
-	};
-	
-	var validateForm = function validateForm() {
-	  var valid = true;
-	
-	  if (!validPattern.name.test(name.value)) {
-	    valid = false;
-	    showAlert(name);
-	  }
-	
-	  if (!validPattern.description.test(describe.value)) {
-	    valid = false;
-	    showAlert(describe);
-	  }
-	
-	  if (!validPattern.group.test(group.value)) {
-	    valid = false;
-	    showAlert(group);
-	  }
-	  if (!validPattern.purchasePrice.test(purchase.value)) {
-	    valid = false;
-	    priceValid.innerHTML = '!!';
-	  }
-	  if (!validPattern.extra.test(extra.value)) {
-	    valid = false;
-	    priceValid.innerHTML = '!!';
-	  }
-	  if (!validPattern.sellingPrice.test(sell.value)) {
-	    valid = false;
-	    priceValid.innerHTML = '!!';
-	  }
-	  if (!validPattern.barcode.test(barcode.value)) {
-	    valid = false;
-	    showAlert(barcode);
-	  }
-	  return valid;
-	};
-	
 	var submitForm = function submitForm() {
 	  var stor = _storage2.default.data;
 	  var groupId = _storage2.default.currentGroupId;
@@ -5717,42 +5682,55 @@
 	  urlApp = urlApp.replace('{{oper}}', stor.operatorId);
 	  urlApp = urlApp.replace('{{busId}}', stor.currentBusiness);
 	
-	  var response = {
+	  _formTools2.default.submit({
 	    url: urlApp,
 	    metod: 'POST',
 	    data: postData,
-	    callbackSuccess: callbackXhrSuccess,
-	    callbackError: callbackXhrError
-	  };
-	
-	  _xhr2.default.request = response;
+	    callbackSuccess: callbackXhrSuccess
+	  });
 	};
 	
-	var formSubmitHandler = function formSubmitHandler(evt) {
-	  evt.preventDefault();
+	var calcExtra = function calcExtra() {
+	  sell.value = (Number(purchase.value) + purchase.value / 100 * extra.value).toFixed(2);
+	};
 	
-	  if (validateForm()) {
-	    showSpinner();
-	    submitForm();
+	var calcPercent = function calcPercent() {
+	  extra.value = ((sell.value - purchase.value) * 100 / purchase.value).toFixed(2);
+	};
+	
+	var priceChangeHandler = function priceChangeHandler(evt) {
+	  if (!evt.target.type === 'text') {
+	    return false;
 	  }
+	
+	  if (_formTools2.default.validElement(evt.target)) {
+	
+	    switch (evt.target.id) {
+	      case 'group-goods-price-purchase':
+	        calcExtra();break;
+	
+	      case 'group-goods-price-extra':
+	        calcExtra();break;
+	
+	      case 'group-goods-price-sell':
+	        calcPercent();break;
+	    }
+	  }
+	
+	  return true;
 	};
 	
 	var addHandlers = function addHandlers() {
-	
 	  $('#group-goods-add').on('hidden.bs.modal', function () {
-	    formReset();
+	    _formTools2.default.reset();
 	  });
 	
 	  $('#group-goods-add').on('shown.bs.modal', function () {
-	    group.value = _storage2.default.currentGroupName;
+	    document.querySelector('#group-goods-group').value = _storage2.default.currentGroupName;
+	    _formTools2.default.work(form, submitForm);
 	  });
 	
-	  form.addEventListener('input', function (evt) {
-	    hideAlert(evt.target);
-	    buttonSubmit.disabled = false;
-	  });
-	
-	  form.addEventListener('submit', formSubmitHandler);
+	  priceGroup.addEventListener('change', priceChangeHandler);
 	};
 	
 	exports.default = {
@@ -5760,7 +5738,7 @@
 	};
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5777,7 +5755,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogCards = __webpack_require__(41);
+	var _catalogCards = __webpack_require__(42);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
 	
@@ -6076,7 +6054,7 @@
 	};
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -6116,7 +6094,7 @@
 	};
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6133,7 +6111,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogCards = __webpack_require__(41);
+	var _catalogCards = __webpack_require__(42);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
 	
@@ -6337,7 +6315,7 @@
 	};
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6346,59 +6324,91 @@
 	  value: true
 	});
 	
-	var _xhr = __webpack_require__(5);
-	
-	var _xhr2 = _interopRequireDefault(_xhr);
-	
 	var _storage = __webpack_require__(1);
 	
 	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
 	
 	var _catalogGroupsGoods = __webpack_require__(36);
 	
 	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
 	
+	var _formTools = __webpack_require__(39);
+	
+	var _formTools2 = _interopRequireDefault(_formTools);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var expressModal = document.querySelector('#express-modal'); // Экспресс-операция БЕЗ ВАЛИДАЦИИ
+	var appUrl = window.appSettings.formExpressOperation.UrlApi;
+	var messages = window.appSettings.formExpressOperation.message;
 	
-	var expressModalPrice = document.querySelector('#express-modal-price');
-	var expressModalQuantity = document.querySelector('#express-modal-quantity');
-	var expressModalSubmit = document.querySelector('#express-modal-submit');
-	var expressModalForm = document.querySelector('#express-modal-form');
+	var form = document.querySelector('#express-modal-form');
 	
-	var onSuccessExpressExecute = function onSuccessExpressExecute(answer) {
-	  $(expressModal).modal('hide');
-	  _catalogGroupsGoods2.default.fill();
+	var price = form.querySelector('#express-modal-price');
+	var amount = form.querySelector('#express-modal-quantity');
+	
+	var callbackXhrSuccess = function callbackXhrSuccess(response) {
+	
+	  _formTools2.default.reset();
+	  $('#express-modal').modal('hide');
+	
+	  switch (response.status) {
+	    case 200:
+	      _catalogGroupsGoods2.default.fill();
+	      break;
+	    case 400:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'messages': messages.mes400
+	      };
+	      break;
+	    case 271:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'messages': response.messages
+	      };
+	      break;
+	  }
 	};
 	
-	var onExpressModalSubmit = function onExpressModalSubmit(evt) {
-	  evt.preventDefault();
-	  _xhr2.default.request = {
+	var submitForm = function submitForm() {
+	  var stor = _storage2.default.data;
+	  var value = amount.value * Number(_storage2.default.expressOperationType);
+	
+	  var postData = 'token=' + stor.token + '&value=' + value + '&price=' + price.value;
+	  var urlApp = appUrl.replace('{{dir}}', stor.directory);
+	  urlApp = urlApp.replace('{{oper}}', stor.operatorId);
+	  urlApp = urlApp.replace('{{busId}}', stor.currentBusiness);
+	  urlApp = urlApp.replace('{{goodId}}', _storage2.default.currentGoodId);
+	  urlApp = urlApp.replace('{{stockId}}', _storage2.default.currentStockId);
+	
+	  _formTools2.default.submit({
+	    url: urlApp,
 	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + _storage2.default.currentGoodId + '/stock/' + _storage2.default.currentStockId + '/express',
-	    data: 'value=' + expressModalQuantity.value * +_storage2.default.expressOperationType + '&price=' + expressModalPrice.value + '&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessExpressExecute
-	  };
+	    data: postData,
+	    callbackSuccess: callbackXhrSuccess
+	  });
 	};
 	
-	var start = function start() {
-	  expressModalSubmit.removeAttribute('disabled');
-	  expressModalForm.addEventListener('submit', onExpressModalSubmit);
-	};
+	var addHandlers = function addHandlers() {
+	  $('#express-modal').on('hidden.bs.modal', function () {
+	    _formTools2.default.reset();
+	  });
 	
-	var stop = function stop() {
-	  expressModalSubmit.addAttribute('disabled', 'disabled');
-	  expressModalForm.addEventListener('submit', onExpressModalSubmit);
+	  $('#express-modal').on('shown.bs.modal', function () {
+	    _formTools2.default.work(form, submitForm);
+	  });
 	};
 	
 	exports.default = {
-	  start: start,
-	  stop: stop
+	  start: addHandlers
 	};
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6454,7 +6464,7 @@
 	};
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6471,7 +6481,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogGroupsCards = __webpack_require__(40);
+	var _catalogGroupsCards = __webpack_require__(41);
 	
 	var _catalogGroupsCards2 = _interopRequireDefault(_catalogGroupsCards);
 	
