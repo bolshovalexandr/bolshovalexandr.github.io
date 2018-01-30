@@ -4422,6 +4422,7 @@
 	var listGroupGoodsAddModalName = document.querySelector('#group-goods-name');
 	var listGroupGoodsAddModalDescribe = document.querySelector('#group-goods-describe');
 	var listGroupGoodsAddModalPurchase = document.querySelector('#group-goods-price-purchase');
+	var listGroupGoodsAddModalExtra = document.querySelector('#group-goods-price-extra');
 	var listGroupGoodsAddModalSell = document.querySelector('#group-goods-price-sell');
 	var listGroupGoodsAddModalBarcode = document.querySelector('#group-goods-barcode');
 	var listGroupGoodsCardCopyBtn = document.querySelector('#group-goods-copy-btn');
@@ -4595,6 +4596,7 @@
 	  listGroupGoodsAddModalDescribe.value = description;
 	  listGroupGoodsAddModalPurchase.value = +purchasePrice;
 	  listGroupGoodsAddModalSell.value = +sellingPrice;
+	  listGroupGoodsAddModalExtra.value = (+sellingPrice - +purchasePrice) * +purchasePrice / 100;
 	  listGroupGoodsAddModalBarcode.value = barcode;
 	};
 	
