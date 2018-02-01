@@ -140,6 +140,7 @@
 	
 	// Отправка без валидации
 	
+	
 	// import goodsButtonFormEdit from './buttons/catalog-groups-goods-edit.js';
 	
 	console.log('ver: 3A4');
@@ -3924,10 +3925,6 @@
 	// модификатор отображения при отрисовке ключевого слова
 	var keywordModificator = null;
 	
-	// теги, которые приходят с каждым товаром, с ними мы сравниваем весь список клюслов
-	// let goodTags = [];
-	
-	
 	// установка прозрачности
 	var setKeywordModificator = function setKeywordModificator(keywordId, keywordNode) {
 	  if (keywordModificator) {
@@ -3971,7 +3968,6 @@
 	var getKeywords = function getKeywords(containerToDraw, handler, modificator) {
 	
 	  container = containerToDraw;
-	  console.log(container);
 	  keywordHandler = handler;
 	  keywordModificator = modificator;
 	  container.innerHTML = loaderSpinnerMarkup;
@@ -4998,7 +4994,6 @@
 	var stockModalName = document.querySelector('#set-stock-modal-stock');
 	var stockModalQuantity = document.querySelector('#set-stock-modal-quantity');
 	
-	var goodTags = [];
 	var formSave = {};
 	
 	var saveForm = function saveForm() {
@@ -5011,16 +5006,20 @@
 	};
 	
 	var restoreForm = function restoreForm() {
-	  if (formSave.name) {
+	  if (_storage2.default.isGoodCardEdit === 'true') {
 	    goodsCardName.value = formSave.name;
 	    goodsCardDescribe.value = formSave.describe;
 	    goodsCardBarcode.value = formSave.barcode;
 	    goodsCardGroup.value = formSave.group;
 	  }
+	  _storage2.default.isGoodCardEdit = false;
 	};
 	
+	var goodTags = [];
 	var onSuccessGoodsLoad = function onSuccessGoodsLoad(loadedGood) {
 	  console.log(loadedGood);
+	
+	  // разбираем данные
 	  var _loadedGood$data = loadedGood.data,
 	      name = _loadedGood$data.name,
 	      description = _loadedGood$data.description,
@@ -5036,23 +5035,22 @@
 	
 	  purchasePrice = Number(purchasePrice).toFixed(2);
 	  sellingPrice = Number(sellingPrice).toFixed(2);
+	
+	  // заполняем форму - сведения о товаре
 	  goodsCardName.value = name;
 	  goodsCardDescribe.value = description;
 	  goodsCardBarcode.value = barcode;
 	  goodsCardPurchase.value = purchasePrice;
 	  goodsCardSell.value = sellingPrice;
 	  goodsCardExtra.innerHTML = ((+sellingPrice - +purchasePrice) / (+purchasePrice / 100)).toFixed(2) + '%';
-	
-	  goodTags = tags ? tags : [];
-	
 	  goodsCardGroup.innerHTML = allGroups.map(function (item) {
 	    return '<option value="' + item.id + '" ' + (item.id === groupId ? 'selected' : '') + '>' + item.name + '</option>';
 	  }).join('');
-	
 	  goodsCardImage.title = name;
 	  goodsCardImage.alt = name;
 	  goodsCardImage.src = imgUrl ? 'https://lopos.bidone.ru/users/600a5357/images/' + imgUrl + '.jpg' : './img/not-available.png';
 	
+	  // заполняем форму - остатки
 	  var totalCount = 0;
 	  var checkedStock = false;
 	
@@ -5081,7 +5079,6 @@
 	    goodsStock.insertAdjacentHTML('beforeend', '\n      <div class="row border">\n        <div class="col-8 border">\u0418\u0442\u043E\u0433\u043E</div>\n        <div class="col-4 text-center">\n          ' + totalCount + '\n        </div>\n      </div>');
 	  }
 	
-	  console.log(checkedStock);
 	  if (checkedStock) {
 	    goodsStock.querySelector('#stock-' + checkedStock).checked = true;
 	    _storage2.default.currentStockId = checkedStock;
@@ -5094,22 +5091,26 @@
 	    _storage2.default.currentStockQuantityT2 = goodsStock.children[1].dataset.stockT2;
 	  }
 	
-	  _universalKeywords2.default.downloadAndDraw(goodsCardKeywordsBody, onKeywordClick, keywordModificator);
+	  // keywordsUniversal.downloadAndDraw(goodsCardKeywordsBody, onKeywordClick, keywordModificator);
 	
-	  var onGoodKeywordClick = function onGoodKeywordClick(evt) {
-	    _storage2.default.isGoodCardEdit = true;
+	  /*
+	  const onGoodKeywordClick = (evt) => {
+	    auth.isGoodCardEdit = true;
 	    saveForm();
-	    var returnHandler = function returnHandler(e) {
-	      // $('#list-keywords-list').tab('hide');
+	    const returnHandler = (e) => {
 	      getGood();
 	      $('#list-groups-list').tab('show');
 	      $('#goods-card').modal('show');
 	      e.target.removeEventListener('click', returnHandler);
-	    };
-	    _referenceKeywords2.default.showKeywordEdit(evt, returnHandler);
+	      };
+	    referenceKeywords.showKeywordEdit(evt, returnHandler);
 	    $('#goods-card').modal('hide');
 	    $('#list-keywords-list').tab('show');
 	  };
+	  */
+	
+	  // заполняем форму - ключевые слова и работа с ними
+	  goodTags = tags ? tags : [];
 	
 	  goodsKeywords.innerHTML = '';
 	  if (goodTags.length) {
@@ -5126,6 +5127,23 @@
 	  _storage2.default.isGoodCardEdit = false;
 	
 	  _catalogGroupsGoodsEdit2.default.start(goodsCard);
+	
+	  // восстановление состояния формы
+	  restoreForm();
+	};
+	
+	var onGoodKeywordClick = function onGoodKeywordClick(evt) {
+	  _storage2.default.isGoodCardEdit = true;
+	  saveForm();
+	  var returnHandler = function returnHandler(e) {
+	    getGood();
+	    $('#list-groups-list').tab('show');
+	    $('#goods-card').modal('show');
+	    e.target.removeEventListener('click', returnHandler);
+	  };
+	  _referenceKeywords2.default.showKeywordEdit(evt, returnHandler);
+	  $('#goods-card').modal('hide');
+	  $('#list-keywords-list').tab('show');
 	};
 	
 	// обработчик клика по ключевому слову (пока внутри карточки связей "товар-слово")
@@ -5212,7 +5230,6 @@
 	        callbackSuccess: onSuccessExpressExecute
 	      };
 	    } else if (currentBtnId.indexOf('custom') !== -1) {
-	      // $(goodsCard).modal('hide');
 	      $(expressModal).modal('show');
 	
 	      console.log(formSave);
@@ -5226,7 +5243,7 @@
 	      expressModalQuantity.value = '';
 	      expressModalQuantity.focus();
 	      _storage2.default.expressOperationType = multiplier;
-	      _catalogGroupsGoodsExpress2.default.start(expressModal);
+	      // goodsExpressValidityAndSend.start(expressModal);
 	    }
 	    _storage2.default.isGoodCardEdit = true;
 	    saveForm();
@@ -5268,7 +5285,6 @@
 	  stockModalQuantity.value = _storage2.default.currentStockQuantityT2;
 	  _storage2.default.isGoodCardEdit = true;
 	  saveForm();
-	
 	  _catalogGroupsGoodsStock2.default.start(stockModal);
 	});
 	
