@@ -425,7 +425,7 @@
 	  },
 	
 	  get currentStockQuantityT2() {
-	    return sessionStorage.getItem('currentStockQuantityT2');
+	    return Number(sessionStorage.getItem('currentStockQuantityT2')).toFixed(2);
 	  },
 	
 	  set expressOperationType(type) {
@@ -1027,6 +1027,9 @@
 	    };
 	
 	    $(modalUniversalAdd).modal('show');
+	    $(modalUniversalAdd).on('shown.bs.modal', function () {
+	      $('#universal-add-name').trigger('focus');
+	    });
 	    modalUniversalAddLabel.innerHTML = setup.title;
 	    modalUniversalAddNameLabel.innerHTML = setup.inputLabel;
 	    modalUniversalAddName.setAttribute('placeholder', setup.inputPlaceholder);
@@ -5067,6 +5070,7 @@
 	      totalCount += +item.values[4][0] + +item.values[2][0] + +item.values[3][0];
 	      if (!_storage2.default.currentStockId) {
 	        checkedStock = item.id === _storage2.default.data.currentStock ? item.id : checkedStock;
+	        // auth.currentStockId = checkedStock;
 	      } else {
 	        checkedStock = _storage2.default.currentStockId;
 	      }
@@ -5079,35 +5083,18 @@
 	    goodsStock.insertAdjacentHTML('beforeend', '\n      <div class="row border">\n        <div class="col-8 border">\u0418\u0442\u043E\u0433\u043E</div>\n        <div class="col-4 text-center">\n          ' + totalCount + '\n        </div>\n      </div>');
 	  }
 	
+	  // переписать на storage
 	  if (checkedStock) {
 	    goodsStock.querySelector('#stock-' + checkedStock).checked = true;
 	    _storage2.default.currentStockId = checkedStock;
 	    _storage2.default.currentStockName = goodsStock.querySelector('#stock-' + checkedStock).nextElementSibling.dataset.stockName;
-	    _storage2.default.currentStockQuantityT2 = goodsStock.children[1].dataset.stockT2;
+	    _storage2.default.currentStockQuantityT2 = goodsStock.querySelector('#stock-' + checkedStock).nextElementSibling.dataset.stockT2;
 	  } else if (goodsStock.firstChild.id) {
 	    goodsStock.firstChild.checked = true;
 	    _storage2.default.currentStockId = goodsStock.firstChild.id.split('-')[1];
 	    _storage2.default.currentStockName = goodsStock.children[1].dataset.stockName;
 	    _storage2.default.currentStockQuantityT2 = goodsStock.children[1].dataset.stockT2;
 	  }
-	
-	  // keywordsUniversal.downloadAndDraw(goodsCardKeywordsBody, onKeywordClick, keywordModificator);
-	
-	  /*
-	  const onGoodKeywordClick = (evt) => {
-	    auth.isGoodCardEdit = true;
-	    saveForm();
-	    const returnHandler = (e) => {
-	      getGood();
-	      $('#list-groups-list').tab('show');
-	      $('#goods-card').modal('show');
-	      e.target.removeEventListener('click', returnHandler);
-	      };
-	    referenceKeywords.showKeywordEdit(evt, returnHandler);
-	    $('#goods-card').modal('hide');
-	    $('#list-keywords-list').tab('show');
-	  };
-	  */
 	
 	  // заполняем форму - ключевые слова и работа с ними
 	  goodTags = tags ? tags : [];
