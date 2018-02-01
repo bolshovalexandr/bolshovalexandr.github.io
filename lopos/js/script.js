@@ -110,42 +110,38 @@
 	
 	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
 	
-	var _catalogGroupsAdd = __webpack_require__(37);
+	var _catalogGroupsAdd = __webpack_require__(44);
 	
 	var _catalogGroupsAdd2 = _interopRequireDefault(_catalogGroupsAdd);
 	
-	var _catalogGroupsEdit = __webpack_require__(38);
+	var _catalogGroupsEdit = __webpack_require__(45);
 	
 	var _catalogGroupsEdit2 = _interopRequireDefault(_catalogGroupsEdit);
 	
-	var _catalogGroupsGoodsAdd = __webpack_require__(40);
+	var _catalogGroupsGoodsAdd = __webpack_require__(46);
 	
 	var _catalogGroupsGoodsAdd2 = _interopRequireDefault(_catalogGroupsGoodsAdd);
 	
-	var _catalogGroupsCards = __webpack_require__(41);
+	var _catalog__cards = __webpack_require__(47);
 	
-	var _catalogGroupsCards2 = _interopRequireDefault(_catalogGroupsCards);
+	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
-	var _catalogSearch = __webpack_require__(43);
+	var _catalog__search = __webpack_require__(49);
 	
-	var _catalogSearch2 = _interopRequireDefault(_catalogSearch);
+	var _catalog__search2 = _interopRequireDefault(_catalog__search);
 	
-	var _catalogGroupsGoodsExpress = __webpack_require__(44);
+	var _catalog__cardsAddResource = __webpack_require__(50);
 	
-	var _catalogGroupsGoodsExpress2 = _interopRequireDefault(_catalogGroupsGoodsExpress);
-	
-	var _catalogGroupsGoodsStock = __webpack_require__(45);
-	
-	var _catalogGroupsGoodsStock2 = _interopRequireDefault(_catalogGroupsGoodsStock);
-	
-	var _catalogGroupsCardsResourceAdd = __webpack_require__(46);
-	
-	var _catalogGroupsCardsResourceAdd2 = _interopRequireDefault(_catalogGroupsCardsResourceAdd);
+	var _catalog__cardsAddResource2 = _interopRequireDefault(_catalog__cardsAddResource);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// Отправка без валидации
 	console.log('ver: 3D1');
+	
+	// Отправка без валидации
+	
+	// import goodsButtonFormEdit from './buttons/catalog-groups-goods-edit.js';
+	
 	console.log('ver: 3A4');
 	
 	var exit = document.querySelector('#profile-exit');
@@ -188,7 +184,7 @@
 	  }
 	};
 	
-	var mainMenuButtons = [_onlineProfile2.default, _log2.default, _referenceEnterprises2.default, _referencePoints2.default, _referenceContractors2.default, _referenceKeywords2.default, _catalogGroups2.default, _catalogGroupsGoodsExpress2.default, _catalogGroupsGoodsStock2.default, _catalogGroupsCards2.default, _catalogGroupsCardsResourceAdd2.default, _catalogSearch2.default];
+	var mainMenuButtons = [_onlineProfile2.default, _log2.default, _referenceEnterprises2.default, _referencePoints2.default, _referenceContractors2.default, _referenceKeywords2.default, _catalogGroups2.default, _catalog__cards2.default, _catalog__cardsAddResource2.default, _catalog__search2.default];
 	
 	// ========== ОБНОВЛЕНИЕ/ОТКРЫТИЕ СТРАНИЦЫ ==========
 	var start = function start() {
@@ -209,6 +205,7 @@
 	    _catalogGroupsAdd2.default.start();
 	    _catalogGroupsEdit2.default.start();
 	    _catalogGroupsGoodsAdd2.default.start();
+	    // goodsButtonFormEdit.start();
 	  } else {
 	    showLoginHideApp();
 	    _main_login_window2.default.init();
@@ -460,6 +457,14 @@
 	
 	  get currentCardOperation() {
 	    return sessionStorage.getItem('currentCardOperation');
+	  },
+	
+	  set isGoodCardEdit(flag) {
+	    sessionStorage.setItem('isGoodCardEdit', flag);
+	  },
+	
+	  get isGoodCardEdit() {
+	    return sessionStorage.getItem('isGoodCardEdit');
 	  }
 	
 	};
@@ -4408,7 +4413,15 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalogGroupsGoods = __webpack_require__(36);
+	var _catalogGroupsDelete = __webpack_require__(36);
+	
+	var _catalogGroupsDelete2 = _interopRequireDefault(_catalogGroupsDelete);
+	
+	var _catalogGroupsEdit = __webpack_require__(37);
+	
+	var _catalogGroupsEdit2 = _interopRequireDefault(_catalogGroupsEdit);
+	
+	var _catalogGroupsGoods = __webpack_require__(38);
 	
 	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
 	
@@ -4430,8 +4443,6 @@
 	var listGroupsCardBody = document.querySelector('#list-groups-card-body');
 	var listGroupsCardCheckMessage = document.querySelector('#list-groups-header-check-message');
 	var listGroupsGoodsCardCheckMessage = document.querySelector('#list-groups-goods-header-check-message');
-	var groupsEditForm = document.querySelector('#groups-edit');
-	var groupsEditName = document.querySelector('#groups-edit-name');
 	var groupGoodsCard = document.querySelector('#group-goods-card');
 	var groupGoodsReturnBtn = document.querySelector('#group-goods-return-btn');
 	var groupGoodsViewBtn = document.querySelector('#group-goods-view-btn');
@@ -4444,10 +4455,7 @@
 	var goodsSortAbcDownBtn = document.querySelector('#group-goods-sort-abc-down');
 	var goodsSortTailingsUpBtn = document.querySelector('#group-goods-sort-tailings-up');
 	var goodsSortTailingsDownBtn = document.querySelector('#group-goods-sort-tailings-down');
-	
 	var groupGoodsCardBody = document.querySelector('#group-goods-card-body');
-	
-	var listGroupSearchInput = document.querySelector('#list-groups-search-input');
 	
 	var SELECT_DELAY = 2000;
 	
@@ -4458,8 +4466,9 @@
 	var loadedGoods = [];
 	var currentGroupName = '';
 	
+	// поиск по группам
+	var listGroupSearchInput = document.querySelector('#list-groups-search-input');
 	listGroupSearchInput.addEventListener('input', function (evt) {
-	  console.log(evt);
 	  var selectedData = [];
 	  loadedData.data.forEach(function (item) {
 	    if (item.name.toLowerCase().indexOf(listGroupSearchInput.value.toLowerCase()) !== -1) {
@@ -4470,118 +4479,41 @@
 	  _catalogGroups2.default.drawDataInContainer(selectedData);
 	});
 	
-	var onSuccessGroupDelete = function onSuccessGroupDelete(answer) {
+	// поиск по товарам
+	var goodsCardSearch = document.querySelector('#list-groups-goods-search-input');
+	goodsCardSearch.addEventListener('input', function (evt) {
+	  var loadedGoodsBackup = loadedGoods.data.slice(0);
+	  var selectedData = [];
+	  loadedGoods.data.forEach(function (item) {
+	    if (item.name.toLowerCase().indexOf(goodsCardSearch.value.toLowerCase()) !== -1) {
+	      selectedData.push(item);
+	    }
+	  });
+	  loadedGoods.data = selectedData;
+	  drawGoods();
+	  loadedGoods.data = loadedGoodsBackup;
+	});
 	
-	  // onListEnterprisesCardReturnBtn();
-	  console.log(answer);
-	  var message = '';
+	// обработчики кликов редактирования/удаления
+	var onEditDeleteClick = function onEditDeleteClick(evt) {
+	  var currentHandler = evt.target === listGroupsCardEditBtn ? _catalogGroupsEdit2.default.handler : _catalogGroupsDelete2.default.handler;
 	
-	  if (answer.status === 271) {
-	    message = answer.message + ', удалить никак невозможно-с';
-	  } else {
-	    message = 'Группа успешно удалена';
-	    getGroups();
-	  }
-	
-	  _tools2.default.informationtModal = {
-	    title: 'Уведомление',
-	    message: message
-	  };
-	};
-	
-	var setRequestToDeleteGroup = function setRequestToDeleteGroup(groupNumber) {
-	  console.log('lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/group/' + groupNumber);
-	  _xhr2.default.request = {
-	    metod: 'DELETE',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/group/' + groupNumber,
-	    data: 'token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessGroupDelete
-	  };
-	};
-	
-	var onListGroupsCardBodyClickEdit = function onListGroupsCardBodyClickEdit(evt) {
-	  console.log(evt.target);
-	  var currentStringElement = evt.target;
-	  while (!currentStringElement.dataset.groupIndex) {
-	    currentStringElement = currentStringElement.parentNode;
-	  }
-	  $(groupsEditForm).modal('show');
-	  groupsEditName.value = loadedData.data[currentStringElement.dataset.groupIndex].name;
-	
-	  _storage2.default.currentGroupId = loadedData.data[currentStringElement.dataset.groupIndex].id;
-	  _storage2.default.currentGroupName = loadedData.data[currentStringElement.dataset.groupIndex].name;
-	};
-	
-	var onListGroupsCardBodyClickRemove = function onListGroupsCardBodyClickRemove(evt, clickedAction) {
-	  console.log(evt.target);
-	  var currentStringElement = evt.target;
-	  while (!currentStringElement.dataset.groupIndex) {
-	    currentStringElement = currentStringElement.parentNode;
-	  }
-	  console.log(currentStringElement.dataset.groupIndex);
-	  console.log(currentStringElement.dataset.groupLevel);
-	  _storage2.default.currentGroupId = loadedData.data[currentStringElement.dataset.groupIndex].id;
-	
-	  if (+currentStringElement.dataset.groupLevel >= 9000) {
-	    _tools2.default.informationtModal = {
-	      title: 'Уведомление',
-	      message: '<b>NO! IT\'S OVER NINE THOUSAAAAAND!!!</b>'
-	    };
-	  } else {
-	    _tools2.default.actionRequestModal = {
-	      title: 'Удаление',
-	      message: '\u0412\u044B \u0442\u043E\u0447\u043D\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u0433\u0440\u0443\u043F\u043F\u0443 <b>' + loadedData.data[currentStringElement.dataset.groupIndex].name + '</b>?',
-	      submitCallback: setRequestToDeleteGroup.bind(null, currentStringElement.dataset.groupId)
-	    };
-	  }
-	
-	  groupsEditName.value = loadedData.data[currentStringElement.dataset.groupIndex].name;
-	};
-	
-	var onSuccessGroupsLoad = function onSuccessGroupsLoad(loadedGroups) {
-	  console.log(loadedGroups);
-	  loadedData = loadedGroups;
-	  document.querySelector('#' + loaderSpinnerId).remove();
-	  _catalogGroups2.default.drawDataInContainer(loadedGroups.data);
-	};
-	
-	var getGroups = function getGroups() {
-	  _catalogGroups2.default.cleanContainer();
-	  _catalogGroups2.default.drawMarkupInContainer(loaderSpinnerMarkup);
-	  _storage2.default.currentGroupId = false;
-	
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/group',
-	    data: 'view_last=0&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessGroupsLoad
-	  };
-	};
-	
-	var onListGroupsCardEditBtnClick = function onListGroupsCardEditBtnClick(evt) {
 	  listGroupsCardCheckMessage.innerHTML = 'Выберите группу';
 	  listGroupsCardBody.removeEventListener('click', onListGroupsCardBodyClick);
-	  listGroupsCardBody.addEventListener('click', onListGroupsCardBodyClickEdit);
-	  window.setTimeout(function () {
-	    listGroupsCardCheckMessage.innerHTML = '';
-	    listGroupsCardBody.addEventListener('click', onListGroupsCardBodyClick);
-	    listGroupsCardBody.removeEventListener('click', onListGroupsCardBodyClickEdit);
-	  }, SELECT_DELAY);
-	};
-	
-	var onListGroupsCardDeleteBtnClick = function onListGroupsCardDeleteBtnClick(evt) {
-	
-	  listGroupsCardBody.removeEventListener('click', onListGroupsCardBodyClick);
-	  listGroupsCardCheckMessage.innerHTML = 'Выберите группу';
-	  listGroupsCardBody.addEventListener('click', onListGroupsCardBodyClickRemove);
+	  listGroupsCardBody.addEventListener('click', currentHandler);
 	
 	  window.setTimeout(function () {
 	    listGroupsCardCheckMessage.innerHTML = '';
 	    listGroupsCardBody.addEventListener('click', onListGroupsCardBodyClick);
-	    listGroupsCardBody.removeEventListener('click', onListGroupsCardBodyClickRemove);
+	    listGroupsCardBody.removeEventListener('click', currentHandler);
 	  }, SELECT_DELAY);
 	};
+	listGroupsCardEditBtn.addEventListener('click', onEditDeleteClick);
+	listGroupsCardDeleteBtn.addEventListener('click', onEditDeleteClick);
 	
+	// РАБОТА С ТОВАРАМИ
+	
+	// заполнение карточки копирования товара
 	var fillCopyCard = function fillCopyCard(loadedGoodData) {
 	  var _loadedGoodData$data = loadedGoodData.data,
 	      name = _loadedGoodData$data.name,
@@ -4596,7 +4528,7 @@
 	  listGroupGoodsAddModalDescribe.value = description;
 	  listGroupGoodsAddModalPurchase.value = +purchasePrice;
 	  listGroupGoodsAddModalSell.value = +sellingPrice;
-	  listGroupGoodsAddModalExtra.value = (+sellingPrice - +purchasePrice) * +purchasePrice / 100;
+	  listGroupGoodsAddModalExtra.value = ((+sellingPrice - +purchasePrice) / (+purchasePrice / 100)).toFixed(2);
 	  listGroupGoodsAddModalBarcode.value = barcode;
 	};
 	
@@ -4607,7 +4539,13 @@
 	    currentStringElement = currentStringElement.parentNode;
 	  }
 	  _storage2.default.currentGoodId = currentStringElement.dataset.goodId;
-	  _catalogGroupsGoods2.default.fill(fillCopyCard);
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + _storage2.default.currentGoodId + '/card_info',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: fillCopyCard
+	  };
 	};
 	
 	var onListGroupGoodsCardCopyBtn = function onListGroupGoodsCardCopyBtn(evt) {
@@ -4623,24 +4561,40 @@
 	    groupGoodsCardBody.removeEventListener('click', onListGroupGoodsCardCopy);
 	  }, SELECT_DELAY);
 	};
+	
 	listGroupsCardAddBtn.addEventListener('click', function () {
 	  groupGoodsAddSubmitBtn.innerHTML = 'Создание';
 	  groupGoodsAddLabel.innerHTML = 'Создание товара';
 	});
-	listGroupsCardEditBtn.addEventListener('click', onListGroupsCardEditBtnClick);
-	listGroupsCardDeleteBtn.addEventListener('click', onListGroupsCardDeleteBtnClick);
+	
 	listGroupGoodsCardCopyBtn.addEventListener('click', onListGroupGoodsCardCopyBtn);
 	
+	// отрисовка товаров (данные через замыкание)
 	var drawGoods = function drawGoods() {
 	  if (_storage2.default.goodsViewMode === 'string') {
 	    _catalogGroups2.default.drawGoodsTable(loadedGoods.data);
+	    groupGoodsViewBtn.classList.remove('icon-btn__view-tiles');
 	  } else if (_storage2.default.goodsViewMode === 'metro') {
 	    _catalogGroups2.default.drawGoodsMetro(loadedGoods.data);
+	    groupGoodsViewBtn.classList.add('icon-btn__view-tiles');
 	  }
 	};
 	
+	// переключение режимов отрисовки товаров
+	var onGroupGoodsViewBtnClick = function onGroupGoodsViewBtnClick() {
+	  if (_storage2.default.goodsViewMode === 'string') {
+	    _catalogGroups2.default.drawGoodsMetro(loadedGoods.data);
+	    _storage2.default.goodsViewMode = 'metro';
+	    groupGoodsViewBtn.classList.add('icon-btn__view-tiles');
+	  } else if (_storage2.default.goodsViewMode === 'metro') {
+	    _catalogGroups2.default.drawGoodsTable(loadedGoods.data);
+	    _storage2.default.goodsViewMode = 'string';
+	    groupGoodsViewBtn.classList.remove('icon-btn__view-tiles');
+	  }
+	};
+	groupGoodsViewBtn.addEventListener('click', onGroupGoodsViewBtnClick);
+	
 	var onSuccessGroupGood = function onSuccessGroupGood(goodsData) {
-	  console.log(goodsData);
 	  loadedGoods = goodsData;
 	  if (_storage2.default.goodsSortMode && loadedGoods.data) {
 	    goodsSortMode[_storage2.default.goodsSortMode]();
@@ -4679,21 +4633,10 @@
 	  listGroupsCard.classList.remove('d-none');
 	};
 	
-	var onGroupGoodsViewBtnClick = function onGroupGoodsViewBtnClick() {
-	  if (_storage2.default.goodsViewMode === 'string') {
-	    _catalogGroups2.default.drawGoodsMetro(loadedGoods.data);
-	    _storage2.default.goodsViewMode = 'metro';
-	  } else if (_storage2.default.goodsViewMode === 'metro') {
-	    _catalogGroups2.default.drawGoodsTable(loadedGoods.data);
-	    _storage2.default.goodsViewMode = 'string';
-	  }
-	};
-	
 	listGroupsCardBody.addEventListener('click', onListGroupsCardBodyClick);
 	groupGoodsReturnBtn.addEventListener('click', onGroupGoodsReturnBtnClick);
 	
-	groupGoodsViewBtn.addEventListener('click', onGroupGoodsViewBtnClick);
-	
+	// сортировка товаров
 	var onGoodsSortAbcUpBtn = function onGoodsSortAbcUpBtn() {
 	  loadedGoods.data.sort(function (a, b) {
 	    return a.name > b.name ? 1 : -1;
@@ -4751,6 +4694,26 @@
 	  _catalogGroupsGoods2.default.fill();
 	};
 	
+	// РАБОТА С ГРУППАМИ
+	var onSuccessGroupsLoad = function onSuccessGroupsLoad(loadedGroups) {
+	  loadedData = loadedGroups;
+	  document.querySelector('#' + loaderSpinnerId).remove();
+	  _catalogGroups2.default.drawDataInContainer(loadedGroups.data);
+	};
+	
+	var getGroups = function getGroups() {
+	  _catalogGroups2.default.cleanContainer();
+	  _catalogGroups2.default.drawMarkupInContainer(loaderSpinnerMarkup);
+	  _storage2.default.currentGroupId = false;
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/group',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessGroupsLoad
+	  };
+	};
+	
 	groupGoodsCardBody.addEventListener('click', onGroupGoodsCardBodyClick);
 	
 	exports.default = {
@@ -4792,7 +4755,7 @@
 	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
 	    // ${currentEnterpriseFlag}
 	    console.log(item, index);
-	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '" data-group-index="' + index + '" data-group-level="' + item.level + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.id + '</span> ||\n        <span>' + item.level + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
+	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '" data-group-index="' + index + '" data-group-level="' + item.level + '" data-group-name="' + item.name + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.id + '</span> ||\n        <span>' + item.level + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
 	  },
 	  getGoodString: function getGoodString(item, index) {
 	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
@@ -4870,6 +4833,121 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	var _catalogGroups = __webpack_require__(34);
+	
+	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// удаление группы
+	var onSuccessGroupDelete = function onSuccessGroupDelete(answer) {
+	
+	  var message = '';
+	  if (answer.status === 271) {
+	    message = answer.message + ', удалить никак невозможно-с';
+	  } else {
+	    message = 'Группа успешно удалена';
+	    _catalogGroups2.default.redraw();
+	  }
+	
+	  _tools2.default.informationtModal = {
+	    title: 'Уведомление',
+	    message: message
+	  };
+	};
+	
+	var setRequestToDeleteGroup = function setRequestToDeleteGroup() {
+	  _xhr2.default.request = {
+	    metod: 'DELETE',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/group/' + _storage2.default.currentGroupId,
+	    data: 'token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessGroupDelete
+	  };
+	};
+	
+	var onListGroupsCardBodyClickRemove = function onListGroupsCardBodyClickRemove(evt) {
+	  var currentStringElement = evt.target;
+	  while (!currentStringElement.dataset.groupIndex) {
+	    currentStringElement = currentStringElement.parentNode;
+	  }
+	  _storage2.default.currentGroupId = currentStringElement.dataset.groupId;
+	  _storage2.default.currentGroupName = currentStringElement.dataset.groupName;
+	
+	  if (+currentStringElement.dataset.groupLevel >= 9000) {
+	    _tools2.default.informationtModal = {
+	      title: 'Уведомление',
+	      message: '<b>NO! IT\'S OVER NINE THOUSAAAAAND!!!</b>'
+	    };
+	  } else {
+	    _tools2.default.actionRequestModal = {
+	      title: 'Удаление',
+	      message: '\u0412\u044B \u0442\u043E\u0447\u043D\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u0433\u0440\u0443\u043F\u043F\u0443 <b>' + _storage2.default.currentGroupName + '</b>?',
+	      submitCallback: setRequestToDeleteGroup
+	    };
+	  }
+	};
+	
+	exports.default = {
+	  handler: onListGroupsCardBodyClickRemove
+	};
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var groupsEditForm = document.querySelector('#groups-edit');
+	var groupsEditName = document.querySelector('#groups-edit-name');
+	
+	var onListGroupsCardBodyClickEdit = function onListGroupsCardBodyClickEdit(evt) {
+	  var currentStringElement = evt.target;
+	  while (!currentStringElement.dataset.groupIndex) {
+	    currentStringElement = currentStringElement.parentNode;
+	  }
+	  $(groupsEditForm).modal('show');
+	  groupsEditName.value = currentStringElement.dataset.groupName;
+	
+	  _storage2.default.currentGroupId = currentStringElement.dataset.groupId;
+	  _storage2.default.currentGroupName = currentStringElement.dataset.groupName;
+	};
+	
+	exports.default = {
+	  handler: onListGroupsCardBodyClickEdit
+	};
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
 	var _universalKeywords = __webpack_require__(31);
 	
 	var _universalKeywords2 = _interopRequireDefault(_universalKeywords);
@@ -4878,19 +4956,33 @@
 	
 	var _referenceKeywords2 = _interopRequireDefault(_referenceKeywords);
 	
+	var _catalogGroupsGoodsExpress = __webpack_require__(39);
+	
+	var _catalogGroupsGoodsExpress2 = _interopRequireDefault(_catalogGroupsGoodsExpress);
+	
+	var _catalogGroupsGoodsStock = __webpack_require__(41);
+	
+	var _catalogGroupsGoodsStock2 = _interopRequireDefault(_catalogGroupsGoodsStock);
+	
+	var _catalogGroupsGoodsEdit = __webpack_require__(42);
+	
+	var _catalogGroupsGoodsEdit2 = _interopRequireDefault(_catalogGroupsGoodsEdit);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var goodsCard = document.querySelector('#goods-card');
+	// const goodsCardForm = document.querySelector('#goods-card-form');
 	
 	var goodsCardName = document.querySelector('#goods-card-name');
 	var goodsCardDescribe = document.querySelector('#goods-card-describe');
 	var goodsCardBarcode = document.querySelector('#goods-card-barcode');
 	var goodsCardGroup = document.querySelector('#goods-card-group');
 	
-	var goodsCardPurchase = document.querySelector('#goods-card-price-purchase');
 	var goodsCardImage = document.querySelector('#goods-card-image');
 	var goodsCardImageUpload = document.querySelector('#goods-card-image-upload');
+	var goodsCardPurchase = document.querySelector('#goods-card-price-purchase');
 	var goodsCardSell = document.querySelector('#goods-card-price-sell');
+	var goodsCardExtra = document.querySelector('#goods-card-price-extra');
 	var goodsStock = document.querySelector('#goods-stock-body');
 	var goodsKeywords = document.querySelector('#goods-keywords');
 	var goodsCardKeywordsModal = document.querySelector('#goods-card-keywords');
@@ -4907,6 +4999,25 @@
 	var stockModalQuantity = document.querySelector('#set-stock-modal-quantity');
 	
 	var goodTags = [];
+	var formSave = {};
+	
+	var saveForm = function saveForm() {
+	  formSave = {
+	    name: goodsCardName.value,
+	    describe: goodsCardDescribe.value,
+	    barcode: goodsCardBarcode.value,
+	    group: goodsCardGroup.value
+	  };
+	};
+	
+	var restoreForm = function restoreForm() {
+	  if (formSave.name) {
+	    goodsCardName.value = formSave.name;
+	    goodsCardDescribe.value = formSave.describe;
+	    goodsCardBarcode.value = formSave.barcode;
+	    goodsCardGroup.value = formSave.group;
+	  }
+	};
 	
 	var onSuccessGoodsLoad = function onSuccessGoodsLoad(loadedGood) {
 	  console.log(loadedGood);
@@ -4930,6 +5041,7 @@
 	  goodsCardBarcode.value = barcode;
 	  goodsCardPurchase.value = purchasePrice;
 	  goodsCardSell.value = sellingPrice;
+	  goodsCardExtra.innerHTML = ((+sellingPrice - +purchasePrice) / (+purchasePrice / 100)).toFixed(2) + '%';
 	
 	  goodTags = tags ? tags : [];
 	
@@ -4960,7 +5072,6 @@
 	      } else {
 	        checkedStock = _storage2.default.currentStockId;
 	      }
-	      console.log('draw stocks');
 	      return '\n      <input type="radio" id="stock-' + item.id + '" name="stock" value="email" class="d-none">\n      <label style="padding-left: 34px;" for="stock-' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '" data-stock-t2="' + item.values[2][0] + '">\n        <div class="row w-100 h-100">\n          <div class="col-8">' + item.name + '</div>\n          <div class="col-4 d-flex justify-content-between">\n            <div class="w-100 text-center">' + item.values[3][0] + '</div>\n            <div class="w-100 text-center">' + item.values[2][0] + '</div>\n            <div class="w-100 text-center">' + item.values[4][0] + '</div>\n          </div>\n          </div>\n        </label>';
 	    }).join(''));
 	    console.log(allStocks);
@@ -4986,6 +5097,8 @@
 	  _universalKeywords2.default.downloadAndDraw(goodsCardKeywordsBody, onKeywordClick, keywordModificator);
 	
 	  var onGoodKeywordClick = function onGoodKeywordClick(evt) {
+	    _storage2.default.isGoodCardEdit = true;
+	    saveForm();
 	    var returnHandler = function returnHandler(e) {
 	      // $('#list-keywords-list').tab('hide');
 	      getGood();
@@ -5006,6 +5119,13 @@
 	  } else {
 	    goodsKeywords.innerHTML = 'Ключевых слов нет';
 	  }
+	  console.log('fillForm');
+	  if (_storage2.default.isGoodCardEdit === 'true') {
+	    restoreForm();
+	  }
+	  _storage2.default.isGoodCardEdit = false;
+	
+	  _catalogGroupsGoodsEdit2.default.start(goodsCard);
 	};
 	
 	// обработчик клика по ключевому слову (пока внутри карточки связей "товар-слово")
@@ -5035,8 +5155,11 @@
 	};
 	
 	$(goodsCardKeywordsModal).on('shown.bs.modal', function () {
+	  _storage2.default.isGoodCardEdit = true;
+	  saveForm();
 	  _universalKeywords2.default.downloadAndDraw(goodsCardKeywordsBody, onKeywordClick, keywordModificator);
 	  $(goodsCard).modal('hide');
+	  _catalogGroupsGoodsEdit2.default.removeHandlers();
 	});
 	
 	$(goodsCardKeywordsModal).on('hidden.bs.modal', function () {
@@ -5053,7 +5176,6 @@
 	
 	var onSuccessExpressExecute = function onSuccessExpressExecute(answer) {
 	  console.log(answer);
-	  currentExpressBtn.removeAttribute('disabled');
 	  $(currentExpressBtn).popover({
 	    content: answer.message,
 	    placement: 'top'
@@ -5061,9 +5183,11 @@
 	  getGood();
 	  window.setTimeout(function () {
 	    $(currentExpressBtn).popover('dispose');
+	    expressContainer.querySelectorAll('BUTTON').forEach(function (btn) {
+	      return btn.removeAttribute('disabled', 'disabled');
+	    });
 	  }, 1000);
 	};
-	
 	var onExpressContainerClick = function onExpressContainerClick(evt) {
 	  var multiplier = null;
 	  var value = null;
@@ -5077,11 +5201,10 @@
 	    value = currentBtnId.indexOf('express-operation') !== -1 ? Number(currentBtnId.split('-')[3]) * multiplier : '';
 	    currentExpressBtn = evt.target;
 	
-	    console.log('lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + _storage2.default.currentGoodId + '/stock/' + _storage2.default.currentStockId + '/express');
-	    console.log('value=' + value + '&price=' + price + '&token=' + _storage2.default.data.token);
-	
 	    if (currentBtnId.indexOf('operation') !== -1) {
-	      currentExpressBtn.setAttribute('disabled', 'disabled');
+	      expressContainer.querySelectorAll('BUTTON').forEach(function (btn) {
+	        return btn.setAttribute('disabled', 'disabled');
+	      });
 	      _xhr2.default.request = {
 	        metod: 'POST',
 	        url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + _storage2.default.currentGoodId + '/stock/' + _storage2.default.currentStockId + '/express',
@@ -5091,46 +5214,62 @@
 	    } else if (currentBtnId.indexOf('custom') !== -1) {
 	      // $(goodsCard).modal('hide');
 	      $(expressModal).modal('show');
+	
+	      console.log(formSave);
 	      $(goodsCard).modal('toggle');
+	
+	      _catalogGroupsGoodsEdit2.default.removeHandlers();
 	
 	      expressModalLabel.innerHTML = currentBtnId.indexOf('purchase') !== -1 ? 'Экспресс-закупка' : 'Экспресс-продажа';
 	      expressModalStock.innerHTML = _storage2.default.currentStockName;
 	      expressModalPrice.value = currentBtnId.indexOf('purchase') !== -1 ? goodsCardPurchase.value : goodsCardSell.value;
+	      expressModalQuantity.value = '';
 	      expressModalQuantity.focus();
 	      _storage2.default.expressOperationType = multiplier;
+	      _catalogGroupsGoodsExpress2.default.start(expressModal);
 	    }
+	    _storage2.default.isGoodCardEdit = true;
+	    saveForm();
 	  }
 	};
 	
 	expressContainer.addEventListener('click', onExpressContainerClick);
 	
 	$(expressModal).on('hidden.bs.modal', function () {
+	  console.log(formSave);
+	  _catalogGroupsGoodsExpress2.default.stop();
 	  getGood();
 	  $(goodsCard).modal('toggle');
 	});
 	
-	var getGood = function getGood(getGoodForCopyCb) {
-	  if (!getGoodForCopyCb) {
-	    $(goodsCard).modal('show');
-	    goodsStock.innerHTML = '';
-	  }
+	var getGood = function getGood() {
+	  $(goodsCard).modal('show');
+	  goodsStock.innerHTML = '';
 	
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + _storage2.default.currentGoodId + '/card_info',
 	    data: 'view_last=0&token=' + _storage2.default.data.token,
-	    callbackSuccess: getGoodForCopyCb || onSuccessGoodsLoad
+	    callbackSuccess: onSuccessGoodsLoad
 	  };
 	};
 	
 	$(stockModal).on('hidden.bs.modal', function () {
+	  _catalogGroupsGoodsStock2.default.stop();
 	  getGood();
 	});
 	
 	$(stockModal).on('shown.bs.modal', function () {
 	  $(goodsCard).modal('hide');
+	
+	  _catalogGroupsGoodsEdit2.default.removeHandlers();
+	
 	  stockModalName.innerHTML = _storage2.default.currentStockName;
 	  stockModalQuantity.value = _storage2.default.currentStockQuantityT2;
+	  _storage2.default.isGoodCardEdit = true;
+	  saveForm();
+	
+	  _catalogGroupsGoodsStock2.default.start(stockModal);
 	});
 	
 	var showPreview = function showPreview(file) {
@@ -5179,7 +5318,656 @@
 	};
 
 /***/ }),
-/* 37 */
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	var _formTools = __webpack_require__(40);
+	
+	var _formTools2 = _interopRequireDefault(_formTools);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var appUrl = void 0;
+	var messages = void 0;
+	
+	var form = void 0;
+	var price = void 0;
+	var amount = void 0;
+	var modal = void 0;
+	
+	var initVar = function initVar(remModal) {
+	  modal = remModal;
+	  form = modal.querySelector('*[data-formName]');
+	  price = form.querySelector('*[data-valid="price"]');
+	  amount = form.querySelector('*[data-valid="amount"]');
+	
+	  appUrl = window.appSettings[form.dataset.formname].UrlApi;
+	  messages = window.appSettings[form.dataset.formname].message;
+	};
+	
+	var callbackXhrSuccess = function callbackXhrSuccess(response) {
+	  switch (response.status) {
+	    case 270:
+	      $(modal).modal('hide');
+	      break;
+	    case 400:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'messages': messages.mes400
+	      };
+	      break;
+	    case 271:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'messages': response.messages
+	      };
+	      break;
+	  }
+	};
+	
+	var submitForm = function submitForm() {
+	  var stor = _storage2.default.data;
+	  var value = amount.value * Number(_storage2.default.expressOperationType);
+	
+	  var postData = 'token=' + stor.token + '&value=' + value + '&price=' + price.value;
+	  var urlApp = appUrl.replace('{{dir}}', stor.directory);
+	  urlApp = urlApp.replace('{{oper}}', stor.operatorId);
+	  urlApp = urlApp.replace('{{busId}}', stor.currentBusiness);
+	  urlApp = urlApp.replace('{{goodId}}', _storage2.default.currentGoodId);
+	  urlApp = urlApp.replace('{{stockId}}', _storage2.default.currentStockId);
+	
+	  _formTools2.default.submit({
+	    url: urlApp,
+	    metod: 'POST',
+	    data: postData,
+	    callbackSuccess: callbackXhrSuccess
+	  });
+	};
+	
+	exports.default = {
+	  start: function start(remModal) {
+	    initVar(remModal);
+	    _formTools2.default.work(modal, submitForm);
+	  },
+	  stop: function stop() {
+	    _formTools2.default.reset();
+	  }
+	};
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var butSubmit = void 0; // теги в разметке:
+	//   <form>
+	//      data-formName = appSettings.{formName}
+	//   <input>
+	//      data-valid = appSettings.formName.validPatterns.{valid}
+	//      data-validLabelName = data-validLabel на сообщении о валидации
+	//   <сообщение>
+	//      data-validLabel = appSettings.formName.validMessage.{data-validLabel}
+	//   <спиннер>
+	//      data-spinner
+	//   <кнопка отмены>
+	//      data-butCancel
+	
+	
+	// Параметры work:
+	// -----------------------------------------------------------------------------
+	//   remoteForm - форма
+	// -----------------------------------------------------------------------------
+	//   remoteSubmitCallback - массив функций должны возвращать объект:
+	//     {
+	//       url: ссылка на апи,
+	//       metod: метод http,
+	//       data: строка data,
+	//     }
+	//   Массив нужен для отправок отправок разных полей по разным адресам
+	// -----------------------------------------------------------------------------
+	//   remoteXhrCallbackSuccess - функция, в которую передается управление при
+	//      успешном запросе
+	// -----------------------------------------------------------------------------
+	//   remoteValidCallback - параметр validCallback передается для дополнительной
+	//      проверки
+	//     (когда недостаточно проверить текстовые поля по шаблонам).
+	//     Должен возвращать true или false.
+	//
+	
+	var butCancel = void 0;
+	var spinner = void 0;
+	
+	var modal = void 0;
+	var form = void 0;
+	var pattern = void 0;
+	var message = void 0;
+	var submitCallback = void 0;
+	var validCallback = void 0;
+	
+	var elSaveValues = void 0;
+	
+	var showAlert = function showAlert(el) {
+	  if (el.dataset.valid) {
+	    el.classList.add('border');
+	    el.classList.add('border-danger');
+	    form.querySelector('*[data-validLabel="' + el.dataset.validlabelname + '"]').innerHTML = message[el.dataset.valid];
+	  }
+	};
+	
+	var hideAlert = function hideAlert(el) {
+	  if (el.dataset.valid) {
+	    el.classList.remove('border');
+	    el.classList.remove('border-danger');
+	    form.querySelector('*[data-validLabel="' + el.dataset.validlabelname + '"]').innerHTML = '';
+	  }
+	};
+	
+	var showSpinner = function showSpinner() {
+	  spinner.classList.remove('invisible');
+	  butSubmit.disabled = true;
+	  butCancel.disabled = true;
+	};
+	
+	var hideSpinner = function hideSpinner() {
+	  spinner.classList.add('invisible');
+	  butSubmit.disabled = false;
+	  butCancel.disabled = false;
+	};
+	
+	var delHandlers = function delHandlers() {
+	  console.log('FORM ID = ' + form.id);
+	  console.log('DEL HANDLERS');
+	  modal.removeEventListener('click', modalClickHandler);
+	  form.removeEventListener('submit', formSubmitHandler);
+	  form.removeEventListener('input', formInputHandler);
+	  form.querySelectorAll('*[data-cancel]').forEach(function (el) {
+	    el.removeEventListener('click', modalClickHandler);
+	  });
+	};
+	
+	var formReset = function formReset() {
+	  form.reset();
+	
+	  form.querySelectorAll('*[data-valid]').forEach(function (el) {
+	    hideAlert(el);
+	  });
+	
+	  hideSpinner();
+	  butSubmit.disabled = true;
+	  delHandlers();
+	};
+	
+	var validateForm = function validateForm() {
+	
+	  var valid = true;
+	  var otherValid = validCallback ? validCallback() : true;
+	  var elements = form.querySelectorAll('*[data-valid]');
+	
+	  elements.forEach(function (el) {
+	    if (!pattern[el.dataset.valid].test(el.value)) {
+	      valid = false;
+	      showAlert(el);
+	    }
+	  });
+	
+	  return valid && otherValid;
+	};
+	
+	var formIsChange = function formIsChange() {
+	  var change = false;
+	
+	  form.querySelectorAll('*[data-valid]').forEach(function (el, index) {
+	    if (el.value !== elSaveValues[index]) {
+	      change = true;
+	    }
+	  });
+	
+	  return change;
+	};
+	
+	var formSubmitHandler = function formSubmitHandler(evt) {
+	  evt.preventDefault();
+	
+	  if (validateForm()) {
+	    showSpinner();
+	    submitCallback();
+	  }
+	};
+	
+	var submitForm = function submitForm(data) {
+	  _xhr2.default.request = data;
+	};
+	
+	var formInputHandler = function formInputHandler(evt) {
+	  hideAlert(evt.target);
+	
+	  if (formIsChange()) {
+	    butSubmit.disabled = false;
+	  } else {
+	    butSubmit.disabled = true;
+	  }
+	};
+	
+	var cancelClickHandler = function cancelClickHandler(evt) {
+	  formReset();
+	};
+	
+	var modalClickHandler = function modalClickHandler(evt) {
+	  if (evt.target === modal) {
+	    formReset();
+	  }
+	};
+	
+	var addHandlersFunc = function addHandlersFunc(remoteModal, remoteSubmitCallback, remoteValidCallback) {
+	  modal = remoteModal;
+	  form = modal.querySelector('*[data-formName]');
+	  submitCallback = remoteSubmitCallback;
+	  validCallback = remoteValidCallback;
+	  pattern = window.appSettings[form.dataset.formname].validPatterns;
+	  message = window.appSettings[form.dataset.formname].validMessage;
+	
+	  butSubmit = form.querySelector('button[type="submit"]');
+	  butCancel = form.querySelector('*[data-butCancel]');
+	  spinner = form.querySelector('*[data-spinner]');
+	
+	  elSaveValues = [];
+	
+	  form.querySelectorAll('*[data-valid]').forEach(function (el) {
+	    elSaveValues.push(el.value);
+	  });
+	
+	  form.addEventListener('submit', formSubmitHandler);
+	  form.addEventListener('input', formInputHandler);
+	  form.querySelectorAll('*[data-cancel]').forEach(function (el) {
+	    el.addEventListener('click', cancelClickHandler);
+	  });
+	  modal.addEventListener('click', modalClickHandler);
+	
+	  console.log('FORM ID = ' + form.id);
+	  console.log('ADD HANDLERS');
+	};
+	
+	var valEl = function valEl(el) {
+	  if (pattern[el.dataset.valid].test(el.value)) {
+	    return true;
+	  }
+	  showAlert(el);
+	  return false;
+	};
+	
+	exports.default = {
+	
+	  work: addHandlersFunc,
+	  reset: formReset,
+	  removeHandlers: delHandlers,
+	  validElement: valEl,
+	  submit: submitForm
+	};
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	var _formTools = __webpack_require__(40);
+	
+	var _formTools2 = _interopRequireDefault(_formTools);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var appUrl = void 0;
+	var messages = void 0;
+	
+	var form = void 0;
+	var amount = void 0;
+	var modal = void 0;
+	
+	var initVar = function initVar(remModal) {
+	  modal = remModal;
+	  form = modal.querySelector('*[data-formName]');
+	  amount = form.querySelector('*[data-valid="amount"]');
+	
+	  appUrl = window.appSettings[form.dataset.formname].UrlApi;
+	  messages = window.appSettings[form.dataset.formname].message;
+	};
+	
+	var callbackXhrSuccess = function callbackXhrSuccess(response) {
+	  switch (response.status) {
+	    case 200:
+	      $(modal).modal('hide');
+	      break;
+	    case 400:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'messages': messages.mes400
+	      };
+	      break;
+	    case 271:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'messages': response.messages
+	      };
+	      break;
+	  }
+	};
+	
+	var submitForm = function submitForm() {
+	  var stor = _storage2.default.data;
+	  var value = amount.value;
+	
+	  var postData = 'token=' + stor.token + '&value=' + value;
+	  var urlApp = appUrl.replace('{{dir}}', stor.directory);
+	  urlApp = urlApp.replace('{{oper}}', stor.operatorId);
+	  urlApp = urlApp.replace('{{busId}}', stor.currentBusiness);
+	  urlApp = urlApp.replace('{{goodId}}', _storage2.default.currentGoodId);
+	  urlApp = urlApp.replace('{{stockId}}', _storage2.default.currentStockId);
+	
+	  _formTools2.default.submit({
+	    url: urlApp,
+	    metod: 'POST',
+	    data: postData,
+	    callbackSuccess: callbackXhrSuccess
+	  });
+	};
+	
+	exports.default = {
+	  start: function start(remModal) {
+	    initVar(remModal);
+	
+	    _formTools2.default.work(modal, submitForm);
+	  },
+	  stop: function stop() {
+	    _formTools2.default.reset();
+	  }
+	};
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	var _formTools = __webpack_require__(40);
+	
+	var _formTools2 = _interopRequireDefault(_formTools);
+	
+	var _tools3 = __webpack_require__(43);
+	
+	var _tools4 = _interopRequireDefault(_tools3);
+	
+	var _catalogGroups = __webpack_require__(34);
+	
+	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var modal = void 0;
+	// import catalogGroupsGoods from './catalog-groups-goods.js';
+	
+	var appUrl1 = void 0;
+	var appUrl2 = void 0;
+	var appUrl3 = void 0;
+	var messages = void 0;
+	var form = void 0;
+	var name = void 0;
+	var describe = void 0;
+	var groupId = void 0;
+	var img = void 0;
+	var purchase = void 0;
+	var sell = void 0;
+	var percent = void 0;
+	var barcode = void 0;
+	var priceBlock = void 0;
+	
+	var initVar = function initVar(remModal) {
+	  modal = remModal;
+	  form = modal.querySelector('#goods-card-form');
+	  name = form.querySelector('#goods-card-name');
+	  describe = form.querySelector('#goods-card-describe');
+	  groupId = form.querySelector('#goods-card-group');
+	  img = form.querySelector('#goods-card-image-upload');
+	  priceBlock = form.querySelector('#goods-card-price-block');
+	  purchase = form.querySelector('#goods-card-price-purchase');
+	  sell = form.querySelector('#goods-card-price-sell');
+	  percent = form.querySelector('#goods-card-price-extra');
+	  barcode = form.querySelector('#goods-card-barcode');
+	
+	  appUrl1 = window.appSettings[form.dataset.formname].UrlApi1;
+	  appUrl2 = window.appSettings[form.dataset.formname].UrlApi2;
+	  appUrl3 = window.appSettings[form.dataset.formname].UrlApi3;
+	  messages = window.appSettings[form.dataset.formname].message;
+	};
+	
+	var callbackXhrSuccess = function callbackXhrSuccess(response) {
+	  console.log('callbackXhr1');
+	  console.dir(response);
+	
+	  _formTools2.default.reset();
+	  $('#goods-card').modal('hide');
+	
+	  switch (response.status) {
+	    case 200:
+	      _catalogGroups2.default.redrawGoods();
+	      break;
+	    case 400:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'messages': messages.mes400
+	      };
+	      break;
+	    case 271:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'messages': response.messages
+	      };
+	      break;
+	  }
+	};
+	
+	var callbackXhrSuccess2 = function callbackXhrSuccess2(response) {
+	  console.log('callbackXhr2');
+	  console.dir(response);
+	
+	  _formTools2.default.reset();
+	  $(modal).modal('hide');
+	
+	  switch (response.status) {
+	    case 200:
+	      _catalogGroups2.default.redrawGoods();
+	      break;
+	    case 400:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'messages': messages.mes400
+	      };
+	      break;
+	    case 271:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'messages': response.messages
+	      };
+	      break;
+	  }
+	};
+	
+	var callbackXhrImgLoadSuccess = function callbackXhrImgLoadSuccess(response) {
+	  console.log('callbackXhr2');
+	  console.dir(response);
+	
+	  switch (response.status) {
+	    case 200:
+	      console.log('img load - ok');break;
+	    case 400:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'messages': messages.mes400
+	      };
+	      break;
+	    case 271:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'messages': response.messages
+	      };
+	      break;
+	  }
+	};
+	
+	var submitForm = function submitForm() {
+	  var stor = _storage2.default.data;
+	
+	  var postData = 'token=' + stor.token + '&name=' + name.value + '&description=' + describe.value + '&group=' + groupId.value + '&barcode=' + barcode.value;
+	  var urlApp = appUrl1.replace('{{dir}}', stor.directory);
+	  urlApp = urlApp.replace('{{oper}}', stor.operatorId);
+	  urlApp = urlApp.replace('{{busId}}', stor.currentBusiness);
+	  urlApp = urlApp.replace('{{goodId}}', _storage2.default.currentGoodId);
+	
+	  _formTools2.default.submit({
+	    url: urlApp,
+	    metod: 'PUT',
+	    data: postData,
+	    callbackSuccess: callbackXhrSuccess
+	  });
+	
+	  postData = 'token=' + stor.token + '&purchase_price=' + purchase.value + '&selling_price=' + sell.value;
+	  urlApp = appUrl2.replace('{{dir}}', stor.directory);
+	  urlApp = urlApp.replace('{{oper}}', stor.operatorId);
+	  urlApp = urlApp.replace('{{busId}}', stor.currentBusiness);
+	  urlApp = urlApp.replace('{{goodId}}', _storage2.default.currentGoodId);
+	
+	  _formTools2.default.submit({
+	    url: urlApp,
+	    metod: 'POST',
+	    data: postData,
+	    callbackSuccess: callbackXhrSuccess2
+	  });
+	};
+	
+	var calcPr = function calcPr() {
+	  return _tools4.default.calcPercent(purchase.value, sell.value) + '%';
+	};
+	
+	var calcPrice = function calcPrice(evt) {
+	  if (!evt.target.type === 'text') {
+	    return false;
+	  }
+	  if (_formTools2.default.validElement(evt.target)) {
+	    percent.innerHTML = calcPr();
+	  }
+	  return true;
+	};
+	
+	var imgChangeHandler = function imgChangeHandler(evt) {
+	  var stor = _storage2.default.data;
+	
+	  var postData = new FormData();
+	  postData.append('token', stor.token);
+	  postData.append('good', _storage2.default.currentGoodId);
+	  postData.append('file', img.files[0]);
+	  var urlApp = appUrl3.replace('{{dir}}', stor.directory);
+	
+	  var data = {
+	    url: urlApp,
+	    metod: 'POST',
+	    data: postData,
+	    callbackSuccess: callbackXhrImgLoadSuccess
+	  };
+	
+	  console.dir(data);
+	  _formTools2.default.submit(data);
+	};
+	
+	exports.default = {
+	  start: function start(remModal) {
+	    console.log('Card-Edit-START!');
+	    initVar(remModal);
+	    percent.innerHTML = calcPr();
+	    _formTools2.default.work(modal, submitForm);
+	
+	    priceBlock.addEventListener('change', calcPrice);
+	    img.addEventListener('change', imgChangeHandler);
+	  },
+	  stop: function stop() {
+	    _formTools2.default.reset();
+	  },
+	
+	
+	  removeHandlers: _formTools2.default.removeHandlers
+	};
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = {
+	
+	  // рассчитывает процент по стоимости и цене
+	  calcPercent: function calcPercent(purchase, price) {
+	    return ((price - purchase) * 100 / purchase).toFixed(2);
+	  },
+	
+	  // рассчитывает цену по стоимости и проценту
+	  calcPrice: function calcPrice(purchase, percent) {
+	    return (Number(purchase) + purchase / 100 * percent).toFixed(2);
+	  }
+	};
+
+/***/ }),
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5362,7 +6150,7 @@
 	};
 
 /***/ }),
-/* 38 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5383,7 +6171,7 @@
 	
 	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(40);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -5450,203 +6238,7 @@
 	};
 
 /***/ }),
-/* 39 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _xhr = __webpack_require__(5);
-	
-	var _xhr2 = _interopRequireDefault(_xhr);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var butSubmit = void 0; // теги в разметке:
-	//   <form>
-	//      data-formName = appSettings.{formName}
-	//   <input>
-	//      data-valid = appSettings.formName.validPatterns.{valid}
-	//      data-validLabelName = data-validLabel на сообщении о валидации
-	//   <сообщение>
-	//      data-validLabel = appSettings.formName.validMessage.{data-validLabel}
-	//   <спиннер>
-	//      data-spinner
-	//   <кнопка отмены>
-	//      data-butCancel
-	
-	
-	// Параметры work:
-	// -----------------------------------------------------------------------------
-	//   remoteForm - форма
-	// -----------------------------------------------------------------------------
-	//   remoteSubmitCallback - массив функций должны возвращать объект:
-	//     {
-	//       url: ссылка на апи,
-	//       metod: метод http,
-	//       data: строка data,
-	//     }
-	//   Массив нужен для отправок отправок разных полей по разным адресам
-	// -----------------------------------------------------------------------------
-	//   remoteXhrCallbackSuccess - функция, в которую передается управление при
-	//      успешном запросе
-	// -----------------------------------------------------------------------------
-	//   remoteValidCallback - параметр validCallback передается для дополнительной
-	//      проверки
-	//     (когда недостаточно проверить текстовые поля по шаблонам).
-	//     Должен возвращать true или false.
-	//
-	
-	var butCancel = void 0;
-	var spinner = void 0;
-	
-	var form = void 0;
-	var pattern = void 0;
-	var message = void 0;
-	var submitCallback = void 0;
-	var validCallback = void 0;
-	
-	var elSaveValues = void 0;
-	
-	var showAlert = function showAlert(el) {
-	  if (el.type === 'text') {
-	    el.classList.add('border');
-	    el.classList.add('border-danger');
-	    form.querySelector('*[data-validLabel="' + el.dataset.validlabelname + '"]').innerHTML = message[el.dataset.valid];
-	  }
-	};
-	
-	var hideAlert = function hideAlert(el) {
-	  if (el.type === 'text') {
-	    el.classList.remove('border');
-	    el.classList.remove('border-danger');
-	    form.querySelector('*[data-validLabel="' + el.dataset.validlabelname + '"]').innerHTML = '';
-	  }
-	};
-	
-	var showSpinner = function showSpinner() {
-	  spinner.classList.remove('invisible');
-	  butSubmit.disabled = true;
-	  butCancel.disabled = true;
-	};
-	
-	var hideSpinner = function hideSpinner() {
-	  spinner.classList.add('invisible');
-	  butSubmit.disabled = false;
-	  butCancel.disabled = false;
-	};
-	
-	var delHandlers = function delHandlers() {
-	  form.removeEventListener('submit', formSubmitHandler);
-	  form.removeEventListener('input', formInputHandler);
-	};
-	
-	var formReset = function formReset() {
-	  form.reset();
-	
-	  form.querySelectorAll('*[data-valid]').forEach(function (el) {
-	    hideAlert(el);
-	  });
-	
-	  hideSpinner();
-	  butSubmit.disabled = true;
-	  delHandlers();
-	};
-	
-	var validateForm = function validateForm() {
-	
-	  var valid = true;
-	  var otherValid = validCallback ? validCallback() : true;
-	  var elements = form.querySelectorAll('*[data-valid]');
-	
-	  elements.forEach(function (el) {
-	    if (!pattern[el.dataset.valid].test(el.value)) {
-	      valid = false;
-	      showAlert(el);
-	    }
-	  });
-	
-	  return valid && otherValid;
-	};
-	
-	var formIsChange = function formIsChange() {
-	  var change = false;
-	
-	  form.querySelectorAll('*[data-valid]').forEach(function (el, index) {
-	    if (el.value !== elSaveValues[index]) {
-	      change = true;
-	    }
-	  });
-	
-	  return change;
-	};
-	
-	var formSubmitHandler = function formSubmitHandler(evt) {
-	  evt.preventDefault();
-	
-	  if (validateForm()) {
-	    showSpinner();
-	    submitCallback();
-	  }
-	};
-	
-	var submitForm = function submitForm(data) {
-	  _xhr2.default.request = data;
-	};
-	
-	var formInputHandler = function formInputHandler(evt) {
-	  hideAlert(evt.target);
-	
-	  if (formIsChange()) {
-	    butSubmit.disabled = false;
-	  } else {
-	    butSubmit.disabled = true;
-	  }
-	};
-	
-	var addHandlersFunc = function addHandlersFunc(remoteForm, remoteSubmitCallback, remoteValidCallback) {
-	
-	  form = remoteForm;
-	  submitCallback = remoteSubmitCallback;
-	  validCallback = remoteValidCallback;
-	  pattern = window.appSettings[form.dataset.formname].validPatterns;
-	  message = window.appSettings[form.dataset.formname].validMessage;
-	
-	  butSubmit = form.querySelector('button[type="submit"]');
-	  butCancel = form.querySelector('*[data-butCancel]');
-	  spinner = form.querySelector('*[data-spinner]');
-	
-	  elSaveValues = [];
-	
-	  form.querySelectorAll('*[data-valid]').forEach(function (el) {
-	    elSaveValues.push(el.value);
-	  });
-	
-	  form.addEventListener('submit', formSubmitHandler);
-	  form.addEventListener('input', formInputHandler);
-	};
-	
-	var valEl = function valEl(el) {
-	  if (pattern[el.dataset.valid].test(el.value)) {
-	    return true;
-	  }
-	  showAlert(el);
-	  return false;
-	};
-	
-	exports.default = {
-	
-	  work: addHandlersFunc,
-	  reset: formReset,
-	  validElement: valEl,
-	  submit: submitForm
-	};
-
-/***/ }),
-/* 40 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5667,7 +6259,7 @@
 	
 	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(40);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -5775,7 +6367,7 @@
 	};
 
 /***/ }),
-/* 41 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5792,7 +6384,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogCards = __webpack_require__(42);
+	var _catalogCards = __webpack_require__(48);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
 	
@@ -5827,58 +6419,57 @@
 	var cardResourcesGroupModal = document.querySelector('#card-resources-group');
 	var cardResourcesGroupModalTitle = document.querySelector('#card-resources-title');
 	var cardResourcesGroupModalBody = document.querySelector('#card-resources-groups-body');
+	var cardResourcesGroupModalReturnBtn = document.querySelector('#card-resources-modal-return-btn');
 	
 	var addResourcesModal = document.querySelector('#add-resources-modal');
 	var addResourcesModalLabel = document.querySelector('#add-resources-modal-label');
 	
-	var onSuccessGroupGood = function onSuccessGroupGood(goodsData) {
-	  console.log(goodsData);
-	  cardResourcesGroupModalTitle.innerHTML = '\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0442\u043E\u0432\u0430\u0440 \u0432 \u0433\u0440\u0443\u043F\u043F\u0435 "' + _storage2.default.currentGroupName + '"';
-	  cardResourcesGroupModalBody.innerHTML = '\n    <div class="catalog-header-title">\n      <button id="group-goods-return-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__return"></button>\n        <h2 id="group-name"></h2>\n      </div>';
-	  cardResourcesGroupModalBody.lastChild.addEventListener('click', getGroups);
+	var loadedGoods = [];
+	var loadedGroups = [];
 	
-	  goodsData.data.forEach(function (item, index) {
+	// поиск по товару внутри группы
+	var cardResourcesSearchInput = document.querySelector('#card-resources-search-input');
+	
+	var drawGoods = function drawGoods(data) {
+	  cardResourcesGroupModalReturnBtn.classList.remove('invisible');
+	  cardResourcesSearchInput.addEventListener('input', onGoodsSearch);
+	  cardResourcesSearchInput.removeEventListener('input', onGroupsSearch);
+	  cardResourcesGroupModalBody.innerHTML = '';
+	  data.forEach(function (item, index) {
 	    cardResourcesGroupModalBody.insertAdjacentHTML('beforeend', _catalogGroups2.default.getGoodString(item, index));
 	
 	    cardResourcesGroupModalBody.lastChild.addEventListener('click', function (evt) {
-	      console.log(evt);
 	
 	      var currentStringElement = evt.target;
 	      while (!currentStringElement.dataset.goodId) {
 	        currentStringElement = currentStringElement.parentNode;
 	      }
-	
 	      $(cardResourcesGroupModal).modal('hide');
 	      $(addResourcesModal).modal('show');
 	      addResourcesModalLabel.innerHTML = item.name;
-	      // groupName.innerHTML = currentGroupName;
-	
 	      _storage2.default.currentGoodId = currentStringElement.dataset.goodId;
-	      // auth.currentGroupName = currentGroupName;
 	    });
 	  });
 	};
 	
-	$(addResourcesModal).on('hidden.bs.modal', function () {
-	  $(cardResourcesGroupModal).modal('show');
-	});
-	
-	var onSuccessGroupsLoad = function onSuccessGroupsLoad(loadedGroups) {
-	
+	var drawGroups = function drawGroups(groupsData) {
+	  console.log(groupsData);
+	  cardResourcesGroupModalReturnBtn.classList.add('invisible');
+	  cardResourcesSearchInput.removeEventListener('input', onGoodsSearch);
+	  cardResourcesSearchInput.addEventListener('input', onGroupsSearch);
 	  cardResourcesGroupModalBody.innerHTML = '';
-	  cardResourcesGroupModalTitle.innerHTML = 'Выберите группу';
-	  loadedGroups.data.forEach(function (item, index) {
+	  groupsData.forEach(function (item, index) {
 	    cardResourcesGroupModalBody.insertAdjacentHTML('beforeend', _catalogGroups2.default.getElement(item, index));
 	    cardResourcesGroupModalBody.lastChild.addEventListener('click', function (evt) {
 	
 	      var currentStringElement = evt.target;
+	      cardResourcesSearchInput.value = '';
+	      cardResourcesSearchInput.focus();
 	      while (!currentStringElement.dataset.groupId) {
 	        currentStringElement = currentStringElement.parentNode;
 	      }
 	
 	      var currentGroupName = loadedGroups.data[currentStringElement.dataset.groupIndex].name;
-	      // groupName.innerHTML = currentGroupName;
-	
 	      _storage2.default.currentGroupId = currentStringElement.dataset.groupId;
 	      _storage2.default.currentGroupName = currentGroupName;
 	
@@ -5890,13 +6481,54 @@
 	      };
 	    });
 	  });
-	  // cardResourcesGroupModalBody.insertAdjacentHTML('beforeend', loadedGroups.data.forEach((item, index) => groupsMarkup.getElement(item, index)));
+	};
+	
+	var onGoodsSearch = function onGoodsSearch(evt) {
+	  var selectedData = [];
+	  loadedGoods.data.forEach(function (item) {
+	    if (item.name.toLowerCase().indexOf(cardResourcesSearchInput.value.toLowerCase()) !== -1) {
+	      selectedData.push(item);
+	    }
+	  });
+	  drawGoods(selectedData);
+	};
+	
+	var onGroupsSearch = function onGroupsSearch(evt) {
+	  var selectedData = [];
+	  loadedGroups.data.forEach(function (item) {
+	    if (item.name.toLowerCase().indexOf(cardResourcesSearchInput.value.toLowerCase()) !== -1) {
+	      selectedData.push(item);
+	    }
+	  });
+	  drawGroups(selectedData);
+	};
+	
+	// cardResourcesSearchInput.addEventListener('input', onGoodsSearch);
+	
+	var onSuccessGroupGood = function onSuccessGroupGood(goodsData) {
+	  loadedGoods = goodsData;
+	  cardResourcesGroupModalTitle.innerHTML = '\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0442\u043E\u0432\u0430\u0440 \u0432 \u0433\u0440\u0443\u043F\u043F\u0435 "' + _storage2.default.currentGroupName + '"';
+	  cardResourcesGroupModalReturnBtn.addEventListener('click', getGroups);
+	  drawGoods(goodsData.data);
+	};
+	
+	$(addResourcesModal).on('hidden.bs.modal', function () {
+	  $(cardResourcesGroupModal).modal('show');
+	});
+	
+	var onSuccessGroupsLoad = function onSuccessGroupsLoad(groupsData) {
+	  loadedGroups = groupsData;
+	  cardResourcesGroupModalBody.innerHTML = '';
+	  cardResourcesGroupModalTitle.innerHTML = 'Выберите группу';
+	  cardResourcesSearchInput.focus();
+	  drawGroups(groupsData.data);
 	};
 	
 	var getGroups = function getGroups() {
-	  // groupsMarkup.cleanContainer();
-	  // groupsMarkup.drawMarkupInContainer(loaderSpinnerMarkup);
+	  console.log('hi');
+	  _catalogGroups2.default.cleanContainer();
 	  _storage2.default.currentGroupId = false;
+	  cardResourcesSearchInput.value = '';
 	  $(cardResourcesGroupModal).modal('show');
 	
 	  _xhr2.default.request = {
@@ -5909,6 +6541,7 @@
 	
 	var onResourcesAddBtn = function onResourcesAddBtn() {
 	  _storage2.default.currentCardOperation = -1;
+	
 	  getGroups();
 	};
 	
@@ -6091,7 +6724,7 @@
 	};
 
 /***/ }),
-/* 42 */
+/* 48 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -6131,7 +6764,7 @@
 	};
 
 /***/ }),
-/* 43 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6148,7 +6781,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogCards = __webpack_require__(42);
+	var _catalogCards = __webpack_require__(48);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
 	
@@ -6160,7 +6793,7 @@
 	
 	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
 	
-	var _catalogGroupsGoods = __webpack_require__(36);
+	var _catalogGroupsGoods = __webpack_require__(38);
 	
 	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
 	
@@ -6240,6 +6873,20 @@
 	  };
 	};
 	
+	var onSuccessKeywordSearch = function onSuccessKeywordSearch(keywordSearchData) {
+	  console.log(keywordSearchData);
+	  if (keywordSearchData.status === 271) {
+	    listSearchBody.innerHTML = 'Ключевые слова: ' + keywordSearchData.message;
+	    getFullSearch();
+	    listSearchInput.value = '';
+	  } else {
+	    listSearchBody.innerHTML = '';
+	    drawResult(keywordSearchData.data);
+	    fullSearch = keywordSearchData;
+	    listSearchInput.value = '';
+	  }
+	};
+	
 	var selectedKeywords = [];
 	
 	listSearchKeywordsModalSubmit.addEventListener('click', function () {
@@ -6253,7 +6900,7 @@
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good_search',
 	    data: 'token=' + _storage2.default.data.token + '&tags=[' + selectedKeywords + ']',
-	    callbackSuccess: onSuccessFullSearchLoad
+	    callbackSuccess: onSuccessKeywordSearch
 	  };
 	});
 	
@@ -6275,7 +6922,6 @@
 	  _universalKeywords2.default.downloadAndDraw(listSearchKeywordsModalBody, onKeywordClick, keywordModificator);
 	  $(listSearchKeywordsModal).modal('show');
 	  listSearchKeywordsResetBtn.removeAttribute('disabled');
-	  // keywordsUniversal.draw(listSearchBody);
 	});
 	
 	listSearchKeywordsResetBtn.addEventListener('click', function () {
@@ -6353,100 +6999,7 @@
 	};
 
 /***/ }),
-/* 44 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _storage = __webpack_require__(1);
-	
-	var _storage2 = _interopRequireDefault(_storage);
-	
-	var _tools = __webpack_require__(6);
-	
-	var _tools2 = _interopRequireDefault(_tools);
-	
-	var _catalogGroupsGoods = __webpack_require__(36);
-	
-	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
-	
-	var _formTools = __webpack_require__(39);
-	
-	var _formTools2 = _interopRequireDefault(_formTools);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var appUrl = window.appSettings.formExpressOperation.UrlApi;
-	var messages = window.appSettings.formExpressOperation.message;
-	
-	var form = document.querySelector('#express-modal-form');
-	
-	var price = form.querySelector('#express-modal-price');
-	var amount = form.querySelector('#express-modal-quantity');
-	
-	var callbackXhrSuccess = function callbackXhrSuccess(response) {
-	
-	  _formTools2.default.reset();
-	  $('#express-modal').modal('hide');
-	
-	  switch (response.status) {
-	    case 200:
-	      _catalogGroupsGoods2.default.fill();
-	      break;
-	    case 400:
-	      _tools2.default.informationtModal = {
-	        'title': 'Error',
-	        'messages': messages.mes400
-	      };
-	      break;
-	    case 271:
-	      _tools2.default.informationtModal = {
-	        'title': 'Error',
-	        'messages': response.messages
-	      };
-	      break;
-	  }
-	};
-	
-	var submitForm = function submitForm() {
-	  var stor = _storage2.default.data;
-	  var value = amount.value * Number(_storage2.default.expressOperationType);
-	
-	  var postData = 'token=' + stor.token + '&value=' + value + '&price=' + price.value;
-	  var urlApp = appUrl.replace('{{dir}}', stor.directory);
-	  urlApp = urlApp.replace('{{oper}}', stor.operatorId);
-	  urlApp = urlApp.replace('{{busId}}', stor.currentBusiness);
-	  urlApp = urlApp.replace('{{goodId}}', _storage2.default.currentGoodId);
-	  urlApp = urlApp.replace('{{stockId}}', _storage2.default.currentStockId);
-	
-	  _formTools2.default.submit({
-	    url: urlApp,
-	    metod: 'POST',
-	    data: postData,
-	    callbackSuccess: callbackXhrSuccess
-	  });
-	};
-	
-	var addHandlers = function addHandlers() {
-	  $('#express-modal').on('hidden.bs.modal', function () {
-	    _formTools2.default.reset();
-	  });
-	
-	  $('#express-modal').on('shown.bs.modal', function () {
-	    _formTools2.default.work(form, submitForm);
-	  });
-	};
-	
-	exports.default = {
-	  start: addHandlers
-	};
-
-/***/ }),
-/* 45 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6463,65 +7016,9 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _catalog__cards = __webpack_require__(47);
 	
-	// Экспресс-операция БЕЗ ВАЛИДАЦИИ
-	
-	var setStockModal = document.querySelector('#set-stock-modal');
-	var setStockModalQuantity = document.querySelector('#set-stock-modal-quantity');
-	var setStockModalSubmit = document.querySelector('#set-stock-modal-submit');
-	var setStockModalForm = document.querySelector('#set-stock-modal-form');
-	
-	var onSuccessSetStockExecute = function onSuccessSetStockExecute(answer) {
-	  $(setStockModal).modal('hide');
-	};
-	
-	var onStockModalSubmit = function onStockModalSubmit(evt) {
-	  evt.preventDefault();
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + _storage2.default.currentGoodId + '/stock/' + _storage2.default.currentStockId + '/current_count',
-	    data: 'value=' + setStockModalQuantity.value + '&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessSetStockExecute
-	  };
-	};
-	
-	var start = function start() {
-	  setStockModalSubmit.removeAttribute('disabled');
-	  setStockModalForm.addEventListener('submit', onStockModalSubmit);
-	};
-	
-	var stop = function stop() {
-	  setStockModalSubmit.addAttribute('disabled', 'disabled');
-	  setStockModalForm.addEventListener('submit', onStockModalSubmit);
-	};
-	
-	exports.default = {
-	  start: start,
-	  stop: stop
-	};
-
-/***/ }),
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _xhr = __webpack_require__(5);
-	
-	var _xhr2 = _interopRequireDefault(_xhr);
-	
-	var _storage = __webpack_require__(1);
-	
-	var _storage2 = _interopRequireDefault(_storage);
-	
-	var _catalogGroupsCards = __webpack_require__(41);
-	
-	var _catalogGroupsCards2 = _interopRequireDefault(_catalogGroupsCards);
+	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -6539,7 +7036,7 @@
 	var onSuccessExpressExecute = function onSuccessExpressExecute(answer) {
 	  console.log(answer);
 	  $(addResourcesModal).modal('hide');
-	  _catalogGroupsCards2.default.redraw();
+	  _catalog__cards2.default.redraw();
 	};
 	
 	var onExpressModalSubmit = function onExpressModalSubmit(evt) {

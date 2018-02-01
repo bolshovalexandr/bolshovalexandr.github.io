@@ -320,7 +320,7 @@
               </div>
             </div>
             <div id="list-groups-search" class="catalog-header">
-              <input id="list-groups-search-input" type="text" placeholder="поискъ">
+              <input id="list-groups-search-input" type="text" placeholder="поиск в группах">
             </div>
             <div id="list-groups-card-body" class="groups-card-block"></div>
           </div>
@@ -339,6 +339,9 @@
                 <button id="group-goods-sort-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__sort" data-toggle="modal" data-target="#group-goods-sort"></button>
 
               </div>
+            </div>
+            <div id="list-groups-goods-search" class="catalog-header">
+              <input id="list-groups-goods-search-input" type="text" placeholder="поиск в товарах">
             </div>
             <div id="group-goods-card-body"></div>
           </div>
@@ -1041,10 +1044,10 @@
 
           <div class="modal-header">
             <div class="form-group goods-card-name">
-              <input type="text" class="form-control" id="goods-card-name" aria-describedby="goods-card-name" placeholder="Название">
+              <input type="text" class="form-control" id="goods-card-name" aria-describedby="goods-card-name" placeholder="Название" data-valid="name" data-validLabelName="name">
               <span id="goods-card-name-valid" class="badge badge-danger w-100" data-validLabel="name"></span>
             </div>
-            <button id="goods-card-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button id="goods-card-close" type="button" class="close" data-dismiss="modal" aria-label="Close" data-cancel>
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -1085,11 +1088,14 @@
             </div>
 
             <div class="goods-card-string">
-              <div class="goods-card-first-row">
-                <h4 id="goods-card-price-total" class="text-danger">Здесь будет цена %%</h4>
+              <div class="goods-card-first-row" id="goods-card-price-block">
+                <div class="price-total">
+                  <h4>Цена</h4>
+                  <h4 id="goods-card-price-extra" class="text-danger"></h4>
+                </div>
                 <input type="text" class="form-control" id="goods-card-price-purchase" aria-describedby="goods-card-price" placeholder="Наценка" data-valid="purchase" data-validLabelName="goodPrice">
                 <input type="text" class="form-control" id="goods-card-price-sell" aria-describedby="goods-card-price" placeholder="Цена" data-valid="price" data-validLabelName="goodPrice">
-                <span id="goods-card-price-valid" class="badge badge-danger w-100"></span>
+                <span id="goods-card-price-valid" class="badge badge-danger w-100" data-validLabel="goodPrice"></span>
               </div>
 
               <div id="express-container" class="express-container goods-card-second-row">
@@ -1148,7 +1154,7 @@
 
             <div class="goods-card-btns-container">
               <button id="goods-card-submit" type="submit" class="btn btn-primary" disabled>Изменить</button>
-              <button id="goods-card-cancel" type="button" class="btn btn-danger" data-dismiss="modal">Отменить</button>
+              <button id="goods-card-cancel" type="button" class="btn btn-danger" data-dismiss="modal" data-butCancel data-cancel>Отменить</button>
             </div>
           </div>
         </form>
@@ -1160,15 +1166,14 @@
   <div class="modal" id="express-modal" tabindex="-1" role="dialog" aria-labelledby="express-modal" aria-hidden="true">
     <div class="modal-dialog" style="width: 300px;" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="express-modal-label"></h5>
-          <button id="express-modal-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        </div>
-        <div class="modal-body">
-
-          <form id="express-modal-form" name="express-modal" data-formName="formExpressOperation">
+        <form id="express-modal-form" name="express-modal" data-formName="formExpressOperation">
+          <div class="modal-header">
+            <h5 class="modal-title" id="express-modal-label"></h5>
+            <button id="express-modal-close" type="button" class="close" data-dismiss="modal" aria-label="Close" data-cancel>
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>
+          <div class="modal-body">
             <div class="form-group row w-50">
               <h5 class="modal-title" id="express-modal-stock"></h5>
               <label class="col-sm-2 col-form-label" for="express-modal-price">Цена</label>
@@ -1188,7 +1193,7 @@
             </div>
 
             <button id="express-modal-submit" type="submit" class="btn btn-primary w-100" disabled>Выполнить</button>
-            <button id="express-modal-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal" data-butCancel>Отменить</button>
+            <button id="express-modal-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal" data-butCancel data-cancel>Отменить</button>
           </form>
 
         </div>
@@ -1207,22 +1212,22 @@
         </div>
         <div class="modal-body">
 
-          <form id="set-stock-modal-form" name="set-stock-modal">
+          <form id="set-stock-modal-form" name="set-stock-modal" data-formName="goodsCardStockModal">
             <div class="form-group row w-50">
               <h5 class="modal-title" id="set-stock-modal-stock"></h5>
               <label class="col-sm-2 col-form-label" for="set-stock-modal-quantity">Количество</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control m-1" id="set-stock-modal-quantity" aria-describedby="set-stock-modal-quantity" placeholder="Количество">
+                <input type="text" class="form-control m-1" id="set-stock-modal-quantity" aria-describedby="set-stock-modal-quantity" placeholder="Количество" data-valid="amount" data-validLabelName="amount">
               </div>
-              <span id="set-stock-modal-quantity-valid" class="badge badge-danger w-100"></span>
+              <span id="set-stock-modal-quantity-valid" class="badge badge-danger w-100" data-validLabel="amount"></span>
             </div>
 
-            <div id="set-stock-modal-spinner" class="progress text-white mb-3 invisible">
+            <div id="set-stock-modal-spinner" class="progress text-white mb-3 invisible" data-spinner>
               <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
 
             <button id="set-stock-modal-submit" type="submit" class="btn btn-primary w-100" disabled>Выполнить</button>
-            <button id="set-stock-modal-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal">Отменить</button>
+            <button id="set-stock-modal-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal" data-butCancel>Отменить</button>
           </form>
 
         </div>
@@ -1312,6 +1317,10 @@
           <button id="card-resources-group-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
+        </div>
+        <div id="card-resources-search">
+          <button id="card-resources-modal-return-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__return"></button>
+          <input id="card-resources-search-input" type="text" placeholder="поиск в ресурсах">
         </div>
         <div id="card-resources-groups-body"></div>
         <div class="modal-footer">
