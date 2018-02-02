@@ -298,6 +298,7 @@
                 <button id="list-search-card-reset-btn" type="button" class="btn btn-danger m-2 p-2" disabled> Х </button>
               </div>
             </div>
+            <div id="list-search-card-body-checked-keywords" class="groups-card-block"></div>
             <div id="list-search-card-body" class="groups-card-block"></div>
           </div>
         </div>
@@ -916,7 +917,6 @@
   </div>
 
   <!-- Каталог / Редактирование группы -->
-
   <div class="modal fade" id="groups-edit" tabindex="-1" role="dialog" aria-labelledby="groups-edit" aria-hidden="true" backdrop="static">
     <div class="modal-dialog" style="width: 300px;" role="document">
       <div class="modal-content">
@@ -946,8 +946,8 @@
       </div>
     </div>
   </div>
-  <!-- Каталог / Группы товаров / сортировка -->
 
+  <!-- Каталог / Группы товаров / сортировка -->
   <div class="modal fade" id="group-goods-sort" tabindex="-1" role="dialog" aria-labelledby="groups-edit" aria-hidden="true" backdrop="static">
     <div class="modal-dialog" style="width: 300px;" role="document">
       <div class="modal-content">
@@ -958,13 +958,10 @@
         </button>
         </div>
         <div class="modal-body">
-
-
           <button id="group-goods-sort-abc-up" type="submit" class="btn btn-primary w-100 mb-2">А - Я</button>
           <button id="group-goods-sort-abc-down" type="submit" class="btn btn-primary w-100 mb-2">Я - А</button>
           <button id="group-goods-sort-tailings-up" type="submit" class="btn btn-primary w-100 mb-2">Остатки (по возрастанию)</button>
           <button id="group-goods-sort-tailings-down" type="submit" class="btn btn-primary w-100 mb-2">Остатки (по убыванию)</button>
-
           <button id="group-goods-sort-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal">Отменить</button>
         </div>
       </div>
@@ -1194,9 +1191,9 @@
 
             <button id="express-modal-submit" type="submit" class="btn btn-primary w-100" disabled>Выполнить</button>
             <button id="express-modal-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal" data-butCancel data-cancel>Отменить</button>
-          </form>
 
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -1241,7 +1238,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="add-resources-modal-label"></h5>
-          <button id="set-stock-modal-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button id="add-resources-modal-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
         </div>
@@ -1294,7 +1291,7 @@
 
         <div class="modal-header">
           <h5 class="modal-title" id="search-card-keywords-label">Выбрать ключевые слова для поиска</h5>
-          <button id="goods-card-keywords-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button id="search-card-keywords-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
         </div>
@@ -1388,7 +1385,7 @@
           <form id="universal-add-form" name="universal-add">
             <div class="form-group">
               <label id="universal-add-name-label" for="universal-add-name"></label>
-              <input type="text" class="form-control" id="universal-add-name" aria-describedby="universal-add-name" placeholder="" autofocus>
+              <input type="text" class="form-control" id="universal-add-name" aria-describedby="universal-add-name" placeholder="">
               <span id="universal-add-valid" class="badge badge-danger w-100"></span>
             </div>
 

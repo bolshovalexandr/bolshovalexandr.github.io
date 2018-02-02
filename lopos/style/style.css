@@ -148,6 +148,14 @@
 .keyword__mute {
   opacity: 0.4; }
 
+.keyword__small {
+  font-size: 12px;
+  cursor: default; }
+
+#list-search-card-body-checked-keywords {
+  margin: 20px 60px;
+  padding: 10px; }
+
 .goods-card-name {
   width: 100%; }
 
@@ -251,7 +259,7 @@ input[name="express-sell-radio"]:checked + label {
   bottom: 0;
   right: 0;
   padding: 10px;
-  width: 80px;
+  width: 100px;
   background-color: aliceblue;
   opacity: 0.8;
   border-radius: 20px; }
