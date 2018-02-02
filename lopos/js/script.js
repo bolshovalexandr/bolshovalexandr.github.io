@@ -130,7 +130,7 @@
 	
 	var _catalog__search2 = _interopRequireDefault(_catalog__search);
 	
-	var _catalog__cardsAddResource = __webpack_require__(52);
+	var _catalog__cardsAddResource = __webpack_require__(51);
 	
 	var _catalog__cardsAddResource2 = _interopRequireDefault(_catalog__cardsAddResource);
 	
@@ -6800,13 +6800,13 @@
 	
 	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
 	
+	var _universalKeywords = __webpack_require__(31);
+	
+	var _universalKeywords2 = _interopRequireDefault(_universalKeywords);
+	
 	var _catalog__searchBarcode = __webpack_require__(50);
 	
 	var _catalog__searchBarcode2 = _interopRequireDefault(_catalog__searchBarcode);
-	
-	var _catalog__searchKeywords = __webpack_require__(51);
-	
-	var _catalog__searchKeywords2 = _interopRequireDefault(_catalog__searchKeywords);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -6816,6 +6816,13 @@
 	var listSearchForm = document.querySelector('#list-search-form');
 	var listSearchInput = document.querySelector('#list-search-input');
 	
+	var listSearchKeywordsChecked = document.querySelector('#list-search-card-body-checked-keywords');
+	var listSearchKeywordsBtn = document.querySelector('#list-search-keywords-btn');
+	var listSearchKeywordsModal = document.querySelector('#search-card-keywords');
+	var listSearchKeywordsModalBody = document.querySelector('#search-card-keywords-body');
+	var listSearchKeywordsResetBtn = document.querySelector('#list-search-card-reset-btn');
+	var listSearchKeywordsModalSubmit = document.querySelector('#search-card-keywords-submit');
+	
 	var loaderSpinnerId = 'loader-cards';
 	var loaderSpinnerMessage = 'Загрузка';
 	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
@@ -6824,10 +6831,10 @@
 	var fullSearch = [];
 	
 	// отрисовка результатов поиска
-	var drawResult = function drawResult(selectedData) {
+	var drawResult = function drawResult(data) {
 	  listSearchBody.innerHTML = '';
-	  if (selectedData.length) {
-	    selectedData.forEach(function (item, index) {
+	  if (data.length) {
+	    data.forEach(function (item, index) {
 	      return listSearchBody.insertAdjacentHTML('beforeend', _catalogGroups2.default.getGoodString(item, index));
 	    });
 	  } else {
@@ -6882,9 +6889,75 @@
 	};
 	listSearchBody.addEventListener('click', onListSearchBodyClick);
 	
+	// поиск по ключевым словам
+	var onSuccessKeywordSearch = function onSuccessKeywordSearch(keywordSearchData) {
+	  console.log(keywordSearchData);
+	  if (keywordSearchData.status === 271) {
+	    listSearchBody.innerHTML = 'Ключевые слова: ' + keywordSearchData.message;
+	    getFullSearch();
+	    listSearchInput.value = '';
+	  } else {
+	    listSearchBody.innerHTML = '';
+	    drawResult(keywordSearchData.data);
+	    fullSearch = keywordSearchData;
+	    listSearchInput.value = '';
+	  }
+	};
+	
+	var selectedKeywords = [];
+	
+	listSearchKeywordsModalSubmit.addEventListener('click', function () {
+	  listSearchBody.innerHTML = loaderSpinnerMarkup;
+	  var selectedKeywordsNodes = listSearchKeywordsModalBody.querySelectorAll('.keyword:not(.keyword__mute)');
+	  selectedKeywords = [];
+	  if (selectedKeywordsNodes.length) {
+	    listSearchKeywordsChecked.innerHTML = 'Поиск идет по данным ключевым словам: ';
+	    selectedKeywordsNodes.forEach(function (keywordNode) {
+	      selectedKeywords.push(keywordNode.dataset.keywordId);
+	      listSearchKeywordsChecked.appendChild(keywordNode.cloneNode(true)).classList.add('keyword__small');
+	    });
+	  }
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good_search',
+	    data: 'token=' + _storage2.default.data.token + '&tags=[' + selectedKeywords + ']',
+	    callbackSuccess: onSuccessKeywordSearch
+	  };
+	});
+	
+	// обработчик клика по ключевому слову
+	var onKeywordClick = function onKeywordClick(evt) {
+	  return evt.target.classList.toggle('keyword__mute');
+	};
+	
+	// установка прозрачности
+	var keywordModificator = function keywordModificator(keywordId, keywordNode) {
+	  if (selectedKeywords.every(function (tagItem) {
+	    return tagItem !== keywordId;
+	  })) {
+	    keywordNode.classList.add('keyword__mute');
+	  }
+	};
+	
+	var onListSearchKeywordsBtn = function onListSearchKeywordsBtn() {
+	  _universalKeywords2.default.downloadAndDraw(listSearchKeywordsModalBody, onKeywordClick, keywordModificator);
+	  $(listSearchKeywordsModal).modal('show');
+	  listSearchKeywordsChecked.innerHTML = '';
+	  listSearchKeywordsResetBtn.removeAttribute('disabled');
+	};
+	
+	var onListSearchKeywordsResetBtn = function onListSearchKeywordsResetBtn() {
+	  selectedKeywords = [];
+	  listSearchInput.value = '';
+	  listSearchKeywordsChecked.innerHTML = '';
+	  getFullSearch();
+	  listSearchKeywordsResetBtn.setAttribute('disabled', 'disabled');
+	};
+	
 	// поиск по штрихкоду и ключевым словам
 	_catalog__searchBarcode2.default.start();
-	_catalog__searchKeywords2.default.start();
+	listSearchKeywordsBtn.addEventListener('click', onListSearchKeywordsBtn);
+	listSearchKeywordsResetBtn.addEventListener('click', onListSearchKeywordsResetBtn);
 	
 	exports.default = {
 	  start: function start() {
@@ -6986,124 +7059,6 @@
 
 /***/ }),
 /* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _storage = __webpack_require__(1);
-	
-	var _storage2 = _interopRequireDefault(_storage);
-	
-	var _universalKeywords = __webpack_require__(31);
-	
-	var _universalKeywords2 = _interopRequireDefault(_universalKeywords);
-	
-	var _xhr = __webpack_require__(5);
-	
-	var _xhr2 = _interopRequireDefault(_xhr);
-	
-	var _catalog__search = __webpack_require__(49);
-	
-	var _catalog__search2 = _interopRequireDefault(_catalog__search);
-	
-	var _tools = __webpack_require__(6);
-	
-	var _tools2 = _interopRequireDefault(_tools);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var listSearchKeywordsChecked = document.querySelector('#list-search-card-body-checked-keywords');
-	var listSearchKeywordsBtn = document.querySelector('#list-search-keywords-btn');
-	var listSearchKeywordsModal = document.querySelector('#search-card-keywords');
-	var listSearchKeywordsModalBody = document.querySelector('#search-card-keywords-body');
-	var listSearchKeywordsResetBtn = document.querySelector('#list-search-card-reset-btn');
-	var listSearchKeywordsModalSubmit = document.querySelector('#search-card-keywords-submit');
-	
-	var listSearchBody = document.querySelector('#list-search-card-body');
-	var listSearchInput = document.querySelector('#list-search-input');
-	
-	var loaderSpinnerId = 'loader-cards';
-	var loaderSpinnerMessage = 'Загрузка';
-	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
-	
-	// поиск по ключевым словам
-	var onSuccessKeywordSearch = function onSuccessKeywordSearch(keywordSearchData) {
-	  console.log(keywordSearchData);
-	  if (keywordSearchData.status === 271) {
-	    listSearchBody.innerHTML = 'Ключевые слова: ' + keywordSearchData.message;
-	    // getFullSearch();
-	    listSearchInput.value = '';
-	  } else {
-	    listSearchBody.innerHTML = '';
-	    _catalog__search2.default.drawResult(keywordSearchData.data);
-	    // fullSearch = keywordSearchData;
-	    listSearchInput.value = '';
-	  }
-	};
-	
-	var selectedKeywords = [];
-	
-	listSearchKeywordsModalSubmit.addEventListener('click', function () {
-	  listSearchBody.innerHTML = loaderSpinnerMarkup;
-	  var selectedKeywordsNodes = listSearchKeywordsModalBody.querySelectorAll('.keyword:not(.keyword__mute)');
-	  selectedKeywords = [];
-	  if (selectedKeywordsNodes.length) {
-	    listSearchKeywordsChecked.innerHTML = 'Поиск идет по данным ключевым словам: ';
-	    selectedKeywordsNodes.forEach(function (keywordNode) {
-	      selectedKeywords.push(keywordNode.dataset.keywordId);
-	      listSearchKeywordsChecked.appendChild(keywordNode.cloneNode(true)).classList.add('keyword__small');
-	    });
-	  }
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good_search',
-	    data: 'token=' + _storage2.default.data.token + '&tags=[' + selectedKeywords + ']',
-	    callbackSuccess: onSuccessKeywordSearch
-	  };
-	});
-	
-	// обработчик клика по ключевому слову
-	var onKeywordClick = function onKeywordClick(evt) {
-	  return evt.target.classList.toggle('keyword__mute');
-	};
-	
-	// установка прозрачности
-	var keywordModificator = function keywordModificator(keywordId, keywordNode) {
-	  if (selectedKeywords.every(function (tagItem) {
-	    return tagItem !== keywordId;
-	  })) {
-	    keywordNode.classList.add('keyword__mute');
-	  }
-	};
-	
-	var onListSearchKeywordsBtn = function onListSearchKeywordsBtn() {
-	  _universalKeywords2.default.downloadAndDraw(listSearchKeywordsModalBody, onKeywordClick, keywordModificator);
-	  $(listSearchKeywordsModal).modal('show');
-	  listSearchKeywordsChecked.innerHTML = '';
-	  listSearchKeywordsResetBtn.removeAttribute('disabled');
-	};
-	
-	var onListSearchKeywordsResetBtn = function onListSearchKeywordsResetBtn() {
-	  selectedKeywords = [];
-	  listSearchInput.value = '';
-	  listSearchKeywordsChecked.innerHTML = '';
-	  // getFullSearch();
-	  listSearchKeywordsResetBtn.setAttribute('disabled', 'disabled');
-	};
-	
-	exports.default = {
-	  start: function start() {
-	    listSearchKeywordsBtn.addEventListener('click', onListSearchKeywordsBtn);
-	    listSearchKeywordsResetBtn.addEventListener('click', onListSearchKeywordsResetBtn);
-	  }
-	};
-
-/***/ }),
-/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
