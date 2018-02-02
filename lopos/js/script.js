@@ -466,6 +466,14 @@
 	
 	  get isGoodCardEdit() {
 	    return sessionStorage.getItem('isGoodCardEdit');
+	  },
+	
+	  set searchMode(type) {
+	    sessionStorage.setItem('searchMode', type);
+	  },
+	
+	  get searchMode() {
+	    return sessionStorage.getItem('searchMode');
 	  }
 	
 	};
@@ -4723,6 +4731,7 @@
 	
 	  redraw: getGroups,
 	  redrawGoods: onListGroupsCardBodyClick,
+	  openGoodCard: onGroupGoodsCardBodyClick,
 	
 	  stop: function stop() {
 	    _catalogGroups2.default.cleanContainer();
@@ -6796,9 +6805,9 @@
 	
 	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
 	
-	var _catalogGroupsGoods = __webpack_require__(38);
+	var _catalogGroups3 = __webpack_require__(34);
 	
-	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
+	var _catalogGroups4 = _interopRequireDefault(_catalogGroups3);
 	
 	var _universalKeywords = __webpack_require__(31);
 	
@@ -6827,6 +6836,9 @@
 	var loaderSpinnerMessage = 'Загрузка';
 	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
 	
+	// отрисовка карточки товара
+	listSearchBody.addEventListener('click', _catalogGroups4.default.openGoodCard);
+	
 	// массив с полными результатами
 	var fullSearch = [];
 	
@@ -6842,17 +6854,22 @@
 	  }
 	};
 	
+	var makeSearch = function makeSearch() {
+	  var selectedData = [];
+	  fullSearch.data.forEach(function (item) {
+	    if (item.name.toLowerCase().indexOf(listSearchInput.value.toLowerCase()) !== -1) {
+	      selectedData.push(item);
+	    }
+	  });
+	  drawResult(selectedData);
+	};
+	
+	// поиск по массиву результатов fullSearch
 	var onlistSearchFormSubmit = function onlistSearchFormSubmit(evt) {
 	  evt.preventDefault();
 	  listSearchBody.innerHTML = '';
-	  var selectedData = [];
 	  if (listSearchInput.value) {
-	    fullSearch.data.forEach(function (item) {
-	      if (item.name.toLowerCase().indexOf(listSearchInput.value.toLowerCase()) !== -1) {
-	        selectedData.push(item);
-	      }
-	    });
-	    drawResult(selectedData);
+	    makeSearch();
 	  } else {
 	    listSearchBody.innerHTML = 'Ну скажите хоть что-нибудь...';
 	  }
@@ -6868,7 +6885,9 @@
 	};
 	
 	var getFullSearch = function getFullSearch() {
+	  listSearchKeywordsChecked.innerHTML = '';
 	  listSearchBody.innerHTML = loaderSpinnerMarkup;
+	  selectedKeywords = [];
 	
 	  _xhr2.default.request = {
 	    metod: 'POST',
@@ -6878,17 +6897,6 @@
 	  };
 	};
 	
-	// переход на карточку товара (УБРАТЬ В УНИВЕРСАЛЬНЫЙ МОДУЛЬ, ВЫВОДЯЩИЙ СПИСОК ТОВАРОВ)
-	var onListSearchBodyClick = function onListSearchBodyClick(evt) {
-	  var currentStringElement = evt.target;
-	  while (!currentStringElement.dataset.goodId) {
-	    currentStringElement = currentStringElement.parentNode;
-	  }
-	  _storage2.default.currentGoodId = currentStringElement.dataset.goodId;
-	  _catalogGroupsGoods2.default.fill();
-	};
-	listSearchBody.addEventListener('click', onListSearchBodyClick);
-	
 	// поиск по ключевым словам
 	var onSuccessKeywordSearch = function onSuccessKeywordSearch(keywordSearchData) {
 	  console.log(keywordSearchData);
@@ -6897,6 +6905,7 @@
 	    getFullSearch();
 	    listSearchInput.value = '';
 	  } else {
+	    _storage2.default.searchMode = 'keywords';
 	    listSearchBody.innerHTML = '';
 	    drawResult(keywordSearchData.data);
 	    fullSearch = keywordSearchData;
@@ -6906,7 +6915,7 @@
 	
 	var selectedKeywords = [];
 	
-	listSearchKeywordsModalSubmit.addEventListener('click', function () {
+	var onListSearchKeywordsModalSubmit = function onListSearchKeywordsModalSubmit() {
 	  listSearchBody.innerHTML = loaderSpinnerMarkup;
 	  var selectedKeywordsNodes = listSearchKeywordsModalBody.querySelectorAll('.keyword:not(.keyword__mute)');
 	  selectedKeywords = [];
@@ -6916,14 +6925,18 @@
 	      selectedKeywords.push(keywordNode.dataset.keywordId);
 	      listSearchKeywordsChecked.appendChild(keywordNode.cloneNode(true)).classList.add('keyword__small');
 	    });
+	    _xhr2.default.request = {
+	      metod: 'POST',
+	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good_search',
+	      data: 'token=' + _storage2.default.data.token + '&tags=[' + selectedKeywords + ']',
+	      callbackSuccess: onSuccessKeywordSearch
+	    };
+	  } else {
+	    _storage2.default.searchMode = 'base';
 	  }
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good_search',
-	    data: 'token=' + _storage2.default.data.token + '&tags=[' + selectedKeywords + ']',
-	    callbackSuccess: onSuccessKeywordSearch
-	  };
-	});
+	};
+	
+	listSearchKeywordsModalSubmit.addEventListener('click', onListSearchKeywordsModalSubmit);
 	
 	// обработчик клика по ключевому слову
 	var onKeywordClick = function onKeywordClick(evt) {
@@ -6939,6 +6952,7 @@
 	  }
 	};
 	
+	// запускаем выбор ключевых слов
 	var onListSearchKeywordsBtn = function onListSearchKeywordsBtn() {
 	  _universalKeywords2.default.downloadAndDraw(listSearchKeywordsModalBody, onKeywordClick, keywordModificator);
 	  $(listSearchKeywordsModal).modal('show');
@@ -6946,21 +6960,22 @@
 	  listSearchKeywordsResetBtn.removeAttribute('disabled');
 	};
 	
+	// сброс ключевых слов
 	var onListSearchKeywordsResetBtn = function onListSearchKeywordsResetBtn() {
-	  selectedKeywords = [];
 	  listSearchInput.value = '';
 	  listSearchKeywordsChecked.innerHTML = '';
-	  getFullSearch();
 	  listSearchKeywordsResetBtn.setAttribute('disabled', 'disabled');
+	  getFullSearch();
 	};
+	listSearchKeywordsResetBtn.addEventListener('click', onListSearchKeywordsResetBtn);
 	
 	// поиск по штрихкоду и ключевым словам
 	_catalog__searchBarcode2.default.start();
 	listSearchKeywordsBtn.addEventListener('click', onListSearchKeywordsBtn);
-	listSearchKeywordsResetBtn.addEventListener('click', onListSearchKeywordsResetBtn);
 	
 	exports.default = {
 	  start: function start() {
+	    _storage2.default.searchMode = 'base';
 	    listSearchBtn.addEventListener('click', onlistSearchFormSubmit);
 	    listSearchForm.addEventListener('submit', onlistSearchFormSubmit);
 	    listSearch.addEventListener('click', getFullSearch);
