@@ -222,10 +222,10 @@ window.appSettings = {
     'validPatterns': {
       'name': /^[а-яёА-ЯЁA-Za-z\s\d]+$/,
       'describe': /^[а-яёА-ЯЁA-Za-z\s\d]*$/,
-      'purchase': /(^$)|(^\d+$)|(^\d+[.,]\d{2}$)/,
-      'percent': /(^\d*$)|(^\d*\.\d*$)/,
-      'price': /(^$)|(^\d+$)|(^\d+[.,]\d{2}$)/,
-      'barcode': /^[а-яёА-ЯЁA-Za-z\s\d]*$/,
+      'purchase': /(^$)|(^\d+$)|(^\d+[.]\d{1,2}$)/,
+      'percent': /(^-?\d*$)|(^-?\d*\.\d*$)/,
+      'price': /(^$)|(^\d+$)|(^\d+[.]\d{1,2}$)/,
+      'barcode': /^[а-яёА-ЯЁA-Za-z\s\d]{0,30}$/,
     },
     'validMessage': {
       'name': 'поле минимум 1 буква,<br>не должно содержать спецсимволы',
@@ -248,10 +248,10 @@ window.appSettings = {
     'validPatterns': {
       'name': /^[а-яёА-ЯЁA-Za-z\s\d]+$/,
       'describe': /^[а-яёА-ЯЁA-Za-z\s\d]*$/,
-      'purchase': /(^$)|(^\d+$)|(^\d+[.,]\d{2}$)/,
-      'percent': /(^\d*$)|(^\d*\.\d*$)/,
-      'price': /(^$)|(^\d+$)|(^\d+[.,]\d{2}$)/,
-      'barcode': /^[а-яёА-ЯЁA-Za-z\s\d]*$/,
+      'purchase': /(^$)|(^\d+$)|(^\d+[.]\d{1,2}$)/,
+      'percent': /(^-?\d*$)|(^-?\d*\.\d*$)/,
+      'price': /(^$)|(^\d+$)|(^\d+[.]\d{1,2}$)/,
+      'barcode': /^[а-яёА-ЯЁA-Za-z\s\d]{0,30}$/,
     },
     'validMessage': {
       'name': 'поле минимум 1 буква,<br>не должно содержать спецсимволы',
@@ -269,7 +269,7 @@ window.appSettings = {
   'formExpressOperation': {
     'UrlApi': '/lopos_directory/{{dir}}/operator/{{oper}}/business/{{busId}}/good/{{goodId}}/stock/{{stockId}}/express',
     'validPatterns': {
-      'price': /(^$)|(^\d+$)|(^\d+[.]\d{1,3}$)/,
+      'price': /(^$)|(^\d+$)|(^\d+[.]\d{1,2}$)/,
       'amount': /(^\d+$)|(^\d+[.]\d+$)/,
     },
     'validMessage': {
@@ -292,5 +292,60 @@ window.appSettings = {
     'messages': {
       'mes400': 'Некорректный запрос'
     }
-  }
+  },
+  'nomenclatureAddEdit': {
+    'UrlApiAdd': '/lopos_directory/{{dir}}/operator/{{oper}}/business/{{busId}}/nomenclature_card',
+    'UrlApiEdit': '/lopos_directory/{{dir}}/operator/{{oper}}/business/{{busId}}/nomenclature_card/{{NCid}}',
+    'validPatterns': {
+      // название производственной карты
+      'field1': /^[а-яёА-ЯЁA-Za-z\s\d]+$/,
+    },
+    'validMessage': {
+      // название производственной карты
+      'field1': 'поле минимум 1 буква,<br>не должно содержать спецсимволы',
+    },
+    'messages': {
+      'mes400': 'Некорректный запрос'
+    }
+  },
+
+  'addResource': {
+    'UrlApi': '/lopos_directory/{{dir}}/operator/{{oper}}/business/{{busId}}/nomenclature_card/{{NCid}}/compare',
+    'validPatterns': {
+      'quantity': /^\d+$/,
+    },
+    'validMessage': {
+      'quantity': 'минимум 1 цифра',
+    },
+    'messages': {
+      'mes400': 'Некорректный запрос'
+    }
+  },
+
+  'listSearchForm': {
+    'validPatterns': {
+      'search': /^[а-яёА-ЯЁA-Za-z\s\d]+$/,
+    },
+    'validMessage': {
+      'search': 'поле минимум 1 буква,<br>не должно содержать спецсимволы',
+    },
+    'messages': {
+      'mes400': 'Некорректный запрос'
+    }
+  },
+
+  'searchBarcode': {
+    'UrlApi': '/lopos_directory/{{dir}}/operator/{{oper}}/business/{{busId}}/good_search',
+    'validPatterns': {
+      // поиск по штрихкоду
+      'field1': /^[а-яёА-ЯЁA-Za-z\s\d]{0,30}$/,
+    },
+    'validMessage': {
+      // поиск по штрихкоду
+      'field1': 'Штрихкод содержит спецсимволы<br>Максимальная длинна 30 символов',
+    },
+    'messages': {
+      'mes400': 'Некорректный запрос'
+    }
+  },
 };

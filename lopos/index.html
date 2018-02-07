@@ -15,12 +15,11 @@
 
 <body>
   <script src="js/metrika.js"></script>
-
-  <div id="login" class="container-fluid mx-auto d-none" style="min-height: 920px; height: 100vh">
-    <div id="globalAlert" class="position-absolute w-75 ml-3"></div>
+  <div id="alertBlock" class="position-absolute w-75 " style="left:0; right:0; margin:auto; z-index: 100000;"></div>
+  
+  <div id="login" class="container-fluid mx-auto d-none position-relative" style="min-height: 920px; height: 100vh">
 
     <section id="sectionLoginFormMain" class="pt-5">
-
       <section id="sectionLogin" class="d-none">
 
         <div class="container-fluid text-center" style="max-width: 27rem">
@@ -289,7 +288,8 @@
               <div>
                 <form id="list-search-form" action="">
                   <button id="list-search-card-barcode-btn" type="button" class="btn btn-danger m-2 p-2">|||</button>
-                  <input id="list-search-input" type="text" placeholder="">
+                  <input id="list-search-input" type="text" placeholder="" data-valid="search" data-validLabelName="search" data-valisettings="listSearchForm">
+                  <span id="list-search-input-valid" class="badge badge-danger w-100" data-validLabel="search"></span>
                   <button id="list-search-btn" type="submit" class="btn btn-success">Искать</button>
                 </form>
               </div>
@@ -891,7 +891,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="groups-add-label">Создать группу</h5>
-          <button id="groups-add-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button id="groups-add-close" type="button" class="close" data-dismiss="modal" aria-label="Close" data-cancel>
           <span aria-hidden="true">&times;</span>
         </button>
         </div>
@@ -909,7 +909,7 @@
 
             <button id="groups-add-submit" type="submit" class="btn btn-primary w-100" disabled>Создать</button>
 
-            <button id="groups-add-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal" data-butCancel>Отменить</button>
+            <button id="groups-add-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal" data-butCancel data-cancel>Отменить</button>
           </form>
         </div>
       </div>
@@ -922,7 +922,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="groups-edit-label">Редактировать группу</h5>
-          <button id="groups-edit-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button id="groups-edit-close" type="button" class="close" data-dismiss="modal" aria-label="Close" data-cancel>
           <span aria-hidden="true">&times;</span>
         </button>
         </div>
@@ -940,7 +940,7 @@
 
             <button id="groups-edit-submit" type="submit" class="btn btn-primary w-100" disabled>Изменить</button>
 
-            <button id="groups-edit-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal" data-butCancel>Отменить</button>
+            <button id="groups-edit-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal" data-butCancel data-cancel>Отменить</button>
           </form>
         </div>
       </div>
@@ -974,7 +974,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="group-goods-add-label">Создание товара</h5>
-          <button id="group-goods-add-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button id="group-goods-add-close" type="button" class="close" data-dismiss="modal" aria-label="Close" data-cancel>
           <span aria-hidden="true">&times;</span>
         </button>
         </div>
@@ -1025,7 +1025,7 @@
 
             <button id="group-goods-add-submit" type="submit" class="btn btn-primary w-100" disabled>Создание</button>
 
-            <button id="group-goods-add-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal" data-butCancel>Отменить</button>
+            <button id="group-goods-add-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal" data-butCancel data-cancel>Отменить</button>
             <button id="group-goods-add-bill" type="button" class="btn btn-info w-100 mt-3 d-none" data-dismiss="modal">Последние накладные</button>
           </form>
         </div>
@@ -1055,7 +1055,7 @@
               <div class="goods-card-first-row">
                 <div class="goods-card-img" width="300" height="300">
                   <img id="goods-card-image" src="./img/not-available.png" alt="">
-                  <input type="file" class="d-none" id="goods-card-image-upload">
+                  <input type="file" class="d-none" id="goods-card-image-upload" data-valid='none'>
                   <label class="custom-file-label btn btn-warning icon-btn icon-btn__edit" for="goods-card-image-upload"></label>
                 </div>
               </div>
@@ -1075,7 +1075,7 @@
 
                 <div class="form-group">
                   <label for="goods-card-group">Группа</label>
-                  <select id="goods-card-group" class="custom-select">
+                  <select id="goods-card-group" class="custom-select" data-valid='none'>
                     <option selected>Выберите группу</option>
                   </select>
                   <span id="goods-card-group-valid" class="badge badge-danger w-100"></span>
@@ -1203,7 +1203,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="set-stock-modal-label">Изменить остатки</h5>
-          <button id="set-stock-modal-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button id="set-stock-modal-close" type="button" class="close" data-dismiss="modal" aria-label="Close" data-cancel>
           <span aria-hidden="true">&times;</span>
         </button>
         </div>
@@ -1224,7 +1224,7 @@
             </div>
 
             <button id="set-stock-modal-submit" type="submit" class="btn btn-primary w-100" disabled>Выполнить</button>
-            <button id="set-stock-modal-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal" data-butCancel>Отменить</button>
+            <button id="set-stock-modal-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal" data-butCancel data-cancel>Отменить</button>
           </form>
 
         </div>
@@ -1238,25 +1238,25 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="add-resources-modal-label"></h5>
-          <button id="add-resources-modal-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button id="add-resources-modal-close" type="button" class="close" data-dismiss="modal" aria-label="Close" data-cancel>
           <span aria-hidden="true">&times;</span>
         </button>
         </div>
         <div class="modal-body">
 
-          <form id="add-resources-modal-form" name="add-resources-modal-form">
+          <form id="add-resources-modal-form" name="add-resources-modal-form" data-formName="addResource">
             <div class="form-group">
-              <label for="add-resources-modal-quantity">Количество (БЕЗ ВАЛИДАЦИИ)</label>
-              <input type="text" class="form-control" id="add-resources-modal-quantity" aria-describedby="add-resources-modal-quantity" placeholder="Количество">
-              <span id="add-resources-modal-quantity-valid" class="badge badge-danger w-100"></span>
+              <label for="add-resources-modal-quantity">Количество</label>
+              <input type="text" class="form-control" id="add-resources-modal-quantity" aria-describedby="add-resources-modal-quantity" placeholder="Количество" data-valid="quantity" data-validLabelName="quantity">
+              <span id="add-resources-modal-quantity-valid" class="badge badge-danger w-100" data-validLabel="quantity"></span>
             </div>
 
-            <div id="add-resources-modal-spinner" class="progress text-white mb-3 invisible">
+            <div id="add-resources-modal-spinner" class="progress text-white mb-3 invisible" data-spinner>
               <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
 
             <button id="add-resources-modal-submit" type="submit" class="btn btn-primary w-100" disabled>Добавить</button>
-            <button id="add-resources-modal-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal">Отменить</button>
+            <button id="add-resources-modal-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal" data-butCancel data-cancel>Отменить</button>
           </form>
 
         </div>
@@ -1377,24 +1377,24 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="universal-add-label"></h5>
-          <button id="universal-add-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button id="universal-add-close" type="button" class="close" data-dismiss="modal" aria-label="Close" data-cancel>
           <span aria-hidden="true">&times;</span>
         </button>
         </div>
         <div class="modal-body">
-          <form id="universal-add-form" name="universal-add">
+          <form id="universal-add-form" name="universal-add" data-formName="universalForm">
             <div class="form-group">
               <label id="universal-add-name-label" for="universal-add-name"></label>
-              <input type="text" class="form-control" id="universal-add-name" aria-describedby="universal-add-name" placeholder="">
-              <span id="universal-add-valid" class="badge badge-danger w-100"></span>
+              <input type="text" class="form-control" id="universal-add-name" aria-describedby="universal-add-name" placeholder="" data-valid="field1" data-validLabelName="field1">
+              <span id="universal-add-valid" class="badge badge-danger w-100" data-validLabel="field1"></span>
             </div>
 
-            <div id="universal-add-spinner" class="progress text-white mb-3 invisible">
+            <div id="universal-add-spinner" class="progress text-white mb-3 invisible" data-spinner>
               <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
 
-            <button id="universal-add-submit" type="submit" class="btn btn-primary w-100">Создать</button>
-            <button id="universal-add-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal">Отменить</button>
+            <button id="universal-add-submit" type="submit" class="btn btn-primary w-100" disabled>Создать</button>
+            <button id="universal-add-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal" data-butCancel data-cancel>Отменить</button>
           </form>
         </div>
       </div>
