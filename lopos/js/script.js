@@ -4603,6 +4603,7 @@
 	    groupGoodsCard.classList.remove('d-none');
 	    listGroupsCard.classList.add('d-none');
 	    getGoodsForGroup();
+	    _catalogGroupsGoods2.default.redraw();
 	  }
 	};
 	
@@ -5009,7 +5010,7 @@
 	};
 	
 	var formInputHandler = function formInputHandler(evt) {
-	  if (evt.target.tagName === 'INPUT' && evt.target.type !== 'file') {
+	  if (evt.target.type !== 'file') {
 	    hideAlert(evt.target);
 	
 	    var change = false;
@@ -5560,7 +5561,7 @@
 	  } else if (!fileName.endsWith('jpg')) {
 	    goodsCardImage.src = '';
 	    goodsCardImageUpload.value = '';
-	    goodsCardImage.alt = '\u0424\u043E\u0440\u043C\u0430\u0442 ' + fileName.slice(-3) + ' \u043D\u0435 \u043A\u0430\u0442\u0438\u0442, \u0442\u043E\u043B\u044C\u043A\u043E jpg';
+	    goodsCardImage.alt = '\u0424\u043E\u0440\u043C\u0430\u0442 ' + fileName.slice(-3) + ' \u043D\u0435 \u043A\u0430\u0442\u0438\u0442, \u0442\u043E\u043B\u044C\u043A\u043E jpg \u0438\u043B\u0438 png';
 	  } else if (fileSize > 2) {
 	    goodsCardImage.src = '';
 	    goodsCardImageUpload.value = '';
@@ -6457,9 +6458,9 @@
 	
 	    if (goodsData) {
 	      container.innerHTML = '<div class="goods-tile"></div>';
-	      goodsData.forEach(function (item, index) {
-	        container.firstChild.insertAdjacentHTML('beforeend', _this2.getGoodTile(item, index));
-	        container.firstChild.lastChild.addEventListener('click', handler);
+	      goodsData.forEach(function (good, index) {
+	        container.firstChild.insertAdjacentHTML('beforeend', _this2.getGoodTile(good, index));
+	        container.firstChild.lastChild.addEventListener('click', handler.bind(null, good));
 	      });
 	    } else {
 	      container.innerHTML = 'Пусто';
@@ -6472,7 +6473,7 @@
 	  if (_storage2.default.goodsViewMode === 'string' || viewFlag === 'string') {
 	    markup.drawGoodsTable(goodsList, container, handler);
 	  } else if (_storage2.default.goodsViewMode === 'metro') {
-	    markup.drawGoodsMetro(goodsList, container);
+	    markup.drawGoodsMetro(goodsList, container, handler);
 	  }
 	};
 	
@@ -6499,7 +6500,7 @@
 	  */
 	
 	  getElement: function getElement(item, index) {
-	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '" data-group-index="' + index + '" data-group-level="' + item.level + '" data-group-name="' + item.name + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.id + '</span> ||\n        <span>' + item.level + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
+	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '" data-group-index="' + index + '" data-group-level="' + item.level + '" data-group-name="' + item.name + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.id + '</span> ||\n        <span>' + item.level + '</span> ||\n        <span>' + item.count + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(groupsData, container, handler) {
 	    var _this = this;
@@ -7259,17 +7260,21 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalogGroups = __webpack_require__(35);
+	var _catalogGroups = __webpack_require__(34);
 	
 	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
 	
-	var _catalogGroups3 = __webpack_require__(34);
+	var _catalogGroupsGoods = __webpack_require__(40);
 	
-	var _catalogGroups4 = _interopRequireDefault(_catalogGroups3);
+	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
 	
 	var _universalKeywords = __webpack_require__(31);
 	
 	var _universalKeywords2 = _interopRequireDefault(_universalKeywords);
+	
+	var _universalGoodsList = __webpack_require__(48);
+	
+	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
 	var _singleValidation = __webpack_require__(56);
 	
@@ -7281,6 +7286,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	// import groupsMarkup from '../markup/catalog-groups.js';
 	var listSearch = document.querySelector('#list-search-list');
 	var listSearchBody = document.querySelector('#list-search-card-body');
 	var listSearchBtn = document.querySelector('#list-search-btn');
@@ -7299,21 +7305,32 @@
 	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
 	
 	// отрисовка карточки товара
-	listSearchBody.addEventListener('click', _catalogGroups4.default.openGoodCard);
+	listSearchBody.addEventListener('click', _catalogGroups2.default.openGoodCard);
 	
 	// массив с полными результатами
 	var fullSearch = [];
 	
 	// отрисовка результатов поиска
 	var drawResult = function drawResult(data) {
+	  /*
 	  listSearchBody.innerHTML = '';
 	  if (data.length) {
-	    data.forEach(function (item, index) {
-	      return listSearchBody.insertAdjacentHTML('beforeend', _catalogGroups2.default.getGoodString(item, index));
-	    });
+	    data.forEach((item, index) => listSearchBody.insertAdjacentHTML('beforeend', groupsMarkup.getGoodString(item, index)));
 	  } else {
-	    listSearchBody.innerHTML = '\u041D\u0435 \u0437\u0430\u0432\u0435\u0437\u043B\u0438 \u043F\u043E\u043A\u0430 <b>' + listSearchInput.value + '</b>, \u0445\u043E\u0442\u044F \u0438 \u0436\u0434\u0430\u043B\u0438 \u043D\u0430\u043C\u0435\u0434\u043D\u0438...';
+	    listSearchBody.innerHTML = `Не завезли пока <b>${listSearchInput.value}</b>, хотя и ждали намедни...`;
 	  }
+	  */
+	
+	  var onGoodClick = function onGoodClick(good) {
+	    // $(cardResourcesGroupModal).modal('hide');
+	    // $(addResourcesModal).modal('show');
+	    _storage2.default.currentGoodId = good.id;
+	    _catalogGroupsGoods2.default.fill();
+	    // addResourcesModalLabel.innerHTML = good.name;
+	    // resourceAdd.start(addResourcesModal);
+	  };
+	
+	  _universalGoodsList2.default.draw(data, listSearchBody, onGoodClick, 'string');
 	};
 	
 	var makeSearch = function makeSearch() {
