@@ -5345,6 +5345,7 @@
 	var onGroupGoodsViewBtnClick = function onGroupGoodsViewBtnClick() {
 	  if (_storage2.default.goodsViewMode === 'string') {
 	    _storage2.default.goodsViewMode = 'metro';
+	    groupGoodsViewBtn.classList.add('icon-btn__view-tiles');
 	  } else if (_storage2.default.goodsViewMode === 'metro') {
 	    _storage2.default.goodsViewMode = 'string';
 	    groupGoodsViewBtn.classList.remove('icon-btn__view-tiles');
