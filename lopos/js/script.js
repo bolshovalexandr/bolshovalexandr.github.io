@@ -110,11 +110,11 @@
 	
 	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
 	
-	var _catalog__cards = __webpack_require__(51);
+	var _catalog__cards = __webpack_require__(50);
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
-	var _catalog__search = __webpack_require__(55);
+	var _catalog__search = __webpack_require__(54);
 	
 	var _catalog__search2 = _interopRequireDefault(_catalog__search);
 	
@@ -4473,35 +4473,31 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogGroups = __webpack_require__(35);
-	
-	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
-	
 	var _tools = __webpack_require__(6);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _universalSearch = __webpack_require__(36);
+	var _universalSearch = __webpack_require__(35);
 	
 	var _universalSearch2 = _interopRequireDefault(_universalSearch);
 	
-	var _catalogGroupsDelete = __webpack_require__(37);
+	var _catalogGroupsDelete = __webpack_require__(36);
 	
 	var _catalogGroupsDelete2 = _interopRequireDefault(_catalogGroupsDelete);
 	
-	var _catalogGroupsAdd = __webpack_require__(38);
+	var _catalogGroupsAdd = __webpack_require__(37);
 	
 	var _catalogGroupsAdd2 = _interopRequireDefault(_catalogGroupsAdd);
 	
-	var _catalogGroupsGoods = __webpack_require__(40);
+	var _catalogGroupsGoods = __webpack_require__(39);
 	
 	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
 	
-	var _universalGroupsList = __webpack_require__(49);
+	var _universalGroupsList = __webpack_require__(48);
 	
 	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
 	
-	var _catalogGroupsEdit = __webpack_require__(50);
+	var _catalogGroupsEdit = __webpack_require__(49);
 	
 	var _catalogGroupsEdit2 = _interopRequireDefault(_catalogGroupsEdit);
 	
@@ -4534,8 +4530,7 @@
 	// поиск по группам
 	var listGroupSearchInput = document.querySelector('#list-groups-search-input');
 	listGroupSearchInput.addEventListener('input', function (evt) {
-	  _catalogGroups2.default.cleanContainer();
-	  _catalogGroups2.default.drawDataInContainer(_universalSearch2.default.make(loadedData.data, evt.target.value));
+	  _universalGroupsList2.default.draw(_universalSearch2.default.make(loadedData.data, evt.target.value), listGroupsCardBody, onGroupClick);
 	});
 	
 	listGroupsCardAddBtn.addEventListener('click', function () {
@@ -4551,8 +4546,8 @@
 	
 	// получение групп
 	var getGroups = function getGroups() {
-	  _catalogGroups2.default.cleanContainer();
-	  _catalogGroups2.default.drawMarkupInContainer(loaderSpinnerMarkup);
+	  listGroupsCardBody.innerHTML = '';
+	  listGroupsCardBody.insertAdjacentHTML('beforeend', loaderSpinnerMarkup);
 	  _storage2.default.currentGroupId = false;
 	
 	  _xhr2.default.request = {
@@ -4586,11 +4581,7 @@
 	};
 	
 	// обработчик клика по ноде группы
-	var onGroupClick = function onGroupClick(group) {
-	
-	  _storage2.default.currentGroupId = group.id;
-	  _storage2.default.currentGroupName = group.name;
-	  _storage2.default.currentGroupLevel = group.level;
+	var onGroupClick = function onGroupClick() {
 	
 	  if (_storage2.default.groupListOperationType === 'edit') {
 	    $(groupsEditForm).modal('show');
@@ -4616,43 +4607,13 @@
 	  redraw: getGroups,
 	
 	  stop: function stop() {
-	    _catalogGroups2.default.cleanContainer();
+	    // groupsMarkup.cleanContainer();
 	    listGroups.removeEventListener('click', getGroups);
 	  }
 	};
 
 /***/ }),
 /* 35 */
-/***/ (function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var listGroupsBody = document.querySelector('#list-groups-card-body');
-	
-	exports.default = {
-	  cleanContainer: function cleanContainer() {
-	    listGroupsBody.innerHTML = '';
-	  },
-	  getElement: function getElement(item, index) {
-	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '" data-group-index="' + index + '" data-group-level="' + item.level + '" data-group-name="' + item.name + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.id + '</span> ||\n        <span>' + item.level + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
-	  },
-	  drawDataInContainer: function drawDataInContainer(groupsData) {
-	    var _this = this;
-	
-	    groupsData.forEach(function (item, index) {
-	      return listGroupsBody.insertAdjacentHTML('beforeend', _this.getElement(item, index));
-	    });
-	  },
-	  drawMarkupInContainer: function drawMarkupInContainer(markup) {
-	    listGroupsBody.insertAdjacentHTML('beforeend', markup);
-	  }
-	};
-
-/***/ }),
-/* 36 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -4675,7 +4636,7 @@
 	};
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4749,7 +4710,7 @@
 	};
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4766,7 +4727,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(38);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -4853,7 +4814,7 @@
 	};
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5121,7 +5082,7 @@
 	};
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5138,35 +5099,35 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogGroupsGoodsExpress = __webpack_require__(41);
+	var _catalogGroupsGoodsExpress = __webpack_require__(40);
 	
 	var _catalogGroupsGoodsExpress2 = _interopRequireDefault(_catalogGroupsGoodsExpress);
 	
-	var _catalogGroupsGoodsStock = __webpack_require__(42);
+	var _catalogGroupsGoodsStock = __webpack_require__(41);
 	
 	var _catalogGroupsGoodsStock2 = _interopRequireDefault(_catalogGroupsGoodsStock);
 	
-	var _catalogGroupsGoodsEdit = __webpack_require__(43);
+	var _catalogGroupsGoodsEdit = __webpack_require__(42);
 	
 	var _catalogGroupsGoodsEdit2 = _interopRequireDefault(_catalogGroupsGoodsEdit);
 	
-	var _catalogGroupsGoodsGetStock = __webpack_require__(45);
+	var _catalogGroupsGoodsGetStock = __webpack_require__(44);
 	
 	var _catalogGroupsGoodsGetStock2 = _interopRequireDefault(_catalogGroupsGoodsGetStock);
 	
-	var _catalogGroupsGoodsGetKeywords = __webpack_require__(46);
+	var _catalogGroupsGoodsGetKeywords = __webpack_require__(45);
 	
 	var _catalogGroupsGoodsGetKeywords2 = _interopRequireDefault(_catalogGroupsGoodsGetKeywords);
 	
-	var _catalogGroupsGoodsAdd = __webpack_require__(47);
+	var _catalogGroupsGoodsAdd = __webpack_require__(46);
 	
 	var _catalogGroupsGoodsAdd2 = _interopRequireDefault(_catalogGroupsGoodsAdd);
 	
-	var _universalGoodsList = __webpack_require__(48);
+	var _universalGoodsList = __webpack_require__(47);
 	
 	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
-	var _universalSearch = __webpack_require__(36);
+	var _universalSearch = __webpack_require__(35);
 	
 	var _universalSearch2 = _interopRequireDefault(_universalSearch);
 	
@@ -5278,8 +5239,7 @@
 	};
 	
 	// обработчик клика по ноде товара
-	var onGoodClick = function onGoodClick(good) {
-	  _storage2.default.currentGoodId = good.id;
+	var onGoodClick = function onGoodClick() {
 	  if (_storage2.default.goodListOperationType === 'copy') {
 	    listGroupsGoodsCardCheckMessage.innerHTML = 'Выберите товар';
 	    groupGoodsAddSubmitBtn.innerHTML = 'Скопировать';
@@ -5582,7 +5542,7 @@
 	};
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5599,7 +5559,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(38);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -5685,7 +5645,7 @@
 	};
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5702,7 +5662,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(38);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -5787,7 +5747,7 @@
 	};
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5804,15 +5764,15 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(38);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _tools3 = __webpack_require__(44);
+	var _tools3 = __webpack_require__(43);
 	
 	var _tools4 = _interopRequireDefault(_tools3);
 	
-	var _catalogGroupsGoods = __webpack_require__(40);
+	var _catalogGroupsGoods = __webpack_require__(39);
 	
 	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
 	
@@ -6051,7 +6011,7 @@
 	};
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -6079,7 +6039,7 @@
 	};
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6147,7 +6107,7 @@
 	};
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6160,7 +6120,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogGroupsGoods = __webpack_require__(40);
+	var _catalogGroupsGoods = __webpack_require__(39);
 	
 	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
 	
@@ -6176,7 +6136,7 @@
 	
 	var _referenceKeywords2 = _interopRequireDefault(_referenceKeywords);
 	
-	var _catalogGroupsGoodsEdit = __webpack_require__(43);
+	var _catalogGroupsGoodsEdit = __webpack_require__(42);
 	
 	var _catalogGroupsGoodsEdit2 = _interopRequireDefault(_catalogGroupsGoodsEdit);
 	
@@ -6259,7 +6219,7 @@
 	};
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6276,7 +6236,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(38);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -6284,7 +6244,7 @@
 	
 	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
 	
-	var _tools3 = __webpack_require__(44);
+	var _tools3 = __webpack_require__(43);
 	
 	var _tools4 = _interopRequireDefault(_tools3);
 	
@@ -6414,7 +6374,7 @@
 	};
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6448,7 +6408,10 @@
 	    if (goodsData) {
 	      goodsData.forEach(function (good, index) {
 	        container.insertAdjacentHTML('beforeend', _this.getGoodString(good, index));
-	        container.lastChild.addEventListener('click', handler.bind(null, good));
+	        container.lastChild.addEventListener('click', function () {
+	          _storage2.default.currentGoodId = good.id;
+	          handler(good);
+	        });
 	      });
 	    } else {
 	      container.innerHTML = 'Пусто';
@@ -6461,7 +6424,10 @@
 	      container.innerHTML = '<div class="goods-tile"></div>';
 	      goodsData.forEach(function (good, index) {
 	        container.firstChild.insertAdjacentHTML('beforeend', _this2.getGoodTile(good, index));
-	        container.firstChild.lastChild.addEventListener('click', handler.bind(null, good));
+	        container.firstChild.lastChild.addEventListener('click', function () {
+	          _storage2.default.currentGoodId = good.id;
+	          handler(good);
+	        });
 	      });
 	    } else {
 	      container.innerHTML = 'Пусто';
@@ -6483,15 +6449,20 @@
 	};
 
 /***/ }),
-/* 49 */
-/***/ (function(module, exports) {
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	// import auth from '../tools/storage.js';
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var markup = {
 	  /*
@@ -6508,13 +6479,19 @@
 	
 	    groupsData.forEach(function (group, index) {
 	      container.insertAdjacentHTML('beforeend', _this.getElement(group, index));
-	      container.lastChild.addEventListener('click', handler.bind(null, group));
+	      container.lastChild.addEventListener('click', function () {
+	        _storage2.default.currentGroupId = group.id;
+	        _storage2.default.currentGroupName = group.name;
+	        _storage2.default.currentGroupLevel = group.level;
+	        handler();
+	      });
 	    });
 	  }
 	};
 	
 	// отрисовка списка групп по данным
 	var drawGroups = function drawGroups(groupsList, container, handler) {
+	  container.innerHTML = '';
 	  markup.drawDataInContainer(groupsList, container, handler);
 	};
 	
@@ -6523,7 +6500,7 @@
 	};
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6540,7 +6517,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(38);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -6628,7 +6605,7 @@
 	};
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6645,33 +6622,33 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogCards = __webpack_require__(52);
+	var _catalogCards = __webpack_require__(51);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
-	
-	var _catalogGroups = __webpack_require__(35);
-	
-	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
 	
 	var _tools = __webpack_require__(6);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalog__cardsAddEdit = __webpack_require__(53);
+	var _catalog__cardsAddEdit = __webpack_require__(52);
 	
 	var _catalog__cardsAddEdit2 = _interopRequireDefault(_catalog__cardsAddEdit);
 	
-	var _catalog__cardsAddResource = __webpack_require__(54);
+	var _catalog__cardsAddResource = __webpack_require__(53);
 	
 	var _catalog__cardsAddResource2 = _interopRequireDefault(_catalog__cardsAddResource);
 	
-	var _universalGoodsList = __webpack_require__(48);
+	var _universalGoodsList = __webpack_require__(47);
 	
 	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
-	var _universalSearch = __webpack_require__(36);
+	var _universalSearch = __webpack_require__(35);
 	
 	var _universalSearch2 = _interopRequireDefault(_universalSearch);
+	
+	var _universalGroupsList = __webpack_require__(48);
+	
+	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -6714,7 +6691,6 @@
 	  var onGoodClick = function onGoodClick(good) {
 	    $(cardResourcesGroupModal).modal('hide');
 	    $(addResourcesModal).modal('show');
-	    _storage2.default.currentGoodId = good.id;
 	    addResourcesModalLabel.innerHTML = good.name;
 	    _catalog__cardsAddResource2.default.start(addResourcesModal);
 	  };
@@ -6725,35 +6701,25 @@
 	  _universalGoodsList2.default.draw(data, cardResourcesGroupModalBody, onGoodClick, 'string');
 	};
 	
+	var onGroupClick = function onGroupClick() {
+	
+	  cardResourcesSearchInput.focus();
+	  cardResourcesSearchInput.value = '';
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/group/' + _storage2.default.currentGroupId + '/goods_light',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessGroupGood
+	  };
+	};
+	
 	var drawGroups = function drawGroups(groupsData) {
 	  console.log(groupsData);
 	  cardResourcesGroupModalReturnBtn.classList.add('invisible');
 	  cardResourcesSearchInput.removeEventListener('input', onGoodsSearch);
 	  cardResourcesSearchInput.addEventListener('input', onGroupsSearch);
-	  cardResourcesGroupModalBody.innerHTML = '';
-	  groupsData.forEach(function (item, index) {
-	    cardResourcesGroupModalBody.insertAdjacentHTML('beforeend', _catalogGroups2.default.getElement(item, index));
-	    cardResourcesGroupModalBody.lastChild.addEventListener('click', function (evt) {
-	
-	      var currentStringElement = evt.target;
-	      cardResourcesSearchInput.value = '';
-	      cardResourcesSearchInput.focus();
-	      while (!currentStringElement.dataset.groupId) {
-	        currentStringElement = currentStringElement.parentNode;
-	      }
-	
-	      var currentGroupName = loadedGroups.data[currentStringElement.dataset.groupIndex].name;
-	      _storage2.default.currentGroupId = currentStringElement.dataset.groupId;
-	      _storage2.default.currentGroupName = currentGroupName;
-	
-	      _xhr2.default.request = {
-	        metod: 'POST',
-	        url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/group/' + _storage2.default.currentGroupId + '/goods_light',
-	        data: 'view_last=0&token=' + _storage2.default.data.token,
-	        callbackSuccess: onSuccessGroupGood
-	      };
-	    });
-	  });
+	  _universalGroupsList2.default.draw(groupsData, cardResourcesGroupModalBody, onGroupClick);
 	};
 	
 	var onGoodsSearch = function onGoodsSearch(evt) {
@@ -6784,8 +6750,6 @@
 	};
 	
 	var getGroups = function getGroups() {
-	  console.log('hi');
-	  _catalogGroups2.default.cleanContainer();
 	  _storage2.default.currentGroupId = false;
 	  cardResourcesSearchInput.value = '';
 	  $(cardResourcesGroupModal).modal('show');
@@ -6952,16 +6916,15 @@
 	  },
 	
 	
-	  redraw: getCards,
+	  redraw: onListCardBodyClick,
 	
 	  stop: function stop() {
-	    _catalogCards2.default.cleanContainer();
 	    listCards.removeEventListener('click', getCards);
 	  }
 	};
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -6970,15 +6933,9 @@
 	  value: true
 	});
 	var listCardsBody = document.querySelector('#list-cards-card-body');
-	// import auth from '../tools/storage.js';
 	
 	exports.default = {
-	  cleanContainer: function cleanContainer() {
-	    listCardsBody.innerHTML = '';
-	  },
 	  getElement: function getElement(item, index) {
-	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
-	    // ${currentEnterpriseFlag}
 	
 	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-card-id="' + item.id + '" data-card-index="' + index + '"">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.id + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
 	  },
@@ -6990,18 +6947,12 @@
 	    });
 	  },
 	  getResourceElement: function getResourceElement(item) {
-	    // const currentEnterpriseFlag = (item.b_id === auth.data['currentBusiness']) ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
-	    // ${currentEnterpriseFlag}
-	
 	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-card-id="' + item.good_id + '"">\n      <div style="padding-left: 34px;">\n        <span>' + item.good_id + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.value + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
-	  },
-	  drawMarkupInContainer: function drawMarkupInContainer(markup) {
-	    listCardsBody.insertAdjacentHTML('beforeend', markup);
 	  }
 	};
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7018,11 +6969,11 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(38);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalog__cards = __webpack_require__(51);
+	var _catalog__cards = __webpack_require__(50);
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
@@ -7131,7 +7082,7 @@
 	};
 
 /***/ }),
-/* 54 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7148,11 +7099,11 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(38);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalog__cards = __webpack_require__(51);
+	var _catalog__cards = __webpack_require__(50);
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
@@ -7236,7 +7187,7 @@
 	};
 
 /***/ }),
-/* 55 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7253,10 +7204,6 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogCards = __webpack_require__(52);
-	
-	var _catalogCards2 = _interopRequireDefault(_catalogCards);
-	
 	var _tools = __webpack_require__(6);
 	
 	var _tools2 = _interopRequireDefault(_tools);
@@ -7265,7 +7212,7 @@
 	
 	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
 	
-	var _catalogGroupsGoods = __webpack_require__(40);
+	var _catalogGroupsGoods = __webpack_require__(39);
 	
 	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
 	
@@ -7273,21 +7220,20 @@
 	
 	var _universalKeywords2 = _interopRequireDefault(_universalKeywords);
 	
-	var _universalGoodsList = __webpack_require__(48);
+	var _universalGoodsList = __webpack_require__(47);
 	
 	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
-	var _singleValidation = __webpack_require__(56);
+	var _singleValidation = __webpack_require__(55);
 	
 	var _singleValidation2 = _interopRequireDefault(_singleValidation);
 	
-	var _catalog__searchBarcode = __webpack_require__(57);
+	var _catalog__searchBarcode = __webpack_require__(56);
 	
 	var _catalog__searchBarcode2 = _interopRequireDefault(_catalog__searchBarcode);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// import groupsMarkup from '../markup/catalog-groups.js';
 	var listSearch = document.querySelector('#list-search-list');
 	var listSearchBody = document.querySelector('#list-search-card-body');
 	var listSearchBtn = document.querySelector('#list-search-btn');
@@ -7311,27 +7257,17 @@
 	// массив с полными результатами
 	var fullSearch = [];
 	
+	var onGoodClick = function onGoodClick() {
+	  _catalogGroupsGoods2.default.fill();
+	};
+	
 	// отрисовка результатов поиска
 	var drawResult = function drawResult(data) {
-	  /*
-	  listSearchBody.innerHTML = '';
 	  if (data.length) {
-	    data.forEach((item, index) => listSearchBody.insertAdjacentHTML('beforeend', groupsMarkup.getGoodString(item, index)));
+	    _universalGoodsList2.default.draw(data, listSearchBody, onGoodClick, 'string');
 	  } else {
-	    listSearchBody.innerHTML = `Не завезли пока <b>${listSearchInput.value}</b>, хотя и ждали намедни...`;
+	    listSearchBody.innerHTML = '\u041D\u0435 \u0437\u0430\u0432\u0435\u0437\u043B\u0438 \u043F\u043E\u043A\u0430 <b>' + listSearchInput.value + '</b>, \u0445\u043E\u0442\u044F \u0438 \u0436\u0434\u0430\u043B\u0438 \u043D\u0430\u043C\u0435\u0434\u043D\u0438...';
 	  }
-	  */
-	
-	  var onGoodClick = function onGoodClick(good) {
-	    // $(cardResourcesGroupModal).modal('hide');
-	    // $(addResourcesModal).modal('show');
-	    _storage2.default.currentGoodId = good.id;
-	    _catalogGroupsGoods2.default.fill();
-	    // addResourcesModalLabel.innerHTML = good.name;
-	    // resourceAdd.start(addResourcesModal);
-	  };
-	
-	  _universalGoodsList2.default.draw(data, listSearchBody, onGoodClick, 'string');
 	};
 	
 	var makeSearch = function makeSearch() {
@@ -7349,9 +7285,6 @@
 	var onlistSearchFormSubmit = function onlistSearchFormSubmit(evt) {
 	  evt.preventDefault();
 	  listSearchBody.innerHTML = '';
-	  // Здесь стартуем (пользователь ввел данные и нажал энтер, или кликнул на поиск)
-	  // validity.start(listSearchForm);
-	  // validity.valid(listSearchInput);
 	  if (listSearchInput.value) {
 	    if (_singleValidation2.default.valid(listSearchInput)) {
 	      makeSearch();
@@ -7471,13 +7404,12 @@
 	  drawResult: drawResult,
 	
 	  stop: function stop() {
-	    _catalogCards2.default.cleanContainer();
 	    // listSearchBtn.removeEventListener('click', getSearch);
 	  }
 	};
 
 /***/ }),
-/* 56 */
+/* 55 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -7543,7 +7475,7 @@
 	};
 
 /***/ }),
-/* 57 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7556,7 +7488,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalog__searchBarcodeValid = __webpack_require__(58);
+	var _catalog__searchBarcodeValid = __webpack_require__(57);
 	
 	var _catalog__searchBarcodeValid2 = _interopRequireDefault(_catalog__searchBarcodeValid);
 	
@@ -7620,7 +7552,7 @@
 	};
 
 /***/ }),
-/* 58 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7637,15 +7569,15 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(38);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalogGroupsGoods = __webpack_require__(40);
+	var _catalogGroupsGoods = __webpack_require__(39);
 	
 	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
 	
-	var _catalog__search = __webpack_require__(55);
+	var _catalog__search = __webpack_require__(54);
 	
 	var _catalog__search2 = _interopRequireDefault(_catalog__search);
 	
