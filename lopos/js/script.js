@@ -106,9 +106,9 @@
 	
 	var _referenceKeywordsEdit2 = _interopRequireDefault(_referenceKeywordsEdit);
 	
-	var _catalogGroups = __webpack_require__(34);
+	var _catalog__groups = __webpack_require__(34);
 	
-	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
+	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
 	var _catalog__cards = __webpack_require__(50);
 	
@@ -123,8 +123,8 @@
 	// Отправка без валидации
 	// import cardsResourcesButton from './buttons/catalog__cards--add-resource.js';
 	
-	// import goodsButtonFormEdit from './buttons/catalog-groups-goods-edit.js';
-	console.log('ver: 3D2');
+	// import goodsButtonFormEdit from './buttons/catalog__goods--edit.js';
+	console.log('3D3 (07.02.18_13:30)');
 	console.log('ver: 3A5');
 	
 	var exit = document.querySelector('#profile-exit');
@@ -167,7 +167,7 @@
 	  }
 	};
 	
-	var mainMenuButtons = [_onlineProfile2.default, _log2.default, _referenceEnterprises2.default, _referencePoints2.default, _referenceContractors2.default, _referenceKeywords2.default, _catalogGroups2.default, _catalog__cards2.default,
+	var mainMenuButtons = [_onlineProfile2.default, _log2.default, _referenceEnterprises2.default, _referencePoints2.default, _referenceContractors2.default, _referenceKeywords2.default, _catalog__groups2.default, _catalog__cards2.default,
 	// cardsResourcesButton,
 	_catalog__search2.default];
 	
@@ -994,16 +994,14 @@
 	var modalActionRequestMessage = modalActionRequest.querySelector('#modal-action-request-message');
 	var modalActionRequestSubmit = modalActionRequest.querySelector('#modal-action-request-submit');
 	
-	var modalInformation = document.querySelector('#modal-information');
-	var modalInformationTitle = modalInformation.querySelector('#modal-information-title');
-	var modalInformationMessage = modalInformation.querySelector('#modal-information-message');
-	
 	var modalUniversalAdd = document.querySelector('#universal-add');
 	var modalUniversalAddLabel = document.querySelector('#universal-add-label');
 	var modalUniversalAddForm = document.querySelector('#universal-add-form');
 	var modalUniversalAddName = document.querySelector('#universal-add-name');
 	var modalUniversalAddNameLabel = document.querySelector('#universal-add-name-label');
 	var modalUniversalAddSubmit = document.querySelector('#universal-add-submit');
+	
+	var alertBlock = document.querySelector('#alertBlock');
 	
 	exports.default = {
 	  getWaitSpinner: function getWaitSpinner(id, message) {
@@ -1031,12 +1029,11 @@
 	  },
 	
 	  set informationtModal(setup) {
-	    $(modalInformation).modal('show');
-	    modalInformationTitle.innerHTML = setup.title;
-	    modalInformationMessage.innerHTML = setup.message;
-	  },
 	
-	  set informationModalLight(setup) {},
+	    var type = setup.isMess === true ? 'alert-success' : 'alert-danger';
+	
+	    alertBlock.innerHTML = alertBlock.innerHTML + ('<div id="alert" class="alert ' + type + ' fade show" role="alert">\n        <strong>' + setup.title + ' </strong> ' + setup.message + '\n        <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n          <span aria-hidden="true">&times;</span>\n        </button>\n      </div>');
+	  },
 	
 	  set runUniversalAdd(setup) {
 	    var requestHandler = function requestHandler(evt) {
@@ -1055,9 +1052,7 @@
 	    modalUniversalAddName.setAttribute('placeholder', setup.inputPlaceholder);
 	    modalUniversalAddName.value = setup.inputValue ? setup.inputValue : '';
 	    modalUniversalAddSubmit.innerHTML = setup.submitBtnName;
-	    // modalUniversalAddForm.addEventListener('submit', requestHandler);
 	  }
-	
 	};
 
 /***/ }),
@@ -1248,6 +1243,10 @@
 	
 	var _xhr2 = _interopRequireDefault(_xhr);
 	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var regVal = window.appSettings.registerValid;
@@ -1259,7 +1258,11 @@
 	  switch (response.status) {
 	
 	    case 200:
-	      _main_login_window2.default.setAlert(response.message, 'message');
+	      _tools2.default.informationtModal = {
+	        'title': 'MESSAGE: ',
+	        'message': response.message,
+	        'isMess': true
+	      };
 	      _main_login_window2.default.confirmEmail();
 	      break;
 	    case 400:
@@ -1680,7 +1683,8 @@
 	    // зеленое сообщение
 	    _tools2.default.informationtModal = {
 	      'title': 'УСПЕХ: ',
-	      'message': response.message
+	      'message': response.message,
+	      'isMess': true
 	    };
 	  }
 	};
@@ -4481,25 +4485,25 @@
 	
 	var _universalSearch2 = _interopRequireDefault(_universalSearch);
 	
-	var _catalogGroupsDelete = __webpack_require__(36);
+	var _catalog__groupsDelete = __webpack_require__(36);
 	
-	var _catalogGroupsDelete2 = _interopRequireDefault(_catalogGroupsDelete);
+	var _catalog__groupsDelete2 = _interopRequireDefault(_catalog__groupsDelete);
 	
-	var _catalogGroupsAdd = __webpack_require__(37);
+	var _catalog__groupsAdd = __webpack_require__(37);
 	
-	var _catalogGroupsAdd2 = _interopRequireDefault(_catalogGroupsAdd);
+	var _catalog__groupsAdd2 = _interopRequireDefault(_catalog__groupsAdd);
 	
-	var _catalogGroupsGoods = __webpack_require__(39);
+	var _catalog__goods = __webpack_require__(39);
 	
-	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
+	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
 	var _universalGroupsList = __webpack_require__(48);
 	
 	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
 	
-	var _catalogGroupsEdit = __webpack_require__(49);
+	var _catalog__groupsEdit = __webpack_require__(49);
 	
-	var _catalogGroupsEdit2 = _interopRequireDefault(_catalogGroupsEdit);
+	var _catalog__groupsEdit2 = _interopRequireDefault(_catalog__groupsEdit);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -4534,7 +4538,7 @@
 	});
 	
 	listGroupsCardAddBtn.addEventListener('click', function () {
-	  _catalogGroupsAdd2.default.start(groupsAddModal);
+	  _catalog__groupsAdd2.default.start(groupsAddModal);
 	});
 	
 	// обработка успеха загрузки групп
@@ -4576,7 +4580,7 @@
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/group/' + _storage2.default.currentGroupId + '/goods',
 	    data: 'view_last=0&token=' + _storage2.default.data.token,
-	    callbackSuccess: _catalogGroupsGoods2.default.onSuccessGroupGood
+	    callbackSuccess: _catalog__goods2.default.onSuccessGroupGood
 	  };
 	};
 	
@@ -4586,15 +4590,15 @@
 	  if (_storage2.default.groupListOperationType === 'edit') {
 	    $(groupsEditForm).modal('show');
 	    groupsEditName.value = _storage2.default.currentGroupName;
-	    _catalogGroupsEdit2.default.start(groupsEditForm);
+	    _catalog__groupsEdit2.default.start(groupsEditForm);
 	  } else if (_storage2.default.groupListOperationType === 'delete') {
-	    _catalogGroupsDelete2.default.make();
+	    _catalog__groupsDelete2.default.make();
 	  } else if (_storage2.default.groupListOperationType === 'open' || !_storage2.default.groupListOperationType) {
 	    groupName.innerHTML = _storage2.default.currentGroupName;
 	    groupGoodsCard.classList.remove('d-none');
 	    listGroupsCard.classList.add('d-none');
 	    getGoodsForGroup();
-	    _catalogGroupsGoods2.default.redraw();
+	    _catalog__goods2.default.redraw();
 	  }
 	};
 	
@@ -4657,9 +4661,9 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalogGroups = __webpack_require__(34);
+	var _catalog__groups = __webpack_require__(34);
 	
-	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
+	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -4671,7 +4675,7 @@
 	    message = answer.message + ', удалить никак невозможно-с';
 	  } else {
 	    message = 'Группа успешно удалена';
-	    _catalogGroups2.default.redraw();
+	    _catalog__groups2.default.redraw();
 	  }
 	
 	  _tools2.default.informationtModal = {
@@ -4731,9 +4735,9 @@
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalogGroups = __webpack_require__(34);
+	var _catalog__groups = __webpack_require__(34);
 	
-	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
+	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -4758,18 +4762,18 @@
 	    case 200:
 	      $(modal).modal('hide');
 	      _formTools2.default.reset();
-	      _catalogGroups2.default.redraw();
+	      _catalog__groups2.default.redraw();
 	      break;
 	    case 400:
 	      _tools2.default.informationtModal = {
 	        'title': 'Error',
-	        'messages': messages.mes400
+	        'message': messages.mes400
 	      };
 	      break;
 	    case 271:
 	      _tools2.default.informationtModal = {
 	        'title': 'Error',
-	        'messages': response.messages
+	        'message': response.messages
 	      };
 	      break;
 	  }
@@ -5099,29 +5103,29 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogGroupsGoodsExpress = __webpack_require__(40);
+	var _catalog__goodsExpress = __webpack_require__(40);
 	
-	var _catalogGroupsGoodsExpress2 = _interopRequireDefault(_catalogGroupsGoodsExpress);
+	var _catalog__goodsExpress2 = _interopRequireDefault(_catalog__goodsExpress);
 	
-	var _catalogGroupsGoodsStock = __webpack_require__(41);
+	var _catalog__goodsStock = __webpack_require__(41);
 	
-	var _catalogGroupsGoodsStock2 = _interopRequireDefault(_catalogGroupsGoodsStock);
+	var _catalog__goodsStock2 = _interopRequireDefault(_catalog__goodsStock);
 	
-	var _catalogGroupsGoodsEdit = __webpack_require__(42);
+	var _catalog__goodsEdit = __webpack_require__(42);
 	
-	var _catalogGroupsGoodsEdit2 = _interopRequireDefault(_catalogGroupsGoodsEdit);
+	var _catalog__goodsEdit2 = _interopRequireDefault(_catalog__goodsEdit);
 	
-	var _catalogGroupsGoodsGetStock = __webpack_require__(44);
+	var _catalog__goodsGetStock = __webpack_require__(44);
 	
-	var _catalogGroupsGoodsGetStock2 = _interopRequireDefault(_catalogGroupsGoodsGetStock);
+	var _catalog__goodsGetStock2 = _interopRequireDefault(_catalog__goodsGetStock);
 	
-	var _catalogGroupsGoodsGetKeywords = __webpack_require__(45);
+	var _catalog__goodsGetKeywords = __webpack_require__(45);
 	
-	var _catalogGroupsGoodsGetKeywords2 = _interopRequireDefault(_catalogGroupsGoodsGetKeywords);
+	var _catalog__goodsGetKeywords2 = _interopRequireDefault(_catalog__goodsGetKeywords);
 	
-	var _catalogGroupsGoodsAdd = __webpack_require__(46);
+	var _catalog__goodsAdd = __webpack_require__(46);
 	
-	var _catalogGroupsGoodsAdd2 = _interopRequireDefault(_catalogGroupsGoodsAdd);
+	var _catalog__goodsAdd2 = _interopRequireDefault(_catalog__goodsAdd);
 	
 	var _universalGoodsList = __webpack_require__(47);
 	
@@ -5211,7 +5215,7 @@
 	var onListGroupGoodsCardAddBtn = function onListGroupGoodsCardAddBtn() {
 	  groupGoodsAddSubmitBtn.innerHTML = 'Создать';
 	  groupGoodsAddLabel.innerHTML = 'Создание товара';
-	  _catalogGroupsGoodsAdd2.default.start(listGroupGoodsAddModal);
+	  _catalog__goodsAdd2.default.start(listGroupGoodsAddModal);
 	};
 	
 	var onListGroupGoodsCardCopyBtn = function onListGroupGoodsCardCopyBtn(evt) {
@@ -5245,7 +5249,7 @@
 	    groupGoodsAddSubmitBtn.innerHTML = 'Скопировать';
 	    groupGoodsAddLabel.innerHTML = 'Копирование товара';
 	    $(listGroupGoodsAddModal).modal('show');
-	    _catalogGroupsGoodsAdd2.default.start(listGroupGoodsAddModal);
+	    _catalog__goodsAdd2.default.start(listGroupGoodsAddModal);
 	    _xhr2.default.request = {
 	      metod: 'POST',
 	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/good/' + _storage2.default.currentGoodId + '/card_info',
@@ -5375,19 +5379,19 @@
 	  goodsCardImage.src = imgUrl ? 'https://lopos.bidone.ru/users/600a5357/images/' + imgUrl + '.jpg' : './img/not-available.png';
 	
 	  // заполняем форму - остатки
-	  _catalogGroupsGoodsGetStock2.default.getStock(allStocks, currentValue);
+	  _catalog__goodsGetStock2.default.getStock(allStocks, currentValue);
 	
 	  // заполняем форму - ключевые слова и работа с ними
 	  goodTags = tags ? tags : [];
 	
-	  _catalogGroupsGoodsGetKeywords2.default.getKeywords(goodTags);
+	  _catalog__goodsGetKeywords2.default.getKeywords(goodTags);
 	
 	  if (_storage2.default.isGoodCardEdit === 'true') {
 	    restoreForm();
 	  }
 	  _storage2.default.isGoodCardEdit = false;
 	
-	  _catalogGroupsGoodsEdit2.default.start(goodsCard);
+	  _catalog__goodsEdit2.default.start(goodsCard);
 	
 	  // восстановление состояния формы
 	  restoreForm();
@@ -5397,7 +5401,7 @@
 	  saveForm();
 	});
 	
-	_catalogGroupsGoodsGetKeywords2.default.getKeywords(goodTags);
+	_catalog__goodsGetKeywords2.default.getKeywords(goodTags);
 	
 	goodsStock.addEventListener('change', function (evt) {
 	  _storage2.default.currentStockId = Number(evt.target.id.split('-')[1]);
@@ -5445,7 +5449,7 @@
 	    } else if (currentBtnId.indexOf('custom') !== -1) {
 	      $(expressModal).modal('show');
 	      $(goodsCard).modal('toggle');
-	      _catalogGroupsGoodsEdit2.default.removeHandlers();
+	      _catalog__goodsEdit2.default.removeHandlers();
 	
 	      expressModalLabel.innerHTML = currentBtnId.indexOf('purchase') !== -1 ? 'Экспресс-закупка' : 'Экспресс-продажа';
 	      expressModalStock.innerHTML = _storage2.default.currentStockName;
@@ -5453,7 +5457,7 @@
 	      expressModalQuantity.value = '';
 	      expressModalQuantity.focus();
 	      _storage2.default.expressOperationType = multiplier;
-	      _catalogGroupsGoodsExpress2.default.start(expressModal);
+	      _catalog__goodsExpress2.default.start(expressModal);
 	    }
 	    _storage2.default.isGoodCardEdit = true;
 	    saveForm();
@@ -5464,7 +5468,7 @@
 	
 	$(expressModal).on('hidden.bs.modal', function () {
 	  console.log(formSave);
-	  _catalogGroupsGoodsExpress2.default.stop();
+	  _catalog__goodsExpress2.default.stop();
 	  getGood();
 	  $(goodsCard).modal('toggle');
 	});
@@ -5482,20 +5486,20 @@
 	};
 	
 	$(stockModal).on('hidden.bs.modal', function () {
-	  _catalogGroupsGoodsStock2.default.stop();
+	  _catalog__goodsStock2.default.stop();
 	  getGood();
 	});
 	
 	$(stockModal).on('shown.bs.modal', function () {
 	  $(goodsCard).modal('hide');
 	
-	  _catalogGroupsGoodsEdit2.default.removeHandlers();
+	  _catalog__goodsEdit2.default.removeHandlers();
 	
 	  stockModalName.innerHTML = _storage2.default.currentStockName;
 	  stockModalQuantity.value = _storage2.default.currentStockQuantityT2;
 	  _storage2.default.isGoodCardEdit = true;
 	  saveForm();
-	  _catalogGroupsGoodsStock2.default.start(stockModal);
+	  _catalog__goodsStock2.default.start(stockModal);
 	});
 	
 	var getGoodsForGroup = function getGoodsForGroup() {
@@ -5587,17 +5591,22 @@
 	  switch (response.status) {
 	    case 270:
 	      $(modal).modal('hide');
+	      _tools2.default.informationtModal = {
+	        'title': 'MESSAGE: ',
+	        'message': response.message,
+	        'isMess': true
+	      };
 	      break;
 	    case 400:
 	      _tools2.default.informationtModal = {
-	        'title': 'Error',
-	        'messages': messages.mes400
+	        'title': 'ERROR: ',
+	        'message': messages.mes400
 	      };
 	      break;
 	    case 271:
 	      _tools2.default.informationtModal = {
-	        'title': 'Error',
-	        'messages': response.messages
+	        'title': 'ERROR: ',
+	        'message': response.messages
 	      };
 	      break;
 	  }
@@ -5692,13 +5701,13 @@
 	    case 400:
 	      _tools2.default.informationtModal = {
 	        'title': 'Error',
-	        'messages': messages.mes400
+	        'message': messages.mes400
 	      };
 	      break;
 	    case 271:
 	      _tools2.default.informationtModal = {
 	        'title': 'Error',
-	        'messages': response.messages
+	        'message': response.messages
 	      };
 	      break;
 	  }
@@ -5772,14 +5781,14 @@
 	
 	var _tools4 = _interopRequireDefault(_tools3);
 	
-	var _catalogGroupsGoods = __webpack_require__(39);
+	var _catalog__goods = __webpack_require__(39);
 	
-	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
+	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var modal = void 0;
-	// import catalogGroupsGoods from './catalog-groups-goods.js';
+	// import catalogGroupsGoods from './catalog__groups-goods.js';
 	
 	var appUrl1 = void 0;
 	var appUrl2 = void 0;
@@ -5822,7 +5831,7 @@
 	
 	  $(modal).modal('hide');
 	  _formTools2.default.reset();
-	  _catalogGroupsGoods2.default.redraw();
+	  _catalog__goods2.default.redraw();
 	
 	  _tools2.default.informationtModal = {
 	    'title': 'ОШИБКА СВЯЗИ',
@@ -5879,7 +5888,7 @@
 	      } else {
 	        $('#goods-card').modal('hide');
 	        _formTools2.default.reset();
-	        _catalogGroupsGoods2.default.redraw();
+	        _catalog__goods2.default.redraw();
 	      }
 	      break;
 	    case 400:
@@ -5909,7 +5918,7 @@
 	      } else {
 	        _formTools2.default.reset();
 	        $('#goods-card').modal('hide');
-	        _catalogGroupsGoods2.default.redraw();
+	        _catalog__goods2.default.redraw();
 	      }
 	      break;
 	    case 400:
@@ -5937,7 +5946,7 @@
 	
 	      _formTools2.default.reset();
 	      $('#goods-card').modal('hide');
-	      _catalogGroupsGoods2.default.redraw();
+	      _catalog__goods2.default.redraw();
 	      break;
 	    case 400:
 	      _tools2.default.informationtModal = {
@@ -6120,9 +6129,9 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogGroupsGoods = __webpack_require__(39);
+	var _catalog__goods = __webpack_require__(39);
 	
-	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
+	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
 	var _xhr = __webpack_require__(5);
 	
@@ -6136,9 +6145,9 @@
 	
 	var _referenceKeywords2 = _interopRequireDefault(_referenceKeywords);
 	
-	var _catalogGroupsGoodsEdit = __webpack_require__(42);
+	var _catalog__goodsEdit = __webpack_require__(42);
 	
-	var _catalogGroupsGoodsEdit2 = _interopRequireDefault(_catalogGroupsGoodsEdit);
+	var _catalog__goodsEdit2 = _interopRequireDefault(_catalog__goodsEdit);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -6179,11 +6188,11 @@
 	  _storage2.default.isGoodCardEdit = true;
 	  _universalKeywords2.default.downloadAndDraw(goodsCardKeywordsBody, onKeywordClick, keywordModificator);
 	  $(goodsCard).modal('hide');
-	  _catalogGroupsGoodsEdit2.default.removeHandlers();
+	  _catalog__goodsEdit2.default.removeHandlers();
 	});
 	
 	$(goodsCardKeywordsModal).on('hidden.bs.modal', function () {
-	  _catalogGroupsGoods2.default.fill();
+	  _catalog__goods2.default.fill();
 	});
 	
 	var getKeywords = function getKeywords(tags) {
@@ -6193,7 +6202,7 @@
 	  var onGoodKeywordClick = function onGoodKeywordClick(evt) {
 	    _storage2.default.isGoodCardEdit = true;
 	    var returnHandler = function returnHandler(e) {
-	      _catalogGroupsGoods2.default.fill();
+	      _catalog__goods2.default.fill();
 	      $('#list-groups-list').tab('show');
 	      $('#goods-card').modal('show');
 	      e.target.removeEventListener('click', returnHandler);
@@ -6240,9 +6249,9 @@
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalogGroups = __webpack_require__(34);
+	var _catalog__groups = __webpack_require__(34);
 	
-	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
+	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
 	var _tools3 = __webpack_require__(43);
 	
@@ -6284,14 +6293,14 @@
 	    case 200:
 	      $(modal).modal('hide');
 	      _formTools2.default.reset();
-	      _catalogGroups2.default.redrawGoods();
+	      _catalog__groups2.default.redrawGoods();
 	      break;
 	    case 400:
 	      $(modal).modal('hide');
 	      _formTools2.default.reset();
 	      _tools2.default.informationtModal = {
 	        'title': 'Error',
-	        'messages': messages.mes400
+	        'message': messages.mes400
 	      };
 	      break;
 	    case 271:
@@ -6299,7 +6308,7 @@
 	      _formTools2.default.reset();
 	      _tools2.default.informationtModal = {
 	        'title': 'Error',
-	        'messages': response.messages
+	        'message': response.messages
 	      };
 	      break;
 	  }
@@ -6472,7 +6481,7 @@
 	  */
 	
 	  getElement: function getElement(item, index) {
-	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '" data-group-index="' + index + '" data-group-level="' + item.level + '" data-group-name="' + item.name + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.id + '</span> ||\n        <span>' + item.level + '</span> ||\n        <span>' + item.count + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
+	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '" data-group-index="' + index + '" data-group-level="' + item.level + '" data-group-name="' + item.name + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n      <div class="d-flex justify-content-between align-items-center" style="padding-right: 34px;">\n        <span> ' + item.count + ' </span>\n      </div>\n    </div>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(groupsData, container, handler) {
 	    var _this = this;
@@ -6492,7 +6501,11 @@
 	// отрисовка списка групп по данным
 	var drawGroups = function drawGroups(groupsList, container, handler) {
 	  container.innerHTML = '';
-	  markup.drawDataInContainer(groupsList, container, handler);
+	  if (groupsList.length > 0) {
+	    markup.drawDataInContainer(groupsList, container, handler);
+	  } else {
+	    container.innerHTML = 'Списка групп для этого предприятия еще нет';
+	  }
 	};
 	
 	exports.default = {
@@ -6521,9 +6534,9 @@
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalogGroups = __webpack_require__(34);
+	var _catalog__groups = __webpack_require__(34);
 	
-	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
+	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -6548,18 +6561,18 @@
 	    case 200:
 	      $(modal).modal('hide');
 	      _formTools2.default.reset();
-	      _catalogGroups2.default.redraw();
+	      _catalog__groups2.default.redraw();
 	      break;
 	    case 400:
 	      _tools2.default.informationtModal = {
 	        'title': 'Error',
-	        'messages': messages.mes400
+	        'message': messages.mes400
 	      };
 	      break;
 	    case 271:
 	      _tools2.default.informationtModal = {
 	        'title': 'Error',
-	        'messages': response.messages
+	        'message': response.messages
 	      };
 	      break;
 	  }
@@ -6942,9 +6955,13 @@
 	  drawDataInContainer: function drawDataInContainer(cardsData) {
 	    var _this = this;
 	
-	    cardsData.forEach(function (item, index) {
-	      return listCardsBody.insertAdjacentHTML('beforeend', _this.getElement(item, index));
-	    });
+	    if (cardsData.length > 0) {
+	      cardsData.forEach(function (item, index) {
+	        return listCardsBody.insertAdjacentHTML('beforeend', _this.getElement(item, index));
+	      });
+	    } else {
+	      listCardsBody.innerHTML = 'Производственных карточек еще не создано';
+	    }
 	  },
 	  getResourceElement: function getResourceElement(item) {
 	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-card-id="' + item.good_id + '"">\n      <div style="padding-left: 34px;">\n        <span>' + item.good_id + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.value + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
@@ -7009,13 +7026,13 @@
 	    case 400:
 	      _tools2.default.informationtModal = {
 	        'title': 'Error',
-	        'messages': messages.mes400
+	        'message': messages.mes400
 	      };
 	      break;
 	    case 271:
 	      _tools2.default.informationtModal = {
 	        'title': 'Error',
-	        'messages': response.messages
+	        'message': response.messages
 	      };
 	      break;
 	  }
@@ -7135,13 +7152,13 @@
 	    case 400:
 	      _tools2.default.informationtModal = {
 	        'title': 'Error',
-	        'messages': messages.mes400
+	        'message': messages.mes400
 	      };
 	      break;
 	    case 271:
 	      _tools2.default.informationtModal = {
 	        'title': 'Error',
-	        'messages': response.messages
+	        'message': response.messages
 	      };
 	      break;
 	  }
@@ -7208,13 +7225,13 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalogGroups = __webpack_require__(34);
+	var _catalog__groups = __webpack_require__(34);
 	
-	var _catalogGroups2 = _interopRequireDefault(_catalogGroups);
+	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
-	var _catalogGroupsGoods = __webpack_require__(39);
+	var _catalog__goods = __webpack_require__(39);
 	
-	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
+	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
 	var _universalKeywords = __webpack_require__(31);
 	
@@ -7252,13 +7269,13 @@
 	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
 	
 	// отрисовка карточки товара
-	listSearchBody.addEventListener('click', _catalogGroups2.default.openGoodCard);
+	listSearchBody.addEventListener('click', _catalog__groups2.default.openGoodCard);
 	
 	// массив с полными результатами
 	var fullSearch = [];
 	
 	var onGoodClick = function onGoodClick() {
-	  _catalogGroupsGoods2.default.fill();
+	  _catalog__goods2.default.fill();
 	};
 	
 	// отрисовка результатов поиска
@@ -7494,7 +7511,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// import goodsCard from './catalog-groups-goods.js';
+	// import goodsCard from './catalog__groups-goods.js';
 	// import search from './catalog__search.js';
 	
 	// const listSearchBody = document.querySelector('#list-search-card-body');
@@ -7573,9 +7590,9 @@
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalogGroupsGoods = __webpack_require__(39);
+	var _catalog__goods = __webpack_require__(39);
 	
-	var _catalogGroupsGoods2 = _interopRequireDefault(_catalogGroupsGoods);
+	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
 	var _catalog__search = __webpack_require__(54);
 	
@@ -7610,7 +7627,7 @@
 	      // чОрное колдовство с автооткрытием карточки при одном найденном варианте
 	      if (response.data.length === 1) {
 	        _storage2.default.currentGoodId = response.data[0].id;
-	        _catalogGroupsGoods2.default.fill();
+	        _catalog__goods2.default.fill();
 	        response.data = 0;
 	      } else if (response.data.length > 1) {
 	        _catalog__search2.default.drawResult(response.data);
