@@ -7338,6 +7338,7 @@
 	var onListSearchKeywordsResetBtn = function onListSearchKeywordsResetBtn() {
 	  listSearchInput.value = '';
 	  listSearchKeywordsChecked.innerHTML = '';
+	  keywordSearch = '';
 	  listSearchKeywordsResetBtn.setAttribute('disabled', 'disabled');
 	  getFullSearch();
 	};
