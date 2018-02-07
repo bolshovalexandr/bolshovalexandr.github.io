@@ -6890,7 +6890,7 @@
 	exports.default = {
 	  getElement: function getElement(item, index) {
 	
-	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-card-id="' + item.id + '" data-card-index="' + index + '"">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.id + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
+	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-card-id="' + item.id + '" data-card-index="' + index + '"">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(cardsData) {
 	    var _this = this;
@@ -6904,7 +6904,7 @@
 	    }
 	  },
 	  getResourceElement: function getResourceElement(item) {
-	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-card-id="' + item.good_id + '"">\n      <div style="padding-left: 34px;">\n        <span>' + item.good_id + '</span> ||\n        <span>' + item.name + '</span> ||\n        <span>' + item.value + '</span> ||\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
+	    return '\n    <div class="d-flex justify-content-between reference-string" data-card-id="' + item.good_id + '"">\n      <div style="padding-left: 34px;">\n        ' + item.name + '\n      </div>\n      <div style="padding-right: 10px;">\n        ' + item.value + '\n      </div>\n\n    </div>';
 	  }
 	};
 
