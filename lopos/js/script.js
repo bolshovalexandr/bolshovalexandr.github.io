@@ -4549,6 +4549,7 @@
 	
 	
 	  redraw: getGroups,
+	  getGoodsForGroup: getGoodsForGroup,
 	
 	  stop: function stop() {
 	    // groupsMarkup.cleanContainer();
@@ -5055,6 +5056,10 @@
 	
 	var _catalog__goodsEdit2 = _interopRequireDefault(_catalog__goodsEdit);
 	
+	var _catalog__groups = __webpack_require__(34);
+	
+	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
+	
 	var _catalog__goodsGetStock = __webpack_require__(44);
 	
 	var _catalog__goodsGetStock2 = _interopRequireDefault(_catalog__goodsGetStock);
@@ -5241,6 +5246,7 @@
 	var onGroupGoodsReturnBtnClick = function onGroupGoodsReturnBtnClick() {
 	  groupGoodsCard.classList.add('d-none');
 	  listGroupsCard.classList.remove('d-none');
+	  _catalog__groups2.default.redraw();
 	};
 	groupGoodsReturnBtn.addEventListener('click', onGroupGoodsReturnBtnClick);
 	
@@ -5727,9 +5733,8 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var modal = void 0;
 	// import catalogGroupsGoods from './catalog__groups-goods.js';
-	
+	var modal = void 0;
 	var appUrl1 = void 0;
 	var appUrl2 = void 0;
 	var appUrl3 = void 0;
@@ -5771,6 +5776,7 @@
 	
 	  $(modal).modal('hide');
 	  _formTools2.default.reset();
+	  _catalog__goods2.default.getGoodsForGroup();
 	  _catalog__goods2.default.redraw();
 	
 	  _tools2.default.informationtModal = {
@@ -6233,7 +6239,7 @@
 	    case 200:
 	      $(modal).modal('hide');
 	      _formTools2.default.reset();
-	      _catalog__groups2.default.redrawGoods();
+	      _catalog__groups2.default.getGoodsForGroup();
 	      break;
 	    case 400:
 	      $(modal).modal('hide');
@@ -7241,7 +7247,7 @@
 	    if (_singleValidation2.default.valid(listSearchInput)) {
 	      makeSearch();
 	    }
-	  } else if (selectedKeywords) {
+	  } else if (selectedKeywords === '') {
 	    drawResult(keywordSearch.data);
 	  } else {
 	    listSearchBody.innerHTML = 'Ну скажите хоть что-нибудь...';
