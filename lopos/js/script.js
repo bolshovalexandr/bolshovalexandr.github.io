@@ -58,53 +58,53 @@
 	
 	var _log2 = _interopRequireDefault(_log);
 	
-	var _onlineProfile = __webpack_require__(16);
+	var _online__profile = __webpack_require__(16);
 	
-	var _onlineProfile2 = _interopRequireDefault(_onlineProfile);
+	var _online__profile2 = _interopRequireDefault(_online__profile);
 	
-	var _referenceEnterprises = __webpack_require__(18);
+	var _reference__enterprises = __webpack_require__(18);
 	
-	var _referenceEnterprises2 = _interopRequireDefault(_referenceEnterprises);
+	var _reference__enterprises2 = _interopRequireDefault(_reference__enterprises);
 	
-	var _referenceEnterprisesAdd = __webpack_require__(20);
+	var _reference__enterprisesAdd = __webpack_require__(20);
 	
-	var _referenceEnterprisesAdd2 = _interopRequireDefault(_referenceEnterprisesAdd);
+	var _reference__enterprisesAdd2 = _interopRequireDefault(_reference__enterprisesAdd);
 	
-	var _referenceEnterprisesEdit = __webpack_require__(21);
+	var _reference__enterprisesEdit = __webpack_require__(21);
 	
-	var _referenceEnterprisesEdit2 = _interopRequireDefault(_referenceEnterprisesEdit);
+	var _reference__enterprisesEdit2 = _interopRequireDefault(_reference__enterprisesEdit);
 	
-	var _referencePoints = __webpack_require__(22);
+	var _reference__points = __webpack_require__(22);
 	
-	var _referencePoints2 = _interopRequireDefault(_referencePoints);
+	var _reference__points2 = _interopRequireDefault(_reference__points);
 	
-	var _referencePointsAdd = __webpack_require__(24);
+	var _reference__pointsAdd = __webpack_require__(24);
 	
-	var _referencePointsAdd2 = _interopRequireDefault(_referencePointsAdd);
+	var _reference__pointsAdd2 = _interopRequireDefault(_reference__pointsAdd);
 	
-	var _referencePointsEdit = __webpack_require__(25);
+	var _reference__pointsEdit = __webpack_require__(25);
 	
-	var _referencePointsEdit2 = _interopRequireDefault(_referencePointsEdit);
+	var _reference__pointsEdit2 = _interopRequireDefault(_reference__pointsEdit);
 	
-	var _referenceContractors = __webpack_require__(26);
+	var _reference__contractors = __webpack_require__(26);
 	
-	var _referenceContractors2 = _interopRequireDefault(_referenceContractors);
+	var _reference__contractors2 = _interopRequireDefault(_reference__contractors);
 	
-	var _referenceContractorsAdd = __webpack_require__(29);
+	var _reference__contractorsAdd = __webpack_require__(29);
 	
-	var _referenceContractorsAdd2 = _interopRequireDefault(_referenceContractorsAdd);
+	var _reference__contractorsAdd2 = _interopRequireDefault(_reference__contractorsAdd);
 	
-	var _referenceKeywords = __webpack_require__(30);
+	var _reference__keywords = __webpack_require__(30);
 	
-	var _referenceKeywords2 = _interopRequireDefault(_referenceKeywords);
+	var _reference__keywords2 = _interopRequireDefault(_reference__keywords);
 	
-	var _referenceKeywordsAdd = __webpack_require__(32);
+	var _reference__keywordsAdd = __webpack_require__(32);
 	
-	var _referenceKeywordsAdd2 = _interopRequireDefault(_referenceKeywordsAdd);
+	var _reference__keywordsAdd2 = _interopRequireDefault(_reference__keywordsAdd);
 	
-	var _referenceKeywordsEdit = __webpack_require__(33);
+	var _reference__keywordsEdit = __webpack_require__(33);
 	
-	var _referenceKeywordsEdit2 = _interopRequireDefault(_referenceKeywordsEdit);
+	var _reference__keywordsEdit2 = _interopRequireDefault(_reference__keywordsEdit);
 	
 	var _catalog__groups = __webpack_require__(34);
 	
@@ -167,7 +167,7 @@
 	  }
 	};
 	
-	var mainMenuButtons = [_onlineProfile2.default, _log2.default, _referenceEnterprises2.default, _referencePoints2.default, _referenceContractors2.default, _referenceKeywords2.default, _catalog__groups2.default, _catalog__cards2.default,
+	var mainMenuButtons = [_online__profile2.default, _log2.default, _reference__enterprises2.default, _reference__points2.default, _reference__contractors2.default, _reference__keywords2.default, _catalog__groups2.default, _catalog__cards2.default,
 	// cardsResourcesButton,
 	_catalog__search2.default];
 	
@@ -180,13 +180,13 @@
 	    mainMenuButtons.forEach(function (item) {
 	      return item.start();
 	    });
-	    _referenceEnterprisesAdd2.default.start();
-	    _referenceEnterprisesEdit2.default.start();
-	    _referencePointsAdd2.default.start();
-	    _referencePointsEdit2.default.start();
-	    _referenceContractorsAdd2.default.start();
-	    _referenceKeywordsAdd2.default.start();
-	    _referenceKeywordsEdit2.default.start();
+	    _reference__enterprisesAdd2.default.start();
+	    _reference__enterprisesEdit2.default.start();
+	    _reference__pointsAdd2.default.start();
+	    _reference__pointsEdit2.default.start();
+	    _reference__contractorsAdd2.default.start();
+	    _reference__keywordsAdd2.default.start();
+	    _reference__keywordsEdit2.default.start();
 	  } else {
 	    showLoginHideApp();
 	    _main_login_window2.default.init();
@@ -1936,18 +1936,18 @@
 	  value: true
 	});
 	
-	var _onlineProfile = __webpack_require__(17);
+	var _online__profile = __webpack_require__(17);
 	
-	var _onlineProfile2 = _interopRequireDefault(_onlineProfile);
+	var _online__profile2 = _interopRequireDefault(_online__profile);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	exports.default = {
 	  start: function start() {
-	    _onlineProfile2.default.setProfile();
+	    _online__profile2.default.setProfile();
 	  },
 	  stop: function stop() {
-	    _onlineProfile2.default.clearProfile();
+	    _online__profile2.default.clearProfile();
 	  }
 	};
 
@@ -2000,9 +2000,9 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _referenceEnterprises = __webpack_require__(19);
+	var _reference__enterprises = __webpack_require__(19);
 	
-	var _referenceEnterprises2 = _interopRequireDefault(_referenceEnterprises);
+	var _reference__enterprises2 = _interopRequireDefault(_reference__enterprises);
 	
 	var _tools = __webpack_require__(6);
 	
@@ -2020,8 +2020,6 @@
 	var listEnterprisesCardBalance = document.querySelector('#list-enterprises-card-balance');
 	var listEnterprisesCardIsChecked = document.querySelector('#list-enterprises-card-is-checked');
 	var listEnterprisesCardDate = document.querySelector('#list-enterprises-card-date');
-	// const listEnterprisesCardNegativeTailings = document.querySelector('#list-enterprises-card-negative-tailings');
-	// const listEnterprisesCardNegativeBalance = document.querySelector('#list-enterprises-card-negative-balance');
 	var listEnterprisesCardNegativeTailingsSwitch = document.querySelector('#list-enterprises-card-negative-tailings-switch');
 	var listEnterprisesCardNegativeBalanceSwitch = document.querySelector('#list-enterprises-card-negative-balance-switch');
 	
@@ -2066,9 +2064,9 @@
 	  console.log(loadedEnterprises);
 	  document.querySelector('#' + loaderSpinnerId).remove();
 	  if (loadedEnterprises.status === 200) {
-	    _referenceEnterprises2.default.drawDataInContainer(loadedEnterprises.data);
+	    _reference__enterprises2.default.drawDataInContainer(loadedEnterprises.data);
 	  } else {
-	    _referenceEnterprises2.default.drawMarkupInContainer('<p>' + loadedEnterprises.message + '</p>');
+	    _reference__enterprises2.default.drawMarkupInContainer('<p>' + loadedEnterprises.message + '</p>');
 	  }
 	};
 	
@@ -2077,8 +2075,8 @@
 	};
 	
 	var getEnterprises = function getEnterprises() {
-	  _referenceEnterprises2.default.cleanContainer();
-	  _referenceEnterprises2.default.drawMarkupInContainer(loaderSpinnerMarkup);
+	  _reference__enterprises2.default.cleanContainer();
+	  _reference__enterprises2.default.drawMarkupInContainer(loaderSpinnerMarkup);
 	
 	  _xhr2.default.request = {
 	    metod: 'POST',
@@ -2099,10 +2097,7 @@
 	
 	listEnterprisesCardNegativeBalanceSwitch.addEventListener('change', function (evt) {
 	
-	  // enterprisesMarkup.cleanContainer();
-	  // enterprisesMarkup.drawMarkupInContainer(loaderSpinnerMarkup);
 	  var value = evt.target.checked ? 1 : 0;
-	  // console.log(value);
 	
 	  _xhr2.default.request = {
 	    metod: 'PUT',
@@ -2115,10 +2110,7 @@
 	
 	listEnterprisesCardNegativeTailingsSwitch.addEventListener('change', function (evt) {
 	
-	  // enterprisesMarkup.cleanContainer();
-	  // enterprisesMarkup.drawMarkupInContainer(loaderSpinnerMarkup);
 	  var value = evt.target.checked ? 1 : 0;
-	  // console.log(value);
 	
 	  _xhr2.default.request = {
 	    metod: 'PUT',
@@ -2129,7 +2121,6 @@
 	  };
 	});
 	
-	// listEnterprisesCardNegativeBalanceSwitch
 	var onSuccessEnterpriseCardLoad = function onSuccessEnterpriseCardLoad(loadedEnterpriseCard) {
 	  console.log(loadedEnterpriseCard);
 	
@@ -2165,7 +2156,6 @@
 	    console.log(loadedEnterpriseCard.data.meta[i].meta_code === '11' && loadedEnterpriseCard.data.meta[i].meta_value === '1');
 	    if (loadedEnterpriseCard.data.meta[i].meta_code === '11' && loadedEnterpriseCard.data.meta[i].meta_value === '1') {
 	      listEnterprisesCardNegativeTailingsSwitch.setAttribute('checked', 'checked');
-	      // listEnterprisesCardNegativeTailingsSwitch.innerHTML = 'Выключить';
 	      listEnterprisesCardNegativeTailingsSwitch.checked = true;
 	      break;
 	    } else {
@@ -2182,8 +2172,6 @@
 	      listEnterprisesCardNegativeBalanceSwitch.checked = false;
 	    }
 	  }
-	
-	  // auth.currentEnterpriseId = loadedEnterpriseCard.data.id;
 	};
 	
 	var onErrorEnterpriseCardLoad = function onErrorEnterpriseCardLoad(error) {
@@ -2239,7 +2227,7 @@
 	  updateCard: drawEnterpriseCard,
 	
 	  stop: function stop() {
-	    _referenceEnterprises2.default.cleanContainer();
+	    _reference__enterprises2.default.cleanContainer();
 	    listEnterprises.removeEventListener('click', getEnterprises);
 	  }
 	};
@@ -2304,9 +2292,9 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _referenceEnterprises = __webpack_require__(18);
+	var _reference__enterprises = __webpack_require__(18);
 	
-	var _referenceEnterprises2 = _interopRequireDefault(_referenceEnterprises);
+	var _reference__enterprises2 = _interopRequireDefault(_reference__enterprises);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -2378,7 +2366,7 @@
 	
 	  switch (response.status) {
 	    case 200:
-	      _referenceEnterprises2.default.redraw();
+	      _reference__enterprises2.default.redraw();
 	      break;
 	    case 400:
 	      _tools2.default.informationtModal = {
@@ -2492,9 +2480,9 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _referenceEnterprises = __webpack_require__(18);
+	var _reference__enterprises = __webpack_require__(18);
 	
-	var _referenceEnterprises2 = _interopRequireDefault(_referenceEnterprises);
+	var _reference__enterprises2 = _interopRequireDefault(_reference__enterprises);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -2561,7 +2549,7 @@
 	
 	  switch (response.status) {
 	    case 200:
-	      _referenceEnterprises2.default.updateCard();
+	      _reference__enterprises2.default.updateCard();
 	      break;
 	    case 400:
 	      _tools2.default.informationtModal = {
@@ -2681,9 +2669,9 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _referencePoints = __webpack_require__(23);
+	var _reference__points = __webpack_require__(23);
 	
-	var _referencePoints2 = _interopRequireDefault(_referencePoints);
+	var _reference__points2 = _interopRequireDefault(_reference__points);
 	
 	var _tools = __webpack_require__(6);
 	
@@ -2715,9 +2703,9 @@
 	  document.querySelector('#' + loaderSpinnerId).remove();
 	  if (loadedPoints.status === 200) {
 	    console.log(loadedPoints);
-	    _referencePoints2.default.drawDataInContainer(loadedPoints.data);
+	    _reference__points2.default.drawDataInContainer(loadedPoints.data);
 	  } else {
-	    _referencePoints2.default.drawMarkupInContainer('<p>' + loadedPoints.message + '</p>');
+	    _reference__points2.default.drawMarkupInContainer('<p>' + loadedPoints.message + '</p>');
 	  }
 	};
 	
@@ -2758,8 +2746,8 @@
 	var getPoints = function getPoints() {
 	  disableCheckEditButtons();
 	
-	  _referencePoints2.default.cleanContainer();
-	  _referencePoints2.default.drawMarkupInContainer(loaderSpinnerMarkup);
+	  _reference__points2.default.cleanContainer();
+	  _reference__points2.default.drawMarkupInContainer(loaderSpinnerMarkup);
 	
 	  _xhr2.default.request = {
 	    metod: 'POST',
@@ -2779,7 +2767,7 @@
 	  redraw: getPoints,
 	
 	  stop: function stop() {
-	    _referencePoints2.default.cleanContainer();
+	    _reference__points2.default.cleanContainer();
 	    listPoints.removeEventListener('click', getPoints);
 	  }
 	};
@@ -2806,7 +2794,6 @@
 	    listPointsBody.innerHTML = '';
 	  },
 	  getElement: function getElement(item, index) {
-	    // const currentStockFlag = (item.id === auth.data['currentStock']) ? '<button type="button" class="btn p-0 bg-white icon-btn icon-btn__check--green"></button>' : '';
 	    var currentStockFlag = item.id === _storage2.default.data['currentStock'] ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
 	
 	    return '\n\n    <input type="radio" id="' + item.id + '" name="contact" value="email" class="d-none">\n\n    <label style="padding-left: 34px;" for="' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '">\n      <div><span class="reference-row-number">' + (index + 1) + '</span> ' + item.name + '</div>\n      <div class="d-flex justify-content-between align-items-center">\n        ' + currentStockFlag + '\n      </div>\n      </label>';
@@ -2845,9 +2832,9 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _referencePoints = __webpack_require__(22);
+	var _reference__points = __webpack_require__(22);
 	
-	var _referencePoints2 = _interopRequireDefault(_referencePoints);
+	var _reference__points2 = _interopRequireDefault(_reference__points);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -2918,7 +2905,7 @@
 	
 	  switch (response.status) {
 	    case 200:
-	      _referencePoints2.default.redraw();
+	      _reference__points2.default.redraw();
 	      break;
 	    case 400:
 	      _tools2.default.informationtModal = {
@@ -3029,9 +3016,9 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _referencePoints = __webpack_require__(22);
+	var _reference__points = __webpack_require__(22);
 	
-	var _referencePoints2 = _interopRequireDefault(_referencePoints);
+	var _reference__points2 = _interopRequireDefault(_reference__points);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -3098,7 +3085,7 @@
 	
 	  switch (response.status) {
 	    case 200:
-	      _referencePoints2.default.redraw();
+	      _reference__points2.default.redraw();
 	      break;
 	    case 400:
 	      _tools2.default.informationtModal = {
@@ -3221,13 +3208,13 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _referenceContractors = __webpack_require__(27);
+	var _reference__contractors = __webpack_require__(27);
 	
-	var _referenceContractors2 = _interopRequireDefault(_referenceContractors);
+	var _reference__contractors2 = _interopRequireDefault(_reference__contractors);
 	
-	var _referenceContractorsCard = __webpack_require__(28);
+	var _reference__contractorsCard = __webpack_require__(28);
 	
-	var _referenceContractorsCard2 = _interopRequireDefault(_referenceContractorsCard);
+	var _reference__contractorsCard2 = _interopRequireDefault(_reference__contractorsCard);
 	
 	var _tools = __webpack_require__(6);
 	
@@ -3285,13 +3272,6 @@
 	  listContractorsFormSubmit.innerHTML = 'Создать';
 	});
 	
-	/*
-	listContractorsCardEditBtn.addEventListener('click', function () {
-	  auth.currentContractorOperation = 'edit';
-	  listContractorsFormSubmit.innerHTML = 'Изменить';
-	});
-	*/
-	
 	listContractorsCardReturnBtn.addEventListener('click', function () {
 	  showBodyHideCard();
 	  getContractors(_storage2.default.currentContractorType);
@@ -3304,14 +3284,12 @@
 	    if (loadedContractors.data.length) {
 	      contractorsData = loadedContractors.data.slice(0);
 	    }
-	    _referenceContractorsCard2.default.cleanContainer();
+	    _reference__contractorsCard2.default.cleanContainer();
 	    if (loadedContractors.data) {
-	      _referenceContractors2.default.drawDataInContainer(loadedContractors.data);
+	      _reference__contractors2.default.drawDataInContainer(loadedContractors.data);
 	    }
-	    // listContractorsFormSubmit.innerHTML = 'Создать';
-	    // auth.currentContractorOperation = 'add';
 	  } else {
-	    _referenceContractors2.default.drawMarkupInContainer('<p>' + loadedContractors.message + '</p>');
+	    _reference__contractors2.default.drawMarkupInContainer('<p>' + loadedContractors.message + '</p>');
 	  }
 	};
 	
@@ -3323,12 +3301,10 @@
 	  document.querySelector('#' + loaderSpinnerId).remove();
 	  if (loadedBuyerCard.status === 200) {
 	    console.log(loadedBuyerCard);
-	    _referenceContractorsCard2.default.cleanContainer();
-	    _referenceContractorsCard2.default.drawDataInContainer(loadedBuyerCard.data);
-	    // auth.currentContractorOperation = 'edit';
-	    // listContractorsFormSubmit.innerHTML = 'Изменить';
+	    _reference__contractorsCard2.default.cleanContainer();
+	    _reference__contractorsCard2.default.drawDataInContainer(loadedBuyerCard.data);
 	  } else {
-	    _referenceContractorsCard2.default.drawMarkupInContainer('<p>' + loadedBuyerCard.message + '</p>');
+	    _reference__contractorsCard2.default.drawMarkupInContainer('<p>' + loadedBuyerCard.message + '</p>');
 	  }
 	};
 	
@@ -3376,7 +3352,7 @@
 	    listContractorsHeader.classList.remove('d-flex');
 	    listContractorsHeader.classList.add('d-none');
 	
-	    _referenceContractorsCard2.default.drawMarkupInContainer(loaderSpinnerMarkup);
+	    _reference__contractorsCard2.default.drawMarkupInContainer(loaderSpinnerMarkup);
 	
 	    _xhr2.default.request = {
 	      metod: 'POST',
@@ -3401,12 +3377,12 @@
 	  type = type || _storage2.default.currentContractorType;
 	  console.log(type);
 	
-	  listContractorsHeaderType.innerHTML = Number(type) === ContractorType.SUPPLIER ? _referenceContractors2.default.getSuppliersHeader() : _referenceContractors2.default.getBuyersHeader();
+	  listContractorsHeaderType.innerHTML = Number(type) === ContractorType.SUPPLIER ? _reference__contractors2.default.getSuppliersHeader() : _reference__contractors2.default.getBuyersHeader();
 	  listContractorsFormEditLabel.innerHTML = Number(type) === ContractorType.SUPPLIER ? 'Поставщики' : 'Покупатели';
 	  _storage2.default.currentContractorType = type;
 	
-	  _referenceContractors2.default.cleanContainer();
-	  _referenceContractors2.default.drawMarkupInContainer(loaderSpinnerMarkup);
+	  _reference__contractors2.default.cleanContainer();
+	  _reference__contractors2.default.drawMarkupInContainer(loaderSpinnerMarkup);
 	
 	  _xhr2.default.request = {
 	    metod: 'POST',
@@ -3436,7 +3412,7 @@
 	  redraw: getContractors,
 	
 	  stop: function stop() {
-	    _referenceContractors2.default.cleanContainer();
+	    _reference__contractors2.default.cleanContainer();
 	    listBuyers.removeEventListener('click', getContractors);
 	    listSuppliers.addEventListener('click', getContractors);
 	  }
@@ -3489,29 +3465,6 @@
 	  value: true
 	});
 	var listContractorsCardBody = document.querySelector('#list-contractors-card-body');
-	// import auth from '../tools/storage.js';
-	
-	/*
-	const drawHeaderInContainer = (data) => {
-	  return `
-	    <div class="d-flex justify-content-between">
-	      <div class="border">${data.name}</div>
-	      <div class="border">${data.phone}</div>
-	      <div class="border">${data.email}</div>
-	    </div>
-	    <div class="d-flex border">${data.description}</div>
-	  `;
-	};
-	*/
-	/*
-	const drawHeaderInContainer = (data) => {
-	  return `
-	    <div class="d-flex justify-content-between">
-	      <div class="border">${auth.currentContractorName}</div>
-	    </div>
-	  `;
-	};
-	*/
 	
 	var BillTypes = {
 	  'type0': 'suppliers',
@@ -3526,25 +3479,13 @@
 	    listContractorsCardBody.innerHTML = '';
 	  },
 	  getElement: function getElement(item) {
-	    // const currentStockFlag = (item.id === auth.data['currentStock']) ? 'V' : '';
 	
 	    return '\n    <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n      <div class="media">\n        <img class="mr-3" src="img/' + BillTypes['type' + item.type] + '.png" width="30" alt="Generic placeholder image">\n        <div class="media-body">\n          <b>ID: </b>' + item.id + '\n          <b> \u0421\u0442\u0430\u0442\u0443\u0441: </b>' + item.status + '\n          <b> \u0412\u0440\u0435\u043C\u044F: </b>' + new Date(+(item.time_activity + '000')).toLocaleString() + '\n          <b> \u0412\u0441\u0435\u0433\u043E: </b>' + item.total + '\n          <b> \u0422\u0438\u043F: </b>' + item.type + '\n        </div>\n      </div>';
-	    /*
-	        return `
-	            <div class="border">
-	              <b>ID: </b>${item.id}
-	              <b> Статус: </b>${item.status}
-	              <b> Время: </b>${new Date(+(item.time_activity + '000')).toLocaleString()}
-	              <b> Всего: </b>${item.total}
-	              <b> Тип: </b>${item.type}
-	            </div>
-	    `;*/
 	  },
 	  drawDataInContainer: function drawDataInContainer(buyersCardData) {
 	    var _this = this;
 	
 	    console.log(buyersCardData);
-	    // listContractorsCardBody.insertAdjacentHTML('beforeend', drawHeaderInContainer(buyersCardData));
 	    if (buyersCardData) {
 	      buyersCardData.forEach(function (item) {
 	        return listContractorsCardBody.insertAdjacentHTML('beforeend', _this.getElement(item));
@@ -3576,9 +3517,9 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _referenceContractors = __webpack_require__(26);
+	var _reference__contractors = __webpack_require__(26);
 	
-	var _referenceContractors2 = _interopRequireDefault(_referenceContractors);
+	var _reference__contractors2 = _interopRequireDefault(_reference__contractors);
 	
 	var _tools = __webpack_require__(6);
 	
@@ -3656,7 +3597,7 @@
 	
 	  switch (response.status) {
 	    case 200:
-	      _referenceContractors2.default.redraw();
+	      _reference__contractors2.default.redraw();
 	      break;
 	    case 400:
 	      _tools2.default.informationtModal = {
@@ -3847,7 +3788,6 @@
 	var listKeywordsCardEditBtn = document.querySelector('#list-keywords-card-edit-btn');
 	var listKeywordsCardEditName = document.querySelector('#keywords-card-edit-name');
 	
-	// здесь был дубль в модуле с разметкой
 	var listKeywordsHeader = document.querySelector('#list-keywords-header');
 	var listKeywordsBody = document.querySelector('#list-keywords-body');
 	var listKeywordsCard = document.querySelector('#list-keywords-card');
@@ -4083,9 +4023,9 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _referenceKeywords = __webpack_require__(30);
+	var _reference__keywords = __webpack_require__(30);
 	
-	var _referenceKeywords2 = _interopRequireDefault(_referenceKeywords);
+	var _reference__keywords2 = _interopRequireDefault(_reference__keywords);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -4154,7 +4094,7 @@
 	
 	  switch (response.status) {
 	    case 200:
-	      _referenceKeywords2.default.update();
+	      _reference__keywords2.default.update();
 	      break;
 	    case 400:
 	      _tools2.default.informationtModal = {
@@ -4283,9 +4223,9 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _referenceKeywords = __webpack_require__(30);
+	var _reference__keywords = __webpack_require__(30);
 	
-	var _referenceKeywords2 = _interopRequireDefault(_referenceKeywords);
+	var _reference__keywords2 = _interopRequireDefault(_reference__keywords);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -4354,7 +4294,7 @@
 	
 	  switch (response.status) {
 	    case 200:
-	      _referenceKeywords2.default.redraw();
+	      _reference__keywords2.default.redraw();
 	      break;
 	    case 400:
 	      _tools2.default.informationtModal = {
@@ -6141,9 +6081,9 @@
 	
 	var _universalKeywords2 = _interopRequireDefault(_universalKeywords);
 	
-	var _referenceKeywords = __webpack_require__(30);
+	var _reference__keywords = __webpack_require__(30);
 	
-	var _referenceKeywords2 = _interopRequireDefault(_referenceKeywords);
+	var _reference__keywords2 = _interopRequireDefault(_reference__keywords);
 	
 	var _catalog__goodsEdit = __webpack_require__(42);
 	
@@ -6207,7 +6147,7 @@
 	      $('#goods-card').modal('show');
 	      e.target.removeEventListener('click', returnHandler);
 	    };
-	    _referenceKeywords2.default.showKeywordEdit(evt, returnHandler);
+	    _reference__keywords2.default.showKeywordEdit(evt, returnHandler);
 	    $('#goods-card').modal('hide');
 	    $('#list-keywords-list').tab('show');
 	  };
@@ -6474,12 +6414,6 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var markup = {
-	  /*
-	  cleanContainer() {
-	    listGroupsBody.innerHTML = '';
-	  },
-	  */
-	
 	  getElement: function getElement(item, index) {
 	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '" data-group-index="' + index + '" data-group-level="' + item.level + '" data-group-name="' + item.name + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n      <div class="d-flex justify-content-between align-items-center" style="padding-right: 34px;">\n        <span> ' + item.count + ' </span>\n      </div>\n    </div>';
 	  },
@@ -7273,6 +7207,7 @@
 	
 	// массив с полными результатами
 	var fullSearch = [];
+	var keywordSearch = [];
 	
 	var onGoodClick = function onGoodClick() {
 	  _catalog__goods2.default.fill();
@@ -7306,6 +7241,8 @@
 	    if (_singleValidation2.default.valid(listSearchInput)) {
 	      makeSearch();
 	    }
+	  } else if (selectedKeywords) {
+	    drawResult(keywordSearch.data);
 	  } else {
 	    listSearchBody.innerHTML = 'Ну скажите хоть что-нибудь...';
 	  }
@@ -7341,6 +7278,7 @@
 	    getFullSearch();
 	    listSearchInput.value = '';
 	  } else {
+	    keywordSearch = keywordSearchData;
 	    _storage2.default.searchMode = 'keywords';
 	    listSearchBody.innerHTML = '';
 	    drawResult(keywordSearchData.data);
@@ -7511,45 +7449,10 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// import goodsCard from './catalog__groups-goods.js';
-	// import search from './catalog__search.js';
-	
-	// const listSearchBody = document.querySelector('#list-search-card-body');
-	// import xhr from '../tools/xhr.js';
-	// import auth from '../tools/storage.js';
 	var listSearchInput = document.querySelector('#list-search-input');
 	var listSearchBarcodeBtn = document.querySelector('#list-search-card-barcode-btn');
 	var universalAddModal = document.querySelector('#universal-add');
 	
-	// const loaderSpinnerId = 'loader-cards';
-	// const loaderSpinnerMessage = 'Загрузка';
-	// const loaderSpinnerMarkup = toolsMarkup.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
-	
-	// поиск по штрихкоду
-	// const onBarcodeSuccessLoad = (barcodeResult) => {
-	//   document.querySelector(`#${loaderSpinnerId}`).remove();
-	
-	//   // чОрное колдовство с автооткрытием карточки при одном найденном варианте
-	//   $('#universal-add').on('hidden.bs.modal', function (e) {
-	//     if (barcodeResult.data.length === 1) {
-	//       auth.currentGoodId = barcodeResult.data[0].id;
-	//       goodsCard.fill();
-	//       barcodeResult.data = 0;
-	//     } else if (barcodeResult.data.length > 1) {
-	//       search.drawResult(barcodeResult.data);
-	//     }
-	//   });
-	// };
-	
-	// const setRequestToFindBarcode = (barcode) => {
-	//   // listSearchBody.innerHTML = loaderSpinnerMarkup;
-	//   xhr.request = {
-	//     metod: 'POST',
-	//     url: `lopos_directory/${auth.data.directory}/operator/1/business/${auth.data.currentBusiness}/good_search`,
-	//     data: `token=${auth.data.token}&barcode=${barcode}`,
-	//     // callbackSuccess: onBarcodeSuccessLoad,
-	//   };
-	// };
 	var onListSearchBarcodeBtn = function onListSearchBarcodeBtn() {
 	  listSearchInput.value = '';
 	  _tools2.default.runUniversalAdd = {
@@ -7557,7 +7460,6 @@
 	    inputLabel: 'Штрихкод',
 	    inputPlaceholder: 'введите штрихкод',
 	    submitBtnName: 'Поиск'
-	    // submitCallback: setRequestToFindBarcode
 	  };
 	  _catalog__searchBarcodeValid2.default.start(universalAddModal);
 	};
