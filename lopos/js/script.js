@@ -6642,14 +6642,14 @@
 	// поиск по товару внутри группы
 	var cardResourcesSearchInput = document.querySelector('#card-resources-search-input');
 	
-	var drawGoods = function drawGoods(data) {
+	var onGoodClick = function onGoodClick(good) {
+	  $(cardResourcesGroupModal).modal('hide');
+	  $(addResourcesModal).modal('show');
+	  addResourcesModalLabel.innerHTML = good.name;
+	  _catalog__cardsAddResource2.default.start(addResourcesModal);
+	};
 	
-	  var onGoodClick = function onGoodClick(good) {
-	    $(cardResourcesGroupModal).modal('hide');
-	    $(addResourcesModal).modal('show');
-	    addResourcesModalLabel.innerHTML = good.name;
-	    _catalog__cardsAddResource2.default.start(addResourcesModal);
-	  };
+	var drawGoods = function drawGoods(data) {
 	
 	  cardResourcesGroupModalReturnBtn.classList.remove('invisible');
 	  cardResourcesSearchInput.addEventListener('input', onGoodsSearch);
@@ -6747,10 +6747,22 @@
 	
 	  if (cardResourcesData.data.resours.length) {
 	    cardResourcesData.data.resours.forEach(function (item) {
+	
+	      var onResourcesGoodClick = function onResourcesGoodClick(good) {
+	        $(cardResourcesGroupModal).modal('hide');
+	        $(addResourcesModal).modal('show');
+	        addResourcesModalLabel.innerHTML = item.name;
+	        _storage2.default.currentGoodId = item.good_id;
+	        _storage2.default.currentCardOperation = item.value < 0 ? -1 : 1;
+	        _catalog__cardsAddResource2.default.start(addResourcesModal);
+	      };
+	
 	      if (item.value < 0) {
 	        cardResourcesResources.insertAdjacentHTML('beforeend', _catalogCards2.default.getResourceElement(item));
+	        cardResourcesResources.lastChild.addEventListener('click', onResourcesGoodClick);
 	      } else {
 	        cardResourcesProduct.insertAdjacentHTML('beforeend', _catalogCards2.default.getResourceElement(item));
+	        cardResourcesProduct.lastChild.addEventListener('click', onResourcesGoodClick);
 	      }
 	    });
 	  } else {
