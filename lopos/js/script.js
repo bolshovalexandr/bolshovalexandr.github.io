@@ -4559,6 +4559,18 @@
 	  $('#add-resources-modal-quantity').trigger('focus');
 	});
 	
+	$('#points-edit').on('shown.bs.modal', function () {
+	  $('#points-edit-name').trigger('focus');
+	});
+	
+	$('#points-add').on('shown.bs.modal', function () {
+	  $('#points-add-name').trigger('focus');
+	});
+	
+	$('#keywords-add').on('shown.bs.modal', function () {
+	  $('#keywords-add-name').trigger('focus');
+	});
+	
 	exports.default = {
 	  start: function start() {
 	    listGroups.addEventListener('click', getGroups);
@@ -6373,7 +6385,7 @@
 	      return imgUrl ? 'https://lopos.bidone.ru/users/600a5357/images/' + imgUrl + '_preview150.jpg' : './img/not-available.png';
 	    };
 	
-	    return '\n    <div class="card goods-tile-card" data-good-id="' + item.id + '">\n      <img class="card-img-top" src="' + getImg(item.img_url) + '" alt="' + item.name + '" title="' + item.name + '">\n      <div class="card-body goods-tile-title">\n        <p class="card-text">' + item.count + '</p>\n      </div>\n    </div>';
+	    return '\n    <div class="card goods-tile-card" data-good-id="' + item.id + '">\n      <img class="card-img-top" src="' + getImg(item.img_url) + '" alt="' + item.name + '" title="' + item.name + '">\n      <div class="card-body ' + (item.count ? 'goods-tile-title' : '') + '">\n        <p class="card-text">' + (item.count ? item.count : '') + '</p>\n      </div>\n    </div>';
 	  },
 	  drawGoodsTable: function drawGoodsTable(goodsData, container, handler) {
 	    var _this = this;
@@ -7403,6 +7415,7 @@
 	exports.default = {
 	  start: function start() {
 	    _storage2.default.searchMode = 'base';
+	    listSearchInput.focus();
 	    listSearchBtn.addEventListener('click', onlistSearchFormSubmit);
 	    listSearchForm.addEventListener('submit', onlistSearchFormSubmit);
 	    listSearch.addEventListener('click', getFullSearch);
