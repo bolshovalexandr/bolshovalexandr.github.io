@@ -4545,6 +4545,20 @@
 	  }
 	};
 	
+	$('#list-groups-search-input').focus();
+	
+	$('#groups-add').on('shown.bs.modal', function () {
+	  $('#groups-add-name').trigger('focus');
+	});
+	
+	$('#groups-edit').on('shown.bs.modal', function () {
+	  $('#groups-edit-name').trigger('focus');
+	});
+	
+	$('#add-resources-modal').on('shown.bs.modal', function () {
+	  $('#add-resources-modal-quantity').trigger('focus');
+	});
+	
 	exports.default = {
 	  start: function start() {
 	    listGroups.addEventListener('click', getGroups);
