@@ -1033,6 +1033,9 @@
 	    var type = setup.isMess === true ? 'alert-success' : 'alert-danger';
 	
 	    alertBlock.innerHTML = alertBlock.innerHTML + ('<div id="alert" class="alert ' + type + ' fade show" role="alert">\n        <strong>' + setup.title + ' </strong> ' + setup.message + '\n        <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n          <span aria-hidden="true">&times;</span>\n        </button>\n      </div>');
+	    window.setTimeout(function () {
+	      alertBlock.firstChild.remove();
+	    }, 5000);
 	  },
 	
 	  set runUniversalAdd(setup) {
@@ -6740,6 +6743,8 @@
 	  cardResourcesProduct.innerHTML = '';
 	  cardResourcesOldCost.innerHTML = +cardResourcesData.data.old_cost ? cardResourcesData.data.old_cost : '';
 	  cardResourcesNewPrice.innerHTML = +cardResourcesData.data.new_price ? cardResourcesData.data.new_price : '';
+	  cardName.innerHTML = cardResourcesData.data.name;
+	
 	  if (cardResourcesData.data.resours.length) {
 	    cardResourcesData.data.resours.forEach(function (item) {
 	      if (item.value < 0) {
@@ -6763,7 +6768,8 @@
 	cardResourcesReturnBtn.addEventListener('click', onCardResourcesReturnBtn);
 	
 	var onListCardBodyClick = function onListCardBodyClick(evt) {
-	
+	  console.log(evt);
+	  console.log('onListCardBodyClick');
 	  if (evt) {
 	
 	    cardResources.classList.remove('d-none');
@@ -6775,7 +6781,7 @@
 	    }
 	
 	    var currentCardName = cardData.data[currentStringElement.dataset.cardIndex].name;
-	    cardName.innerHTML = currentCardName;
+	    // cardName.innerHTML = currentCardName;
 	    _storage2.default.currentCardName = currentCardName;
 	    _storage2.default.currentCardId = currentStringElement.dataset.cardId;
 	  }
@@ -6840,6 +6846,7 @@
 	cardResourcesDeleteBtn.addEventListener('click', onCardResourcesDeleteBtnClick);
 	
 	var setupUniversalAdd = function setupUniversalAdd() {
+	  _storage2.default.currentCardName = '';
 	  _tools2.default.runUniversalAdd = {
 	    title: 'Создание карточки',
 	    inputLabel: 'Название',
@@ -6869,7 +6876,8 @@
 	  },
 	
 	
-	  redraw: onListCardBodyClick,
+	  redrawList: getCards,
+	  redrawCard: onListCardBodyClick,
 	
 	  stop: function stop() {
 	    listCards.removeEventListener('click', getCards);
@@ -6961,7 +6969,11 @@
 	    case 200:
 	      $(modal).modal('hide');
 	      _formTools2.default.reset();
-	      _catalog__cards2.default.redraw();
+	      if (_storage2.default.currentCardName === '') {
+	        _catalog__cards2.default.redrawList();
+	      } else {
+	        _catalog__cards2.default.redrawCard();
+	      }
 	      break;
 	    case 400:
 	      _tools2.default.informationtModal = {
@@ -7027,7 +7039,7 @@
 	  start: function start(remModal) {
 	    initVar(remModal);
 	
-	    if (name.value === '') {
+	    if (_storage2.default.currentCardName === '') {
 	      _formTools2.default.work(modal, submitFormAdd);
 	    } else {
 	      _formTools2.default.work(modal, submitFormEdit);
@@ -7087,7 +7099,7 @@
 	    case 200:
 	      $(modal).modal('hide');
 	      _formTools2.default.reset();
-	      _catalog__cards2.default.redraw();
+	      _catalog__cards2.default.redrawCard();
 	      break;
 	    case 400:
 	      _tools2.default.informationtModal = {
@@ -7535,9 +7547,11 @@
 	
 	      // чОрное колдовство с автооткрытием карточки при одном найденном варианте
 	      if (response.data.length === 1) {
-	        _storage2.default.currentGoodId = response.data[0].id;
-	        _catalog__goods2.default.fill();
-	        response.data = 0;
+	        $(modal).on('hidden.bs.modal', function (e) {
+	          _storage2.default.currentGoodId = response.data[0].id;
+	          _catalog__goods2.default.fill();
+	          response.data = 0;
+	        });
 	      } else if (response.data.length > 1) {
 	        _catalog__search2.default.drawResult(response.data);
 	      }
