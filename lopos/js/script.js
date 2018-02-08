@@ -5367,6 +5367,7 @@
 	    placement: 'top'
 	  }).popover('show');
 	  getGood();
+	  getGoodsForGroup();
 	  window.setTimeout(function () {
 	    $(currentExpressBtn).popover('dispose');
 	    expressContainer.querySelectorAll('BUTTON').forEach(function (btn) {
@@ -5419,6 +5420,7 @@
 	  console.log(formSave);
 	  _catalog__goodsExpress2.default.stop();
 	  getGood();
+	  getGoodsForGroup();
 	  $(goodsCard).modal('toggle');
 	});
 	
@@ -6639,6 +6641,8 @@
 	var loadedGoods = [];
 	var loadedGroups = [];
 	
+	var fastEditFlag = false;
+	
 	// поиск по товару внутри группы
 	var cardResourcesSearchInput = document.querySelector('#card-resources-search-input');
 	
@@ -6694,7 +6698,9 @@
 	};
 	
 	$(addResourcesModal).on('hidden.bs.modal', function () {
-	  $(cardResourcesGroupModal).modal('show');
+	  if (fastEditFlag === false) {
+	    $(cardResourcesGroupModal).modal('show');
+	  }
 	});
 	
 	var onSuccessGroupsLoad = function onSuccessGroupsLoad(groupsData) {
@@ -6709,6 +6715,7 @@
 	  _storage2.default.currentGroupId = false;
 	  cardResourcesSearchInput.value = '';
 	  $(cardResourcesGroupModal).modal('show');
+	  fastEditFlag = false;
 	
 	  _xhr2.default.request = {
 	    metod: 'POST',
@@ -6755,6 +6762,7 @@
 	        _storage2.default.currentGoodId = item.good_id;
 	        _storage2.default.currentCardOperation = item.value < 0 ? -1 : 1;
 	        _catalog__cardsAddResource2.default.start(addResourcesModal);
+	        fastEditFlag = true;
 	      };
 	
 	      if (item.value < 0) {
