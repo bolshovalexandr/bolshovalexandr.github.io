@@ -110,11 +110,23 @@
 	
 	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
-	var _catalog__cards = __webpack_require__(50);
+	var _reference__debitCredit = __webpack_require__(50);
+	
+	var _reference__debitCredit2 = _interopRequireDefault(_reference__debitCredit);
+	
+	var _operations__manufacture = __webpack_require__(52);
+	
+	var _operations__manufacture2 = _interopRequireDefault(_operations__manufacture);
+	
+	var _operations__balance = __webpack_require__(54);
+	
+	var _operations__balance2 = _interopRequireDefault(_operations__balance);
+	
+	var _catalog__cards = __webpack_require__(55);
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
-	var _catalog__search = __webpack_require__(54);
+	var _catalog__search = __webpack_require__(58);
 	
 	var _catalog__search2 = _interopRequireDefault(_catalog__search);
 	
@@ -169,7 +181,7 @@
 	
 	var mainMenuButtons = [_online__profile2.default, _log2.default, _reference__enterprises2.default, _reference__points2.default, _reference__contractors2.default, _reference__keywords2.default, _catalog__groups2.default, _catalog__cards2.default,
 	// cardsResourcesButton,
-	_catalog__search2.default];
+	_catalog__search2.default, _reference__debitCredit2.default, _operations__manufacture2.default, _operations__balance2.default];
 	
 	// ========== ОБНОВЛЕНИЕ/ОТКРЫТИЕ СТРАНИЦЫ ==========
 	var start = function start() {
@@ -478,6 +490,30 @@
 	
 	  get groupListOperationType() {
 	    return sessionStorage.getItem('groupListOperationType');
+	  },
+	
+	  set debitCreditType(type) {
+	    sessionStorage.setItem('debitCreditType', type);
+	  },
+	
+	  get debitCreditType() {
+	    return sessionStorage.getItem('debitCreditType');
+	  },
+	
+	  set debitCreditName(name) {
+	    sessionStorage.setItem('debitCreditName', name);
+	  },
+	
+	  get debitCreditName() {
+	    return sessionStorage.getItem('debitCreditName');
+	  },
+	
+	  set debitCreditId(id) {
+	    sessionStorage.setItem('debitCreditId', id);
+	  },
+	
+	  get debitCreditId() {
+	    return sessionStorage.getItem('debitCreditId');
 	  }
 	
 	};
@@ -1034,7 +1070,7 @@
 	
 	    alertBlock.innerHTML = alertBlock.innerHTML + ('<div id="alert" class="alert ' + type + ' fade show" role="alert">\n        <strong>' + setup.title + ' </strong> ' + setup.message + '\n        <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n          <span aria-hidden="true">&times;</span>\n        </button>\n      </div>');
 	    window.setTimeout(function () {
-	      alertBlock.firstChild.remove();
+	      return alertBlock.firstChild.remove();
 	    }, 5000);
 	  },
 	
@@ -1044,6 +1080,9 @@
 	      setup.submitCallback(modalUniversalAddName.value);
 	      modalUniversalAddForm.removeEventListener('submit', requestHandler);
 	      $(modalUniversalAdd).modal('hide');
+	      if (setup.disableFlag === 'off') {
+	        modalUniversalAddSubmit.setAttribute('disabled', 'disabled');
+	      }
 	    };
 	
 	    $(modalUniversalAdd).modal('show');
@@ -1055,6 +1094,12 @@
 	    modalUniversalAddName.setAttribute('placeholder', setup.inputPlaceholder);
 	    modalUniversalAddName.value = setup.inputValue ? setup.inputValue : '';
 	    modalUniversalAddSubmit.innerHTML = setup.submitBtnName;
+	    if (setup.disableFlag === 'off') {
+	      modalUniversalAddSubmit.removeAttribute('disabled');
+	    }
+	    if (setup.submitCallback) {
+	      modalUniversalAddForm.addEventListener('submit', requestHandler);
+	    }
 	  }
 	};
 
@@ -2715,10 +2760,6 @@
 	var selectedString = '';
 	disableCheckEditButtons();
 	
-	var onErrorPointsLoad = function onErrorPointsLoad(error) {
-	  console.log(error);
-	};
-	
 	listPointsBody.addEventListener('change', function (evt) {
 	  console.log(evt);
 	  if (selectedString) {
@@ -2756,8 +2797,7 @@
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/stock',
 	    data: 'view_last=0&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessPointsLoad,
-	    callbackError: onErrorPointsLoad
+	    callbackSuccess: onSuccessPointsLoad
 	  };
 	};
 	
@@ -3962,7 +4002,6 @@
 	  containerToDraw.lastChild.addEventListener('click', handler);
 	};
 	
-	// принимает необязательный параметр handler на тот случай, когда массив не загружается обычным способом (например, ключевые слова, ассоциированные с товаром)
 	var drawKeywordsToContainer = function drawKeywordsToContainer(keyword) {
 	  console.log(keyword);
 	  container.insertAdjacentHTML('beforeend', getKeywordMarkup(keyword));
@@ -6606,7 +6645,647 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogCards = __webpack_require__(51);
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	var _reference__debitCreditAddEditU = __webpack_require__(51);
+	
+	var _reference__debitCreditAddEditU2 = _interopRequireDefault(_reference__debitCreditAddEditU);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var debitList = document.querySelector('#list-debit-list');
+	var creditList = document.querySelector('#list-credit-list');
+	var debitCreditBody = document.querySelector('#list-debit-credit-card-body');
+	
+	var debitCreditIcon = document.querySelector('#list-debit-credit-icon');
+	var debitCreditTitle = document.querySelector('#list-debit-credit-title');
+	
+	var debitCreditAddBtn = document.querySelector('#list-debit-credit-card-add-btn');
+	var debitCreditEditBtn = document.querySelector('#list-debit-credit-card-edit-btn');
+	var debitCreditDeleteBtn = document.querySelector('#list-debit-credit-card-delete-btn');
+	var universalAdd = document.querySelector('#universal-add');
+	
+	var loaderSpinnerId = 'loader-groups';
+	var loaderSpinnerMessage = 'Загрузка';
+	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
+	
+	// ############################## РАЗМЕТКА ##############################
+	var getElement = function getElement(item, index) {
+	
+	  return '\n\n  <input type="radio" id="' + item.id + '" name="contact" value="email" class="d-none">\n\n  <label style="padding-left: 34px;" for="' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-debit-credit-id="' + item.id + '" data-debit-credit-name="' + item.name + '">\n    <div><span class="reference-row-number">' + (index + 1) + '</span> ' + item.name + '</div>\n    <div class="d-flex justify-content-between align-items-center">\n    </div>\n    </label>';
+	};
+	
+	var drawDataInContainer = function drawDataInContainer(enterprisesData) {
+	  enterprisesData.forEach(function (item, index) {
+	    return debitCreditBody.insertAdjacentHTML('beforeend', getElement(item, index));
+	  });
+	};
+	
+	// ############################## ЗАПРОС НА УДАЛЕНИЕ ##############################
+	var onSuccessdebitCreditDelete = function onSuccessdebitCreditDelete(answer) {
+	  console.log(answer);
+	
+	  _tools2.default.informationtModal = {
+	    title: 'Уведомление',
+	    message: '\u041A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044F <b>' + _storage2.default.debitCreditName + '</b> \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0443\u0434\u0430\u043B\u0435\u043D\u043E'
+	  };
+	};
+	
+	var setRequestToDeletedebitCredit = function setRequestToDeletedebitCredit() {
+	  _xhr2.default.request = {
+	    metod: 'DELETE',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/reason/' + _storage2.default.debitCreditType + '/' + _storage2.default.debitCreditId,
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessdebitCreditDelete
+	  };
+	};
+	
+	debitCreditDeleteBtn.addEventListener('click', function () {
+	
+	  _tools2.default.actionRequestModal = {
+	    title: 'Удаление',
+	    message: '\u0412\u044B \u0442\u043E\u0447\u043D\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044E <b>' + _storage2.default.debitCreditName + '</b>?',
+	    submitCallback: setRequestToDeletedebitCredit
+	  };
+	});
+	// ############################## НАСТРОЙКА УНИВЕРСАЛЬНОЙ ФОРМЫ ДОБАВЛЕНИЯ ##############################
+	var setupUniversalAdd = function setupUniversalAdd() {
+	  _storage2.default.currentCardName = '';
+	  _tools2.default.runUniversalAdd = {
+	    title: 'Создание категории',
+	    inputLabel: 'Название',
+	    inputPlaceholder: 'введите название',
+	    submitBtnName: 'Создать'
+	  };
+	  _reference__debitCreditAddEditU2.default.start(universalAdd, 'add');
+	};
+	
+	var setupUniversalAddEdit = function setupUniversalAddEdit() {
+	  _tools2.default.runUniversalAdd = {
+	    title: 'Редактирование категории',
+	    inputLabel: 'Название',
+	    inputPlaceholder: 'введите название',
+	    inputValue: _storage2.default.currentCardName,
+	    submitBtnName: 'Изменить'
+	  };
+	  _reference__debitCreditAddEditU2.default.start(universalAdd, 'edit');
+	};
+	
+	debitCreditAddBtn.addEventListener('click', setupUniversalAdd);
+	debitCreditEditBtn.addEventListener('click', setupUniversalAddEdit);
+	
+	// ############################## РАБОТА С ГРУППАМИ (СПИСОК) ##############################
+	var selectedString = '';
+	
+	debitCreditBody.addEventListener('change', function (evt) {
+	  console.log(evt);
+	  if (selectedString) {
+	    selectedString.classList.remove('bg-light');
+	  }
+	  selectedString = evt.target.labels[0];
+	  selectedString.classList.add('bg-light');
+	  _storage2.default.debitCreditId = selectedString.dataset.debitCreditId;
+	  _storage2.default.debitCreditName = selectedString.dataset.debitCreditName;
+	  // enableCheckEditButtons();
+	});
+	
+	var onSuccessdebitCreditLoad = function onSuccessdebitCreditLoad(debitCreditData) {
+	  console.log(debitCreditData);
+	  document.querySelector('#' + loaderSpinnerId).remove();
+	  drawDataInContainer(debitCreditData.data);
+	};
+	
+	var getdebitCredit = function getdebitCredit() {
+	
+	  debitCreditBody.innerHTML = '';
+	  debitCreditBody.insertAdjacentHTML('beforeend', loaderSpinnerMarkup);
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/reason/' + _storage2.default.debitCreditType,
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessdebitCreditLoad
+	  };
+	};
+	
+	var initDebit = function initDebit() {
+	  _storage2.default.debitCreditType = 'debit';
+	  debitCreditIcon.src = 'img/revenue.png';
+	  debitCreditTitle.innerHTML = 'Категории доходов';
+	  getdebitCredit();
+	};
+	
+	var initCredit = function initCredit() {
+	  _storage2.default.debitCreditType = 'credit';
+	  debitCreditIcon.src = 'img/expenses.png';
+	  debitCreditTitle.innerHTML = 'Категории расходов';
+	  getdebitCredit();
+	};
+	
+	exports.default = {
+	  start: function start() {
+	    debitList.addEventListener('click', initDebit);
+	    creditList.addEventListener('click', initCredit);
+	  },
+	  stop: function stop() {
+	    // groupsMarkup.cleanContainer();
+	    debitList.removeEventListener('click', initDebit);
+	    creditList.removeEventListener('click', initCredit);
+	  }
+	};
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	var _formTools = __webpack_require__(38);
+	
+	var _formTools2 = _interopRequireDefault(_formTools);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// import catalogCard from './catalog__cards.js';
+	
+	// let appUrlAdd;
+	// let appUrlEdit;
+	var messages = void 0;
+	
+	var form = void 0;
+	var field1 = void 0;
+	var modal = void 0;
+	
+	var initVar = function initVar(remModal) {
+	  modal = remModal;
+	  form = modal.querySelector('*[data-formName]');
+	
+	  form.dataset.formname = 'nomenclatureAddEdit';
+	  field1 = form.querySelector('*[data-valid="field1"]');
+	
+	  // appUrlAdd = window.appSettings[form.dataset.formname].UrlApiAdd;
+	  // appUrlEdit = window.appSettings[form.dataset.formname].UrlApiEdit;
+	  messages = window.appSettings[form.dataset.formname].messages;
+	};
+	
+	var callbackXhrSuccess = function callbackXhrSuccess(response) {
+	  switch (response.status) {
+	    case 200:
+	      $(modal).modal('hide');
+	      _formTools2.default.reset();
+	      /*
+	      if (dataStorage.currentCardName === '') {
+	        catalogCard.redrawList();
+	      } else {
+	        catalogCard.redrawCard();
+	      }
+	      */
+	      break;
+	    case 400:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'message': messages.mes400
+	      };
+	      break;
+	    case 271:
+	      _tools2.default.informationtModal = {
+	        'title': 'Error',
+	        'message': response.messages
+	      };
+	      break;
+	  }
+	};
+	
+	var callbackXhrError = function callbackXhrError(xhr) {
+	
+	  $(modal).modal('hide');
+	  _formTools2.default.reset();
+	
+	  _tools2.default.informationtModal = {
+	    'title': 'ОШИБКА СВЯЗИ',
+	    'message': '\u041E\u0448\u0438\u0431\u043A\u0430 ' + xhr.status + ': ' + xhr.statusText
+	  };
+	};
+	
+	var submitFormAdd = function submitFormAdd() {
+	  var stor = _storage2.default.data;
+	
+	  /*
+	  let urlApp = appUrlAdd.replace('{{dir}}', stor.directory);
+	  urlApp = urlApp.replace('{{oper}}', stor.operatorId);
+	  urlApp = urlApp.replace('{{busId}}', stor.currentBusiness);
+	  */
+	  var postData = 'name=' + field1.value + '&token=' + stor.token;
+	  var urlApp = 'lopos_directory/' + stor.directory + '/operator/1/business/' + stor.currentBusiness + '/reason/' + _storage2.default.debitCreditType;
+	  _formTools2.default.submit({
+	    url: urlApp,
+	    metod: 'POST',
+	    data: postData,
+	    callbackSuccess: callbackXhrSuccess,
+	    callbackError: callbackXhrError
+	  });
+	};
+	
+	var submitFormEdit = function submitFormEdit() {
+	  var stor = _storage2.default.data;
+	
+	  /*
+	  let urlApp = appUrlEdit.replace('{{dir}}', stor.directory);
+	  urlApp = urlApp.replace('{{oper}}', stor.operatorId);
+	  urlApp = urlApp.replace('{{busId}}', stor.currentBusiness);
+	  urlApp = urlApp.replace('{{NCid}}', dataStorage.currentCardId);
+	  */
+	  var postData = 'name=' + field1.value + '&token=' + stor.token;
+	  var urlApp = 'lopos_directory/' + stor.directory + '/operator/1/business/' + stor.currentBusiness + '/reason/' + _storage2.default.debitCreditType + '/' + _storage2.default.debitCreditId;
+	  _formTools2.default.submit({
+	    url: urlApp,
+	    metod: 'PUT',
+	    data: postData,
+	    callbackSuccess: callbackXhrSuccess
+	  });
+	};
+	
+	exports.default = {
+	  start: function start(remModal, type) {
+	    initVar(remModal);
+	
+	    if (type === 'add') {
+	      _formTools2.default.work(modal, submitFormAdd);
+	    } else if (type === 'edit') {
+	      _formTools2.default.work(modal, submitFormEdit);
+	    }
+	  },
+	  stop: function stop() {
+	    _formTools2.default.reset();
+	  }
+	};
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	var _catalogCards = __webpack_require__(53);
+	
+	var _catalogCards2 = _interopRequireDefault(_catalogCards);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var manufactureList = document.querySelector('#list-manufacture-list');
+	var manufactureStocks = document.querySelector('#manufacture-stocks');
+	var manufactureAddBtn = document.querySelector('#list-manufacture-card-add-btn');
+	var manufactureCountBtn = document.querySelector('#list-manufacture-count');
+	// const manufactureMakeBtn = document.querySelector('#list-manufacture-make');
+	var manufactureColumnBody = document.querySelector('#manufacture-card-manufacture');
+	var materialColumnBody = document.querySelector('#manufacture-card-material');
+	var goodColumnBody = document.querySelector('#manufacture-card-good');
+	
+	var nomenklatureCardModal = document.querySelector('#select-nomenklature-card');
+	var nomenklatureCardModalBody = document.querySelector('#select-nomenklature-card-body');
+	
+	var loaderSpinnerId = 'loader-groups';
+	var loaderSpinnerMessage = 'Загрузка';
+	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
+	
+	var loadedNomenklatureCards = '';
+	var selectedNomenklatureCards = '';
+	var currentGoods = [];
+	// #################### РАЗМЕТКА ДЛЯ ПОМЕЩЕНИЯ ТОВАРОВ В КОЛОНКИ ######################
+	
+	var getGoodString = function getGoodString(id, name, good, index, value, classDanger) {
+	  console.log(classDanger);
+	  return '\n  <div class="goods-string ' + classDanger + '" data-good-id="' + id + '">\n    <div>\n      <span class="reference-row-number">' + index + '</span> <span>' + name + '</span>\n    </div>\n    <div>\n      ' + good + '\n      ' + value + '\n    </div>\n  </div>';
+	};
+	
+	var drawGoodsToColumns = function drawGoodsToColumns() {
+	  var materialNumber = 0;
+	  var goodNumber = 0;
+	  materialColumnBody.innerHTML = '';
+	  goodColumnBody.innerHTML = '';
+	  manufactureCountBtn.removeAttribute('disabled');
+	  currentGoods = [];
+	  selectedNomenklatureCards.forEach(function (card) {
+	    if (card.content) {
+	      card.content.forEach(function (good) {
+	        good.value *= card.k;
+	        currentGoods.push(good);
+	        if (good.value < 0) {
+	          materialNumber++;
+	          materialColumnBody.insertAdjacentHTML('beforeend', getGoodString(good.id, good.name, good.good, materialNumber, good.value, ''));
+	        } else {
+	          goodNumber++;
+	          goodColumnBody.insertAdjacentHTML('beforeend', getGoodString(good.id, good.name, '', goodNumber, good.value, ''));
+	        }
+	      });
+	    }
+	  });
+	};
+	// #################### КНОПКА ПОДСЧЕТ ######################
+	var onSuccessCountLoad = function onSuccessCountLoad(data) {
+	  console.log(data);
+	  console.log(currentGoods);
+	  var materialNumber = 0;
+	  var goodNumber = 0;
+	  materialColumnBody.innerHTML = '';
+	  goodColumnBody.innerHTML = '';
+	  for (var i = 0; i < data.data.length; i++) {
+	    if (currentGoods[i].value < 0) {
+	      materialNumber++;
+	      var classDanger = +data.data[i].value + +currentGoods[i].value < 0 ? 'bg-danger' : '';
+	      materialColumnBody.insertAdjacentHTML('beforeend', getGoodString(currentGoods[i].id, currentGoods[i].name, data.data[i].value, materialNumber, currentGoods[i].value, classDanger));
+	    } else {
+	      goodNumber++;
+	      goodColumnBody.insertAdjacentHTML('beforeend', getGoodString(currentGoods[i].id, currentGoods[i].name, data.data[i].value, goodNumber, currentGoods[i].value));
+	    }
+	  }
+	  // currentGoods = [];
+	};
+	
+	var onManufactureCountBtnClick = function onManufactureCountBtnClick() {
+	  console.log(selectedNomenklatureCards);
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/stock/' + _storage2.default.currentStockId + '/some_goods/',
+	    data: 'content=[' + currentGoods.map(function (good) {
+	      return good.id;
+	    }) + ']&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessCountLoad
+	  };
+	};
+	
+	manufactureCountBtn.addEventListener('click', onManufactureCountBtnClick);
+	// #################### ОБРАБАТЫВАЕМ КЛИКИ ПО СПИСКУ В ПЕРВОЙ КОЛОНКЕ ######################
+	
+	/*
+	const setCoefficient = () => {
+	
+	}
+	*/
+	
+	var onManufactureColumnBodyClick = function onManufactureColumnBodyClick(evt) {
+	  var currentStringElement = evt.target;
+	  while (!currentStringElement.dataset.cardId) {
+	    currentStringElement = currentStringElement.parentNode;
+	  }
+	
+	  _tools2.default.runUniversalAdd = {
+	    title: 'Укажите коэффициент',
+	    inputLabel: 'Коэффициент',
+	    inputPlaceholder: 'введите коэффициент',
+	    submitBtnName: 'Изменить',
+	    disableFlag: 'off',
+	    submitCallback: function submitCallback() {
+	      if (/^\-?\d+$/.test(document.querySelector('#universal-add-name').value)) {
+	        selectedNomenklatureCards[currentStringElement.dataset.cardIndex].k = document.querySelector('#universal-add-name').value;
+	        manufactureColumnBody.innerHTML = '';
+	        _catalogCards2.default.drawDataInContainer(selectedNomenklatureCards, manufactureColumnBody);
+	        drawGoodsToColumns();
+	        // currentGoods = [];
+	      } else {
+	        console.log('alarm');
+	      }
+	    }
+	  };
+	};
+	
+	manufactureColumnBody.addEventListener('click', onManufactureColumnBodyClick);
+	
+	// #################### ОБРАБАТЫВАЕМ КЛИКИ ПО СПИСКУ КАРТОЧКЕ В МОДАЛЬНОМ ОКНЕ #############
+	$(nomenklatureCardModal).on('hidden.bs.modal', function () {
+	  selectedNomenklatureCards = [].map.call(document.querySelectorAll('.manufacture-nomenklature-card--muted'), function (item) {
+	    return Object.assign(loadedNomenklatureCards[item.dataset.cardIndex], { k: 1 });
+	  });
+	  if (selectedNomenklatureCards.length !== 0) {
+	    manufactureColumnBody.innerHTML = '';
+	    _catalogCards2.default.drawDataInContainer(selectedNomenklatureCards, manufactureColumnBody);
+	    console.log(selectedNomenklatureCards);
+	    drawGoodsToColumns();
+	  }
+	});
+	
+	var onListCardBodyClick = function onListCardBodyClick(evt) {
+	  var currentStringElement = evt.target;
+	  while (!currentStringElement.dataset.cardId) {
+	    currentStringElement = currentStringElement.parentNode;
+	  }
+	  currentStringElement.classList.toggle('manufacture-nomenklature-card--muted');
+	};
+	
+	nomenklatureCardModalBody.addEventListener('click', onListCardBodyClick);
+	
+	// ############################## ЗАГРУЗКА И ОТРИСОВКА ДАННЫХ ##############################
+	
+	manufactureAddBtn.addEventListener('click', function () {
+	  return $(nomenklatureCardModal).modal('show');
+	});
+	
+	manufactureStocks.addEventListener('change', function (evt) {
+	  _storage2.default.currentStockId = evt.target.value;
+	});
+	
+	var onSuccessManufactureLoad = function onSuccessManufactureLoad(manufactureData) {
+	  console.log(manufactureData);
+	  loadedNomenklatureCards = manufactureData.data.all_nomenclature_cards;
+	  document.querySelector('#' + loaderSpinnerId).remove();
+	  _catalogCards2.default.drawDataInContainer(loadedNomenklatureCards, nomenklatureCardModalBody);
+	
+	  manufactureStocks.innerHTML = manufactureData.data.all_stocks.map(function (item) {
+	    return '<option value="' + item.id + '">' + item.name + '</option>';
+	  }).join('');
+	  currentGoods = [];
+	};
+	
+	var getManufacture = function getManufacture() {
+	
+	  manufactureColumnBody.innerHTML = '';
+	  manufactureColumnBody.insertAdjacentHTML('beforeend', loaderSpinnerMarkup);
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/operation/manufacture',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessManufactureLoad
+	  };
+	};
+	
+	exports.default = {
+	  start: function start() {
+	    manufactureList.addEventListener('click', getManufacture);
+	  },
+	  stop: function stop() {
+	    // groupsMarkup.cleanContainer();
+	    manufactureList.removeEventListener('click', getManufacture);
+	  }
+	};
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = {
+	  getElement: function getElement(item, index) {
+	
+	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-card-id="' + item.id + '" data-card-index="' + index + '"">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n      <div class="d-flex justify-content-between align-items-center">' + (item.k ? item.k : '') + '\n      </div>\n    </div>';
+	  },
+	  drawDataInContainer: function drawDataInContainer(cardsData, container) {
+	    var _this = this;
+	
+	    if (cardsData.length > 0) {
+	      cardsData.forEach(function (item, index) {
+	        return container.insertAdjacentHTML('beforeend', _this.getElement(item, index));
+	      });
+	    } else {
+	      container.innerHTML = 'Производственных карточек еще не создано';
+	    }
+	  },
+	  getResourceElement: function getResourceElement(item) {
+	    return '\n    <div class="d-flex justify-content-between reference-string" data-card-id="' + item.good_id + '"">\n      <div style="padding-left: 34px;">\n        ' + item.name + '\n      </div>\n      <div style="padding-right: 10px;">\n        ' + item.value + '\n      </div>\n\n    </div>';
+	  }
+	};
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var balanceList = document.querySelector('#list-balance-list');
+	var balanceCardPlusBody = document.querySelector('#balance-card-plus-data');
+	var balanceCardMinusBody = document.querySelector('#balance-card-minus');
+	
+	var loaderSpinnerId = 'loader-groups';
+	var loaderSpinnerMessage = 'Загрузка';
+	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
+	
+	// ############################## РАЗМЕТКА ##############################
+	var getElement = function getElement(item, index) {
+	
+	  return '\n\n  <input type="radio" id="' + item.id + '" name="contact" value="email" class="d-none">\n\n  <label style="padding-left: 34px;" for="' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-debit-credit-id="' + item.id + '" data-debit-credit-name="' + item.name + '">\n    <div><span class="reference-row-number">' + (index + 1) + '</span> ' + item.name + '</div>\n    <div class="d-flex justify-content-between align-items-center">\n    </div>\n    </label>';
+	};
+	
+	var drawDataInContainer = function drawDataInContainer(balanceData, container) {
+	  balanceData.forEach(function (item, index) {
+	    return container.insertAdjacentHTML('beforeend', getElement(item, index));
+	  });
+	};
+	
+	// ############################## ЗАГРУЗКА И ОТРИСОВКА ДАННЫХ ##############################
+	
+	
+	var onSuccessBalanceMinusLoad = function onSuccessBalanceMinusLoad(balanceData) {
+	  console.log(balanceData);
+	  drawDataInContainer(balanceData.data.all_reasons, balanceCardMinusBody);
+	};
+	
+	var onSuccessBalancePlusLoad = function onSuccessBalancePlusLoad(balanceData) {
+	  console.log(balanceData);
+	  document.querySelector('#' + loaderSpinnerId).remove();
+	  drawDataInContainer(balanceData.data.all_reasons, balanceCardPlusBody);
+	};
+	
+	var getBalance = function getBalance() {
+	
+	  balanceCardPlusBody.innerHTML = '';
+	  balanceCardPlusBody.insertAdjacentHTML('beforeend', loaderSpinnerMarkup);
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/operation/debit',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessBalancePlusLoad
+	  };
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/operation/credit',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessBalanceMinusLoad
+	  };
+	};
+	
+	exports.default = {
+	  start: function start() {
+	    balanceList.addEventListener('click', getBalance);
+	  },
+	  stop: function stop() {
+	    // groupsMarkup.cleanContainer();
+	    balanceList.removeEventListener('click', getBalance);
+	  }
+	};
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _catalogCards = __webpack_require__(53);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
 	
@@ -6614,11 +7293,11 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalog__cardsAddEdit = __webpack_require__(52);
+	var _catalog__cardsAddEdit = __webpack_require__(56);
 	
 	var _catalog__cardsAddEdit2 = _interopRequireDefault(_catalog__cardsAddEdit);
 	
-	var _catalog__cardsAddResource = __webpack_require__(53);
+	var _catalog__cardsAddResource = __webpack_require__(57);
 	
 	var _catalog__cardsAddResource2 = _interopRequireDefault(_catalog__cardsAddResource);
 	
@@ -6641,6 +7320,7 @@
 	var listCardBody = document.querySelector('#list-cards-card-body');
 	var listCardAddBtn = document.querySelector('#list-cards-card-add-btn');
 	var listCardEditBtn = document.querySelector('#card-resources-edit-btn');
+	
 	var cardResources = document.querySelector('#card-resources');
 	var cardResourcesReturnBtn = document.querySelector('#card-resources-return-btn');
 	var cardResourcesDeleteBtn = document.querySelector('#card-resources-delete-btn');
@@ -6846,7 +7526,7 @@
 	  document.querySelector('#' + loaderSpinnerId).remove();
 	  console.log(loadedCards);
 	  cardData = loadedCards;
-	  _catalogCards2.default.drawDataInContainer(loadedCards.data);
+	  _catalogCards2.default.drawDataInContainer(loadedCards.data, listCardBody);
 	};
 	
 	var getCards = function getCards() {
@@ -6931,39 +7611,7 @@
 	};
 
 /***/ }),
-/* 51 */
-/***/ (function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var listCardsBody = document.querySelector('#list-cards-card-body');
-	
-	exports.default = {
-	  getElement: function getElement(item, index) {
-	
-	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-card-id="' + item.id + '" data-card-index="' + index + '"">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n      <div class="d-flex justify-content-between align-items-center">\n      </div>\n    </div>';
-	  },
-	  drawDataInContainer: function drawDataInContainer(cardsData) {
-	    var _this = this;
-	
-	    if (cardsData.length > 0) {
-	      cardsData.forEach(function (item, index) {
-	        return listCardsBody.insertAdjacentHTML('beforeend', _this.getElement(item, index));
-	      });
-	    } else {
-	      listCardsBody.innerHTML = 'Производственных карточек еще не создано';
-	    }
-	  },
-	  getResourceElement: function getResourceElement(item) {
-	    return '\n    <div class="d-flex justify-content-between reference-string" data-card-id="' + item.good_id + '"">\n      <div style="padding-left: 34px;">\n        ' + item.name + '\n      </div>\n      <div style="padding-right: 10px;">\n        ' + item.value + '\n      </div>\n\n    </div>';
-	  }
-	};
-
-/***/ }),
-/* 52 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6984,7 +7632,7 @@
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalog__cards = __webpack_require__(50);
+	var _catalog__cards = __webpack_require__(55);
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
@@ -7097,7 +7745,7 @@
 	};
 
 /***/ }),
-/* 53 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7118,7 +7766,7 @@
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalog__cards = __webpack_require__(50);
+	var _catalog__cards = __webpack_require__(55);
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
@@ -7202,7 +7850,7 @@
 	};
 
 /***/ }),
-/* 54 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7239,11 +7887,11 @@
 	
 	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
-	var _singleValidation = __webpack_require__(55);
+	var _singleValidation = __webpack_require__(59);
 	
 	var _singleValidation2 = _interopRequireDefault(_singleValidation);
 	
-	var _catalog__searchBarcode = __webpack_require__(56);
+	var _catalog__searchBarcode = __webpack_require__(60);
 	
 	var _catalog__searchBarcode2 = _interopRequireDefault(_catalog__searchBarcode);
 	
@@ -7430,7 +8078,7 @@
 	};
 
 /***/ }),
-/* 55 */
+/* 59 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -7496,7 +8144,7 @@
 	};
 
 /***/ }),
-/* 56 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7509,7 +8157,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalog__searchBarcodeValid = __webpack_require__(57);
+	var _catalog__searchBarcodeValid = __webpack_require__(61);
 	
 	var _catalog__searchBarcodeValid2 = _interopRequireDefault(_catalog__searchBarcodeValid);
 	
@@ -7537,7 +8185,7 @@
 	};
 
 /***/ }),
-/* 57 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7562,7 +8210,7 @@
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
-	var _catalog__search = __webpack_require__(54);
+	var _catalog__search = __webpack_require__(58);
 	
 	var _catalog__search2 = _interopRequireDefault(_catalog__search);
 	

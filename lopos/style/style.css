@@ -347,6 +347,22 @@ input[name="contact"]:checked + label {
   right: 5px;
   z-index: 9999; }
 
+.manufacture-card-block,
+.balance-card-block {
+  display: flex;
+  justify-content: space-between; }
+
+.manufacture-card-column {
+  border: 1px solid gray;
+  width: 33%; }
+
+.manufacture-column-title {
+  display: flex;
+  justify-content: space-between; }
+
+.manufacture-nomenklature-card--muted {
+  opacity: 0.2; }
+
 /*
 @import "src/sass/components/app.scss";
 @import "src/sass/components/font.scss";
