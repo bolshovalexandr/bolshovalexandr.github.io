@@ -6910,7 +6910,7 @@
 	  urlApp = urlApp.replace('{{NCid}}', dataStorage.currentCardId);
 	  */
 	  var postData = 'name=' + field1.value + '&token=' + stor.token;
-	  var urlApp = 'lopos_directory/' + stor.directory + '/operator/1/business/' + stor.currentBusiness + '/reason/' + _storage2.default.debitCreditType + '/' + _storage2.default.debitCreditId;
+	  var urlApp = 'lopos_directory/' + stor.directory + '/operator/1/business/' + stor.currentBusiness + '/reason/' + _storage2.default.debitCreditId;
 	  _formTools2.default.submit({
 	    url: urlApp,
 	    metod: 'PUT',
