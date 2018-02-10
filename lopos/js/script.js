@@ -6696,7 +6696,7 @@
 	var setRequestToDeletedebitCredit = function setRequestToDeletedebitCredit() {
 	  _xhr2.default.request = {
 	    metod: 'DELETE',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/reason/' + _storage2.default.debitCreditType + '/' + _storage2.default.debitCreditId,
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/reason/' + _storage2.default.debitCreditId,
 	    data: 'view_last=0&token=' + _storage2.default.data.token,
 	    callbackSuccess: onSuccessdebitCreditDelete
 	  };
