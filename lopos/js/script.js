@@ -929,91 +929,110 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	exports.default = {
+	var xhr = void 0;
+	var requestParameters = void 0;
+	var messages = void 0;
 	
-	  set request(requestParameters) {
+	// mess - сообщение, type = true/false - сообщение/ошибка
+	var setMessage = function setMessage(mess, type) {
+	  _tools2.default.informationtModal = {
+	    'title': type ? 'MESSAGE: ' : 'ERROR: ',
+	    'message': mess,
+	    'isMess': type
+	  };
+	};
 	
-	    var ErrorAttr = {
-	      FILE: 'xhr.js',
-	      MESSADGE: {
-	        JSON_ERR: 'XHR: JSON error converting response.',
-	        LOAD_ERR: 'Load Error.',
-	        CONNECT_ERR: 'Connection error.',
-	        TIMEOUT_ERR: 'Сonnection timeout exceeded'
-	      }
-	    };
-	
-	    var getError = function getError(messadge, row, error) {
-	      var newError = new SyntaxError(messadge, ErrorAttr.FILE, row);
-	      newError.cause = error;
-	      return newError;
-	    };
-	
-	    var xhr = new XMLHttpRequest();
-	
-	    xhr.addEventListener('load', function () {
-	
-	      if (xhr.status === 200) {
-	        var response = '';
-	
-	        try {
-	          response = JSON.parse(xhr.response);
-	          if (response.status === 280 && response.message === 'Invalid token') {
-	            _tools2.default.informationtModal = {
-	              title: 'Что-то пошло не так...',
-	              message: 'Пожалуйста, авторизуйтесь заново'
-	            };
-	            document.dispatchEvent(new Event('authError'));
-	          }
-	        } catch (error) {
-	          _tools2.default.informationtModal = {
-	            title: 'Что-то пошло не так...',
-	            message: 'Ошибка парсинга JSON'
-	          };
-	        }
-	
-	        requestParameters.callbackSuccess(response);
-	      } else {
-	        if (requestParameters.callbackError && typeof requestParameters.callbackError === 'function') {
-	          requestParameters.callbackError(xhr);
-	        } else {
-	          _tools2.default.informationtModal = {
-	            title: 'Что-то пошло не так...',
-	            message: 'Ошибка связи с сервером'
-	          };
-	        }
-	      }
-	    });
-	
-	    xhr.addEventListener('error', function () {
-	      if (requestParameters.callbackError && typeof requestParameters.callbackError === 'function') {
-	        requestParameters.callbackError(xhr);
-	      } else {
-	        _tools2.default.informationtModal = {
-	          title: '400',
-	          message: getError(ErrorAttr.MESSADGE.CONNECT_ERR + ' ' + xhr.statusText, 42, '')
-	        };
-	      }
-	    });
-	
-	    xhr.addEventListener('timeout', function () {
-	      if (requestParameters.callbackError && typeof requestParameters.callbackError === 'function') {
-	        requestParameters.callbackError(xhr);
-	      } else {
-	        _tools2.default.informationtModal = {
-	          title: '400',
-	          message: getError(ErrorAttr.MESSADGE.CONNECT_ERR + ' (' + xhr.timeout + 'ms.)', 50, '')
-	        };
-	      }
-	    });
-	
-	    xhr.timeout = window.appSettings.xhrSettings.timeout;
-	    xhr.open(requestParameters.metod, window.appSettings.xhrSettings.urlApi + requestParameters.url, true);
-	    // xhr.setRequestHeader('Content-Type', window.appSettings.xhrSettings.contentType);
-	
-	    xhr.send(requestParameters.data);
+	var setError = function setError(msg) {
+	  setMessage(msg, false);
+	  // Если есть errorCallback - вызываем
+	  if (requestParameters.callbackError && typeof requestParameters.callbackError === 'function') {
+	    requestParameters.callbackError();
 	  }
+	};
 	
+	var parseRespCodes = function parseRespCodes(response) {
+	  switch (response.status) {
+	    case 200:
+	      requestParameters.callbackSuccess(response);
+	      break;
+	    case 270:
+	      setMessage(response.message, true);
+	      requestParameters.callbackSuccess(response);
+	      break;
+	    case 271:
+	      setError(response.message);
+	      break;
+	    case 272:
+	      requestParameters.callbackSuccess(response);
+	      break;
+	    case 273:
+	      setError(response.message);
+	      break;
+	    case 280:
+	      setMessage(response.message, false);
+	      document.dispatchEvent(new Event('authError'));
+	      break;
+	    case 281:
+	      requestParameters.callbackSuccess(response);
+	      break;
+	    case 400:
+	      setError(messages.responseStatus.res400);
+	      break;
+	  }
+	};
+	
+	var xhrLoadHandler = function xhrLoadHandler() {
+	  if (xhr.readyState === 4) {
+	    if (xhr.status === 200) {
+	      var response = '';
+	
+	      try {
+	        response = JSON.parse(xhr.response);
+	      } catch (error) {
+	        // Вывод ошибки парсинга
+	        setError(messages.xhrJsonError);
+	      }
+	
+	      // Разбираем коды ответа APILopos
+	      parseRespCodes(response);
+	    } else {
+	      // Внутренняя ошибка HTTP
+	      setError(messages.xhrError);
+	    }
+	  }
+	};
+	
+	var xhrErrorHandler = function xhrErrorHandler() {
+	  // Ошибка, которую возвращает сервер
+	  setError(messages.xhrError);
+	};
+	
+	var xhrTimeoutHandler = function xhrTimeoutHandler() {
+	  // Ошибка, которую возвращает сервер
+	  setError(messages.xhrTimeoutError);
+	};
+	
+	var xhrRun = function xhrRun() {
+	  xhr = new XMLHttpRequest();
+	
+	  xhr.addEventListener('load', xhrLoadHandler);
+	  // Слушаем событие ошибки XHR
+	  xhr.addEventListener('error', xhrErrorHandler);
+	  // Слушаем событие таймаута связи
+	  xhr.addEventListener('timeout', xhrTimeoutHandler);
+	
+	  xhr.timeout = window.appSettings.xhrSettings.timeout;
+	  xhr.open(requestParameters.metod, window.appSettings.xhrSettings.urlApi + requestParameters.url, true);
+	
+	  xhr.send(requestParameters.data);
+	};
+	
+	exports.default = {
+	  set request(parameters) {
+	    requestParameters = parameters;
+	    messages = window.appSettings.messages;
+	    xhrRun();
+	  }
 	};
 
 /***/ }),
@@ -1070,8 +1089,11 @@
 	
 	    alertBlock.innerHTML = alertBlock.innerHTML + ('<div id="alert" class="alert ' + type + ' fade show" role="alert">\n        <strong>' + setup.title + ' </strong> ' + setup.message + '\n        <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n          <span aria-hidden="true">&times;</span>\n        </button>\n      </div>');
 	    window.setTimeout(function () {
-	      return alertBlock.firstChild.remove();
-	    }, 5000);
+	      var block = alertBlock.firstChild;
+	      if (block) {
+	        block.remove();
+	      }
+	    }, 2000);
 	  },
 	
 	  set runUniversalAdd(setup) {
@@ -5803,8 +5825,11 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// import catalogGroupsGoods from './catalog__groups-goods.js';
 	var modal = void 0;
+	// import catalogGroups from './catalog__groups.js';
+	
+	// import catalogGroupsGoods from './catalog__groups-goods.js';
+	
 	var appUrl1 = void 0;
 	var appUrl2 = void 0;
 	var appUrl3 = void 0;
@@ -5842,17 +5867,9 @@
 	  messages = window.appSettings[form.dataset.formname].messages;
 	};
 	
-	var callbackXhrError = function callbackXhrError(xhr) {
-	
+	var callbackXhrError = function callbackXhrError() {
 	  $(modal).modal('hide');
 	  _formTools2.default.reset();
-	  _catalog__goods2.default.getGoodsForGroup();
-	  _catalog__goods2.default.redraw();
-	
-	  _tools2.default.informationtModal = {
-	    'title': 'ОШИБКА СВЯЗИ',
-	    'message': '\u041E\u0448\u0438\u0431\u043A\u0430 ' + xhr.status + ': ' + xhr.statusText
-	  };
 	};
 	
 	var submitForm2 = function submitForm2() {
@@ -5890,36 +5907,16 @@
 	  });
 	};
 	
-	var callbackXhrSuccess = function callbackXhrSuccess(response) {
-	  console.log('callbackXhr1');
-	  console.dir(response);
-	
-	  switch (response.status) {
-	    case 200:
-	
-	      if (name.value !== inputInitValues[0] || describe.value !== inputInitValues[1] || barcode.value !== inputInitValues[2] || groupId.value !== inputInitValues[3]) {
-	        submitForm2();
-	      } else if (img.files.length !== 0) {
-	        submitImg();
-	      } else {
-	        $('#goods-card').modal('hide');
-	        _formTools2.default.reset();
-	        _catalog__goods2.default.redraw();
-	      }
-	      break;
-	    case 400:
-	      _formTools2.default.reset();
-	      _tools2.default.informationtModal = {
-	        'title': 'Error',
-	        'messages': messages.mes400
-	      };
-	      break;
-	    case 271:
-	      _tools2.default.informationtModal = {
-	        'title': 'Error',
-	        'messages': response.messages
-	      };
-	      break;
+	var callbackXhrSuccess = function callbackXhrSuccess() {
+	  if (name.value !== inputInitValues[0] || describe.value !== inputInitValues[1] || barcode.value !== inputInitValues[2] || groupId.value !== inputInitValues[3]) {
+	    submitForm2();
+	  } else if (img.files.length !== 0) {
+	    submitImg();
+	  } else {
+	    $('#goods-card').modal('hide');
+	    _formTools2.default.reset();
+	    // catalogGroups.getGoodsForGroup();
+	    _catalog__goods2.default.redraw();
 	  }
 	};
 	
@@ -5932,8 +5929,9 @@
 	      if (img.files.length !== 0) {
 	        submitImg();
 	      } else {
-	        _formTools2.default.reset();
 	        $('#goods-card').modal('hide');
+	        _formTools2.default.reset();
+	        // catalogGroups.getGoodsForGroup();
 	        _catalog__goods2.default.redraw();
 	      }
 	      break;
@@ -5960,8 +5958,9 @@
 	    case 200:
 	      console.log('img load - ok');
 	
-	      _formTools2.default.reset();
 	      $('#goods-card').modal('hide');
+	      _formTools2.default.reset();
+	      // catalogGroups.getGoodsForGroup();
 	      _catalog__goods2.default.redraw();
 	      break;
 	    case 400:
@@ -6671,10 +6670,20 @@
 	var loaderSpinnerMessage = 'Загрузка';
 	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
 	
+	var enableCheckEditButtons = function enableCheckEditButtons() {
+	  debitCreditEditBtn.removeAttribute('disabled');
+	  debitCreditDeleteBtn.removeAttribute('disabled');
+	};
+	
+	var disableCheckEditButtons = function disableCheckEditButtons() {
+	  debitCreditEditBtn.setAttribute('disabled', 'disabled');
+	  debitCreditDeleteBtn.setAttribute('disabled', 'disabled');
+	};
+	
 	// ############################## РАЗМЕТКА ##############################
 	var getElement = function getElement(item, index) {
 	
-	  return '\n\n  <input type="radio" id="' + item.id + '" name="contact" value="email" class="d-none">\n\n  <label style="padding-left: 34px;" for="' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-debit-credit-id="' + item.id + '" data-debit-credit-name="' + item.name + '">\n    <div><span class="reference-row-number">' + (index + 1) + '</span> ' + item.name + '</div>\n    <div class="d-flex justify-content-between align-items-center">\n    </div>\n    </label>';
+	  return '\n  <input type="radio" id="reference-' + item.id + '" class="d-none">\n  <label style="padding-left: 34px;" for="reference-' + item.id + '" class="d-flex justify-content-between align-items-center reference-string" data-debit-credit-id="' + item.id + '" data-debit-credit-name="' + item.name + '">\n    <div><span class="reference-row-number">' + (index + 1) + '</span> ' + item.name + '</div>\n    <div class="d-flex justify-content-between align-items-center">\n    </div>\n  </label>';
 	};
 	
 	var drawDataInContainer = function drawDataInContainer(enterprisesData) {
@@ -6691,6 +6700,7 @@
 	    title: 'Уведомление',
 	    message: '\u041A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044F <b>' + _storage2.default.debitCreditName + '</b> \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0443\u0434\u0430\u043B\u0435\u043D\u043E'
 	  };
+	  getdebitCredit();
 	};
 	
 	var setRequestToDeletedebitCredit = function setRequestToDeletedebitCredit() {
@@ -6727,7 +6737,7 @@
 	    title: 'Редактирование категории',
 	    inputLabel: 'Название',
 	    inputPlaceholder: 'введите название',
-	    inputValue: _storage2.default.currentCardName,
+	    inputValue: _storage2.default.debitCreditName,
 	    submitBtnName: 'Изменить'
 	  };
 	  _reference__debitCreditAddEditU2.default.start(universalAdd, 'edit');
@@ -6737,6 +6747,7 @@
 	debitCreditEditBtn.addEventListener('click', setupUniversalAddEdit);
 	
 	// ############################## РАБОТА С ГРУППАМИ (СПИСОК) ##############################
+	
 	var selectedString = '';
 	
 	debitCreditBody.addEventListener('change', function (evt) {
@@ -6744,17 +6755,19 @@
 	  if (selectedString) {
 	    selectedString.classList.remove('bg-light');
 	  }
+	  console.log(evt.target.labels[0]);
 	  selectedString = evt.target.labels[0];
 	  selectedString.classList.add('bg-light');
 	  _storage2.default.debitCreditId = selectedString.dataset.debitCreditId;
 	  _storage2.default.debitCreditName = selectedString.dataset.debitCreditName;
-	  // enableCheckEditButtons();
+	  enableCheckEditButtons();
 	});
 	
 	var onSuccessdebitCreditLoad = function onSuccessdebitCreditLoad(debitCreditData) {
 	  console.log(debitCreditData);
 	  document.querySelector('#' + loaderSpinnerId).remove();
 	  drawDataInContainer(debitCreditData.data);
+	  disableCheckEditButtons();
 	};
 	
 	var getdebitCredit = function getdebitCredit() {
@@ -6789,6 +6802,10 @@
 	    debitList.addEventListener('click', initDebit);
 	    creditList.addEventListener('click', initCredit);
 	  },
+	
+	
+	  redraw: getdebitCredit,
+	
 	  stop: function stop() {
 	    // groupsMarkup.cleanContainer();
 	    debitList.removeEventListener('click', initDebit);
@@ -6818,9 +6835,11 @@
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _reference__debitCredit = __webpack_require__(50);
 	
-	// import catalogCard from './catalog__cards.js';
+	var _reference__debitCredit2 = _interopRequireDefault(_reference__debitCredit);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// let appUrlAdd;
 	// let appUrlEdit;
@@ -6847,6 +6866,7 @@
 	    case 200:
 	      $(modal).modal('hide');
 	      _formTools2.default.reset();
+	      _reference__debitCredit2.default.redraw();
 	      /*
 	      if (dataStorage.currentCardName === '') {
 	        catalogCard.redrawList();
@@ -6966,17 +6986,14 @@
 	var manufactureStocks = document.querySelector('#manufacture-stocks');
 	var manufactureAddBtn = document.querySelector('#list-manufacture-card-add-btn');
 	var manufactureCountBtn = document.querySelector('#list-manufacture-count');
-	// const manufactureMakeBtn = document.querySelector('#list-manufacture-make');
+	var manufactureMaterialCheck = document.querySelector('#manufacture-material-check');
+	var manufactureMakeBtn = document.querySelector('#list-manufacture-make');
 	var manufactureColumnBody = document.querySelector('#manufacture-card-manufacture');
 	var materialColumnBody = document.querySelector('#manufacture-card-material');
 	var goodColumnBody = document.querySelector('#manufacture-card-good');
 	
 	var nomenklatureCardModal = document.querySelector('#select-nomenklature-card');
 	var nomenklatureCardModalBody = document.querySelector('#select-nomenklature-card-body');
-	
-	var loaderSpinnerId = 'loader-groups';
-	var loaderSpinnerMessage = 'Загрузка';
-	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
 	
 	var loadedNomenklatureCards = '';
 	var selectedNomenklatureCards = '';
@@ -6985,7 +7002,7 @@
 	
 	var getGoodString = function getGoodString(id, name, good, index, value, classDanger) {
 	  console.log(classDanger);
-	  return '\n  <div class="goods-string ' + classDanger + '" data-good-id="' + id + '">\n    <div>\n      <span class="reference-row-number">' + index + '</span> <span>' + name + '</span>\n    </div>\n    <div>\n      ' + good + '\n      ' + value + '\n    </div>\n  </div>';
+	  return '\n  <div class="goods-string ' + classDanger + '" data-good-id="' + id + '">\n    <div>\n      <span class="reference-row-number">' + index + '</span> <span>' + name + '</span>\n    </div>\n    <div>\n      <span>' + (good ? good : 'X') + '</span>\n      <span>' + value + '</span>\n    </div>\n  </div>';
 	};
 	
 	var drawGoodsToColumns = function drawGoodsToColumns() {
@@ -7011,6 +7028,26 @@
 	    }
 	  });
 	};
+	// #################### КНОПКА ВЫПОЛНИТЬ ####################
+	var onSuccessMake = function onSuccessMake(answer) {
+	  console.log(answer);
+	};
+	
+	var onManufactureMakeBtnClick = function onManufactureMakeBtnClick() {
+	  var data = currentGoods.map(function (good) {
+	    return [JSON.stringify({ value: good.value, id: good.id, price: 0 })];
+	  });
+	  console.log(data);
+	  console.log(_storage2.default.currentStockId);
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/stock/' + _storage2.default.currentStockId + '/temp_naklad_provesti',
+	    data: 'content=[' + data + ']&token=' + _storage2.default.data.token + '&delivery=0&type=8&kontr_agent=2',
+	    callbackSuccess: onSuccessMake
+	  };
+	};
+	
+	manufactureMakeBtn.addEventListener('click', onManufactureMakeBtnClick);
 	// #################### КНОПКА ПОДСЧЕТ ######################
 	var onSuccessCountLoad = function onSuccessCountLoad(data) {
 	  console.log(data);
@@ -7029,11 +7066,21 @@
 	      goodColumnBody.insertAdjacentHTML('beforeend', getGoodString(currentGoods[i].id, currentGoods[i].name, data.data[i].value, goodNumber, currentGoods[i].value));
 	    }
 	  }
+	  if (materialColumnBody.querySelectorAll('.bg-danger').length === 0) {
+	    manufactureMaterialCheck.classList.remove('d-none');
+	    manufactureMakeBtn.removeAttribute('disabled');
+	  } else {
+	    manufactureMaterialCheck.classList.add('d-none');
+	    manufactureMakeBtn.setAttribute('disabled', 'disabled');
+	  }
 	  // currentGoods = [];
 	};
 	
 	var onManufactureCountBtnClick = function onManufactureCountBtnClick() {
 	  console.log(selectedNomenklatureCards);
+	  console.log(_storage2.default.currentStockId);
+	  console.log(!!_storage2.default.currentStockId);
+	  console.log(_storage2.default.currentStockId === 'null');
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/stock/' + _storage2.default.currentStockId + '/some_goods/',
@@ -7090,6 +7137,7 @@
 	    manufactureColumnBody.innerHTML = '';
 	    _catalogCards2.default.drawDataInContainer(selectedNomenklatureCards, manufactureColumnBody);
 	    console.log(selectedNomenklatureCards);
+	    manufactureMaterialCheck.classList.add('d-none');
 	    drawGoodsToColumns();
 	  }
 	});
@@ -7117,11 +7165,11 @@
 	var onSuccessManufactureLoad = function onSuccessManufactureLoad(manufactureData) {
 	  console.log(manufactureData);
 	  loadedNomenklatureCards = manufactureData.data.all_nomenclature_cards;
-	  document.querySelector('#' + loaderSpinnerId).remove();
+	  nomenklatureCardModalBody.innerHTML = '';
 	  _catalogCards2.default.drawDataInContainer(loadedNomenklatureCards, nomenklatureCardModalBody);
 	
 	  manufactureStocks.innerHTML = manufactureData.data.all_stocks.map(function (item) {
-	    return '<option value="' + item.id + '">' + item.name + '</option>';
+	    return '<option value="' + item.id + '" ' + (item.id === _storage2.default.data.currentStock ? 'selected' : '') + '>' + item.name + '</option>';
 	  }).join('');
 	  currentGoods = [];
 	};
@@ -7129,7 +7177,9 @@
 	var getManufacture = function getManufacture() {
 	
 	  manufactureColumnBody.innerHTML = '';
-	  manufactureColumnBody.insertAdjacentHTML('beforeend', loaderSpinnerMarkup);
+	  materialColumnBody.innerHTML = '';
+	  goodColumnBody.innerHTML = '';
+	  _storage2.default.currentStockId = _storage2.default.data.currentStock;
 	
 	  _xhr2.default.request = {
 	    metod: 'POST',
@@ -7197,24 +7247,27 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _tools = __webpack_require__(6);
-	
-	var _tools2 = _interopRequireDefault(_tools);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// import toolsMarkup from '../markup/tools.js';
 	
 	var balanceList = document.querySelector('#list-balance-list');
 	var balanceCardPlusBody = document.querySelector('#balance-card-plus-data');
 	var balanceCardMinusBody = document.querySelector('#balance-card-minus');
+	var balanceCardPlusTab = document.querySelector('#balance-card-plus-tab');
+	var balanceCardMinusTab = document.querySelector('#balance-card-minus-tab');
 	
-	var loaderSpinnerId = 'loader-groups';
-	var loaderSpinnerMessage = 'Загрузка';
-	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
+	var balanceAmount = document.querySelector('#balance-amount');
+	var balanceSetDescribe = document.querySelector('#balance-set-describe');
+	var balanceStocks = document.querySelector('#balance-stocks');
+	
+	var balanceForm = document.querySelector('#balance-set-form');
+	var balanceFormSend = document.querySelector('#list-balance-make');
 	
 	// ############################## РАЗМЕТКА ##############################
 	var getElement = function getElement(item, index) {
 	
-	  return '\n\n  <input type="radio" id="' + item.id + '" name="contact" value="email" class="d-none">\n\n  <label style="padding-left: 34px;" for="' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-debit-credit-id="' + item.id + '" data-debit-credit-name="' + item.name + '">\n    <div><span class="reference-row-number">' + (index + 1) + '</span> ' + item.name + '</div>\n    <div class="d-flex justify-content-between align-items-center">\n    </div>\n    </label>';
+	  return '\n  <input type="radio" id="operations-' + item.id + '" name="contact" value="email" class="d-none">\n  <label style="padding-left: 34px;" for="operations-' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-debit-credit-id="' + item.id + '" data-debit-credit-name="' + item.name + '">\n    <div><span class="reference-row-number">' + (index + 1) + '</span> ' + item.name + '</div>\n    <div class="d-flex justify-content-between align-items-center">\n    </div>\n  </label>';
 	};
 	
 	var drawDataInContainer = function drawDataInContainer(balanceData, container) {
@@ -7223,32 +7276,85 @@
 	  });
 	};
 	
+	balanceFormSend.addEventListener('click', function () {
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/stock/' + _storage2.default.currentStockId + '/balance_act',
+	    data: 'value=' + balanceAmount.value + '&reason=' + _storage2.default.debitCreditId + '&comment=' + balanceSetDescribe.value + '&token=' + _storage2.default.data.token,
+	    callbackSuccess: init
+	  };
+	});
+	
+	balanceStocks.addEventListener('change', function (evt) {
+	  _storage2.default.currentStockId = evt.target.value;
+	});
+	
+	balanceForm.addEventListener('input', function () {
+	  return balanceFormSend.removeAttribute('disabled');
+	});
+	
+	var selectedString = '';
+	balanceCardPlusBody.addEventListener('change', function (evt) {
+	  console.log(evt);
+	  if (selectedString) {
+	    selectedString.classList.remove('bg-light');
+	  }
+	  selectedString = evt.target.labels[0];
+	  selectedString.classList.add('bg-light');
+	  balanceAmount.removeAttribute('disabled', 'disabled');
+	  balanceSetDescribe.removeAttribute('disabled', 'disabled');
+	  if (balanceAmount.value || balanceSetDescribe.value) {
+	    balanceFormSend.removeAttribute('disabled');
+	  } else {
+	    balanceFormSend.setAttribute('disabled', 'disabled');
+	  }
+	});
+	
+	balanceCardMinusBody.addEventListener('change', function (evt) {
+	  console.log(evt);
+	  if (selectedString) {
+	    selectedString.classList.remove('bg-light');
+	  }
+	  selectedString = evt.target.labels[0];
+	  selectedString.classList.add('bg-light');
+	  balanceAmount.removeAttribute('disabled', 'disabled');
+	  balanceSetDescribe.removeAttribute('disabled', 'disabled');
+	  if (balanceAmount.value || balanceSetDescribe.value) {
+	    balanceFormSend.removeAttribute('disabled');
+	  } else {
+	    balanceFormSend.setAttribute('disabled', 'disabled');
+	  }
+	  _storage2.default.debitCreditId = selectedString.dataset.debitCreditId;
+	});
 	// ############################## ЗАГРУЗКА И ОТРИСОВКА ДАННЫХ ##############################
 	
 	
 	var onSuccessBalanceMinusLoad = function onSuccessBalanceMinusLoad(balanceData) {
 	  console.log(balanceData);
 	  drawDataInContainer(balanceData.data.all_reasons, balanceCardMinusBody);
+	  _storage2.default.debitCreditType = 'credit';
+	  balanceAmount.setAttribute('disabled', 'disabled');
+	  balanceSetDescribe.setAttribute('disabled', 'disabled');
+	  balanceStocks.innerHTML = balanceData.data.all_stocks.map(function (item) {
+	    return '<option value="' + item.id + '" ' + (item.id === _storage2.default.data.currentStock ? 'selected' : '') + '>' + item.name + '</option>';
+	  }).join('');
+	  balanceFormSend.setAttribute('disabled', 'disabled');
 	};
 	
 	var onSuccessBalancePlusLoad = function onSuccessBalancePlusLoad(balanceData) {
 	  console.log(balanceData);
-	  document.querySelector('#' + loaderSpinnerId).remove();
 	  drawDataInContainer(balanceData.data.all_reasons, balanceCardPlusBody);
+	  _storage2.default.debitCreditType = 'debit';
+	  balanceAmount.setAttribute('disabled', 'disabled');
+	  balanceSetDescribe.setAttribute('disabled', 'disabled');
+	  balanceStocks.innerHTML = balanceData.data.all_stocks.map(function (item) {
+	    return '<option value="' + item.id + '" ' + (item.id === _storage2.default.data.currentStock ? 'selected' : '') + '>' + item.name + '</option>';
+	  }).join('');
+	  balanceFormSend.setAttribute('disabled', 'disabled');
 	};
 	
-	var getBalance = function getBalance() {
-	
-	  balanceCardPlusBody.innerHTML = '';
-	  balanceCardPlusBody.insertAdjacentHTML('beforeend', loaderSpinnerMarkup);
-	
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/operation/debit',
-	    data: 'view_last=0&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessBalancePlusLoad
-	  };
-	
+	var getCredit = function getCredit() {
+	  balanceCardMinusBody.innerHTML = '';
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/operation/credit',
@@ -7256,14 +7362,39 @@
 	    callbackSuccess: onSuccessBalanceMinusLoad
 	  };
 	};
+	var getDebit = function getDebit() {
+	
+	  balanceCardPlusBody.innerHTML = '';
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/operation/debit',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessBalancePlusLoad
+	  };
+	};
+	
+	var init = function init() {
+	  balanceCardMinusBody.innerHTML = '';
+	  balanceCardPlusBody.innerHTML = '';
+	  balanceCardPlusTab.classList.remove('active');
+	  balanceCardMinusTab.classList.remove('active');
+	  balanceAmount.setAttribute('disabled', 'disabled');
+	  balanceSetDescribe.setAttribute('disabled', 'disabled');
+	  balanceAmount.value = '';
+	  balanceSetDescribe.value = '';
+	  _storage2.default.currentStockId = _storage2.default.data.currentStock;
+	};
 	
 	exports.default = {
 	  start: function start() {
-	    balanceList.addEventListener('click', getBalance);
+	    balanceList.addEventListener('click', init);
+	    balanceCardPlusTab.addEventListener('click', getDebit);
+	    balanceCardMinusTab.addEventListener('click', getCredit);
 	  },
 	  stop: function stop() {
-	    // groupsMarkup.cleanContainer();
-	    balanceList.removeEventListener('click', getBalance);
+	    balanceList.removeEventListener('click', init);
+	    balanceCardPlusTab.removeEventListener('click', getDebit);
+	    balanceCardMinusTab.removeEventListener('click', getCredit);
 	  }
 	};
 
