@@ -186,6 +186,7 @@
             <div class="dropdown-menu">
               <a class="dropdown-item" id="list-receipt-list" data-toggle="list" href="#list-receipt" role="tab" aria-controls="receipt">Поступление</a>
               <a class="dropdown-item" id="list-sell-list" data-toggle="list" href="#list-sell" role="tab" aria-controls="sell">Продажа</a>
+              <a class="dropdown-item" id="list-inventory-list" data-toggle="list" href="#list-inventory" role="tab" aria-controls="inventory">Инвентаризация</a>
               <a class="dropdown-item" id="list-balance-list" data-toggle="list" href="#list-balance" role="tab" aria-controls="balance">Балансовые операции</a>
               <a class="dropdown-item" id="list-manufacture-list" data-toggle="list" href="#list-manufacture" role="tab" aria-controls="manufacture">Производство</a>
             </div>
@@ -268,6 +269,57 @@
           <p>ПРОДАЖА (UNDER CONSTRUCTION)</p>
         </div>
 
+        <!-- =========== КОНТЕЙНЕРЫ / Операции / ИНВЕНТАРИЗАЦИЯ =========== -->
+        <div class="tab-pane fade" id="list-inventory" role="tabpanel" aria-labelledby="list-inventory-list">
+          <div id="list-inventory-card">
+
+            <div id="list-inventory-header" class="catalog-header">
+              <div class="catalog-header-title">
+                <img src="img/inventory.png" alt="">
+                <h2>ИНВЕНТАРИЗАЦИЯ</h2>
+              </div>
+
+              <div class="catalog-header-buttons">
+                <select id="inventory-stocks" class="custom-select mr-1" data-valid='none'></select>
+                <button id="list-inventory-make" type="button" class="btn btn-danger p-2 mr-1" disabled>Выполнить</button>
+              </div>
+            </div>
+
+            <div id="list-inventory-card-body" class="catalog-header-title">
+
+              <div id="inventory-groups" class="w-100 border">
+                <div class="catalog-header">
+                  <div class="catalog-header-title">
+                    <h2>Выберите группу</h2>
+                  </div>
+                </div>
+                <div id="inventory-groups-body"></div>
+              </div>
+
+              <div id="inventory-goods" class="w-100 border d-none">
+                <div class="catalog-header">
+                  <div class="catalog-header-title">
+                    <button id="inventory-goods-return-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__return"></button>
+                    <h2 id="inventory-group-name"></h2>
+                  </div>
+                </div>
+                <div id="inventory-goods-body"></div>
+              </div>
+
+
+              <div class="w-100 ml-4 border">
+                <div class="catalog-header">
+                  <div class="catalog-header-title">
+                    <h2>Список товаров</h2>
+                  </div>
+                  <div id="card-resources-new-price"></div>
+                </div>
+                <div id="card-resources-body-product"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
         <!-- =========== КОНТЕЙНЕРЫ / Операции / БАЛАНСОВЫЕ ОПЕРАЦИИ =========== -->
         <div class="tab-pane fade" id="list-balance" role="tabpanel" aria-labelledby="list-balance-list">
           <div id="list-balance-card">
@@ -286,7 +338,7 @@
 
             <div id="list-balance-card-body">
               <form id="balance-set-form" name="balance-set">
-                 <div class="form-group">
+                <div class="form-group">
                   <label for="balance-amount">Сумма</label>
                   <input type="text" class="form-control" id="balance-amount" placeholder="Баланс">
                   <span id="balance-amount-valid" class="badge badge-danger w-100"></span>

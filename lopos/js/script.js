@@ -122,11 +122,15 @@
 	
 	var _operations__balance2 = _interopRequireDefault(_operations__balance);
 	
-	var _catalog__cards = __webpack_require__(55);
+	var _operations__inventory = __webpack_require__(55);
+	
+	var _operations__inventory2 = _interopRequireDefault(_operations__inventory);
+	
+	var _catalog__cards = __webpack_require__(56);
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
-	var _catalog__search = __webpack_require__(58);
+	var _catalog__search = __webpack_require__(59);
 	
 	var _catalog__search2 = _interopRequireDefault(_catalog__search);
 	
@@ -181,7 +185,7 @@
 	
 	var mainMenuButtons = [_online__profile2.default, _log2.default, _reference__enterprises2.default, _reference__points2.default, _reference__contractors2.default, _reference__keywords2.default, _catalog__groups2.default, _catalog__cards2.default,
 	// cardsResourcesButton,
-	_catalog__search2.default, _reference__debitCredit2.default, _operations__manufacture2.default, _operations__balance2.default];
+	_catalog__search2.default, _reference__debitCredit2.default, _operations__manufacture2.default, _operations__balance2.default, _operations__inventory2.default];
 	
 	// ========== ОБНОВЛЕНИЕ/ОТКРЫТИЕ СТРАНИЦЫ ==========
 	var start = function start() {
@@ -6490,7 +6494,7 @@
 	
 	var markup = {
 	  getElement: function getElement(item, index) {
-	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '" data-group-index="' + index + '" data-group-level="' + item.level + '" data-group-name="' + item.name + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n      <div class="d-flex justify-content-between align-items-center" style="padding-right: 34px;">\n        <span> ' + item.count + ' </span>\n      </div>\n    </div>';
+	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '" data-group-index="' + index + '" data-group-level="' + item.level + '" data-group-name="' + item.name + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n      <div class="d-flex justify-content-between align-items-center" style="padding-right: 34px;">\n        <span> ' + (item.count ? item.count : '') + ' </span>\n      </div>\n    </div>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(groupsData, container, handler) {
 	    var _this = this;
@@ -7416,6 +7420,150 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
+	var _tools = __webpack_require__(6);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	var _universalSearch = __webpack_require__(35);
+	
+	var _universalSearch2 = _interopRequireDefault(_universalSearch);
+	
+	var _universalGroupsList = __webpack_require__(48);
+	
+	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
+	
+	var _universalGoodsList = __webpack_require__(47);
+	
+	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var listInventory = document.querySelector('#list-inventory-list');
+	var inventoryStocks = document.querySelector('#inventory-stocks');
+	
+	// const listGroupsCard = document.querySelector('#list-groups-card');
+	var inventoryGroups = document.querySelector('#inventory-groups');
+	var inventoryGroupsBody = document.querySelector('#inventory-groups-body');
+	var inventoryGoods = document.querySelector('#inventory-goods');
+	var inventoryGoodsBody = document.querySelector('#inventory-goods-body');
+	
+	var inventoryGoodsReturnBtn = document.querySelector('#inventory-goods-return-btn');
+	var inventoryGroupName = document.querySelector('#inventory-group-name');
+	// const groupGoodsCard = document.querySelector('#group-goods-card');
+	
+	
+	var loaderSpinnerId = 'loader-groups';
+	var loaderSpinnerMessage = 'Загрузка';
+	var loaderSpinnerMarkup = _tools2.default.getLoadSpinner(loaderSpinnerId, loaderSpinnerMessage);
+	
+	// ############################## РАБОТА С ГРУППАМИ (СПИСОК) ##############################
+	
+	var loadedGroups = [];
+	var loadedGoods = [];
+	
+	// поиск по группам
+	var listGroupSearchInput = document.querySelector('#list-groups-search-input');
+	listGroupSearchInput.addEventListener('input', function (evt) {
+	  _universalGroupsList2.default.draw(_universalSearch2.default.make(loadedGroups, evt.target.value), inventoryGroupsBody, onGroupClick);
+	});
+	
+	// кнопка возврата на список групп
+	var onInventoryGoodsReturnBtnlick = function onInventoryGoodsReturnBtnlick() {
+	  inventoryGoods.classList.add('d-none');
+	  inventoryGroups.classList.remove('d-none');
+	  // groups.redraw();
+	};
+	inventoryGoodsReturnBtn.addEventListener('click', onInventoryGoodsReturnBtnlick);
+	
+	// обработка успеха загрузки групп
+	var onSuccessDataLoad = function onSuccessDataLoad(loadedData) {
+	  console.log(loadedData);
+	  loadedGroups = loadedData.data.all_groups;
+	  document.querySelector('#' + loaderSpinnerId).remove();
+	
+	  _universalGroupsList2.default.draw(loadedGroups, inventoryGroupsBody, onGroupClick);
+	  inventoryStocks.innerHTML = loadedData.data.all_stocks.map(function (item) {
+	    return '<option value="' + item.id + '" ' + (item.id === _storage2.default.data.currentStock ? 'selected' : '') + '>' + item.name + '</option>';
+	  }).join('');
+	};
+	
+	// получение групп
+	var getData = function getData() {
+	  inventoryGroupsBody.innerHTML = '';
+	  inventoryGroupsBody.insertAdjacentHTML('beforeend', loaderSpinnerMarkup);
+	  _storage2.default.currentGroupId = false;
+	  _storage2.default.currentStockId = _storage2.default.data.currentStock;
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/operation/inventory',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessDataLoad
+	  };
+	};
+	
+	var onSuccessGroupGood = function onSuccessGroupGood(goodsData) {
+	  loadedGoods = goodsData.data;
+	  /*
+	  if (auth.goodsSortMode && loadedGoods.data) {
+	    universalSort(auth.goodsSortMode);
+	  }
+	  */
+	  // auth.goodsViewMode = (auth.goodsViewMode === 'null') ? 'string' : auth.goodsViewMode;
+	  console.log(loadedGoods);
+	  _universalGoodsList2.default.draw(loadedGoods, inventoryGoodsBody, null);
+	};
+	
+	var getGoodsForGroup = function getGoodsForGroup() {
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/group/' + _storage2.default.currentGroupId + '/goods',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessGroupGood
+	  };
+	};
+	
+	// обработчик клика по ноде группы
+	var onGroupClick = function onGroupClick() {
+	  inventoryGroupName.innerHTML = _storage2.default.currentGroupName;
+	  inventoryGoods.classList.remove('d-none');
+	  inventoryGroups.classList.add('d-none');
+	  getGoodsForGroup();
+	};
+	
+	exports.default = {
+	  start: function start() {
+	    listInventory.addEventListener('click', getData);
+	  },
+	
+	
+	  // redraw: getData,
+	  // getGoodsForGroup,
+	
+	  stop: function stop() {
+	    // groupsMarkup.cleanContainer();
+	    listInventory.removeEventListener('click', getData);
+	  }
+	};
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
 	var _catalogCards = __webpack_require__(53);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
@@ -7424,11 +7572,11 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalog__cardsAddEdit = __webpack_require__(56);
+	var _catalog__cardsAddEdit = __webpack_require__(57);
 	
 	var _catalog__cardsAddEdit2 = _interopRequireDefault(_catalog__cardsAddEdit);
 	
-	var _catalog__cardsAddResource = __webpack_require__(57);
+	var _catalog__cardsAddResource = __webpack_require__(58);
 	
 	var _catalog__cardsAddResource2 = _interopRequireDefault(_catalog__cardsAddResource);
 	
@@ -7742,7 +7890,7 @@
 	};
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7763,7 +7911,7 @@
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalog__cards = __webpack_require__(55);
+	var _catalog__cards = __webpack_require__(56);
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
@@ -7876,7 +8024,7 @@
 	};
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7897,7 +8045,7 @@
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalog__cards = __webpack_require__(55);
+	var _catalog__cards = __webpack_require__(56);
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
@@ -7981,7 +8129,7 @@
 	};
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8018,11 +8166,11 @@
 	
 	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
-	var _singleValidation = __webpack_require__(59);
+	var _singleValidation = __webpack_require__(60);
 	
 	var _singleValidation2 = _interopRequireDefault(_singleValidation);
 	
-	var _catalog__searchBarcode = __webpack_require__(60);
+	var _catalog__searchBarcode = __webpack_require__(61);
 	
 	var _catalog__searchBarcode2 = _interopRequireDefault(_catalog__searchBarcode);
 	
@@ -8209,7 +8357,7 @@
 	};
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -8275,7 +8423,7 @@
 	};
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8288,7 +8436,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalog__searchBarcodeValid = __webpack_require__(61);
+	var _catalog__searchBarcodeValid = __webpack_require__(62);
 	
 	var _catalog__searchBarcodeValid2 = _interopRequireDefault(_catalog__searchBarcodeValid);
 	
@@ -8316,7 +8464,7 @@
 	};
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8341,7 +8489,7 @@
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
-	var _catalog__search = __webpack_require__(58);
+	var _catalog__search = __webpack_require__(59);
 	
 	var _catalog__search2 = _interopRequireDefault(_catalog__search);
 	
