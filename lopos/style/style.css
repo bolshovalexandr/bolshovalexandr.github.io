@@ -35,6 +35,9 @@
   background-image: url("../img/user-male-filled-32.png");
   background-size: cover; }
 
+.btn:disabled {
+  opacity: 0.3; }
+
 .icon-btn {
   width: 42px;
   height: 42px;
@@ -111,11 +114,6 @@
 .icon-btn__sort:hover {
   background-color: darksalmon; }
 
-.reference-string {
-  min-height: 35px;
-  border: 1px solid #ccc;
-  margin-bottom: -1px; }
-
 .reference-header {
   margin-bottom: 15px; }
 
@@ -125,6 +123,37 @@
 
 .reference-header h2 {
   margin-left: 5px; }
+
+.reference-string {
+  min-height: 35px;
+  border: 1px solid #ccc;
+  margin-bottom: -1px; }
+
+.reference-string {
+  height: 44px; }
+
+.reference-string:hover {
+  background-color: #ccc; }
+
+.reference-row-number {
+  display: inline-block;
+  width: 25px;
+  text-align: right;
+  margin-right: 5px;
+  font-weight: bold; }
+
+.enterprise-card-block {
+  margin-left: 55px;
+  margin-right: 55px;
+  margin-top: 55px; }
+
+#list-contractors-card > h3 {
+  margin-left: 54px; }
+
+.negative-switch {
+  width: 20px;
+  height: 20px;
+  margin-left: 10px; }
 
 .keywords-card-select-color-container div {
   display: flex;
@@ -267,37 +296,12 @@ input[name="express-sell-radio"]:checked + label {
   opacity: 0.8;
   border-radius: 10px; }
 
-.enterprise-card-block {
-  margin-left: 55px;
-  margin-right: 55px;
-  margin-top: 55px; }
-
-.reference-string {
-  height: 44px; }
-
-.reference-string:hover {
-  background-color: #ccc; }
-
-.btn:disabled {
-  opacity: 0.3; }
-
-#list-contractors-card > h3 {
-  margin-left: 54px; }
-
-input[name="contact"]:checked + label {
-  border: 1px solid black; }
-
-.reference-row-number {
-  display: inline-block;
-  width: 25px;
-  text-align: right;
-  margin-right: 5px;
-  font-weight: bold; }
-
-.negative-switch {
-  width: 20px;
-  height: 20px;
-  margin-left: 10px; }
+.goods-string {
+  display: flex;
+  justify-content: space-between;
+  min-height: 35px;
+  border: 1px solid #ccc;
+  margin-bottom: -1px; }
 
 .catalog-header {
   display: flex;
@@ -317,13 +321,6 @@ input[name="contact"]:checked + label {
 
 .catalog-header-buttons {
   display: flex; }
-
-.goods-string {
-  display: flex;
-  justify-content: space-between;
-  min-height: 35px;
-  border: 1px solid #ccc;
-  margin-bottom: -1px; }
 
 .informaion-light {
   display: flex;
@@ -362,6 +359,19 @@ input[name="contact"]:checked + label {
 
 .manufacture-nomenklature-card--muted {
   opacity: 0.2; }
+
+.balance-set-form {
+  display: flex;
+  justify-content: space-between; }
+
+.balance-set-form div:first-child {
+  width: 30%; }
+
+.balance-set-form div:last-child {
+  width: 60%; }
+
+input[name="contact"]:checked + label {
+  border: 1px solid black; }
 
 /*
 @import "src/sass/components/app.scss";

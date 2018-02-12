@@ -4605,7 +4605,7 @@
 	    groupName.innerHTML = _storage2.default.currentGroupName;
 	    groupGoodsCard.classList.remove('d-none');
 	    listGroupsCard.classList.add('d-none');
-	    getGoodsForGroup();
+	    // getGoodsForGroup();
 	    _catalog__goods2.default.redraw();
 	  }
 	};
@@ -7019,14 +7019,14 @@
 	  selectedNomenklatureCards.forEach(function (card) {
 	    if (card.content) {
 	      card.content.forEach(function (good) {
-	        good.value *= card.k;
+	        // good.value *= card.k;
 	        currentGoods.push(good);
 	        if (good.value < 0) {
 	          materialNumber++;
-	          materialColumnBody.insertAdjacentHTML('beforeend', getGoodString(good.id, good.name, good.good, materialNumber, good.value, ''));
+	          materialColumnBody.insertAdjacentHTML('beforeend', getGoodString(good.id, good.name, good.good, materialNumber, good.value * card.k, ''));
 	        } else {
 	          goodNumber++;
-	          goodColumnBody.insertAdjacentHTML('beforeend', getGoodString(good.id, good.name, '', goodNumber, good.value, ''));
+	          goodColumnBody.insertAdjacentHTML('beforeend', getGoodString(good.id, good.name, '', goodNumber, good.value * card.k, ''));
 	        }
 	      });
 	    }
@@ -7122,6 +7122,7 @@
 	        manufactureColumnBody.innerHTML = '';
 	        _catalogCards2.default.drawDataInContainer(selectedNomenklatureCards, manufactureColumnBody);
 	        drawGoodsToColumns();
+	        manufactureMakeBtn.setAttribute('disabled', 'disabled');
 	        // currentGoods = [];
 	      } else {
 	        console.log('alarm');
@@ -7164,6 +7165,7 @@
 	
 	manufactureStocks.addEventListener('change', function (evt) {
 	  _storage2.default.currentStockId = evt.target.value;
+	  manufactureMakeBtn.setAttribute('disabled', 'disabled');
 	});
 	
 	var onSuccessManufactureLoad = function onSuccessManufactureLoad(manufactureData) {
