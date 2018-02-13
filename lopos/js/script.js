@@ -6429,7 +6429,7 @@
 	
 	var markup = {
 	  getGoodString: function getGoodString(item, index) {
-	    return '\n    <div class="goods-string" data-good-id="' + item.id + '">\n      <div>\n        <span class="reference-row-number">' + (index + 1) + '</span> <span>' + item.name + '</span>\n      </div>\n      <div>\n        ' + (item.count ? Number(item.count).toFixed(2) : '0.00') + '\n        <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>\n      </div>\n    </div>';
+	    return '\n    <div class="goods-string" data-good-id="' + item.id + '">\n      <div>\n        <span class="reference-row-number">' + (index + 1) + '</span> <span>' + item.name + '</span>\n      </div>\n      <div>\n        ' + (item.count ? Number(item.count).toFixed(2) : '0') + '\n        <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>\n      </div>\n    </div>';
 	  },
 	  getGoodTile: function getGoodTile(item, index) {
 	
@@ -6437,7 +6437,7 @@
 	      return imgUrl ? 'https://lopos.bidone.ru/users/600a5357/images/' + imgUrl + '_preview150.jpg' : './img/not-available.png';
 	    };
 	
-	    return '\n    <div class="card goods-tile-card" data-good-id="' + item.id + '">\n      <img class="card-img-top" src="' + getImg(item.img_url) + '" alt="' + item.name + '" title="' + item.name + '">\n      <div class="card-body goods-tile-title">\n        <p class="card-text">' + (item.count ? Number(item.count).toFixed(2) : '0.00') + '</p>\n      </div>\n    </div>';
+	    return '\n    <div class="card goods-tile-card" data-good-id="' + item.id + '">\n      <img class="card-img-top" src="' + getImg(item.img_url) + '" alt="' + item.name + '" title="' + item.name + '">\n      <div class="card-body goods-tile-title">\n        <p class="card-text">' + (item.count ? Number(item.count).toFixed(2) : '0') + '</p>\n      </div>\n    </div>';
 	  },
 	  drawGoodsTable: function drawGoodsTable(goodsData, container, handler) {
 	    var _this = this;
@@ -6475,6 +6475,7 @@
 	
 	// отрисовка списка товаров по данным
 	var drawGoods = function drawGoods(goodsList, container, handler, viewFlag) {
+	  console.log(goodsList);
 	  if (_storage2.default.goodsViewMode === 'string' || viewFlag === 'string') {
 	    markup.drawGoodsTable(goodsList, container, handler);
 	  } else if (_storage2.default.goodsViewMode === 'metro') {
