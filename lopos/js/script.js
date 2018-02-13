@@ -7049,11 +7049,12 @@
 	// #################### КНОПКА ВЫПОЛНИТЬ ####################
 	var onSuccessMake = function onSuccessMake(answer) {
 	  console.log(answer);
+	  getManufacture();
 	};
 	
 	var onManufactureMakeBtnClick = function onManufactureMakeBtnClick() {
 	  var data = currentGoods.map(function (good) {
-	    return [JSON.stringify({ value: good.value, id: good.id, price: 0 })];
+	    return [JSON.stringify({ value: good.value, good: good.id, price: 0 })];
 	  });
 	  console.log(data);
 	  console.log(_storage2.default.currentStockId);
@@ -7132,12 +7133,17 @@
 	    disableFlag: 'off',
 	    submitCallback: function submitCallback() {
 	      if (/^\-?\d+$/.test(document.querySelector('#universal-add-name').value)) {
-	        selectedNomenklatureCards[currentStringElement.dataset.cardIndex].k = document.querySelector('#universal-add-name').value;
-	        manufactureColumnBody.innerHTML = '';
-	        _catalogCards2.default.drawDataInContainer(selectedNomenklatureCards, manufactureColumnBody);
-	        drawGoodsToColumns();
-	        manufactureMakeBtn.setAttribute('disabled', 'disabled');
-	        // currentGoods = [];
+	
+	        if (+document.querySelector('#universal-add-name').value === 0) {
+	          getManufacture();
+	        } else {
+	          selectedNomenklatureCards[currentStringElement.dataset.cardIndex].k = document.querySelector('#universal-add-name').value;
+	          manufactureColumnBody.innerHTML = '';
+	          _catalogCards2.default.drawDataInContainer(selectedNomenklatureCards, manufactureColumnBody);
+	          drawGoodsToColumns();
+	          manufactureMakeBtn.setAttribute('disabled', 'disabled');
+	          // currentGoods = [];
+	        }
 	      } else {
 	        console.log('alarm');
 	      }
@@ -7296,12 +7302,18 @@
 	  });
 	};
 	
+	var onSuccessBalanceFormSend = function onSuccessBalanceFormSend() {
+	  balanceAmount.value = '';
+	  balanceSetDescribe.value = '';
+	  balanceFormSend.setAttribute('disabled', 'disabled');
+	};
+	
 	balanceFormSend.addEventListener('click', function () {
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/stock/' + _storage2.default.currentStockId + '/balance_act',
 	    data: 'value=' + balanceAmount.value + '&reason=' + _storage2.default.debitCreditId + '&comment=' + balanceSetDescribe.value + '&token=' + _storage2.default.data.token,
-	    callbackSuccess: init
+	    callbackSuccess: onSuccessBalanceFormSend
 	  };
 	});
 	
@@ -7328,6 +7340,7 @@
 	  } else {
 	    balanceFormSend.setAttribute('disabled', 'disabled');
 	  }
+	  _storage2.default.debitCreditId = selectedString.dataset.debitCreditId;
 	});
 	
 	balanceCardMinusBody.addEventListener('change', function (evt) {
