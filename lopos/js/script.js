@@ -134,10 +134,6 @@
 	
 	var _catalog__search2 = _interopRequireDefault(_catalog__search);
 	
-	var _xhr = __webpack_require__(5);
-	
-	var _xhr2 = _interopRequireDefault(_xhr);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// Отправка без валидации
@@ -233,27 +229,6 @@
 	
 	// ========== ЗАВЕРШЕНИЕ РАБОТЫ ==========
 	exit.addEventListener('click', stop);
-	
-	var onSuccess1 = function onSuccess1(answer) {
-	  return console.log(answer);
-	};
-	var onSuccess2 = function onSuccess2(answer) {
-	  return console.log(answer);
-	};
-	
-	_xhr2.default.request = {
-	  metod: 'POST',
-	  url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/operation/credit',
-	  data: 'view_last=0&token=' + _storage2.default.data.token,
-	  callbackSuccess: onSuccess1
-	};
-	
-	_xhr2.default.request = {
-	  metod: 'POST',
-	  url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/operation/debit',
-	  data: 'view_last=0&token=' + _storage2.default.data.token,
-	  callbackSuccess: onSuccess2
-	};
 
 /***/ }),
 /* 1 */
@@ -958,108 +933,104 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var xhr = void 0;
-	var requestParameters = void 0;
-	var messages = void 0;
-	
-	// mess - сообщение, type = true/false - сообщение/ошибка
-	var setMessage = function setMessage(mess, type) {
-	  _tools2.default.informationtModal = {
-	    'title': type ? 'MESSAGE: ' : 'ERROR: ',
-	    'message': mess,
-	    'isMess': type
-	  };
-	};
-	
-	var setError = function setError(msg) {
-	  setMessage(msg, false);
-	  // Если есть errorCallback - вызываем
-	  if (requestParameters.callbackError && typeof requestParameters.callbackError === 'function') {
-	    requestParameters.callbackError();
-	  }
-	};
-	
-	var parseRespCodes = function parseRespCodes(response) {
-	  switch (response.status) {
-	    case 200:
-	      requestParameters.callbackSuccess(response);
-	      break;
-	    case 270:
-	      setMessage(response.message, true);
-	      requestParameters.callbackSuccess(response);
-	      break;
-	    case 271:
-	      setError(response.message);
-	      break;
-	    case 272:
-	      requestParameters.callbackSuccess(response);
-	      break;
-	    case 273:
-	      setError(response.message);
-	      break;
-	    case 280:
-	      setMessage(response.message, false);
-	      document.dispatchEvent(new Event('authError'));
-	      break;
-	    case 281:
-	      requestParameters.callbackSuccess(response);
-	      break;
-	    case 400:
-	      setError(messages.responseStatus.res400);
-	      break;
-	  }
-	};
-	
-	var xhrLoadHandler = function xhrLoadHandler() {
-	  if (xhr.readyState === 4) {
-	    if (xhr.status === 200) {
-	      var response = '';
-	
-	      try {
-	        response = JSON.parse(xhr.response);
-	      } catch (error) {
-	        // Вывод ошибки парсинга
-	        setError(messages.xhrJsonError);
-	      }
-	
-	      // Разбираем коды ответа APILopos
-	      parseRespCodes(response);
-	    } else {
-	      // Внутренняя ошибка HTTP
-	      setError(messages.xhrError);
-	    }
-	  }
-	};
-	
-	var xhrErrorHandler = function xhrErrorHandler() {
-	  // Ошибка, которую возвращает сервер
-	  setError(messages.xhrError);
-	};
-	
-	var xhrTimeoutHandler = function xhrTimeoutHandler() {
-	  // Ошибка, которую возвращает сервер
-	  setError(messages.xhrTimeoutError);
-	};
-	
-	var xhrRun = function xhrRun() {
-	  xhr = new XMLHttpRequest();
-	
-	  xhr.addEventListener('load', xhrLoadHandler);
-	  // Слушаем событие ошибки XHR
-	  xhr.addEventListener('error', xhrErrorHandler);
-	  // Слушаем событие таймаута связи
-	  xhr.addEventListener('timeout', xhrTimeoutHandler);
-	
-	  xhr.timeout = window.appSettings.xhrSettings.timeout;
-	  xhr.open(requestParameters.metod, window.appSettings.xhrSettings.urlApi + requestParameters.url, true);
-	
-	  xhr.send(requestParameters.data);
-	};
-	
 	exports.default = {
 	  set request(parameters) {
-	    requestParameters = parameters;
-	    messages = window.appSettings.messages;
+	    var xhr = void 0;
+	    var messages = void 0;
+	
+	    // mess - сообщение, type = true/false - сообщение/ошибка
+	    var setMessage = function setMessage(mess, type) {
+	      _tools2.default.informationtModal = {
+	        'title': type ? 'MESSAGE: ' : 'ERROR: ',
+	        'message': mess,
+	        'isMess': type
+	      };
+	    };
+	
+	    var setError = function setError(msg) {
+	      setMessage(msg, false);
+	      // Если есть errorCallback - вызываем
+	      if (parameters.callbackError && typeof parameters.callbackError === 'function') {
+	        parameters.callbackError();
+	      }
+	    };
+	
+	    var parseRespCodes = function parseRespCodes(response) {
+	      switch (response.status) {
+	        case 200:
+	          parameters.callbackSuccess(response);
+	          break;
+	        case 270:
+	          setMessage(response.message, true);
+	          parameters.callbackSuccess(response);
+	          break;
+	        case 271:
+	          setError(response.message);
+	          break;
+	        case 272:
+	          parameters.callbackSuccess(response);
+	          break;
+	        case 273:
+	          setError(response.message);
+	          break;
+	        case 280:
+	          setMessage(response.message, false);
+	          document.dispatchEvent(new Event('authError'));
+	          break;
+	        case 281:
+	          parameters.callbackSuccess(response);
+	          break;
+	        case 400:
+	          setError(messages.responseStatus.res400);
+	          break;
+	      }
+	    };
+	
+	    var xhrLoadHandler = function xhrLoadHandler() {
+	      if (xhr.readyState === 4) {
+	        if (xhr.status === 200) {
+	          var response = '';
+	
+	          try {
+	            response = JSON.parse(xhr.response);
+	          } catch (error) {
+	            // Вывод ошибки парсинга
+	            setError(messages.xhrJsonError);
+	          }
+	
+	          // Разбираем коды ответа APILopos
+	          parseRespCodes(response);
+	        } else {
+	          // Внутренняя ошибка HTTP
+	          setError(messages.xhrError);
+	        }
+	      }
+	    };
+	
+	    var xhrErrorHandler = function xhrErrorHandler() {
+	      // Ошибка, которую возвращает сервер
+	      setError(messages.xhrError);
+	    };
+	
+	    var xhrTimeoutHandler = function xhrTimeoutHandler() {
+	      // Ошибка, которую возвращает сервер
+	      setError(messages.xhrTimeoutError);
+	    };
+	
+	    var xhrRun = function xhrRun() {
+	      xhr = new XMLHttpRequest();
+	
+	      xhr.addEventListener('load', xhrLoadHandler);
+	      // Слушаем событие ошибки XHR
+	      xhr.addEventListener('error', xhrErrorHandler);
+	      // Слушаем событие таймаута связи
+	      xhr.addEventListener('timeout', xhrTimeoutHandler);
+	
+	      xhr.timeout = window.appSettings.xhrSettings.timeout;
+	      xhr.open(parameters.metod, window.appSettings.xhrSettings.urlApi + parameters.url, true);
+	      xhr.send(parameters.data);
+	    };
+	
 	    xhrRun();
 	  }
 	};
@@ -7354,14 +7325,18 @@
 	  balanceFormSend.setAttribute('disabled', 'disabled');
 	};
 	
-	balanceFormSend.addEventListener('click', function () {
+	var onBalanceFormSendSubmit = function onBalanceFormSendSubmit(evt) {
+	  evt.preventDefault();
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/stock/' + _storage2.default.currentStockId + '/balance_act',
 	    data: 'value=' + (_storage2.default.debitCreditType === 'credit' ? '-' : '') + balanceAmount.value + '&reason=' + _storage2.default.debitCreditId + '&comment=' + balanceSetDescribe.value + '&token=' + _storage2.default.data.token,
 	    callbackSuccess: onSuccessBalanceFormSend
 	  };
-	});
+	};
+	
+	balanceFormSend.addEventListener('click', onBalanceFormSendSubmit);
+	balanceForm.addEventListener('submit', onBalanceFormSendSubmit);
 	
 	balanceStocks.addEventListener('change', function (evt) {
 	  _storage2.default.currentStockId = evt.target.value;
