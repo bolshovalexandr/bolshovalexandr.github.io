@@ -1,3 +1,4 @@
+@charset "UTF-8";
 #profile {
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#9bdcbf+0,60abf8+61,4a9ad1+100 */
   background: #9bdcbf;
@@ -358,7 +359,11 @@ input[name="express-sell-radio"]:checked + label {
   justify-content: space-between; }
 
 .manufacture-nomenklature-card--muted {
-  opacity: 0.2; }
+  opacity: 0.4;
+  background-color: lightgreen; }
+
+.manufacture-nomenklature-card--muted::after {
+  content: 'Добавлено'; }
 
 .balance-set-form {
   display: flex;

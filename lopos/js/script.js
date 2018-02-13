@@ -2162,11 +2162,7 @@
 	};
 	
 	var onSuccessNegativeTailingsSwitch = function onSuccessNegativeTailingsSwitch(loadedEnterpriseCard) {
-	  console.log(loadedEnterpriseCard);
-	};
-	
-	var onErrorNegativeTailingsSwitch = function onErrorNegativeTailingsSwitch(error) {
-	  console.log(error);
+	  return console.log(loadedEnterpriseCard);
 	};
 	
 	listEnterprisesCardNegativeBalanceSwitch.addEventListener('change', function (evt) {
@@ -2177,8 +2173,7 @@
 	    metod: 'PUT',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.currentEnterpriseId + '/meta',
 	    data: 'code=12&token=' + _storage2.default.data.token + '&value=' + value,
-	    callbackSuccess: onSuccessNegativeTailingsSwitch,
-	    callbackError: onErrorNegativeTailingsSwitch
+	    callbackSuccess: onSuccessNegativeTailingsSwitch
 	  };
 	});
 	
@@ -2190,10 +2185,13 @@
 	    metod: 'PUT',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.currentEnterpriseId + '/meta',
 	    data: 'code=11&token=' + _storage2.default.data.token + '&value=' + value,
-	    callbackSuccess: onSuccessNegativeTailingsSwitch,
-	    callbackError: onErrorNegativeTailingsSwitch
+	    callbackSuccess: onSuccessNegativeTailingsSwitch
 	  };
 	});
+	
+	var enterpriseCheckSuccess = function enterpriseCheckSuccess(answer) {
+	  return console.log(answer);
+	};
 	
 	var onSuccessEnterpriseCardLoad = function onSuccessEnterpriseCardLoad(loadedEnterpriseCard) {
 	  console.log(loadedEnterpriseCard);
@@ -2216,6 +2214,12 @@
 	    console.log(_storage2.default.data.currentBusiness);
 	    listEnterprisesCardCheckBtn.classList.add('d-none');
 	    listEnterprisesCardIsChecked.classList.remove('d-none');
+	    _xhr2.default.request = {
+	      metod: 'POST',
+	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.currentEnterpriseId + '/select',
+	      data: 'token=' + _storage2.default.data.token,
+	      callbackSuccess: enterpriseCheckSuccess
+	    };
 	  });
 	
 	  $('#enterprises-card-edit').on('show.bs.modal', function (e) {
@@ -2797,10 +2801,20 @@
 	  enableCheckEditButtons();
 	});
 	
+	var onSuccessPointCheck = function onSuccessPointCheck(answer) {
+	  return console.log(answer);
+	};
+	
 	pointsCheckBtn.addEventListener('click', function () {
 	  if (!pointsCheckBtn.hasAttribute('disabled')) {
 	    _storage2.default.currentStock = selectedString.dataset.stockId;
 	    disableCheckEditButtons();
+	    _xhr2.default.request = {
+	      metod: 'POST',
+	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/stock/' + _storage2.default.currentStockId + '/select',
+	      data: 'token=' + _storage2.default.data.token,
+	      callbackSuccess: onSuccessPointCheck
+	    };
 	    getPoints();
 	  }
 	});
