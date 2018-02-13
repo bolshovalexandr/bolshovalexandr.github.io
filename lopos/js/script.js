@@ -134,6 +134,10 @@
 	
 	var _catalog__search2 = _interopRequireDefault(_catalog__search);
 	
+	var _xhr = __webpack_require__(5);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// Отправка без валидации
@@ -141,7 +145,7 @@
 	
 	// import goodsButtonFormEdit from './buttons/catalog__goods--edit.js';
 	console.log('3D3 (07.02.18_13:30)');
-	console.log('ver: 3A5');
+	console.log('ver: 4А1');
 	
 	var exit = document.querySelector('#profile-exit');
 	var app = document.querySelector('#app');
@@ -229,6 +233,27 @@
 	
 	// ========== ЗАВЕРШЕНИЕ РАБОТЫ ==========
 	exit.addEventListener('click', stop);
+	
+	var onSuccess1 = function onSuccess1(answer) {
+	  return console.log(answer);
+	};
+	var onSuccess2 = function onSuccess2(answer) {
+	  return console.log(answer);
+	};
+	
+	_xhr2.default.request = {
+	  metod: 'POST',
+	  url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/operation/credit',
+	  data: 'view_last=0&token=' + _storage2.default.data.token,
+	  callbackSuccess: onSuccess1
+	};
+	
+	_xhr2.default.request = {
+	  metod: 'POST',
+	  url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/operation/debit',
+	  data: 'view_last=0&token=' + _storage2.default.data.token,
+	  callbackSuccess: onSuccess2
+	};
 
 /***/ }),
 /* 1 */
@@ -7054,7 +7079,11 @@
 	
 	var onManufactureMakeBtnClick = function onManufactureMakeBtnClick() {
 	  var data = currentGoods.map(function (good) {
-	    return [JSON.stringify({ value: good.value, good: good.id, price: 0 })];
+	    return [JSON.stringify({
+	      value: good.value,
+	      good: good.id,
+	      price: 0
+	    })];
 	  });
 	  console.log(data);
 	  console.log(_storage2.default.currentStockId);
@@ -7133,17 +7162,32 @@
 	    disableFlag: 'off',
 	    submitCallback: function submitCallback() {
 	      if (/^\-?\d+$/.test(document.querySelector('#universal-add-name').value)) {
-	
+	        /*
 	        if (+document.querySelector('#universal-add-name').value === 0) {
 	          getManufacture();
-	        } else {
+	          } else {
 	          selectedNomenklatureCards[currentStringElement.dataset.cardIndex].k = document.querySelector('#universal-add-name').value;
 	          manufactureColumnBody.innerHTML = '';
-	          _catalogCards2.default.drawDataInContainer(selectedNomenklatureCards, manufactureColumnBody);
+	          console.log(selectedNomenklatureCards);
+	          cardsMarkup.drawDataInContainer(selectedNomenklatureCards, manufactureColumnBody);
 	          drawGoodsToColumns();
 	          manufactureMakeBtn.setAttribute('disabled', 'disabled');
 	          // currentGoods = [];
 	        }
+	        */
+	        if (+document.querySelector('#universal-add-name').value === 0) {
+	          selectedNomenklatureCards.splice([currentStringElement.dataset.cardIndex], 1);
+	          document.querySelectorAll('.manufacture-nomenklature-card--muted')[currentStringElement.dataset.cardIndex].classList.remove('manufacture-nomenklature-card--muted');
+	        } else {
+	          selectedNomenklatureCards[currentStringElement.dataset.cardIndex].k = document.querySelector('#universal-add-name').value;
+	        }
+	
+	        manufactureColumnBody.innerHTML = '';
+	        console.log(selectedNomenklatureCards);
+	        _catalogCards2.default.drawDataInContainer(selectedNomenklatureCards, manufactureColumnBody);
+	        drawGoodsToColumns();
+	        manufactureMakeBtn.setAttribute('disabled', 'disabled');
+	        // currentGoods = [];
 	      } else {
 	        console.log('alarm');
 	      }
@@ -7156,7 +7200,9 @@
 	// #################### ОБРАБАТЫВАЕМ КЛИКИ ПО СПИСКУ КАРТОЧКЕ В МОДАЛЬНОМ ОКНЕ #############
 	$(nomenklatureCardModal).on('hidden.bs.modal', function () {
 	  selectedNomenklatureCards = [].map.call(document.querySelectorAll('.manufacture-nomenklature-card--muted'), function (item) {
-	    return Object.assign(loadedNomenklatureCards[item.dataset.cardIndex], { k: 1 });
+	    return Object.assign(loadedNomenklatureCards[item.dataset.cardIndex], {
+	      k: 1
+	    });
 	  });
 	  if (selectedNomenklatureCards.length !== 0) {
 	    manufactureColumnBody.innerHTML = '';
@@ -7312,7 +7358,7 @@
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/stock/' + _storage2.default.currentStockId + '/balance_act',
-	    data: 'value=' + balanceAmount.value + '&reason=' + _storage2.default.debitCreditId + '&comment=' + balanceSetDescribe.value + '&token=' + _storage2.default.data.token,
+	    data: 'value=' + (_storage2.default.debitCreditType === 'credit' ? '-' : '') + balanceAmount.value + '&reason=' + _storage2.default.debitCreditId + '&comment=' + balanceSetDescribe.value + '&token=' + _storage2.default.data.token,
 	    callbackSuccess: onSuccessBalanceFormSend
 	  };
 	});
