@@ -239,6 +239,14 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	var premissionList = {
+	  'reference__contractors--Buyers': {
+	    view: '411',
+	    edit: '412'
+	  },
+	  'reference__contractors--Suppliers': ''
+	};
+	
 	exports.default = {
 	
 	  // заполняем хранилище
@@ -265,6 +273,34 @@
 	      currentBusiness: localStorage.getItem('currentBusiness'),
 	      currentStock: localStorage.getItem('currentStock')
 	    };
+	  },
+	
+	  set currentScreen(screen) {
+	    sessionStorage.setItem('currentScreen', screen);
+	  },
+	
+	  get currentScreen() {
+	    return sessionStorage.getItem('currentScreen');
+	  },
+	
+	  set permissions(data) {
+	    localStorage.setItem('permissions', data.map(function (item) {
+	      return item.kod_operation;
+	    }).join());
+	  },
+	
+	  get permissions() {
+	    if (localStorage.getItem('operatorId') !== '1') {
+	      return {
+	        view: localStorage.getItem('permissions').includes(premissionList[sessionStorage.getItem('currentScreen')].view),
+	        edit: localStorage.getItem('permissions').includes(premissionList[sessionStorage.getItem('currentScreen')].edit)
+	      };
+	    } else {
+	      return {
+	        view: true,
+	        edit: true
+	      };
+	    }
 	  },
 	
 	  set currentBusiness(id) {
@@ -816,6 +852,7 @@
 	      };
 	    } else {
 	      _storage2.default.data = response.data;
+	      _storage2.default.permissions = response.data.list_of_permissions;
 	      document.dispatchEvent(new Event('loginSuccess'));
 	    }
 	  } else {
@@ -828,11 +865,6 @@
 	
 	var callbackXhrError = function callbackXhrError(response) {
 	  _main_login_window2.default.hideProgress('loginButtonSubmit', 'loginProgress');
-	
-	  _tools2.default.informationtModal = {
-	    'title': 'ОШИБКА: ',
-	    'message': window.appSettings.messages.xhrError
-	  };
 	};
 	
 	var getRequestDataEmail = function getRequestDataEmail(userLogin, userPassword) {
@@ -857,18 +889,17 @@
 	  var operator = userLogin.substr(8);
 	
 	  var urlApi = window.appSettings.loginUrlApi.id.replace('{{dir}}', folder);
-	  // let dataApi = `operator=${operator}&deviceToken=-&password=${userPassword}`;
-	  var requestData = new FormData();
-	  requestData.append('operator', operator);
-	  requestData.append('deviceToken', '-');
-	  requestData.append('password', userPassword);
+	  urlApi = urlApi.replace('{{oper}}', operator);
+	  // let requestData = new FormData();
+	  // requestData.append('password', userPassword);
+	  var requestData = 'password=' + userPassword;
 	
 	  return {
 	    url: urlApi,
 	    metod: 'POST',
 	    data: requestData,
 	    callbackSuccess: callbackXhrSuccess,
-	    callbackError: window.callbackXhrError
+	    callbackError: callbackXhrError
 	  };
 	};
 	
@@ -936,7 +967,7 @@
 	exports.default = {
 	  set request(parameters) {
 	    var xhr = void 0;
-	    var messages = void 0;
+	    var messages = window.appSettings.messages;
 	
 	    // mess - сообщение, type = true/false - сообщение/ошибка
 	    var setMessage = function setMessage(mess, type) {
@@ -1017,21 +1048,21 @@
 	      setError(messages.xhrTimeoutError);
 	    };
 	
-	    var xhrRun = function xhrRun() {
-	      xhr = new XMLHttpRequest();
+	    // const xhrRun = () => {
+	    xhr = new XMLHttpRequest();
 	
-	      xhr.addEventListener('load', xhrLoadHandler);
-	      // Слушаем событие ошибки XHR
-	      xhr.addEventListener('error', xhrErrorHandler);
-	      // Слушаем событие таймаута связи
-	      xhr.addEventListener('timeout', xhrTimeoutHandler);
+	    xhr.addEventListener('load', xhrLoadHandler);
+	    // Слушаем событие ошибки XHR
+	    xhr.addEventListener('error', xhrErrorHandler);
+	    // Слушаем событие таймаута связи
+	    xhr.addEventListener('timeout', xhrTimeoutHandler);
 	
-	      xhr.timeout = window.appSettings.xhrSettings.timeout;
-	      xhr.open(parameters.metod, window.appSettings.xhrSettings.urlApi + parameters.url, true);
-	      xhr.send(parameters.data);
-	    };
+	    xhr.timeout = window.appSettings.xhrSettings.timeout;
+	    xhr.open(parameters.metod, window.appSettings.xhrSettings.urlApi + parameters.url, true);
+	    xhr.send(parameters.data);
+	    // };
 	
-	    xhrRun();
+	    // xhrRun();
 	  }
 	};
 
@@ -1109,9 +1140,6 @@
 	      setup.submitCallback(modalUniversalAddName.value);
 	      modalUniversalAddForm.removeEventListener('submit', requestHandler);
 	      $(modalUniversalAdd).modal('hide');
-	      if (setup.disableFlag === 'off') {
-	        modalUniversalAddSubmit.setAttribute('disabled', 'disabled');
-	      }
 	    };
 	
 	    $(modalUniversalAdd).modal('show');
@@ -1123,12 +1151,6 @@
 	    modalUniversalAddName.setAttribute('placeholder', setup.inputPlaceholder);
 	    modalUniversalAddName.value = setup.inputValue ? setup.inputValue : '';
 	    modalUniversalAddSubmit.innerHTML = setup.submitBtnName;
-	    if (setup.disableFlag === 'off') {
-	      modalUniversalAddSubmit.removeAttribute('disabled');
-	    }
-	    if (setup.submitCallback) {
-	      modalUniversalAddForm.addEventListener('submit', requestHandler);
-	    }
 	  },
 	
 	  set runUniversalModalMicro(setup) {
@@ -1136,7 +1158,6 @@
 	      evt.preventDefault();
 	      setup.submitCallback(modalUniversalAddName.value);
 	      modalUniversalAddForm.removeEventListener('submit', requestHandler);
-	      $(modalUniversalMicro).modal('hide');
 	    };
 	
 	    $(modalUniversalMicro).modal('show');
@@ -3448,10 +3469,6 @@
 	
 	  listContractorsFormBill.classList.remove('d-none');
 	
-	  console.log(_storage2.default.currentContractorId);
-	  console.log(_storage2.default.currentContractorOperation);
-	  console.log(contractorsData);
-	
 	  var onListContractorsFormBillClick = function onListContractorsFormBillClick() {
 	    hideBodyShowCard();
 	    listContractorsCardName.innerHTML = name;
@@ -3474,39 +3491,63 @@
 	};
 	
 	listContractorsBody.addEventListener('click', onListContractorsBodyClick);
+	/*
+	*/
 	
 	var getContractors = function getContractors(type) {
-	  showBodyHideCard();
-	  console.log('hi');
-	  console.log(type);
-	  console.log(_storage2.default.currentContractorType);
-	  type = type || _storage2.default.currentContractorType;
-	  console.log(type);
 	
-	  listContractorsHeaderType.innerHTML = Number(type) === ContractorType.SUPPLIER ? _reference__contractors2.default.getSuppliersHeader() : _reference__contractors2.default.getBuyersHeader();
-	  listContractorsFormEditLabel.innerHTML = Number(type) === ContractorType.SUPPLIER ? 'Поставщики' : 'Покупатели';
-	  _storage2.default.currentContractorType = type;
+	  _storage2.default.currentScreen = Number(type) === ContractorType.SUPPLIER ? 'reference__contractors--Suppliers' : 'reference__contractors--Buyers';
+	  console.log(_storage2.default.permissions);
+	  var _auth$permissions = _storage2.default.permissions,
+	      view = _auth$permissions.view,
+	      edit = _auth$permissions.edit;
 	
-	  _reference__contractors2.default.cleanContainer();
-	  _reference__contractors2.default.drawMarkupInContainer(loaderSpinnerMarkup);
 	
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/kontr_agent',
-	    data: 'view_last=0&token=' + _storage2.default.data.token + '&type=' + type,
-	    callbackSuccess: onSuccessContractorsLoad,
-	    callbackError: onErrorContractorsLoad
-	  };
+	  if (view) {
+	    showBodyHideCard();
+	    document.querySelector('#list-contractors').classList.remove('d-none');
+	    type = type || _storage2.default.currentContractorType;
+	
+	    listContractorsHeaderType.innerHTML = Number(type) === ContractorType.SUPPLIER ? _reference__contractors2.default.getSuppliersHeader() : _reference__contractors2.default.getBuyersHeader();
+	    listContractorsFormEditLabel.innerHTML = Number(type) === ContractorType.SUPPLIER ? 'Поставщики' : 'Покупатели';
+	    _storage2.default.currentContractorType = type;
+	
+	    _reference__contractors2.default.cleanContainer();
+	    _reference__contractors2.default.drawMarkupInContainer(loaderSpinnerMarkup);
+	
+	    _xhr2.default.request = {
+	      metod: 'POST',
+	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/kontr_agent',
+	      data: 'view_last=0&token=' + _storage2.default.data.token + '&type=' + type,
+	      callbackSuccess: onSuccessContractorsLoad,
+	      callbackError: onErrorContractorsLoad
+	    };
+	
+	    $('#contractors-add').on('hidden.bs.modal', function (e) {
+	      listContractorsFormBill.classList.add('d-none');
+	    });
+	
+	    $('#contractors-add').on('show.bs.modal', function (e) {
+	      listContractorsFormSubmit.innerHTML = _storage2.default.currentContractorOperation === 'edit' ? 'Изменить' : 'Создать';
+	    });
+	
+	    if (!edit) {
+	      listContractorsAddBtn.setAttribute('disabled', 'disabled');
+	      listContractorsFormSubmit.setAttribute('disabled', 'disabled');
+	      listContractorsFormBill.setAttribute('disabled', 'disabled');
+	    } else {
+	      listContractorsAddBtn.removeAttribute('disabled');
+	      listContractorsFormSubmit.removeAttribute('disabled');
+	      listContractorsFormBill.removeAttribute('disabled');
+	    }
+	  } else {
+	    document.querySelector('#list-contractors').classList.add('d-none');
+	    _tools2.default.informationtModal = {
+	      title: 'Внимание',
+	      message: 'Вам запрещен просмотр'
+	    };
+	  }
 	};
-	
-	$('#contractors-add').on('hidden.bs.modal', function (e) {
-	  listContractorsFormBill.classList.add('d-none');
-	});
-	$('#contractors-add').on('show.bs.modal', function (e) {
-	  listContractorsFormSubmit.innerHTML = _storage2.default.currentContractorOperation === 'edit' ? 'Изменить' : 'Создать';
-	  console.log(_storage2.default.currentContractorId);
-	  console.log(_storage2.default.currentContractorOperation);
-	});
 	
 	exports.default = {
 	  start: function start() {
@@ -7043,7 +7084,6 @@
 	// #################### РАЗМЕТКА ДЛЯ ПОМЕЩЕНИЯ ТОВАРОВ В КОЛОНКИ ######################
 	
 	var getGoodString = function getGoodString(id, name, good, index, value, classDanger) {
-	  console.log(classDanger);
 	  return '\n  <div class="goods-string ' + classDanger + '" data-good-id="' + id + '">\n    <div>\n      <span class="reference-row-number">' + index + '</span> <span>' + name + '</span>\n    </div>\n    <div>\n      <span>' + (good ? good : 'X') + '</span>\n      <span>' + value + '</span>\n    </div>\n  </div>';
 	};
 	
@@ -7057,7 +7097,6 @@
 	  selectedNomenklatureCards.forEach(function (card) {
 	    if (card.content) {
 	      card.content.forEach(function (good) {
-	        // good.value *= card.k;
 	        currentGoods.push(good);
 	        if (good.value < 0) {
 	          materialNumber++;
@@ -7071,11 +7110,6 @@
 	  });
 	};
 	// #################### КНОПКА ВЫПОЛНИТЬ ####################
-	var onSuccessMake = function onSuccessMake(answer) {
-	  console.log(answer);
-	  getManufacture();
-	};
-	
 	var onManufactureMakeBtnClick = function onManufactureMakeBtnClick() {
 	  var data = currentGoods.map(function (good) {
 	    return [JSON.stringify({
@@ -7084,21 +7118,17 @@
 	      price: 0
 	    })];
 	  });
-	  console.log(data);
-	  console.log(_storage2.default.currentStockId);
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/stock/' + _storage2.default.currentStockId + '/temp_naklad_provesti',
 	    data: 'content=[' + data + ']&token=' + _storage2.default.data.token + '&delivery=0&type=8&kontr_agent=2',
-	    callbackSuccess: onSuccessMake
+	    callbackSuccess: getManufacture
 	  };
 	};
 	
 	manufactureMakeBtn.addEventListener('click', onManufactureMakeBtnClick);
 	// #################### КНОПКА ПОДСЧЕТ ######################
 	var onSuccessCountLoad = function onSuccessCountLoad(data) {
-	  console.log(data);
-	  console.log(currentGoods);
 	  var materialNumber = 0;
 	  var goodNumber = 0;
 	  materialColumnBody.innerHTML = '';
@@ -7120,7 +7150,6 @@
 	    manufactureMaterialCheck.classList.add('d-none');
 	    manufactureMakeBtn.setAttribute('disabled', 'disabled');
 	  }
-	  // currentGoods = [];
 	};
 	
 	var onManufactureCountBtnClick = function onManufactureCountBtnClick() {
@@ -7133,8 +7162,8 @@
 	    callbackSuccess: onSuccessCountLoad
 	  };
 	};
-	
 	manufactureCountBtn.addEventListener('click', onManufactureCountBtnClick);
+	
 	// #################### ОБРАБАТЫВАЕМ КЛИКИ ПО СПИСКУ В ПЕРВОЙ КОЛОНКЕ ######################
 	
 	var onManufactureColumnBodyClick = function onManufactureColumnBodyClick(evt) {
@@ -7143,30 +7172,28 @@
 	    currentStringElement = currentStringElement.parentNode;
 	  }
 	
-	  _tools2.default.runUniversalAdd = {
+	  _tools2.default.runUniversalModalMicro = {
 	    title: 'Укажите коэффициент',
 	    inputLabel: 'Коэффициент',
 	    inputPlaceholder: 'введите коэффициент',
 	    submitBtnName: 'Изменить',
-	    disableFlag: 'off',
 	    submitCallback: function submitCallback() {
-	      if (/^\-?\d+$/.test(document.querySelector('#universal-add-name').value)) {
-	        if (+document.querySelector('#universal-add-name').value === 0) {
+	      if (/^\-?\d+$/.test(document.querySelector('#universal-modal-micro-name').value)) {
+	        if (+document.querySelector('#universal-modal-micro-name').value === 0) {
 	          selectedNomenklatureCards.splice([currentStringElement.dataset.cardIndex], 1);
 	          document.querySelectorAll('.manufacture-nomenklature-card--muted')[currentStringElement.dataset.cardIndex].classList.remove('manufacture-nomenklature-card--muted');
 	        } else {
-	          selectedNomenklatureCards[currentStringElement.dataset.cardIndex].k = document.querySelector('#universal-add-name').value;
+	          selectedNomenklatureCards[currentStringElement.dataset.cardIndex].k = document.querySelector('#universal-modal-micro-name').value;
 	        }
 	
 	        manufactureColumnBody.innerHTML = '';
-	        console.log(selectedNomenklatureCards);
 	        _catalogCards2.default.drawDataInContainer(selectedNomenklatureCards, manufactureColumnBody);
 	        drawGoodsToColumns();
 	        manufactureMakeBtn.setAttribute('disabled', 'disabled');
-	        // currentGoods = [];
+	        document.querySelector('#universal-modal-micro-valid').innerHTML = '';
+	        $('#universal-modal-micro').modal('hide');
 	      } else {
-	        console.log('alarm');
-	        document.querySelector('#universal-add-valid').innerHTML = 'Целое число';
+	        document.querySelector('#universal-modal-micro-valid').innerHTML = 'Целое число';
 	      }
 	    }
 	  };
@@ -7212,7 +7239,6 @@
 	});
 	
 	var onSuccessManufactureLoad = function onSuccessManufactureLoad(manufactureData) {
-	  console.log(manufactureData);
 	  loadedNomenklatureCards = manufactureData.data.all_nomenclature_cards;
 	  nomenklatureCardModalBody.innerHTML = '';
 	  _catalogCards2.default.drawDataInContainer(loadedNomenklatureCards, nomenklatureCardModalBody);
@@ -7243,7 +7269,6 @@
 	    manufactureList.addEventListener('click', getManufacture);
 	  },
 	  stop: function stop() {
-	    // groupsMarkup.cleanContainer();
 	    manufactureList.removeEventListener('click', getManufacture);
 	  }
 	};
