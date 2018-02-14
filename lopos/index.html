@@ -1597,6 +1597,32 @@
     </div>
   </div>
 
+  <!-- УНИВЕРСАЛЬНОЕ МОДАЛЬНОЕ МИКРО-ОКНО С ОДНИМ ПОЛЕМ -->
+  <div class="modal fade" id="universal-modal-micro" tabindex="-1" role="dialog" aria-labelledby="universal-modal-micro" aria-hidden="true">
+    <div class="modal-dialog" style="width: 300px;" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="universal-modal-micro-label"></h5>
+          <button id="universal-modal-micro-close" type="button" class="close" data-dismiss="modal" aria-label="Close" data-cancel>
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+          <form id="universal-modal-micro-form" name="universal-modal-micro" data-formName="universalModalMicroForm">
+            <div class="form-group">
+              <label id="universal-modal-micro-name-label" for="universal-modal-micro-name"></label>
+              <input type="text" class="form-control" id="universal-modal-micro-name" aria-describedby="universal-modal-micro-name" placeholder="">
+              <span id="universal-modal-micro-valid" class="badge badge-danger w-100"></span>
+            </div>
+
+            <button id="universal-modal-micro-submit" type="submit" class="btn btn-primary w-100">Создать</button>
+            <button id="universal-modal-micro-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal">Отменить</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

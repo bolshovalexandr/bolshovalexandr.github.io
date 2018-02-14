@@ -7432,6 +7432,8 @@
 	  balanceSetDescribe.setAttribute('disabled', 'disabled');
 	  balanceAmount.value = '';
 	  balanceSetDescribe.value = '';
+	  balanceAmountValid.innerHTML = '';
+	  balanceSetDescribeValid.innerHTML = '';
 	  _storage2.default.currentStockId = _storage2.default.data.currentStock;
 	};
 	
