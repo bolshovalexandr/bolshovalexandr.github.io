@@ -1056,6 +1056,13 @@
 	var modalUniversalAddNameLabel = document.querySelector('#universal-add-name-label');
 	var modalUniversalAddSubmit = document.querySelector('#universal-add-submit');
 	
+	var modalUniversalMicro = document.querySelector('#universal-modal-micro');
+	var modalUniversalMicroLabel = document.querySelector('#universal-modal-micro-label');
+	var modalUniversalMicroForm = document.querySelector('#universal-modal-micro-form');
+	var modalUniversalMicroName = document.querySelector('#universal-modal-micro-name');
+	var modalUniversalMicroNameLabel = document.querySelector('#universal-modal-micro-name-label');
+	var modalUniversalMicroSubmit = document.querySelector('#universal-modal-micro-submit');
+	
 	var alertBlock = document.querySelector('#alertBlock');
 	
 	exports.default = {
@@ -1122,6 +1129,26 @@
 	    if (setup.submitCallback) {
 	      modalUniversalAddForm.addEventListener('submit', requestHandler);
 	    }
+	  },
+	
+	  set runUniversalModalMicro(setup) {
+	    var requestHandler = function requestHandler(evt) {
+	      evt.preventDefault();
+	      setup.submitCallback(modalUniversalAddName.value);
+	      modalUniversalAddForm.removeEventListener('submit', requestHandler);
+	      $(modalUniversalMicro).modal('hide');
+	    };
+	
+	    $(modalUniversalMicro).modal('show');
+	    $(modalUniversalMicro).on('shown.bs.modal', function () {
+	      $(modalUniversalMicro).trigger('focus');
+	    });
+	    modalUniversalMicroLabel.innerHTML = setup.title;
+	    modalUniversalMicroNameLabel.innerHTML = setup.inputLabel;
+	    modalUniversalMicroName.setAttribute('placeholder', setup.inputPlaceholder);
+	    modalUniversalMicroName.value = setup.inputValue ? setup.inputValue : '';
+	    modalUniversalMicroSubmit.innerHTML = setup.submitBtnName;
+	    modalUniversalMicroForm.addEventListener('submit', requestHandler);
 	  }
 	};
 
