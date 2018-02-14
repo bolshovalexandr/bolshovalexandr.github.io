@@ -7097,10 +7097,6 @@
 	};
 	
 	var onManufactureCountBtnClick = function onManufactureCountBtnClick() {
-	  console.log(selectedNomenklatureCards);
-	  console.log(_storage2.default.currentStockId);
-	  console.log(!!_storage2.default.currentStockId);
-	  console.log(_storage2.default.currentStockId === 'null');
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/stock/' + _storage2.default.currentStockId + '/some_goods/',
@@ -7113,12 +7109,6 @@
 	
 	manufactureCountBtn.addEventListener('click', onManufactureCountBtnClick);
 	// #################### ОБРАБАТЫВАЕМ КЛИКИ ПО СПИСКУ В ПЕРВОЙ КОЛОНКЕ ######################
-	
-	/*
-	const setCoefficient = () => {
-	
-	}
-	*/
 	
 	var onManufactureColumnBodyClick = function onManufactureColumnBodyClick(evt) {
 	  var currentStringElement = evt.target;
@@ -7134,19 +7124,6 @@
 	    disableFlag: 'off',
 	    submitCallback: function submitCallback() {
 	      if (/^\-?\d+$/.test(document.querySelector('#universal-add-name').value)) {
-	        /*
-	        if (+document.querySelector('#universal-add-name').value === 0) {
-	          getManufacture();
-	          } else {
-	          selectedNomenklatureCards[currentStringElement.dataset.cardIndex].k = document.querySelector('#universal-add-name').value;
-	          manufactureColumnBody.innerHTML = '';
-	          console.log(selectedNomenklatureCards);
-	          cardsMarkup.drawDataInContainer(selectedNomenklatureCards, manufactureColumnBody);
-	          drawGoodsToColumns();
-	          manufactureMakeBtn.setAttribute('disabled', 'disabled');
-	          // currentGoods = [];
-	        }
-	        */
 	        if (+document.querySelector('#universal-add-name').value === 0) {
 	          selectedNomenklatureCards.splice([currentStringElement.dataset.cardIndex], 1);
 	          document.querySelectorAll('.manufacture-nomenklature-card--muted')[currentStringElement.dataset.cardIndex].classList.remove('manufacture-nomenklature-card--muted');
@@ -7162,6 +7139,7 @@
 	        // currentGoods = [];
 	      } else {
 	        console.log('alarm');
+	        document.querySelector('#universal-add-valid').innerHTML = 'Целое число';
 	      }
 	    }
 	  };
@@ -7302,7 +7280,9 @@
 	var balanceCardMinusTab = document.querySelector('#balance-card-minus-tab');
 	
 	var balanceAmount = document.querySelector('#balance-amount');
+	var balanceAmountValid = document.querySelector('#balance-amount-valid');
 	var balanceSetDescribe = document.querySelector('#balance-set-describe');
+	var balanceSetDescribeValid = document.querySelector('#balance-set-valid');
 	var balanceStocks = document.querySelector('#balance-stocks');
 	
 	var balanceForm = document.querySelector('#balance-set-form');
@@ -7328,12 +7308,27 @@
 	
 	var onBalanceFormSendSubmit = function onBalanceFormSendSubmit(evt) {
 	  evt.preventDefault();
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/stock/' + _storage2.default.currentStockId + '/balance_act',
-	    data: 'value=' + (_storage2.default.debitCreditType === 'credit' ? '-' : '') + balanceAmount.value + '&reason=' + _storage2.default.debitCreditId + '&comment=' + balanceSetDescribe.value + '&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessBalanceFormSend
-	  };
+	  console.log(/^[а-яёА-ЯЁA-Za-z\s\d]{0,300}$/.test(balanceSetDescribe.value));
+	  if (/(^\d+$)|(^\d+[.]\d+$)/.test(balanceAmount.value) && /^[а-яёА-ЯЁA-Za-z\s\d]{0,300}$/.test(balanceSetDescribe.value)) {
+	    _xhr2.default.request = {
+	      metod: 'POST',
+	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/stock/' + _storage2.default.currentStockId + '/balance_act',
+	      data: 'value=' + (_storage2.default.debitCreditType === 'credit' ? '-' : '') + balanceAmount.value + '&reason=' + _storage2.default.debitCreditId + '&comment=' + balanceSetDescribe.value + '&token=' + _storage2.default.data.token,
+	      callbackSuccess: onSuccessBalanceFormSend
+	    };
+	    balanceAmountValid.innerHTML = '';
+	    balanceSetDescribeValid.innerHTML = '';
+	  }
+	  if (!/(^\d+$)|(^\d+[.]\d+$)/.test(balanceAmount.value)) {
+	    balanceAmountValid.innerHTML = 'денежный формат<br>( 000, 000.000 )';
+	  } else {
+	    balanceAmountValid.innerHTML = '';
+	  }
+	  if (!/^[а-яёА-ЯЁA-Za-z\s\d]{0,300}$/.test(balanceSetDescribe.value)) {
+	    balanceSetDescribeValid.innerHTML = 'Не более 300 символов без спецсимволов';
+	  } else {
+	    balanceSetDescribeValid.innerHTML = '';
+	  }
 	};
 	
 	balanceFormSend.addEventListener('click', onBalanceFormSendSubmit);
@@ -7800,14 +7795,17 @@
 	        _catalog__cardsAddResource2.default.start(addResourcesModal);
 	        fastEditFlag = true;
 	      };
-	
+	      console.log(item.value < 0);
 	      if (item.value < 0) {
 	        cardResourcesResources.insertAdjacentHTML('beforeend', _catalogCards2.default.getResourceElement(item));
 	        cardResourcesResources.lastChild.addEventListener('click', onResourcesGoodClick);
 	      } else {
+	        console.log('hi');
+	        console.log(_catalogCards2.default.getResourceElement(item));
 	        cardResourcesProduct.insertAdjacentHTML('beforeend', _catalogCards2.default.getResourceElement(item));
 	        cardResourcesProduct.lastChild.addEventListener('click', onResourcesGoodClick);
 	      }
+	      console.log(cardResourcesProduct);
 	    });
 	  } else {
 	    cardResourcesResources.innerHTML = 'Nothig left, but hope';
