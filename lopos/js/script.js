@@ -7309,7 +7309,7 @@
 	var onBalanceFormSendSubmit = function onBalanceFormSendSubmit(evt) {
 	  evt.preventDefault();
 	  console.log(/^[а-яёА-ЯЁA-Za-z\s\d]{0,300}$/.test(balanceSetDescribe.value));
-	  if (/(^\d+$)|(^\d+[.]\d+$)/.test(balanceAmount.value) && /^[а-яёА-ЯЁA-Za-z\s\d]{0,300}$/.test(balanceSetDescribe.value)) {
+	  if (/(^\d+$)|(^\d+[.]\d+$)/.test(balanceAmount.value) && /^[а-яёА-ЯЁA-Za-z\s\d\.\,\:\;]{0,300}$/.test(balanceSetDescribe.value)) {
 	    _xhr2.default.request = {
 	      metod: 'POST',
 	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/stock/' + _storage2.default.currentStockId + '/balance_act',
@@ -7324,8 +7324,8 @@
 	  } else {
 	    balanceAmountValid.innerHTML = '';
 	  }
-	  if (!/^[а-яёА-ЯЁA-Za-z\s\d]{0,300}$/.test(balanceSetDescribe.value)) {
-	    balanceSetDescribeValid.innerHTML = 'Не более 300 символов без спецсимволов';
+	  if (!/^[а-яёА-ЯЁA-Za-z\s\d\.\,\:\;]{0,300}$/.test(balanceSetDescribe.value)) {
+	    balanceSetDescribeValid.innerHTML = 'Не более 300 символов со знаками препинания (. , : ;) без спецсимволов';
 	  } else {
 	    balanceSetDescribeValid.innerHTML = '';
 	  }
