@@ -130,6 +130,7 @@
 	
 	var _operations__inventory2 = _interopRequireDefault(_operations__inventory);
 	
+<<<<<<< HEAD
 	var _online__users = __webpack_require__(58);
 	
 	var _online__users2 = _interopRequireDefault(_online__users);
@@ -139,6 +140,13 @@
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
 	var _catalog__search = __webpack_require__(62);
+=======
+	var _catalog__cards = __webpack_require__(58);
+	
+	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
+	
+	var _catalog__search = __webpack_require__(61);
+>>>>>>> 8638b307f5648d4a1632ced32e860420b9064404
 	
 	var _catalog__search2 = _interopRequireDefault(_catalog__search);
 	
@@ -578,6 +586,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// Пользовательские права доступа на чтение в зависимости от кодов
+<<<<<<< HEAD
 	var permissionEngToRus = {
 	
 	  // операции
@@ -608,6 +617,8 @@
 	  'log': 'Журнал/Журнал операций'
 	};
 	
+=======
+>>>>>>> 8638b307f5648d4a1632ced32e860420b9064404
 	var permissionRead = {
 	
 	  // операции
@@ -638,6 +649,7 @@
 	  'log': 541
 	};
 	
+<<<<<<< HEAD
 	/*
 	const permissionEdit = {
 	
@@ -659,6 +671,8 @@
 	};
 	*/
 	
+=======
+>>>>>>> 8638b307f5648d4a1632ced32e860420b9064404
 	var permissionReadAdminOnly = ['users', 'support'];
 	
 	var read = function read() {
@@ -683,9 +697,13 @@
 	};
 	
 	exports.default = {
+<<<<<<< HEAD
 	  read: read,
 	  permissionRead: permissionRead,
 	  permissionEngToRus: permissionEngToRus
+=======
+	  read: read
+>>>>>>> 8638b307f5648d4a1632ced32e860420b9064404
 	};
 
 /***/ }),
@@ -7804,6 +7822,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
+<<<<<<< HEAD
 	var _tools = __webpack_require__(7);
 	
 	var _tools2 = _interopRequireDefault(_tools);
@@ -8082,6 +8101,8 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
+=======
+>>>>>>> 8638b307f5648d4a1632ced32e860420b9064404
 	var _catalogCards = __webpack_require__(55);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
@@ -8090,11 +8111,19 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
+<<<<<<< HEAD
 	var _catalog__cardsAddEdit = __webpack_require__(60);
 	
 	var _catalog__cardsAddEdit2 = _interopRequireDefault(_catalog__cardsAddEdit);
 	
 	var _catalog__cardsAddResource = __webpack_require__(61);
+=======
+	var _catalog__cardsAddEdit = __webpack_require__(59);
+	
+	var _catalog__cardsAddEdit2 = _interopRequireDefault(_catalog__cardsAddEdit);
+	
+	var _catalog__cardsAddResource = __webpack_require__(60);
+>>>>>>> 8638b307f5648d4a1632ced32e860420b9064404
 	
 	var _catalog__cardsAddResource2 = _interopRequireDefault(_catalog__cardsAddResource);
 	
@@ -8411,7 +8440,11 @@
 	};
 
 /***/ }),
+<<<<<<< HEAD
 /* 60 */
+=======
+/* 59 */
+>>>>>>> 8638b307f5648d4a1632ced32e860420b9064404
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8432,7 +8465,11 @@
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
+<<<<<<< HEAD
 	var _catalog__cards = __webpack_require__(59);
+=======
+	var _catalog__cards = __webpack_require__(58);
+>>>>>>> 8638b307f5648d4a1632ced32e860420b9064404
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
@@ -8545,7 +8582,11 @@
 	};
 
 /***/ }),
+<<<<<<< HEAD
 /* 61 */
+=======
+/* 60 */
+>>>>>>> 8638b307f5648d4a1632ced32e860420b9064404
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8566,7 +8607,11 @@
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
+<<<<<<< HEAD
 	var _catalog__cards = __webpack_require__(59);
+=======
+	var _catalog__cards = __webpack_require__(58);
+>>>>>>> 8638b307f5648d4a1632ced32e860420b9064404
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
@@ -8650,7 +8695,11 @@
 	};
 
 /***/ }),
+<<<<<<< HEAD
 /* 62 */
+=======
+/* 61 */
+>>>>>>> 8638b307f5648d4a1632ced32e860420b9064404
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8687,11 +8736,19 @@
 	
 	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
+<<<<<<< HEAD
 	var _singleValidation = __webpack_require__(63);
 	
 	var _singleValidation2 = _interopRequireDefault(_singleValidation);
 	
 	var _catalog__searchBarcode = __webpack_require__(64);
+=======
+	var _singleValidation = __webpack_require__(62);
+	
+	var _singleValidation2 = _interopRequireDefault(_singleValidation);
+	
+	var _catalog__searchBarcode = __webpack_require__(63);
+>>>>>>> 8638b307f5648d4a1632ced32e860420b9064404
 	
 	var _catalog__searchBarcode2 = _interopRequireDefault(_catalog__searchBarcode);
 	
@@ -8878,7 +8935,11 @@
 	};
 
 /***/ }),
+<<<<<<< HEAD
 /* 63 */
+=======
+/* 62 */
+>>>>>>> 8638b307f5648d4a1632ced32e860420b9064404
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -8944,7 +9005,11 @@
 	};
 
 /***/ }),
+<<<<<<< HEAD
 /* 64 */
+=======
+/* 63 */
+>>>>>>> 8638b307f5648d4a1632ced32e860420b9064404
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8957,7 +9022,11 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
+<<<<<<< HEAD
 	var _catalog__searchBarcodeValid = __webpack_require__(65);
+=======
+	var _catalog__searchBarcodeValid = __webpack_require__(64);
+>>>>>>> 8638b307f5648d4a1632ced32e860420b9064404
 	
 	var _catalog__searchBarcodeValid2 = _interopRequireDefault(_catalog__searchBarcodeValid);
 	
@@ -8985,7 +9054,11 @@
 	};
 
 /***/ }),
+<<<<<<< HEAD
 /* 65 */
+=======
+/* 64 */
+>>>>>>> 8638b307f5648d4a1632ced32e860420b9064404
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9010,7 +9083,11 @@
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
+<<<<<<< HEAD
 	var _catalog__search = __webpack_require__(62);
+=======
+	var _catalog__search = __webpack_require__(61);
+>>>>>>> 8638b307f5648d4a1632ced32e860420b9064404
 	
 	var _catalog__search2 = _interopRequireDefault(_catalog__search);
 	
