@@ -7861,16 +7861,16 @@
 	  // ///////////
 	
 	  // справочники
-	  'contractor-suppliers': [0, 411],
-	  'contractor-buyers': [0, 421],
-	  'points': [0, 431],
-	  'keywords': [0, 441],
-	  'enterprises': [0, 511],
-	  'debit': [0, 451],
-	  'credit': [0, 461],
+	  'contractor-suppliers': [411, 412],
+	  'contractor-buyers': [421, 422],
+	  'points': [431, 432],
+	  'keywords': [441, 442],
+	  'enterprises': [511, 512],
+	  'debit': [451, 452],
+	  'credit': [461, 462],
 	
 	  // журнал
-	  'log': [0, 541]
+	  'log': [541, '']
 	};
 	
 	// ############################## РАЗМЕТКА ##############################
