@@ -69,6 +69,10 @@
   background-image: url(../img/trash-100.png);
   background-size: cover; }
 
+.icon-btn__settings {
+  background-image: url(../img/menu_s.png);
+  background-size: cover; }
+
 .icon-btn__go {
   background-image: url(../img/arrow-right.png);
   background-size: cover; }
@@ -393,10 +397,36 @@ input[name="contact"]:checked + label {
   border-radius: 50%;
   margin-right: 5px; }
 
+.user-permissions-string {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid gray; }
+
+.user-permissions-string > span {
+  display: inline-block;
+  width: 300px;
+  margin-right: auto; }
+
+.user-permissions-string > div {
+  display: flex;
+  justify-content: space-between;
+  width: 50px;
+  text-align: left; }
+
 .user-permissions-switch {
   width: 15px;
   height: 15px;
   margin-left: 5px; }
+
+.user-permissions-stock {
+  display: inline-block;
+  border-radius: 8px;
+  margin: 5px;
+  padding: 5px;
+  cursor: pointer;
+  background-color: #17a2b8;
+  color: #fff;
+  opacity: 1; }
 
 /*
 @import "src/sass/components/app.scss";

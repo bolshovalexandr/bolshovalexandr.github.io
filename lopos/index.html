@@ -560,7 +560,54 @@
 
         <!-- ==================== КОНТЕЙНЕРЫ / Учет ==================== -->
         <div class="tab-pane fade" id="list-docs" role="tabpanel" aria-labelledby="list-docs-list">
-          <p>ВСЕ ДОКУМЕНТЫ (UNDER CONSTRUCTION)</p>
+
+          <div id="list-docs-header" class="catalog-header">
+            <div class="catalog-header-title">
+              <img src="img/ic_agree.png" alt="">
+              <h2>ВСЕ ДОКУМЕНТЫ</h2>
+            </div>
+
+          </div>
+          <div class="catalog-header">
+            <div>
+              <button id="docs-bill-btn" type="button" class="btn btn-primary">Накладные</button>
+              <button id="docs-balance-btn" type="button" class="btn btn-info">Балансовые операции</button>
+            </div>
+
+            <div>
+              <select id="docs-stocks" class="custom-select mr-1">
+                <option value="null" selected>---------</option>
+              </select>
+            </div>
+
+            <div>
+              <select id="docs-year" class="custom-select mr-1">
+                <option value="2018" selected>2018</option>
+                <option value="2017">2017</option>
+              </select>
+              <select id="docs-month" class="custom-select mr-1">
+                <option value="null" selected>---------</option>
+                <option value="12">Декабрь</option>
+                <option value="11">Ноябрь</option>
+                <option value="10">Октябрь</option>
+                <option value="9">Сентябрь</option>
+                <option value="8">Август</option>
+                <option value="7">Июль</option>
+                <option value="6">Июнь</option>
+                <option value="5">Май</option>
+                <option value="4">Апрель</option>
+                <option value="3">Март</option>
+                <option value="2">Февраль</option>
+                <option value="1">Январь</option>
+              </select>
+              <select id="docs-day" class="custom-select mr-1">
+                <option value="null" selected>---------</option>
+              </select>
+              <button id="" type="button" class="btn btn-link p-0 icon-btn icon-btn__settings"></button>
+            </div>
+          </div>
+          <div id="list-docs-body"></div>
+
         </div>
         <div class="tab-pane fade" id="list-reports" role="tabpanel" aria-labelledby="list-reports-list">
           <p>ОТЧЕТЫ И АНАЛИТИКА (UNDER CONSTRUCTION)</p>
@@ -758,9 +805,9 @@
                 <button id="user-card-return-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__return"></button>
                 <h2>Редактирование профиля</h2>
               </div>
-              <button id="user-card-rgb-btn" type="button" class="btn btn-link p-0 icon-btn icon-btn__rgb" data-toggle="modal" data-target="#keywords-card-edit-rgb"></button>
-              <button id="user-card-password-btn" type="button" class="btn btn-light p-0 icon-btn icon-btn__set-password" data-toggle="modal" data-target="#keywords-card-edit"></button>
-              <button id="user-card-edit-btn" type="button" class="btn btn-warning p-0 icon-btn icon-btn__edit" data-toggle="modal" data-target="#keywords-card-edit"></button>
+              <button id="user-card-rgb-btn" type="button" class="btn btn-link p-0 icon-btn icon-btn__rgb" data-toggle="modal" data-target="#user-card-edit-rgb"></button>
+              <button id="user-card-password-btn" type="button" class="btn btn-light p-0 icon-btn icon-btn__set-password"></button>
+              <button id="user-card-edit-btn" type="button" class="btn btn-warning p-0 icon-btn icon-btn__edit"></button>
               <button id="user-card-lock-btn" type="button" class="btn btn-info p-0 icon-btn icon-btn__lock-user"></button>
             </div>
             <div id="user-card-data">
@@ -1099,6 +1146,58 @@
             <button id="keywords-card-edit-rgb-submit" type="submit" class="btn btn-primary w-100">Изменить</button>
 
             <button id="keywords-card-edit-rgb-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal">Отменить</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Онлайн / изменение цвета пользователя -->
+  <div class="modal fade" id="user-card-edit-rgb" tabindex="-1" role="dialog" aria-labelledby="user-card-edit-rgb" aria-hidden="true" backdrop="static">
+    <div class="modal-dialog" style="width: 200px;" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="user-card-edit-rgb-label">Изменить цвет</h5>
+          <button id="user-card-edit-rgb-close" type="button" class="close" data-dismiss="modal" aria-label="Close`">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+          <form id="user-card-edit-rgb-form" name="user-card-edit-rgb">
+            <div class="form-group keywords-card-select-color-container d-flex flex-wrap justify-content-around">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input d-none" type="radio" name="user-card-edit-rgb" id="rgbE70027" value="E70027">
+                <label class="form-check-label keywords-card-select-color" style="background-color: #E70027" for="rgbE70027"></label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input d-none" type="radio" name="user-card-edit-rgb" id="rgb00A1B6" value="00A1B6">
+                <label class="form-check-label keywords-card-select-color" style="background-color: #00A1B6" for="rgb00A1B6"></label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input d-none" type="radio" name="user-card-edit-rgb" id="rgbDCB131" value="DCB131">
+                <label class="form-check-label keywords-card-select-color" style="background-color: #DCB131" for="rgbDCB131"></label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input d-none" type="radio" name="user-card-edit-rgb" id="rgb009F39" value="009F39">
+                <label class="form-check-label keywords-card-select-color" style="background-color: #009F39" for="rgb009F39"></label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input d-none" type="radio" name="user-card-edit-rgb" id="rgbB154DE" value="B154DE">
+                <label class="form-check-label keywords-card-select-color" style="background-color: #B154DE" for="rgbB154DE"></label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input d-none" type="radio" name="user-card-edit-rgb" id="rgb6E81E4" value="6E81E4">
+                <label class="form-check-label keywords-card-select-color" style="background-color: #6E81E4" for="rgb6E81E4"></label>
+              </div>
+            </div>
+
+            <div id="user-card-edit-rgb-spinner" class="progress text-white mb-3 invisible">
+              <div class="progress-bar progress-bar-striped progress-bar-animated text-white font-weight-bold text-uppercase" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+
+            <button id="user-card-edit-rgb-submit" type="submit" class="btn btn-primary w-100">Изменить</button>
+
+            <button id="user-card-edit-rgb-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal">Отменить</button>
           </form>
         </div>
       </div>

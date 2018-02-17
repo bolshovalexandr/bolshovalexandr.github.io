@@ -134,11 +134,15 @@
 	
 	var _online__users2 = _interopRequireDefault(_online__users);
 	
-	var _catalog__cards = __webpack_require__(59);
+	var _accounting__allDocs = __webpack_require__(59);
+	
+	var _accounting__allDocs2 = _interopRequireDefault(_accounting__allDocs);
+	
+	var _catalog__cards = __webpack_require__(60);
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
-	var _catalog__search = __webpack_require__(62);
+	var _catalog__search = __webpack_require__(63);
 	
 	var _catalog__search2 = _interopRequireDefault(_catalog__search);
 	
@@ -193,7 +197,7 @@
 	
 	var mainMenuButtons = [_online__profile2.default, _log2.default, _reference__enterprises2.default, _reference__points2.default, _reference__contractors2.default, _reference__keywords2.default, _catalog__groups2.default, _catalog__cards2.default,
 	// cardsResourcesButton,
-	_catalog__search2.default, _reference__debitCredit2.default, _operations__manufacture2.default, _operations__balance2.default, _operations__inventory2.default, _online__users2.default];
+	_catalog__search2.default, _reference__debitCredit2.default, _operations__manufacture2.default, _operations__balance2.default, _operations__inventory2.default, _online__users2.default, _accounting__allDocs2.default];
 	
 	// ========== ОБНОВЛЕНИЕ/ОТКРЫТИЕ СТРАНИЦЫ ==========
 	var start = function start() {
@@ -7408,16 +7412,25 @@
 	  'universal-modal-micro-name': {
 	    pattern: /^\-?\d+$/,
 	    message: 'Целое число (0 удалит карточку)'
+	  },
+	  'change-password': {
+	    pattern: /^[а-яёА-ЯЁA-Za-z0-9\s\d]{2,20}$/,
+	    message: 'От 2-х до 20 символов без спецсимволов'
+	  },
+	  'change-user-name': {
+	    pattern: /^[а-яёА-ЯЁA-Za-z0-9\s\d]{2,20}$/,
+	    message: 'От 2-х до 20 символов без спецсимволов'
 	  }
 	
 	};
 	
 	exports.default = {
-	  check: function check(fields) {
+	  check: function check(fields, presetNames) {
 	    var result = [];
-	    fields.forEach(function (field) {
-	      field.nextElementSibling.innerHTML = !validityRelations[field.id].pattern.test(field.value) ? validityRelations[field.id].message : '';
-	      result.push(validityRelations[field.id].pattern.test(field.value));
+	    fields.forEach(function (field, i) {
+	      var relationType = presetNames[i] || field.id;
+	      field.nextElementSibling.innerHTML = !validityRelations[relationType].pattern.test(field.value) ? validityRelations[relationType].message : '';
+	      result.push(validityRelations[relationType].pattern.test(field.value));
 	    });
 	    return result.every(function (item) {
 	      return item;
@@ -7804,6 +7817,10 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
+	var _universalValidityMicro = __webpack_require__(54);
+	
+	var _universalValidityMicro2 = _interopRequireDefault(_universalValidityMicro);
+	
 	var _tools = __webpack_require__(7);
 	
 	var _tools2 = _interopRequireDefault(_tools);
@@ -7819,6 +7836,9 @@
 	var usersBody = document.querySelector('#list-users-body');
 	var usersAddBtn = document.querySelector('#users-add');
 	var usersReturnBtn = document.querySelector('#user-card-return-btn');
+	var usersPasswordBtn = document.querySelector('#user-card-password-btn');
+	var usersEditBtn = document.querySelector('#user-card-edit-btn');
+	var usersLockBtn = document.querySelector('#user-card-lock-btn');
 	
 	var userCard = document.querySelector('#user-card');
 	var userCardData = document.querySelector('#user-card-data');
@@ -7829,6 +7849,7 @@
 	var userStockList = userCardData.querySelector('#user-stock-list');
 	var userStockPermissions = userCardData.querySelector('#user-stock-permissions');
 	var userOtherPermissions = userCardData.querySelector('#user-other-permissions');
+	var userRGBForm = document.querySelector('#user-card-edit-rgb');
 	
 	var permissionsStock = {
 	  // операции
@@ -7848,17 +7869,6 @@
 	  // учет
 	  'docs': [321, 322],
 	  'reports': [331, 0],
-	
-	  // ///////////
-	  // операции
-	  /*
-	  'receipt': [0, 111],
-	  'sell': [0, 121],
-	  'inventory': [0, 141],
-	  'balance': [0, 131],
-	  'manufacture': [0, 181],
-	  */
-	  // ///////////
 	
 	  // справочники
 	  'contractor-suppliers': [411, 412],
@@ -7901,6 +7911,98 @@
 	  }
 	};
 	
+	// ############################## БЛОКИРОВКА ПОЛЬЗОВАТЕЛЯ #########################
+	var lockSuccess = function lockSuccess(answer) {
+	  userProfileStatus.innerText = +userProfileStatus.innerText === 0 ? '1' : '0';
+	  console.log(answer);
+	};
+	
+	var onUsersLockBtnClick = function onUsersLockBtnClick() {
+	  _xhr2.default.request = {
+	    metod: 'PUT',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.currentUserId,
+	    data: 'status=' + (+userProfileStatus.innerText === 0 ? '1' : '0') + '&token=' + _storage2.default.data.token,
+	    callbackSuccess: lockSuccess
+	  };
+	};
+	
+	usersLockBtn.addEventListener('click', onUsersLockBtnClick);
+	// ############################## ИЗМЕНЕНИЕ ИМЕНИ ПОЛЬЗОВАТЕЛЯ #########################
+	var editedName = '';
+	var editSuccess = function editSuccess(answer) {
+	  userProfileName.innerText = editedName;
+	  console.log(answer);
+	};
+	var onUsersEditBtnClick = function onUsersEditBtnClick() {
+	  _tools2.default.runUniversalModalMicro = {
+	    title: 'Новое имя',
+	    inputLabel: 'Имя',
+	    inputPlaceholder: 'введите имя',
+	    inputValue: userProfileName.innerText,
+	    submitBtnName: 'Изменить',
+	    submitCallback: function submitCallback() {
+	      if (_universalValidityMicro2.default.check([document.querySelector('#universal-modal-micro-name')], ['change-user-name'])) {
+	        _xhr2.default.request = {
+	          metod: 'PUT',
+	          url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.currentUserId,
+	          data: 'nickname=' + document.querySelector('#universal-modal-micro-name').value + '&token=' + _storage2.default.data.token,
+	          callbackSuccess: editSuccess
+	        };
+	        editedName = document.querySelector('#universal-modal-micro-name').value;
+	        $('#universal-modal-micro').modal('hide');
+	      }
+	    }
+	  };
+	};
+	usersEditBtn.addEventListener('click', onUsersEditBtnClick);
+	// ############################## ИЗМЕНЕНИЕ ПАРОЛЯ ПОЛЬЗОВАТЕЛЯ #########################
+	var changePassSuccess = function changePassSuccess(answer) {
+	  return console.log(answer);
+	};
+	var onUsersPasswordBtnClick = function onUsersPasswordBtnClick() {
+	  _tools2.default.runUniversalModalMicro = {
+	    title: 'Новый пароль',
+	    inputLabel: 'Пароль',
+	    inputPlaceholder: 'введите пароль',
+	    submitBtnName: 'Изменить',
+	    submitCallback: function submitCallback() {
+	      if (_universalValidityMicro2.default.check([document.querySelector('#universal-modal-micro-name')], ['change-password'])) {
+	        _xhr2.default.request = {
+	          metod: 'PUT',
+	          url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.currentUserId,
+	          data: 'password=' + document.querySelector('#universal-modal-micro-name').value + '&token=' + _storage2.default.data.token,
+	          callbackSuccess: changePassSuccess
+	        };
+	        $('#universal-modal-micro').modal('hide');
+	      }
+	    }
+	  };
+	};
+	
+	usersPasswordBtn.addEventListener('click', onUsersPasswordBtnClick);
+	// ############################## ИЗМЕНЕНИЕ ЦВЕТА ПОЛЬЗОВАТЕЛЯ #########################
+	var editedRGB = '';
+	var updateColor = function updateColor() {
+	  userProfileImage.style.backgroundColor = '#' + editedRGB;
+	};
+	
+	var onListKeywordsCardEditRGBFormSubmit = function onListKeywordsCardEditRGBFormSubmit(evt) {
+	  evt.preventDefault();
+	  console.log(userRGBForm.querySelector('input:checked'));
+	  var newRGB = userRGBForm.querySelector('input:checked').value;
+	  editedRGB = newRGB;
+	  // document.querySelector('#list-keywords-card-edit > h3').style.backgroundColor = '#' + auth.currentKeywordRgb;
+	  $(userRGBForm).modal('hide');
+	
+	  _xhr2.default.request = {
+	    metod: 'PUT',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.currentUserId,
+	    data: 'color=' + newRGB + '&token=' + _storage2.default.data.token,
+	    callbackSuccess: updateColor
+	  };
+	};
+	
+	userRGBForm.addEventListener('submit', onListKeywordsCardEditRGBFormSubmit);
 	// ############################## ДОБАВЛЕНИЕ ПОЛЬЗОВАТЕЛЯ ##############################
 	
 	var addUser = function addUser() {
@@ -7930,11 +8032,19 @@
 	
 	// ############################## СЛУШАЕМ ЧЕКБОКСЫ ##############################
 	var onSuccessChangePermission = function onSuccessChangePermission(answer) {
-	  console.log(answer);
+	  userStockPermissions.querySelectorAll('INPUT').forEach(function (elem) {
+	    return elem.removeAttribute('disabled');
+	  });
+	  userOtherPermissions.querySelectorAll('INPUT').forEach(function (elem) {
+	    return elem.removeAttribute('disabled');
+	  });
 	  onUserClick();
 	};
 	
 	var changeStockPermission = function changeStockPermission(evt) {
+	  userStockPermissions.querySelectorAll('INPUT').forEach(function (elem) {
+	    return elem.setAttribute('disabled', 'disabled');
+	  });
 	  _xhr2.default.request = {
 	    metod: 'PUT',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.currentUserId + '/permission',
@@ -7943,6 +8053,9 @@
 	  };
 	};
 	var changeOtherPermission = function changeOtherPermission(evt) {
+	  userOtherPermissions.querySelectorAll('INPUT').forEach(function (elem) {
+	    return elem.setAttribute('disabled', 'disabled');
+	  });
 	  _xhr2.default.request = {
 	    metod: 'PUT',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.currentUserId + '/permission',
@@ -7956,6 +8069,7 @@
 	
 	// ############################## ЗАГРУЗКА СПИСКА ПОЛЬЗОВАТЕЛЕЙ ##############################
 	usersReturnBtn.addEventListener('click', function () {
+	  getUsers();
 	  usersBody.classList.remove('d-none');
 	  userCard.classList.add('d-none');
 	  usersHeader.classList.remove('d-none');
@@ -7995,7 +8109,7 @@
 	    var screenNamesStock = Object.keys(permissionsStock);
 	    userStockList.innerHTML = '';
 	    Object.keys(permissionList.stock).forEach(function (stockName) {
-	      userStockList.insertAdjacentHTML('beforeEnd', '<span class="mr-2 bg-primary">' + stockName + '</span>');
+	      userStockList.insertAdjacentHTML('beforeEnd', '<span class="user-permissions-stock">' + stockName + '</span>');
 	
 	      userStockList.lastChild.addEventListener('click', function () {
 	        console.log(Number(stockName.split('-')[1]).toFixed());
@@ -8005,13 +8119,13 @@
 	          return permissionList.stock[stockName].includes(permissionsStock[screen].toString()) ? [screen, 'checked'] : [screen, ''];
 	        });
 	        userStockPermissions.innerHTML = screens.map(function (screen) {
-	          return '\n          <div class="user-permissions-string">\n            <span>' + _permissions2.default.permissionEngToRus[screen[0]] + '</span>\n            <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsStock[screen[0]] + '" ' + screen[1] + '>\n          </div>';
+	          return '\n          <div class="user-permissions-string">\n            <span>' + _permissions2.default.permissionEngToRus[screen[0]] + '</span>\n            <div>\n              <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsStock[screen[0]] + '" ' + screen[1] + '>\n            </div>\n          </div>';
 	        }).join('');
 	      });
 	    });
 	    userOtherPermissions.innerHTML = Object.keys(permissionsOther).map(function (screen) {
 	      console.log(screen);
-	      return '\n      <div class="user-permissions-string">\n        <span>' + _permissions2.default.permissionEngToRus[screen] + '</span>\n\n        <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsOther[screen][0] + '" ' + (permissionList.other.includes(permissionsOther[screen][0].toString()) ? 'checked' : '') + '>\n        <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsOther[screen][1] + '" ' + (permissionList.other.includes(permissionsOther[screen][1].toString()) ? 'checked' : '') + '>\n      </div>';
+	      return '\n      <div class="user-permissions-string">\n        <span>' + _permissions2.default.permissionEngToRus[screen] + '</span>\n        <div>\n          <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsOther[screen][0] + '" ' + (permissionList.other.includes(permissionsOther[screen][0].toString()) ? 'checked' : '') + '>\n          <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsOther[screen][1] + '" ' + (permissionList.other.includes(permissionsOther[screen][1].toString()) ? 'checked' : '') + '>\n        </div>\n      </div>';
 	    }).join('');
 	  } else {
 	    userStockList.innerHTML = '';
@@ -8082,6 +8196,104 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// import uValid from './universal-validity-micro.js';
+	// import toolsMarkup from '../markup/tools.js';
+	
+	var docsList = document.querySelector('#list-docs-list');
+	var docsHeader = document.querySelector('#list-docs-header');
+	var docsBody = document.querySelector('#list-docs-body');
+	
+	// const docsReturnBtn = document.querySelector('#user-card-return-btn');
+	
+	
+	// ############################## РАЗМЕТКА ##############################
+	var markup = {
+	  getElement: function getElement(item, index) {
+	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-user-id="' + item.id + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n    </div>';
+	  },
+	  drawDataInContainer: function drawDataInContainer(docs, container, handler) {
+	    var _this = this;
+	
+	    docs.forEach(function (user, index) {
+	      container.insertAdjacentHTML('beforeend', _this.getElement(user, index));
+	      container.lastChild.addEventListener('click', function () {
+	        _storage2.default.currentUserId = user.id;
+	        handler();
+	      });
+	    });
+	  }
+	};
+	
+	// отрисовка списка групп по данным
+	var drawDocs = function drawDocs(users, container, handler) {
+	  container.innerHTML = '';
+	  if (users.length > 0) {
+	    markup.drawDataInContainer(users, container, handler);
+	  } else {
+	    container.innerHTML = 'Пользователей нет, все ушли на базу';
+	  }
+	};
+	
+	// обработчик клика по пользователю
+	var onDocClick = function onDocClick() {
+	  docsBody.classList.add('d-none');
+	  docsHeader.classList.add('d-none');
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.currentUserId + '/info',
+	    data: 'business=' + _storage2.default.data.currentBusiness + '&token=' + _storage2.default.data.token
+	    // callbackSuccess: onSuccessUserInfoLoad,
+	  };
+	};
+	
+	var onSuccessDocsLoad = function onSuccessDocsLoad(docsData) {
+	  console.log(docsData);
+	  drawDocs(docsData.data, docsBody, onDocClick);
+	};
+	
+	var getPoints = function getPoints() {
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/stock',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessDocsLoad
+	  };
+	};
+	
+	exports.default = {
+	  start: function start() {
+	    docsList.addEventListener('click', getPoints);
+	  },
+	
+	
+	  // redraw: getdebitCredit,
+	
+	  stop: function stop() {
+	    docsList.removeEventListener('click', getPoints);
+	  }
+	};
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _xhr = __webpack_require__(6);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
 	var _catalogCards = __webpack_require__(55);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
@@ -8090,11 +8302,11 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalog__cardsAddEdit = __webpack_require__(60);
+	var _catalog__cardsAddEdit = __webpack_require__(61);
 	
 	var _catalog__cardsAddEdit2 = _interopRequireDefault(_catalog__cardsAddEdit);
 	
-	var _catalog__cardsAddResource = __webpack_require__(61);
+	var _catalog__cardsAddResource = __webpack_require__(62);
 	
 	var _catalog__cardsAddResource2 = _interopRequireDefault(_catalog__cardsAddResource);
 	
@@ -8411,7 +8623,7 @@
 	};
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8432,7 +8644,7 @@
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalog__cards = __webpack_require__(59);
+	var _catalog__cards = __webpack_require__(60);
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
@@ -8545,7 +8757,7 @@
 	};
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8566,7 +8778,7 @@
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalog__cards = __webpack_require__(59);
+	var _catalog__cards = __webpack_require__(60);
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
@@ -8650,7 +8862,7 @@
 	};
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8687,11 +8899,11 @@
 	
 	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
-	var _singleValidation = __webpack_require__(63);
+	var _singleValidation = __webpack_require__(64);
 	
 	var _singleValidation2 = _interopRequireDefault(_singleValidation);
 	
-	var _catalog__searchBarcode = __webpack_require__(64);
+	var _catalog__searchBarcode = __webpack_require__(65);
 	
 	var _catalog__searchBarcode2 = _interopRequireDefault(_catalog__searchBarcode);
 	
@@ -8878,7 +9090,7 @@
 	};
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -8944,7 +9156,7 @@
 	};
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8957,7 +9169,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalog__searchBarcodeValid = __webpack_require__(65);
+	var _catalog__searchBarcodeValid = __webpack_require__(66);
 	
 	var _catalog__searchBarcodeValid2 = _interopRequireDefault(_catalog__searchBarcodeValid);
 	
@@ -8985,7 +9197,7 @@
 	};
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9010,7 +9222,7 @@
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
-	var _catalog__search = __webpack_require__(62);
+	var _catalog__search = __webpack_require__(63);
 	
 	var _catalog__search2 = _interopRequireDefault(_catalog__search);
 	
