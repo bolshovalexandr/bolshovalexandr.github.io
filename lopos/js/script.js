@@ -8016,7 +8016,7 @@
 	
 	  var setRequestToAddUser = function setRequestToAddUser() {
 	    _xhr2.default.request = {
-	      metod: 'PUT',
+	      metod: 'POST',
 	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId,
 	      data: 'token=' + _storage2.default.data.token,
 	      callbackSuccess: onSuccessAddUser
@@ -8198,42 +8198,67 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	var START_YEAR = 2015;
 	// import uValid from './universal-validity-micro.js';
 	// import toolsMarkup from '../markup/tools.js';
 	
 	var docsList = document.querySelector('#list-docs-list');
 	var docsHeader = document.querySelector('#list-docs-header');
 	var docsBody = document.querySelector('#list-docs-body');
+	var docsStocks = document.querySelector('#docs-stocks');
 	
+	var docsYear = document.querySelector('#docs-year');
+	var docsMonth = document.querySelector('#docs-month');
+	var docsDay = document.querySelector('#docs-day');
+	
+	var docsBillBtn = document.querySelector('#docs-bill-btn');
+	var docsBalanceBtn = document.querySelector('#docs-balance-btn');
 	// const docsReturnBtn = document.querySelector('#user-card-return-btn');
 	
 	
 	// ############################## РАЗМЕТКА ##############################
-	var markup = {
-	  getElement: function getElement(item, index) {
-	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-user-id="' + item.id + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n    </div>';
-	  },
-	  drawDataInContainer: function drawDataInContainer(docs, container, handler) {
-	    var _this = this;
+	/*
+	const markup = {
 	
-	    docs.forEach(function (user, index) {
-	      container.insertAdjacentHTML('beforeend', _this.getElement(user, index));
+	  getElement(item, index) {
+	    return `
+	    <div class="d-flex justify-content-between align-items-center reference-string" data-user-id="${item.id}">
+	      <div style="padding-left: 34px;">
+	        <span class="reference-row-number">${index + 1}</span>
+	        <span>${item.name}</span>
+	      </div>
+	    </div>`;
+	  },
+	
+	  drawDataInContainer(docs, container, handler) {
+	    docs.forEach((user, index) => {
+	      container.insertAdjacentHTML('beforeend', this.getElement(user, index));
 	      container.lastChild.addEventListener('click', function () {
-	        _storage2.default.currentUserId = user.id;
+	        auth.currentUserId = user.id;
 	        handler();
 	      });
 	    });
-	  }
+	  },
 	};
 	
 	// отрисовка списка групп по данным
-	var drawDocs = function drawDocs(users, container, handler) {
+	const drawDocs = (users, container, handler) => {
 	  container.innerHTML = '';
 	  if (users.length > 0) {
 	    markup.drawDataInContainer(users, container, handler);
 	  } else {
 	    container.innerHTML = 'Пользователей нет, все ушли на базу';
 	  }
+	};
+	*/
+	// ############################## ВЫСТАВЛЯЕМ ДАТЫ ##############################
+	var drawDates = function drawDates() {
+	  // `<option value="2017">2017</option>`
+	  var thisYear = new Date().getFullYear();
+	  for (var i = START_YEAR; i < thisYear; i++) {
+	    docsYear.insertAdjacentHTML('afterBegin', '<option value="' + i + '">' + i + '</option>');
+	  }
+	  docsYear.insertAdjacentHTML('afterBegin', '<option value="' + thisYear + ' selected">' + thisYear + '</option>');
 	};
 	
 	// обработчик клика по пользователю
@@ -8248,31 +8273,39 @@
 	  };
 	};
 	
-	var onSuccessDocsLoad = function onSuccessDocsLoad(docsData) {
+	var onSuccessStocksLoad = function onSuccessStocksLoad(docsData) {
 	  console.log(docsData);
-	  drawDocs(docsData.data, docsBody, onDocClick);
+	  docsStocks.innerHTML = docsData.data.map(function (item) {
+	    return '<option value="' + item.id + '" ' + (item.id === _storage2.default.data.currentStock ? 'selected' : '') + '>' + item.name + '</option>';
+	  }).join('');
+	  if (docsData.data.length > 1) {
+	    docsStocks.innerHTML += '<option value="all">Все склады</option';
+	  }
+	
+	  // drawDocs(docsData.data, docsBody, onDocClick);
 	};
 	
-	var getPoints = function getPoints() {
+	var getStocks = function getStocks() {
 	
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/stock',
 	    data: 'view_last=0&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessDocsLoad
+	    callbackSuccess: onSuccessStocksLoad
 	  };
 	};
 	
 	exports.default = {
 	  start: function start() {
-	    docsList.addEventListener('click', getPoints);
+	    docsList.addEventListener('click', getStocks);
+	    drawDates();
 	  },
 	
 	
 	  // redraw: getdebitCredit,
 	
 	  stop: function stop() {
-	    docsList.removeEventListener('click', getPoints);
+	    docsList.removeEventListener('click', getStocks);
 	  }
 	};
 
