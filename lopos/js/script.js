@@ -8008,10 +8008,7 @@
 	var addUser = function addUser() {
 	  var onSuccessAddUser = function onSuccessAddUser(answer) {
 	    console.log(answer);
-	    _tools2.default.informationtModal = {
-	      title: 'Уведомление',
-	      message: '\u0427\u0442\u043E-\u0442\u043E \u043F\u0440\u043E\u0438\u0437\u043E\u0448\u043B\u043E: ' + answer
-	    };
+	    getUsers();
 	  };
 	
 	  var setRequestToAddUser = function setRequestToAddUser() {
