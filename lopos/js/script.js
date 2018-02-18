@@ -138,11 +138,11 @@
 	
 	var _accounting__allDocs2 = _interopRequireDefault(_accounting__allDocs);
 	
-	var _catalog__cards = __webpack_require__(60);
+	var _catalog__cards = __webpack_require__(61);
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
-	var _catalog__search = __webpack_require__(63);
+	var _catalog__search = __webpack_require__(64);
 	
 	var _catalog__search2 = _interopRequireDefault(_catalog__search);
 	
@@ -561,6 +561,14 @@
 	
 	  get currentUserId() {
 	    return sessionStorage.getItem('currentUserId');
+	  },
+	
+	  set allDocsOperationType(type) {
+	    sessionStorage.setItem('allDocsOperationType', type);
+	  },
+	
+	  get allDocsOperationType() {
+	    return sessionStorage.getItem('allDocsOperationType');
 	  }
 	
 	};
@@ -8073,7 +8081,7 @@
 	});
 	
 	var onSuccessUserInfoLoad = function onSuccessUserInfoLoad(userData) {
-	  console.log(userData);
+	  console.log('userData --> ', userData);
 	  var permissionList = {
 	    stock: {},
 	    other: []
@@ -8083,7 +8091,8 @@
 	      status = _userData$data.status,
 	      id = _userData$data.id,
 	      color = _userData$data.color,
-	      permissions = _userData$data.operator_permissons;
+	      permissions = _userData$data.operator_permissons,
+	      allSocks = _userData$data.all_stocks;
 	
 	  userProfileName.innerHTML = name;
 	  userProfileStatus.innerHTML = status;
@@ -8091,26 +8100,47 @@
 	  userProfileImage.style.backgroundColor = '#' + color;
 	
 	  if (permissions) {
-	
+	    /*
+	    permissions.forEach((item) => {
+	      // permissionList.stock = item;
+	      if (item.stock === '00') {
+	        permissionList.other.push(item.code);
+	      } else if (permissionList.stock[`stock-${item.stock}`]) {
+	        permissionList.stock[`stock-${item.stock}`].push(item.code);
+	      } else {
+	        permissionList.stock[`stock-${item.stock}`] = [item.code];
+	      }
+	    });
+	    */
 	    permissions.forEach(function (item) {
 	      // permissionList.stock = item;
 	      if (item.stock === '00') {
 	        permissionList.other.push(item.code);
-	      } else if (permissionList.stock['stock-' + item.stock]) {
-	        permissionList.stock['stock-' + item.stock].push(item.code);
+	      } else if (permissionList.stock[item.stock]) {
+	        permissionList.stock[item.stock].push(item.code);
 	      } else {
-	        permissionList.stock['stock-' + item.stock] = [item.code];
+	        permissionList.stock[item.stock] = [item.code];
 	      }
 	    });
+	
 	    console.log(permissionList);
 	    var screenNamesStock = Object.keys(permissionsStock);
 	    userStockList.innerHTML = '';
 	    Object.keys(permissionList.stock).forEach(function (stockName) {
-	      userStockList.insertAdjacentHTML('beforeEnd', '<span class="user-permissions-stock">' + stockName + '</span>');
+	      var a = allSocks.find(function (item) {
+	        console.log(item.id);
+	        console.log(Number(stockName).toFixed());
+	        return item.id === Number(stockName).toFixed();
+	      });
+	      console.log(a);
+	      var stock = allSocks.find(function (item) {
+	        return item.id === Number(stockName).toFixed();
+	      });
+	      userStockList.insertAdjacentHTML('beforeEnd', '<span class="user-permissions-stock" data-stock-id=' + Number(stockName).toFixed() + '>' + (stock ? stock.name : '') + '</span>');
 	
 	      userStockList.lastChild.addEventListener('click', function () {
 	        console.log(Number(stockName.split('-')[1]).toFixed());
-	        _storage2.default.currentStockId = Number(stockName.split('-')[1]).toFixed();
+	        _storage2.default.currentStockId = Number(stockName).toFixed();
 	        onUserClick();
 	        var screens = screenNamesStock.map(function (screen) {
 	          return permissionList.stock[stockName].includes(permissionsStock[screen].toString()) ? [screen, 'checked'] : [screen, ''];
@@ -8193,9 +8223,14 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
+	var _universalBillsList = __webpack_require__(60);
+	
+	var _universalBillsList2 = _interopRequireDefault(_universalBillsList);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var START_YEAR = 2015;
+	
 	// import uValid from './universal-validity-micro.js';
 	// import toolsMarkup from '../markup/tools.js';
 	
@@ -8212,63 +8247,98 @@
 	var docsBalanceBtn = document.querySelector('#docs-balance-btn');
 	// const docsReturnBtn = document.querySelector('#user-card-return-btn');
 	
+	// ############################## ЗАГРУЖАЕМ ДОКУМЕНТЫ ##############################
+	var onSuccessBillsGet = function onSuccessBillsGet(billsData) {
+	  console.log(billsData);
 	
-	// ############################## РАЗМЕТКА ##############################
-	/*
-	const markup = {
+	  docsBody.innerHTML = '';
+	  if (billsData.data.length > 0) {
 	
-	  getElement(item, index) {
-	    return `
-	    <div class="d-flex justify-content-between align-items-center reference-string" data-user-id="${item.id}">
-	      <div style="padding-left: 34px;">
-	        <span class="reference-row-number">${index + 1}</span>
-	        <span>${item.name}</span>
-	      </div>
-	    </div>`;
-	  },
-	
-	  drawDataInContainer(docs, container, handler) {
-	    docs.forEach((user, index) => {
-	      container.insertAdjacentHTML('beforeend', this.getElement(user, index));
-	      container.lastChild.addEventListener('click', function () {
-	        auth.currentUserId = user.id;
-	        handler();
-	      });
-	    });
-	  },
-	};
-	
-	// отрисовка списка групп по данным
-	const drawDocs = (users, container, handler) => {
-	  container.innerHTML = '';
-	  if (users.length > 0) {
-	    markup.drawDataInContainer(users, container, handler);
+	    if (billsData.data[0].month_number) {
+	      _universalBillsList2.default.drawYear(billsData.data, docsBody, null);
+	    } else if (billsData.data[0].day_number) {
+	      _universalBillsList2.default.drawMonth(billsData.data, docsBody, null);
+	    } else if (billsData.data[0].stock_name && _storage2.default.allDocsOperationType === 'naklad') {
+	      _universalBillsList2.default.drawDay(billsData.data, docsBody, null);
+	    } else if (billsData.data[0].stock_name && _storage2.default.allDocsOperationType === 'balance') {
+	      _universalBillsList2.default.drawDayBalance(billsData.data, docsBody, null);
+	    }
 	  } else {
-	    container.innerHTML = 'Пользователей нет, все ушли на базу';
+	    docsBody.innerHTML = _storage2.default.allDocsOperationType === 'naklad' ? 'Накладных нет' : 'Балансовых операций нет';
 	  }
 	};
-	*/
-	// ############################## ВЫСТАВЛЯЕМ ДАТЫ ##############################
-	var drawDates = function drawDates() {
-	  // `<option value="2017">2017</option>`
-	  var thisYear = new Date().getFullYear();
-	  for (var i = START_YEAR; i < thisYear; i++) {
-	    docsYear.insertAdjacentHTML('afterBegin', '<option value="' + i + '">' + i + '</option>');
-	  }
-	  docsYear.insertAdjacentHTML('afterBegin', '<option value="' + thisYear + ' selected">' + thisYear + '</option>');
-	};
-	
-	// обработчик клика по пользователю
-	var onDocClick = function onDocClick() {
-	  docsBody.classList.add('d-none');
-	  docsHeader.classList.add('d-none');
+	var getDocs = function getDocs(year, month, day, type) {
+	  var interval = 'year/' + year + (month !== 'all' ? '/month/' + (+month + 1) : '') + (day !== 'all' ? '/day/' + day : '');
 	  _xhr2.default.request = {
 	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.currentUserId + '/info',
-	    data: 'business=' + _storage2.default.data.currentBusiness + '&token=' + _storage2.default.data.token
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/documents/' + _storage2.default.allDocsOperationType + '/' + interval,
+	    data: 'token=' + _storage2.default.data.token + (_storage2.default.currentStockId ? '&stock=' + _storage2.default.currentStockId : ''),
+	    callbackSuccess: onSuccessBillsGet
+	  };
+	};
+	// ############################## ВЫСТАВЛЯЕМ ДАТЫ ##############################
+	var drawDates = function drawDates(year, month, day) {
+	  var thisYear = new Date().getFullYear();
+	  var thisMonth = month || new Date().getMonth();
+	  var numberOfDays = 33 - new Date(thisYear, thisMonth, 33).getDate();
+	
+	  docsYear.innerHTML = '';
+	  docsDay.innerHTML = '';
+	
+	  for (var i = START_YEAR; i <= thisYear; i++) {
+	    docsYear.insertAdjacentHTML('afterBegin', '<option value="' + i + '">' + i + '</option>');
+	  }
+	
+	  for (var _i = 1; _i <= numberOfDays; _i++) {
+	    var currentDayNumber = new Date(thisYear, thisMonth, _i).getUTCDay();
+	    var holidayFlag = currentDayNumber === 5 || currentDayNumber === 6 ? 'class="text-danger"' : '';
+	    docsDay.insertAdjacentHTML('afterBegin', '<option value="' + _i + '" ' + holidayFlag + '>' + _i + '</option>');
+	  }
+	  docsDay.insertAdjacentHTML('afterBegin', '<option value="all">---------</option>');
+	
+	  docsYear.value = year || thisYear;
+	  docsMonth.value = thisMonth;
+	  docsDay.value = day || new Date().getUTCDate();
+	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	};
+	
+	docsYear.addEventListener('change', function (evt) {
+	  return drawDates(evt.target.value, 'all', 'all');
+	});
+	docsMonth.addEventListener('change', function (evt) {
+	  return drawDates(docsYear.value, evt.target.value, 'all');
+	});
+	docsDay.addEventListener('change', function (evt) {
+	  return drawDates(docsYear.value, docsMonth.value, evt.target.value);
+	});
+	docsStocks.addEventListener('change', function (evt) {
+	  _storage2.default.currentStockId = evt.target.value;
+	  drawDates(docsYear.value, docsMonth.value, docsDay.value);
+	});
+	
+	docsBillBtn.addEventListener('click', function () {
+	  _storage2.default.allDocsOperationType = 'naklad';
+	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	});
+	
+	docsBalanceBtn.addEventListener('click', function () {
+	  _storage2.default.allDocsOperationType = 'balance';
+	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	});
+	
+	// обработчик клика по пользователю
+	/*
+	const onDocClick = () => {
+	  docsBody.classList.add('d-none');
+	  docsHeader.classList.add('d-none');
+	  xhr.request = {
+	    metod: 'POST',
+	    url: `lopos_directory/${auth.data.directory}/operator/${auth.currentUserId}/info`,
+	    data: `business=${auth.data.currentBusiness}&token=${auth.data.token}`,
 	    // callbackSuccess: onSuccessUserInfoLoad,
 	  };
 	};
+	*/
 	
 	var onSuccessStocksLoad = function onSuccessStocksLoad(docsData) {
 	  console.log(docsData);
@@ -8296,6 +8366,8 @@
 	  start: function start() {
 	    docsList.addEventListener('click', getStocks);
 	    drawDates();
+	    getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	    _storage2.default.allDocsOperationType = 'naklad';
 	  },
 	
 	
@@ -8308,6 +8380,101 @@
 
 /***/ }),
 /* 60 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	// import auth from '../tools/storage.js';
+	
+	var BillTypes = {
+	  'type0': 'suppliers',
+	  'type1': 'admission',
+	  'type2': 'buyers',
+	  'type3': 'sale',
+	  'type8': 'ic_my_production'
+	};
+	
+	var getYearElement = function getYearElement(item, index) {
+	  return '\n  <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n    <div class="media">\n      <div class="media-body">\n        <b> \u041D\u043E\u043C\u0435\u0440 \u043C\u0435\u0441\u044F\u0446\u0430: </b>' + item.month_number + '\n        <b> \u0412\u0440\u0435\u043C\u044F (\u043F\u0435\u0440\u0432\u0430\u044F) </b>' + new Date(+(item.doc_time_first + '000')).toLocaleString() + '\n        <b> \u0412\u0440\u0435\u043C\u044F (\u043F\u043E\u0441\u043B\u0435\u0434\u043D\u044F\u044F) </b>' + new Date(+(item.doc_time_last + '000')).toLocaleString() + '\n        <b> \u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u0432: </b>' + item.count_documents + '\n        <b> \u0412\u0441\u0435\u0433\u043E: </b>' + item.total + '\n      </div>\n    </div>';
+	};
+	
+	var getMonthElement = function getMonthElement(item, index) {
+	  return '\n  <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n    <div class="media">\n      <div class="media-body">\n        <b> \u041D\u043E\u043C\u0435\u0440 \u0434\u043D\u044F: </b>' + item.day_number + '\n        <b> \u0412\u0440\u0435\u043C\u044F (\u043F\u0435\u0440\u0432\u0430\u044F) </b>' + new Date(+(item.doc_time_first + '000')).toLocaleString() + '\n        <b> \u0412\u0440\u0435\u043C\u044F (\u043F\u043E\u0441\u043B\u0435\u0434\u043D\u044F\u044F) </b>' + new Date(+(item.doc_time_last + '000')).toLocaleString() + '\n        <b> \u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u0432: </b>' + item.count_documents + '\n      </div>\n    </div>';
+	};
+	var getDayElement = function getDayElement(item, index) {
+	  return '\n  <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n    <div class="media">\n      <img class="mr-3" src="img/' + BillTypes['type' + item.type] + '.png" width="30" alt="Generic placeholder image">\n      <div class="media-body">\n        <b>ID: </b>' + item.id + '\n        <b> \u0421\u0442\u0430\u0442\u0443\u0441: </b>' + item.status + '\n        <b> ID \u0441\u043A\u043B\u0430\u0434\u0430: </b>' + item.stock_id + '\n        <b> \u0418\u043C\u044F \u0441\u043A\u043B\u0430\u0434\u0430: </b>' + item.stock_name + '\n        <b> \u0412\u0440\u0435\u043C\u044F: </b>' + new Date(+(item.time + '000')).toLocaleString() + '\n        <b> \u0412\u0441\u0435\u0433\u043E: </b>' + item.total + '\n        <b> \u0422\u0438\u043F: </b>' + item.type + '\n      </div>\n    </div>';
+	};
+	var getDayBalanceElement = function getDayBalanceElement(item, index) {
+	  return '\n  <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n    <div class="media">\n\n      <div class="media-body">\n        <b>ID: </b>' + item.id + '\n        <b> ID \u0441\u043A\u043B\u0430\u0434\u0430: </b>' + item.stock_id + '\n        <b> \u0418\u043C\u044F \u0441\u043A\u043B\u0430\u0434\u0430: </b>' + item.stock_name + '\n        <b> \u0412\u0440\u0435\u043C\u044F: </b>' + new Date(+(item.time + '000')).toLocaleString() + '\n        <b> \u0412\u0441\u0435\u0433\u043E: </b>' + item.total + '\n        <b> \u041A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439: </b>' + item.comment + '\n        <b> \u041E\u0441\u043D\u043E\u0432\u0430\u043D\u0438\u0435: </b>' + item.reason + '\n      </div>\n    </div>';
+	};
+	
+	var markup = {
+	  drawBillsYear: function drawBillsYear(billsData, container, handler) {
+	    billsData.forEach(function (group, index) {
+	      container.insertAdjacentHTML('beforeend', getYearElement(group, index));
+	      /*
+	      container.lastChild.addEventListener('click', function () {
+	        auth.currentGroupId = group.id;
+	        auth.currentGroupName = group.name;
+	        auth.currentGroupLevel = group.level;
+	        handler();
+	      });
+	      */
+	    });
+	  },
+	  drawBillsMonth: function drawBillsMonth(billsData, container, handler) {
+	    billsData.forEach(function (bill, index) {
+	      container.insertAdjacentHTML('beforeend', getMonthElement(bill, index));
+	      /*
+	      container.lastChild.addEventListener('click', function () {
+	        auth.currentGroupId = group.id;
+	        auth.currentGroupName = group.name;
+	        auth.currentGroupLevel = group.level;
+	        handler();
+	      });
+	      */
+	    });
+	  },
+	  drawBillsDay: function drawBillsDay(billsData, container, handler) {
+	    billsData.forEach(function (bill, index) {
+	      container.insertAdjacentHTML('beforeend', getDayElement(bill, index));
+	      /*
+	      container.lastChild.addEventListener('click', function () {
+	        auth.currentGroupId = group.id;
+	        auth.currentGroupName = group.name;
+	        auth.currentGroupLevel = group.level;
+	        handler();
+	      });
+	      */
+	    });
+	  },
+	  drawBalanceDay: function drawBalanceDay(billsData, container, handler) {
+	    billsData.forEach(function (bill, index) {
+	      container.insertAdjacentHTML('beforeend', getDayBalanceElement(bill, index));
+	      /*
+	      container.lastChild.addEventListener('click', function () {
+	        auth.currentGroupId = group.id;
+	        auth.currentGroupName = group.name;
+	        auth.currentGroupLevel = group.level;
+	        handler();
+	      });
+	      */
+	    });
+	  }
+	};
+	
+	exports.default = {
+	  drawYear: markup.drawBillsYear,
+	  drawMonth: markup.drawBillsMonth,
+	  drawDay: markup.drawBillsDay,
+	  drawDayBalance: markup.drawBalanceDay
+	};
+
+/***/ }),
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8332,11 +8499,11 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalog__cardsAddEdit = __webpack_require__(61);
+	var _catalog__cardsAddEdit = __webpack_require__(62);
 	
 	var _catalog__cardsAddEdit2 = _interopRequireDefault(_catalog__cardsAddEdit);
 	
-	var _catalog__cardsAddResource = __webpack_require__(62);
+	var _catalog__cardsAddResource = __webpack_require__(63);
 	
 	var _catalog__cardsAddResource2 = _interopRequireDefault(_catalog__cardsAddResource);
 	
@@ -8653,7 +8820,7 @@
 	};
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8674,7 +8841,7 @@
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalog__cards = __webpack_require__(60);
+	var _catalog__cards = __webpack_require__(61);
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
@@ -8787,7 +8954,7 @@
 	};
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8808,7 +8975,7 @@
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalog__cards = __webpack_require__(60);
+	var _catalog__cards = __webpack_require__(61);
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
@@ -8892,7 +9059,7 @@
 	};
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8929,11 +9096,11 @@
 	
 	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
-	var _singleValidation = __webpack_require__(64);
+	var _singleValidation = __webpack_require__(65);
 	
 	var _singleValidation2 = _interopRequireDefault(_singleValidation);
 	
-	var _catalog__searchBarcode = __webpack_require__(65);
+	var _catalog__searchBarcode = __webpack_require__(66);
 	
 	var _catalog__searchBarcode2 = _interopRequireDefault(_catalog__searchBarcode);
 	
@@ -9120,7 +9287,7 @@
 	};
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -9186,7 +9353,7 @@
 	};
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9199,7 +9366,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalog__searchBarcodeValid = __webpack_require__(66);
+	var _catalog__searchBarcodeValid = __webpack_require__(67);
 	
 	var _catalog__searchBarcodeValid2 = _interopRequireDefault(_catalog__searchBarcodeValid);
 	
@@ -9227,7 +9394,7 @@
 	};
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9252,7 +9419,7 @@
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
-	var _catalog__search = __webpack_require__(63);
+	var _catalog__search = __webpack_require__(64);
 	
 	var _catalog__search2 = _interopRequireDefault(_catalog__search);
 	
