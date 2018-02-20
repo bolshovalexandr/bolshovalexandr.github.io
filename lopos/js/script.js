@@ -569,6 +569,14 @@
 	
 	  get allDocsOperationType() {
 	    return sessionStorage.getItem('allDocsOperationType');
+	  },
+	
+	  set currentBillId(id) {
+	    sessionStorage.setItem('currentBillId', id);
+	  },
+	
+	  get currentBillId() {
+	    return sessionStorage.getItem('currentBillId');
 	  }
 	
 	};
@@ -8227,15 +8235,19 @@
 	
 	var _universalBillsList2 = _interopRequireDefault(_universalBillsList);
 	
+	var _tools = __webpack_require__(7);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var START_YEAR = 2015;
-	
+	// import goods from './universal-goods-list.js';
 	// import uValid from './universal-validity-micro.js';
-	// import toolsMarkup from '../markup/tools.js';
+	
 	
 	var docsList = document.querySelector('#list-docs-list');
-	var docsHeader = document.querySelector('#list-docs-header');
+	// const docsHeader = document.querySelector('#list-docs-header');
 	var docsBody = document.querySelector('#list-docs-body');
 	var docsStocks = document.querySelector('#docs-stocks');
 	
@@ -8246,8 +8258,202 @@
 	var docsBillBtn = document.querySelector('#docs-bill-btn');
 	var docsBalanceBtn = document.querySelector('#docs-balance-btn');
 	// const docsReturnBtn = document.querySelector('#user-card-return-btn');
+	var billCard = document.querySelector('#bill-card');
+	
+	var billCardType = document.querySelector('#bill-card-type');
+	var billCardStock = document.querySelector('#bill-card-stock');
+	var billCardId = document.querySelector('#bill-card-id');
+	var billCardTime = document.querySelector('#bill-card-time');
+	var billCardUser = document.querySelector('#bill-card-user');
+	var billCardGoods = document.querySelector('#bill-card-goods');
+	var billDeliveryBtn = document.querySelector('#bill-delivery-btn');
+	var billDeleteBtn = document.querySelector('#bill-delete-btn');
+	
+	var balanceCard = document.querySelector('#balance-act-card');
+	
+	var balanceCardStock = document.querySelector('#balance-act-card-stock');
+	var balanceCardId = document.querySelector('#balance-act-card-id');
+	var balanceCardUser = document.querySelector('#balance-act-card-user');
+	var balanceCardTime = document.querySelector('#balance-act-card-time');
+	var balanceCardTotal = document.querySelector('#balance-act-total');
+	var balanceCardReason = document.querySelector('#balance-act-reason');
+	var balanceCardComment = document.querySelector('#balance-act-comment');
+	var balanceDeleteBtn = document.querySelector('#balance-act-delete-btn');
+	
+	// ############################## РАЗМЕТКА ТОВАРОВ #############
+	var getGoodString = function getGoodString(item, index) {
+	  return '\n  <div class="goods-string"">\n    <div>\n      <span class="reference-row-number">' + (index + 1) + '</span> <span>\u2116 ' + item.good + '</span>\n    </div>\n    <div>\n      ' + Number(item.count).toFixed(2) + ' x ' + Number(item.price).toFixed(2) + ' = ' + Number(item.count).toFixed(2) * Number(item.price).toFixed(2) + '\n    </div>\n  </div>';
+	};
+	
+	// ############################## ОБРАБОТЧИКИ КЛИКОВ ПРИ ВЫВОДЕ ЗА ДЕНЬ#############
+	// let billStatus = '';
+	
+	var onSuccessBillGet = function onSuccessBillGet(answer) {
+	  console.log(answer);
+	  var _answer$data = answer.data,
+	      id = _answer$data.id,
+	      operatorName = _answer$data.operator_name,
+	      stockName = _answer$data.stock_name,
+	      time = _answer$data.time,
+	      type = _answer$data.type,
+	      goodsContent = _answer$data.content;
+	  // billStatus = status;
+	
+	  billCardStock.innerHTML = stockName;
+	  billCardType.src = 'img/' + _universalBillsList2.default.BillTypes['type' + type] + '.png';
+	  billCardId.innerHTML = '№' + id;
+	  billCardTime.innerHTML = '|| ' + new Date(+(time + '000')).toLocaleString();
+	  billCardUser.title = operatorName;
+	
+	  goodsContent.forEach(function (good, index) {
+	    return billCardGoods.insertAdjacentHTML('beforeend', getGoodString(good, index));
+	  });
+	  if (+type === 0 || +type === 2) {
+	    billDeliveryBtn.classList.remove('d-none');
+	  } else {
+	    billDeliveryBtn.classList.add('d-none');
+	  }
+	  $(billCard).modal('show');
+	};
+	
+	// ############################## УДАЛЕНИЕ НАКЛАДНОЙ #############
+	var onSuccessBillDelete = function onSuccessBillDelete(answer) {
+	  console.log(answer);
+	
+	  // onListEnterprisesCardReturnBtn();
+	  $(billCard).modal('hide');
+	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	
+	  _tools2.default.informationtModal = {
+	    title: 'Уведомление',
+	    message: 'Накладная успешно удалена'
+	  };
+	};
+	
+	var setRequestToDeleteBill = function setRequestToDeleteBill() {
+	  _xhr2.default.request = {
+	    metod: 'DELETE',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.currentEnterpriseId + '/' + _storage2.default.allDocsOperationType + '/' + _storage2.default.currentBillId,
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessBillDelete
+	  };
+	};
+	
+	billDeleteBtn.addEventListener('click', function () {
+	
+	  _tools2.default.actionRequestModal = {
+	    title: 'Удаление',
+	    message: '\u0412\u044B \u0442\u043E\u0447\u043D\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u043D\u0430\u043A\u043B\u0430\u0434\u043D\u0443\u044E <b>' + _storage2.default.currentBillId + '</b>?',
+	    submitCallback: setRequestToDeleteBill
+	  };
+	});
+	
+	// ############################## ЗАВЕРШЕНИЕ ДОСТАВКИ #############
+	var onSuccessBillDelivery = function onSuccessBillDelivery(answer) {
+	  console.log(answer);
+	
+	  // onListEnterprisesCardReturnBtn();
+	  $(billCard).modal('hide');
+	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	
+	  _tools2.default.informationtModal = {
+	    title: 'Уведомление',
+	    message: 'Накладная успешно доставлена'
+	  };
+	};
+	
+	var setRequestToDeliveryBill = function setRequestToDeliveryBill() {
+	  _xhr2.default.request = {
+	    metod: 'PUT',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.currentEnterpriseId + '/' + _storage2.default.allDocsOperationType + '/' + _storage2.default.currentBillId,
+	    data: 'status=3&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessBillDelivery
+	  };
+	};
+	
+	billDeliveryBtn.addEventListener('click', function () {
+	
+	  _tools2.default.actionRequestModal = {
+	    title: 'Удаление',
+	    message: '\u0412\u044B \u0443\u0432\u0435\u0440\u0435\u043D\u044B, \u0447\u0442\u043E \u0434\u043E\u0441\u0442\u0430\u0432\u043A\u0430 \u043F\u043E \u0434\u0430\u043D\u043D\u043E\u0439 \u043D\u0430\u043A\u043B\u0430\u0434\u043D\u043E\u0439 <b>' + _storage2.default.currentBillId + '</b> \u043E\u043A\u043E\u043D\u0447\u0435\u043D\u0430? (\u0434\u0430\u043D\u043D\u043E\u0435 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u044F\u0432\u043B\u044F\u0435\u0442\u0441\u044F \u0431\u0435\u0437\u0432\u043E\u0437\u0432\u0440\u0430\u0442\u043D\u044B\u043C)',
+	    submitCallback: setRequestToDeliveryBill
+	  };
+	});
+	
+	var onBillClick = function onBillClick(id) {
+	  // auth.currentBillId = id;
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/' + _storage2.default.allDocsOperationType + '/' + _storage2.default.currentBillId + '/info',
+	    data: 'token=' + _storage2.default.data.token + (_storage2.default.currentStockId ? '&stock=' + _storage2.default.currentStockId : ''),
+	    callbackSuccess: onSuccessBillGet
+	  };
+	};
+	// ############################## УДАЛЕНИЕ БАЛАНСОВОЙ ОПЕРАЦИИ #############
+	var onSuccessBalanceDelete = function onSuccessBalanceDelete(answer) {
+	  console.log(answer);
+	
+	  $(balanceCard).modal('hide');
+	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	
+	  _tools2.default.informationtModal = {
+	    title: 'Уведомление',
+	    message: 'Балансова операция успешно удалена'
+	  };
+	};
+	
+	var setRequestToDeleteBalance = function setRequestToDeleteBalance() {
+	  _xhr2.default.request = {
+	    metod: 'DELETE',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.currentEnterpriseId + '/balance_act/' + _storage2.default.currentBillId,
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessBalanceDelete
+	  };
+	};
+	
+	balanceDeleteBtn.addEventListener('click', function () {
+	
+	  _tools2.default.actionRequestModal = {
+	    title: 'Удаление',
+	    message: '\u0412\u044B \u0442\u043E\u0447\u043D\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u0431\u0430\u043B\u0430\u043D\u0441\u043E\u0432\u0443\u044E \u043E\u043F\u0435\u0440\u0430\u0446\u0438\u044E <b>' + _storage2.default.currentBillId + '</b>?',
+	    submitCallback: setRequestToDeleteBalance
+	  };
+	});
+	
+	var onSuccessBalanceGet = function onSuccessBalanceGet(answer) {
+	  console.log(answer);
+	  var _answer$data2 = answer.data,
+	      id = _answer$data2.id,
+	      comment = _answer$data2.comment,
+	      reasonName = _answer$data2.reason_name,
+	      operatorName = _answer$data2.operator_name,
+	      stockName = _answer$data2.stock_name,
+	      time = _answer$data2.time,
+	      value = _answer$data2.value;
+	
+	  balanceCardStock.innerHTML = stockName;
+	  balanceCardTotal.innerHTML = value;
+	  balanceCardReason.innerHTML = reasonName;
+	  balanceCardComment.innerHTML = comment;
+	  balanceCardId.innerHTML = '№' + id;
+	  balanceCardTime.innerHTML = '|| ' + new Date(+(time + '000')).toLocaleString();
+	  balanceCardUser.title = operatorName;
+	
+	  $(balanceCard).modal('show');
+	};
+	
+	var onBalanceActClick = function onBalanceActClick() {
+	  console.log('hi');
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/balance_act/' + _storage2.default.currentBillId + '/info',
+	    data: 'token=' + _storage2.default.data.token + (_storage2.default.currentStockId ? '&stock=' + _storage2.default.currentStockId : ''),
+	    callbackSuccess: onSuccessBalanceGet
+	  };
+	};
 	
 	// ############################## ЗАГРУЖАЕМ ДОКУМЕНТЫ ##############################
+	
 	var onSuccessBillsGet = function onSuccessBillsGet(billsData) {
 	  console.log(billsData);
 	
@@ -8259,9 +8465,9 @@
 	    } else if (billsData.data[0].day_number) {
 	      _universalBillsList2.default.drawMonth(billsData.data, docsBody, null);
 	    } else if (billsData.data[0].stock_name && _storage2.default.allDocsOperationType === 'naklad') {
-	      _universalBillsList2.default.drawDay(billsData.data, docsBody, null);
+	      _universalBillsList2.default.drawDay(billsData.data, docsBody, onBillClick);
 	    } else if (billsData.data[0].stock_name && _storage2.default.allDocsOperationType === 'balance') {
-	      _universalBillsList2.default.drawDayBalance(billsData.data, docsBody, null);
+	      _universalBillsList2.default.drawDayBalance(billsData.data, docsBody, onBalanceActClick);
 	    }
 	  } else {
 	    docsBody.innerHTML = _storage2.default.allDocsOperationType === 'naklad' ? 'Накладных нет' : 'Балансовых операций нет';
@@ -8326,20 +8532,6 @@
 	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
 	});
 	
-	// обработчик клика по пользователю
-	/*
-	const onDocClick = () => {
-	  docsBody.classList.add('d-none');
-	  docsHeader.classList.add('d-none');
-	  xhr.request = {
-	    metod: 'POST',
-	    url: `lopos_directory/${auth.data.directory}/operator/${auth.currentUserId}/info`,
-	    data: `business=${auth.data.currentBusiness}&token=${auth.data.token}`,
-	    // callbackSuccess: onSuccessUserInfoLoad,
-	  };
-	};
-	*/
-	
 	var onSuccessStocksLoad = function onSuccessStocksLoad(docsData) {
 	  console.log(docsData);
 	  docsStocks.innerHTML = docsData.data.map(function (item) {
@@ -8380,14 +8572,19 @@
 
 /***/ }),
 /* 60 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	// import auth from '../tools/storage.js';
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var BillTypes = {
 	  'type0': 'suppliers',
@@ -8441,27 +8638,30 @@
 	  drawBillsDay: function drawBillsDay(billsData, container, handler) {
 	    billsData.forEach(function (bill, index) {
 	      container.insertAdjacentHTML('beforeend', getDayElement(bill, index));
-	      /*
+	
 	      container.lastChild.addEventListener('click', function () {
-	        auth.currentGroupId = group.id;
-	        auth.currentGroupName = group.name;
-	        auth.currentGroupLevel = group.level;
+	        // auth.currentGroupId = group.id;
+	        // auth.currentGroupName = group.name;
+	        _storage2.default.currentBillId = bill.id;
+	        // handler(bill.id);
 	        handler();
 	      });
-	      */
 	    });
 	  },
 	  drawBalanceDay: function drawBalanceDay(billsData, container, handler) {
 	    billsData.forEach(function (bill, index) {
 	      container.insertAdjacentHTML('beforeend', getDayBalanceElement(bill, index));
-	      /*
+	
 	      container.lastChild.addEventListener('click', function () {
+	        /*
 	        auth.currentGroupId = group.id;
 	        auth.currentGroupName = group.name;
 	        auth.currentGroupLevel = group.level;
+	        */
+	        _storage2.default.currentBillId = bill.id;
+	        // handler(bill.id);
 	        handler();
 	      });
-	      */
 	    });
 	  }
 	};
@@ -8470,7 +8670,8 @@
 	  drawYear: markup.drawBillsYear,
 	  drawMonth: markup.drawBillsMonth,
 	  drawDay: markup.drawBillsDay,
-	  drawDayBalance: markup.drawBalanceDay
+	  drawDayBalance: markup.drawBalanceDay,
+	  BillTypes: BillTypes
 	};
 
 /***/ }),
