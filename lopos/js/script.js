@@ -8478,7 +8478,7 @@
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/documents/' + _storage2.default.allDocsOperationType + '/' + interval,
-	    data: 'token=' + _storage2.default.data.token + (_storage2.default.currentStockId ? '&stock=' + _storage2.default.currentStockId : ''),
+	    data: 'token=' + _storage2.default.data.token + (_storage2.default.currentStockId !== 'all' ? '&stock=' + _storage2.default.currentStockId : ''),
 	    callbackSuccess: onSuccessBillsGet
 	  };
 	};
@@ -8535,10 +8535,10 @@
 	var onSuccessStocksLoad = function onSuccessStocksLoad(docsData) {
 	  console.log(docsData);
 	  docsStocks.innerHTML = docsData.data.map(function (item) {
-	    return '<option value="' + item.id + '" ' + (item.id === _storage2.default.data.currentStock ? 'selected' : '') + '>' + item.name + '</option>';
+	    return '<option value="' + item.id + '">' + item.name + '</option>';
 	  }).join('');
 	  if (docsData.data.length > 1) {
-	    docsStocks.innerHTML += '<option value="all">Все склады</option';
+	    docsStocks.innerHTML += '<option value="all" selected>Все склады</option';
 	  }
 	
 	  // drawDocs(docsData.data, docsBody, onDocClick);
