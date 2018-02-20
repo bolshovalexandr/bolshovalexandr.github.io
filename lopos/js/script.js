@@ -201,6 +201,7 @@
 	
 	// ========== ОБНОВЛЕНИЕ/ОТКРЫТИЕ СТРАНИЦЫ ==========
 	var start = function start() {
+	  _storage2.default.goodsViewMode = 'string';
 	  if (_storage2.default.isSetFlag) {
 	    showAppHideLogin();
 	    initMarkup();
@@ -5483,6 +5484,7 @@
 	    universalSort(_storage2.default.goodsSortMode);
 	  }
 	  _storage2.default.goodsViewMode = _storage2.default.goodsViewMode === 'null' ? 'string' : _storage2.default.goodsViewMode;
+	  console.log('hihi');
 	  _universalGoodsList2.default.draw(goodsData.data, groupGoodsBody, onGoodClick);
 	};
 	
@@ -6672,6 +6674,7 @@
 	var drawGoods = function drawGoods(goodsList, container, handler, viewFlag) {
 	  console.log(goodsList);
 	  if (_storage2.default.goodsViewMode === 'string' || viewFlag === 'string') {
+	    console.log('hihihi');
 	    markup.drawGoodsTable(goodsList, container, handler);
 	  } else if (_storage2.default.goodsViewMode === 'metro') {
 	    markup.drawGoodsMetro(goodsList, container, handler);
@@ -8108,20 +8111,9 @@
 	  userProfileImage.style.backgroundColor = '#' + color;
 	
 	  if (permissions) {
-	    /*
-	    permissions.forEach((item) => {
-	      // permissionList.stock = item;
-	      if (item.stock === '00') {
-	        permissionList.other.push(item.code);
-	      } else if (permissionList.stock[`stock-${item.stock}`]) {
-	        permissionList.stock[`stock-${item.stock}`].push(item.code);
-	      } else {
-	        permissionList.stock[`stock-${item.stock}`] = [item.code];
-	      }
-	    });
-	    */
+	
 	    permissions.forEach(function (item) {
-	      // permissionList.stock = item;
+	
 	      if (item.stock === '00') {
 	        permissionList.other.push(item.code);
 	      } else if (permissionList.stock[item.stock]) {
@@ -8133,41 +8125,54 @@
 	
 	    console.log(permissionList);
 	    var screenNamesStock = Object.keys(permissionsStock);
-	    userStockList.innerHTML = '';
+	
+	    var drawAccessForStock = function drawAccessForStock(accessList) {
+	      return '\n          <div class="user-permissions-string">\n            <span>' + _permissions2.default.permissionEngToRus[accessList[0]] + '</span>\n            <div>\n              <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsStock[accessList[0]] + '" ' + accessList[1] + '>\n            </div>\n          </div>';
+	    };
+	
 	    Object.keys(permissionList.stock).forEach(function (stockName) {
-	      var a = allSocks.find(function (item) {
-	        console.log(item.id);
-	        console.log(Number(stockName).toFixed());
-	        return item.id === Number(stockName).toFixed();
-	      });
-	      console.log(a);
+	
 	      var stock = allSocks.find(function (item) {
 	        return item.id === Number(stockName).toFixed();
 	      });
 	      userStockList.insertAdjacentHTML('beforeEnd', '<span class="user-permissions-stock" data-stock-id=' + Number(stockName).toFixed() + '>' + (stock ? stock.name : '') + '</span>');
 	
+	      var screens = screenNamesStock.map(function (screen) {
+	        return permissionList.stock[stockName].includes(permissionsStock[screen].toString()) ? [screen, 'checked'] : [screen, ''];
+	      });
+	      drawAccessForStock(screens[0]);
+	
 	      userStockList.lastChild.addEventListener('click', function () {
 	        console.log(Number(stockName.split('-')[1]).toFixed());
 	        _storage2.default.currentStockId = Number(stockName).toFixed();
 	        onUserClick();
-	        var screens = screenNamesStock.map(function (screen) {
-	          return permissionList.stock[stockName].includes(permissionsStock[screen].toString()) ? [screen, 'checked'] : [screen, ''];
-	        });
-	        userStockPermissions.innerHTML = screens.map(function (screen) {
-	          return '\n          <div class="user-permissions-string">\n            <span>' + _permissions2.default.permissionEngToRus[screen[0]] + '</span>\n            <div>\n              <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsStock[screen[0]] + '" ' + screen[1] + '>\n            </div>\n          </div>';
-	        }).join('');
+	        console.log('screens-->', screens);
+	
+	        userStockPermissions.innerHTML = screens.map(drawAccessForStock).join('');
+	        /*
+	        userStockPermissions.innerHTML = screens.map((screen) => `
+	          <div class="user-permissions-string">
+	            <span>${permissionsModule.permissionEngToRus[screen[0]]}</span>
+	            <div>
+	              <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="${permissionsStock[screen[0]]}" ${screen[1]}>
+	            </div>
+	          </div>`).join('');
+	        */
 	      });
 	    });
 	    userOtherPermissions.innerHTML = Object.keys(permissionsOther).map(function (screen) {
 	      console.log(screen);
 	      return '\n      <div class="user-permissions-string">\n        <span>' + _permissions2.default.permissionEngToRus[screen] + '</span>\n        <div>\n          <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsOther[screen][0] + '" ' + (permissionList.other.includes(permissionsOther[screen][0].toString()) ? 'checked' : '') + '>\n          <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsOther[screen][1] + '" ' + (permissionList.other.includes(permissionsOther[screen][1].toString()) ? 'checked' : '') + '>\n        </div>\n      </div>';
 	    }).join('');
+	  } else if (+_storage2.default.currentUserId === 1) {
+	    userStockList.innerHTML = '';
+	    userStockPermissions.innerHTML = 'У вас все права';
+	    userOtherPermissions.innerHTML = 'У вас все права';
 	  } else {
 	    userStockList.innerHTML = '';
-	    userStockPermissions.innerHTML = '';
-	    userOtherPermissions.innerHTML = '';
+	    userStockPermissions.innerHTML = 'У вас нет прав';
+	    userOtherPermissions.innerHTML = 'У вас нет прав';
 	  }
-	
 	  // drawUsers(usersData.data, usersBody, onUserClick);
 	};
 	
@@ -8176,6 +8181,11 @@
 	  usersBody.classList.add('d-none');
 	  usersHeader.classList.add('d-none');
 	  userCard.classList.remove('d-none');
+	
+	  userStockList.innerHTML = '';
+	  userStockPermissions.innerHTML = '';
+	  userOtherPermissions.innerHTML = '';
+	
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.currentUserId + '/info',
@@ -8568,8 +8578,6 @@
 	  if (docsData.data.length > 1) {
 	    docsStocks.innerHTML += '<option value="all" selected>Все склады</option';
 	  }
-	
-	  // drawDocs(docsData.data, docsBody, onDocClick);
 	};
 	
 	var getStocks = function getStocks() {
@@ -8589,10 +8597,6 @@
 	    getDocs(docsYear.value, docsMonth.value, docsDay.value);
 	    _storage2.default.allDocsOperationType = 'naklad';
 	  },
-	
-	
-	  // redraw: getdebitCredit,
-	
 	  stop: function stop() {
 	    docsList.removeEventListener('click', getStocks);
 	  }
@@ -8629,9 +8633,11 @@
 	var getMonthElement = function getMonthElement(item, index) {
 	  return '\n  <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n    <div class="media">\n      <div class="media-body">\n        <b> \u041D\u043E\u043C\u0435\u0440 \u0434\u043D\u044F: </b>' + item.day_number + '\n        <b> \u0412\u0440\u0435\u043C\u044F (\u043F\u0435\u0440\u0432\u0430\u044F) </b>' + new Date(+(item.doc_time_first + '000')).toLocaleString() + '\n        <b> \u0412\u0440\u0435\u043C\u044F (\u043F\u043E\u0441\u043B\u0435\u0434\u043D\u044F\u044F) </b>' + new Date(+(item.doc_time_last + '000')).toLocaleString() + '\n        <b> \u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u0432: </b>' + item.count_documents + '\n      </div>\n    </div>';
 	};
+	
 	var getDayElement = function getDayElement(item, index) {
 	  return '\n  <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n    <div class="media">\n      <img class="mr-3" src="img/' + BillTypes['type' + item.type] + '.png" width="30" alt="">\n      <div class="media-body">\n        <b>ID: </b>' + item.id + '\n        <b> \u0421\u0442\u0430\u0442\u0443\u0441: </b>' + item.status + '\n        <b> ID \u0441\u043A\u043B\u0430\u0434\u0430: </b>' + item.stock_id + '\n        <b> \u0418\u043C\u044F \u0441\u043A\u043B\u0430\u0434\u0430: </b>' + item.stock_name + '\n        <b> \u0412\u0440\u0435\u043C\u044F: </b>' + new Date(+(item.time + '000')).toLocaleString() + '\n        <b> \u0412\u0441\u0435\u0433\u043E: </b>' + item.total + '\n        <b> \u0422\u0438\u043F: </b>' + item.type + '\n      </div>\n    </div>';
 	};
+	
 	var getDayBalanceElement = function getDayBalanceElement(item, index) {
 	  return '\n  <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n    <div class="media">\n\n      <div class="media-body">\n        <b>ID: </b>' + item.id + '\n        <b> ID \u0441\u043A\u043B\u0430\u0434\u0430: </b>' + item.stock_id + '\n        <b> \u0418\u043C\u044F \u0441\u043A\u043B\u0430\u0434\u0430: </b>' + item.stock_name + '\n        <b> \u0412\u0440\u0435\u043C\u044F: </b>' + new Date(+(item.time + '000')).toLocaleString() + '\n        <b> \u0412\u0441\u0435\u0433\u043E: </b>' + item.total + '\n        <b> \u041A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439: </b>' + item.comment + '\n        <b> \u041E\u0441\u043D\u043E\u0432\u0430\u043D\u0438\u0435: </b>' + item.reason + '\n      </div>\n    </div>';
 	};
@@ -8640,27 +8646,11 @@
 	  drawBillsYear: function drawBillsYear(billsData, container, handler) {
 	    billsData.forEach(function (group, index) {
 	      container.insertAdjacentHTML('beforeend', getYearElement(group, index));
-	      /*
-	      container.lastChild.addEventListener('click', function () {
-	        auth.currentGroupId = group.id;
-	        auth.currentGroupName = group.name;
-	        auth.currentGroupLevel = group.level;
-	        handler();
-	      });
-	      */
 	    });
 	  },
 	  drawBillsMonth: function drawBillsMonth(billsData, container, handler) {
 	    billsData.forEach(function (bill, index) {
 	      container.insertAdjacentHTML('beforeend', getMonthElement(bill, index));
-	      /*
-	      container.lastChild.addEventListener('click', function () {
-	        auth.currentGroupId = group.id;
-	        auth.currentGroupName = group.name;
-	        auth.currentGroupLevel = group.level;
-	        handler();
-	      });
-	      */
 	    });
 	  },
 	  drawBillsDay: function drawBillsDay(billsData, container, handler) {
@@ -8668,10 +8658,7 @@
 	      container.insertAdjacentHTML('beforeend', getDayElement(bill, index));
 	
 	      container.lastChild.addEventListener('click', function () {
-	        // auth.currentGroupId = group.id;
-	        // auth.currentGroupName = group.name;
 	        _storage2.default.currentBillId = bill.id;
-	        // handler(bill.id);
 	        handler();
 	      });
 	    });
@@ -8681,13 +8668,7 @@
 	      container.insertAdjacentHTML('beforeend', getDayBalanceElement(bill, index));
 	
 	      container.lastChild.addEventListener('click', function () {
-	        /*
-	        auth.currentGroupId = group.id;
-	        auth.currentGroupName = group.name;
-	        auth.currentGroupLevel = group.level;
-	        */
 	        _storage2.default.currentBillId = bill.id;
-	        // handler(bill.id);
 	        handler();
 	      });
 	    });
