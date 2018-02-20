@@ -8305,6 +8305,7 @@
 	  billCardTime.innerHTML = '|| ' + new Date(+(time + '000')).toLocaleString();
 	  billCardUser.title = operatorName;
 	
+	  billCardGoods.innerHTML = '';
 	  goodsContent.forEach(function (good, index) {
 	    return billCardGoods.insertAdjacentHTML('beforeend', getGoodString(good, index));
 	  });
@@ -8352,7 +8353,6 @@
 	var onSuccessBillDelivery = function onSuccessBillDelivery(answer) {
 	  console.log(answer);
 	
-	  // onListEnterprisesCardReturnBtn();
 	  $(billCard).modal('hide');
 	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
 	
@@ -8380,8 +8380,7 @@
 	  };
 	});
 	
-	var onBillClick = function onBillClick(id) {
-	  // auth.currentBillId = id;
+	var onBillClick = function onBillClick() {
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/' + _storage2.default.allDocsOperationType + '/' + _storage2.default.currentBillId + '/info',
@@ -8452,6 +8451,31 @@
 	  };
 	};
 	
+	// ############################## ЗАГРУЖАЕМ ДОПОЛНИТЕЛЬНЫЕ ДОКУМЕНТЫ   ############
+	
+	
+	var lastTime = '';
+	var prevData = [];
+	
+	var onSuccessLoadMore = function onSuccessLoadMore(billsData) {
+	  console.log(billsData);
+	  docsBody.innerHTML = '';
+	  _universalBillsList2.default.drawDay(billsData.data.concat(prevData), docsBody, onBillClick);
+	
+	  lastTime = billsData.data[billsData.data.length - 1].time;
+	  prevData = billsData.data.concat(prevData);
+	  docsBody.insertAdjacentHTML('beforeend', '<button type="button" class="btn btn-primary">Загрузить еще</button>');
+	  docsBody.lastChild.addEventListener('click', onClickLoadMore);
+	};
+	
+	var onClickLoadMore = function onClickLoadMore() {
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/documents/' + _storage2.default.allDocsOperationType + '/time/' + lastTime + '/before/50',
+	    data: 'token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessLoadMore
+	  };
+	};
 	// ############################## ЗАГРУЖАЕМ ДОКУМЕНТЫ ##############################
 	
 	var onSuccessBillsGet = function onSuccessBillsGet(billsData) {
@@ -8466,6 +8490,10 @@
 	      _universalBillsList2.default.drawMonth(billsData.data, docsBody, null);
 	    } else if (billsData.data[0].stock_name && _storage2.default.allDocsOperationType === 'naklad') {
 	      _universalBillsList2.default.drawDay(billsData.data, docsBody, onBillClick);
+	      lastTime = billsData.data[billsData.data.length - 1].time;
+	      prevData = billsData.data.slice(0);
+	      docsBody.insertAdjacentHTML('beforeend', '<button type="button" class="btn btn-primary">Загрузить еще</button>');
+	      docsBody.lastChild.addEventListener('click', onClickLoadMore);
 	    } else if (billsData.data[0].stock_name && _storage2.default.allDocsOperationType === 'balance') {
 	      _universalBillsList2.default.drawDayBalance(billsData.data, docsBody, onBalanceActClick);
 	    }
