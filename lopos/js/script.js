@@ -8149,10 +8149,11 @@
 	
 	    Object.keys(permissionList.stock).forEach(function (stockName) {
 	
-	      var stock = allSocks.find(function (item) {
-	        return item.id === Number(stockName).toFixed();
-	      });
-	      userStockList.insertAdjacentHTML('beforeEnd', '<span class="user-permissions-stock" data-stock-id=' + Number(stockName).toFixed() + '>' + (stock ? stock.name : '') + '</span>');
+	      /*
+	      let stock = allSocks.find((item) => item.id === Number(stockName).toFixed());
+	      userStockList.insertAdjacentHTML('beforeEnd', `<span class="user-permissions-stock" data-stock-id=${Number(stockName).toFixed()}>${(stock) ? stock.name : ''}</span>`);
+	      */
+	      userStockList.insertAdjacentHTML('beforeEnd', '<span class="user-permissions-stock" data-stock-id=' + Number(stockName).toFixed() + '>' + (allSocks ? allSocks.name : '') + '</span>');
 	
 	      var screens = screenNamesStock.map(function (screen) {
 	        return permissionList.stock[stockName].includes(permissionsStock[screen].toString()) ? [screen, 'checked'] : [screen, ''];
@@ -8500,6 +8501,21 @@
 	};
 	// ############################## ЗАГРУЖАЕМ ДОКУМЕНТЫ ##############################
 	
+	var onYearClick = function onYearClick(bill) {
+	  console.log(bill.month_number - 1);
+	  docsMonth.value = bill.month_number - 1;
+	  console.log(docsYear.value, docsMonth.value, docsDay.value);
+	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	};
+	
+	var onMonthClick = function onMonthClick(bill) {
+	  console.log(bill.day_number);
+	  console.log(docsYear.value, docsMonth.value, docsDay.value);
+	  drawDates(docsYear.value, docsMonth.value, 'all');
+	  docsDay.value = bill.day_number;
+	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	};
+	
 	var onSuccessBillsGet = function onSuccessBillsGet(billsData) {
 	  console.log(billsData);
 	
@@ -8507,9 +8523,9 @@
 	  if (billsData.data.length > 0) {
 	
 	    if (billsData.data[0].month_number) {
-	      _universalBillsList2.default.drawYear(billsData.data, docsBody, null);
+	      _universalBillsList2.default.drawYear(billsData.data, docsBody, onYearClick);
 	    } else if (billsData.data[0].day_number) {
-	      _universalBillsList2.default.drawMonth(billsData.data, docsBody, null);
+	      _universalBillsList2.default.drawMonth(billsData.data, docsBody, onMonthClick);
 	    } else if (billsData.data[0].stock_name && _storage2.default.allDocsOperationType === 'naklad') {
 	      billsData.data.sort(function (a, b) {
 	        return +b.id - +a.id;
@@ -8668,13 +8684,19 @@
 	
 	var markup = {
 	  drawBillsYear: function drawBillsYear(billsData, container, handler) {
-	    billsData.forEach(function (group, index) {
-	      container.insertAdjacentHTML('beforeend', getYearElement(group, index));
+	    billsData.forEach(function (bill, index) {
+	      container.insertAdjacentHTML('beforeend', getYearElement(bill, index));
+	      container.lastChild.addEventListener('click', function () {
+	        handler(bill);
+	      });
 	    });
 	  },
 	  drawBillsMonth: function drawBillsMonth(billsData, container, handler) {
 	    billsData.forEach(function (bill, index) {
 	      container.insertAdjacentHTML('beforeend', getMonthElement(bill, index));
+	      container.lastChild.addEventListener('click', function () {
+	        handler(bill);
+	      });
 	    });
 	  },
 	  drawBillsDay: function drawBillsDay(billsData, container, handler) {
