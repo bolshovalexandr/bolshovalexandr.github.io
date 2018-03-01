@@ -4966,6 +4966,10 @@
 	  $('#keywords-add-name').trigger('focus');
 	});
 	
+	$('#keywords-add').on('shown.bs.modal', function () {
+	  $('#keywords-add-name').trigger('focus');
+	});
+	
 	exports.default = {
 	  start: function start() {
 	    listGroups.addEventListener('click', getGroups);
@@ -7557,6 +7561,11 @@
 	  };
 	};
 	
+	$('#universal-modal-micro').on('shown.bs.modal', function () {
+	  console.log('hi');
+	  $('#universal-modal-micro-name').trigger('focus');
+	});
+	
 	exports.default = {
 	  start: function start() {
 	    manufactureList.addEventListener('click', getManufacture);
@@ -8108,11 +8117,6 @@
 	});
 	
 	var onSuccessUserInfoLoad = function onSuccessUserInfoLoad(userData) {
-	  console.log('userData --> ', userData);
-	  var permissionList = {
-	    stock: {},
-	    other: []
-	  };
 	  var _userData$data = userData.data,
 	      name = _userData$data.name,
 	      status = _userData$data.status,
@@ -8120,6 +8124,12 @@
 	      color = _userData$data.color,
 	      permissions = _userData$data.operator_permissons,
 	      allSocks = _userData$data.all_stocks;
+	
+	
+	  var permissionList = {
+	    stock: {},
+	    other: []
+	  };
 	
 	  userProfileName.innerHTML = name;
 	  _storage2.default.currentUserStatus = status;
@@ -8136,62 +8146,54 @@
 	      } else if (permissionList.stock[item.stock]) {
 	        permissionList.stock[item.stock].push(item.code);
 	      } else {
-	        permissionList.stock[item.stock] = [item.code];
+	        permissionList.stock[+item.stock] = [item.code];
 	      }
 	    });
+	  }
 	
-	    allSocks.forEach(function (stock) {
-	      /*
-	            if (permissionList.stock[item.stock]) {
-	              permissionList.stock[item.stock].push(item.code);
-	            }
-	            /*
-	            else {
-	              permissionList.stock[item.stock] = [item.code];
-	            }
-	            */
+	  allSocks.forEach(function (stock) {
+	    if (!permissionList.stock[stock.id]) {
+	      permissionList.stock[+stock.id] = [];
+	    }
+	  });
+	
+	  var screenNamesStock = Object.keys(permissionsStock);
+	
+	  var drawAccessForStock = function drawAccessForStock(accessList) {
+	    return '\n        <div class="user-permissions-string">\n          <span>' + _permissions2.default.permissionEngToRus[accessList[0]] + '</span>\n          <div>\n            <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsStock[accessList[0]] + '" ' + accessList[1] + '>\n          </div>\n        </div>';
+	  };
+	
+	  Object.keys(permissionList.stock).forEach(function (stockName) {
+	
+	    var stock = allSocks.find(function (item) {
+	      return item.id === Number(stockName).toFixed();
 	    });
+	    userStockList.insertAdjacentHTML('beforeEnd', '<span class="user-permissions-stock" data-stock-id=' + Number(stockName).toFixed() + '>' + (stock ? stock.name : '') + '</span>');
 	
-	    console.log(permissionList);
-	    var screenNamesStock = Object.keys(permissionsStock);
-	
-	    var drawAccessForStock = function drawAccessForStock(accessList) {
-	      return '\n          <div class="user-permissions-string">\n            <span>' + _permissions2.default.permissionEngToRus[accessList[0]] + '</span>\n            <div>\n              <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsStock[accessList[0]] + '" ' + accessList[1] + '>\n            </div>\n          </div>';
-	    };
-	
-	    Object.keys(permissionList.stock).forEach(function (stockName) {
-	
-	      var stock = allSocks.find(function (item) {
-	        return item.id === Number(stockName).toFixed();
-	      });
-	      userStockList.insertAdjacentHTML('beforeEnd', '<span class="user-permissions-stock" data-stock-id=' + Number(stockName).toFixed() + '>' + (stock ? stock.name : '') + '</span>');
-	
-	      var screens = screenNamesStock.map(function (screen) {
-	        return permissionList.stock[stockName].includes(permissionsStock[screen].toString()) ? [screen, 'checked'] : [screen, ''];
-	      });
-	      drawAccessForStock(screens[0]);
-	
-	      userStockList.lastChild.addEventListener('click', function () {
-	        console.log(Number(stockName.split('-')[1]).toFixed());
-	        _storage2.default.currentStockId = Number(stockName).toFixed();
-	        onUserClick();
-	        console.log('screens-->', screens);
-	
-	        userStockPermissions.innerHTML = screens.map(drawAccessForStock).join('');
-	      });
+	    var screens = screenNamesStock.map(function (screen) {
+	      return permissionList.stock[stockName].includes(permissionsStock[screen].toString()) ? [screen, 'checked'] : [screen, ''];
 	    });
-	    userOtherPermissions.innerHTML = Object.keys(permissionsOther).map(function (screen) {
-	      console.log(screen);
-	      return '\n      <div class="user-permissions-string">\n        <span>' + _permissions2.default.permissionEngToRus[screen] + '</span>\n        <div>\n          <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsOther[screen][0] + '" ' + (permissionList.other.includes(permissionsOther[screen][0].toString()) ? 'checked' : '') + '>\n          <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsOther[screen][1] + '" ' + (permissionList.other.includes(permissionsOther[screen][1].toString()) ? 'checked' : '') + '>\n        </div>\n      </div>';
-	    }).join('');
-	  } else if (+_storage2.default.currentUserId === 1) {
+	    // drawAccessForStock(screens[0]);
+	
+	    userStockList.lastChild.addEventListener('click', function () {
+	      console.log(Number(stockName.split('-')[1]).toFixed());
+	      _storage2.default.currentStockId = Number(stockName).toFixed();
+	      onUserClick();
+	      console.log('screens-->', screens);
+	
+	      userStockPermissions.innerHTML = screens.map(drawAccessForStock).join('');
+	    });
+	  });
+	
+	  userOtherPermissions.innerHTML = Object.keys(permissionsOther).map(function (screen) {
+	    console.log(screen);
+	    return '\n    <div class="user-permissions-string">\n      <span>' + _permissions2.default.permissionEngToRus[screen] + '</span>\n      <div>\n        <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsOther[screen][0] + '" ' + (permissionList.other.includes(permissionsOther[screen][0].toString()) ? 'checked' : '') + '>\n        <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsOther[screen][1] + '" ' + (permissionList.other.includes(permissionsOther[screen][1].toString()) ? 'checked' : '') + '>\n      </div>\n    </div>';
+	  }).join('');
+	
+	  if (+_storage2.default.currentUserId === 1) {
 	    userStockList.innerHTML = '';
 	    userStockPermissions.innerHTML = 'У вас все права';
 	    userOtherPermissions.innerHTML = 'У вас все права';
-	  } else {
-	    userStockList.innerHTML = '';
-	    userStockPermissions.innerHTML = 'У вас нет прав';
-	    userOtherPermissions.innerHTML = 'У вас нет прав';
 	  }
 	  // drawUsers(usersData.data, usersBody, onUserClick);
 	};
