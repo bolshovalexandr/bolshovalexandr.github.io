@@ -7585,8 +7585,8 @@
 	    message: 'Не более 300 символов со знаками препинания (. , : ;) без спецсимволов'
 	  },
 	  'universal-modal-micro-name': {
-	    pattern: /^\-?\d+$/,
-	    message: 'Целое число (0 удалит карточку)'
+	    pattern: /(^\d+$)|(^\d+[.]\d+$)/,
+	    message: 'Дробное число ( 000, 000.000, 0 - удалит карточку)'
 	  },
 	  'change-password': {
 	    pattern: /^[а-яёА-ЯЁA-Za-z0-9\s\d]{2,20}$/,
@@ -7704,7 +7704,7 @@
 	
 	var onBalanceFormSendSubmit = function onBalanceFormSendSubmit(evt) {
 	  evt.preventDefault();
-	  if (_universalValidityMicro2.default.check([balanceAmount, balanceSetDescribe])) {
+	  if (_universalValidityMicro2.default.check([balanceAmount, balanceSetDescribe], ['balance-amount', 'balance-set-describe'])) {
 	    _xhr2.default.request = {
 	      metod: 'POST',
 	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/stock/' + _storage2.default.currentStockId + '/balance_act',
@@ -8140,6 +8140,18 @@
 	      }
 	    });
 	
+	    allSocks.forEach(function (stock) {
+	      /*
+	            if (permissionList.stock[item.stock]) {
+	              permissionList.stock[item.stock].push(item.code);
+	            }
+	            /*
+	            else {
+	              permissionList.stock[item.stock] = [item.code];
+	            }
+	            */
+	    });
+	
 	    console.log(permissionList);
 	    var screenNamesStock = Object.keys(permissionsStock);
 	
@@ -8149,11 +8161,10 @@
 	
 	    Object.keys(permissionList.stock).forEach(function (stockName) {
 	
-	      /*
-	      let stock = allSocks.find((item) => item.id === Number(stockName).toFixed());
-	      userStockList.insertAdjacentHTML('beforeEnd', `<span class="user-permissions-stock" data-stock-id=${Number(stockName).toFixed()}>${(stock) ? stock.name : ''}</span>`);
-	      */
-	      userStockList.insertAdjacentHTML('beforeEnd', '<span class="user-permissions-stock" data-stock-id=' + Number(stockName).toFixed() + '>' + (allSocks ? allSocks.name : '') + '</span>');
+	      var stock = allSocks.find(function (item) {
+	        return item.id === Number(stockName).toFixed();
+	      });
+	      userStockList.insertAdjacentHTML('beforeEnd', '<span class="user-permissions-stock" data-stock-id=' + Number(stockName).toFixed() + '>' + (stock ? stock.name : '') + '</span>');
 	
 	      var screens = screenNamesStock.map(function (screen) {
 	        return permissionList.stock[stockName].includes(permissionsStock[screen].toString()) ? [screen, 'checked'] : [screen, ''];
@@ -8277,7 +8288,7 @@
 	var docsBillBtn = document.querySelector('#docs-bill-btn');
 	var getDocsBtn = document.querySelector('#get-docs-btn');
 	var docsBalanceBtn = document.querySelector('#docs-balance-btn');
-	// const docsReturnBtn = document.querySelector('#user-card-return-btn');
+	var docsReturnBtn = document.querySelector('#docs-return-btn');
 	var billCard = document.querySelector('#bill-card');
 	
 	var billCardType = document.querySelector('#bill-card-type');
@@ -8478,20 +8489,22 @@
 	var prevData = [];
 	
 	var onSuccessLoadMore = function onSuccessLoadMore(billsData) {
+	  console.log(new Date(+billsData).toLocaleString());
 	  console.log(billsData);
 	  docsBody.innerHTML = '';
+	  lastTime = billsData.data[billsData.data.length - 1].time;
 	  billsData.data.sort(function (a, b) {
 	    return b.id - a.id;
 	  });
 	  _universalBillsList2.default.drawDay(prevData.concat(billsData.data), docsBody, onBillClick);
 	
-	  lastTime = billsData.data[billsData.data.length - 1].time;
 	  prevData = billsData.data.concat(prevData);
 	  docsBody.insertAdjacentHTML('beforeend', '<button type="button" class="btn btn-primary">Загрузить еще</button>');
 	  docsBody.lastChild.addEventListener('click', onClickLoadMore);
 	};
 	
 	var onClickLoadMore = function onClickLoadMore() {
+	  console.log(lastTime);
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/documents/' + _storage2.default.allDocsOperationType + '/time/' + lastTime + '/before/50',
@@ -8500,6 +8513,15 @@
 	  };
 	};
 	// ############################## ЗАГРУЖАЕМ ДОКУМЕНТЫ ##############################
+	docsReturnBtn.addEventListener('click', function () {
+	  if (docsDay.value !== 'all') {
+	    docsDay.value = 'all';
+	    getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	  } else if (docsMonth.value !== 'all') {
+	    docsMonth.value = 'all';
+	    getDocs(docsYear.value, docsMonth.value, 'all');
+	  }
+	});
 	
 	var onYearClick = function onYearClick(bill) {
 	  console.log(bill.month_number - 1);
@@ -8518,6 +8540,12 @@
 	
 	var onSuccessBillsGet = function onSuccessBillsGet(billsData) {
 	  console.log(billsData);
+	
+	  if (docsMonth.value === 'all') {
+	    docsReturnBtn.setAttribute('disabled', 'disabled');
+	  } else {
+	    docsReturnBtn.removeAttribute('disabled');
+	  }
 	
 	  docsBody.innerHTML = '';
 	  if (billsData.data.length > 0) {
@@ -8558,6 +8586,7 @@
 	var drawDates = function drawDates(year, month, day) {
 	  // month = month || 'all';
 	  // day = day || 'all';
+	
 	  var thisYear = new Date().getFullYear();
 	  var thisMonth = month || new Date().getMonth();
 	  var numberOfDays = 33 - new Date(thisYear, thisMonth, 33).getDate();
