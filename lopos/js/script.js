@@ -8135,6 +8135,7 @@
 	};
 	
 	var permissionList = {};
+	var currentStockNode = '';
 	
 	var onSuccessUserInfoLoad = function onSuccessUserInfoLoad(userData) {
 	  var _userData$data = userData.data,
@@ -8183,13 +8184,15 @@
 	    var stock = allSocks.find(function (item) {
 	      return item.id === Number(stockName).toFixed();
 	    });
-	    userStockList.insertAdjacentHTML('beforeEnd', '<span class="user-permissions-stock" data-stock-id=' + Number(stockName).toFixed() + '>' + (stock ? stock.name : '') + '</span>');
+	    userStockList.insertAdjacentHTML('beforeEnd', '<span id="stock-' + Number(stockName).toFixed() + '" class="user-permissions-stock" data-stock-id=' + Number(stockName).toFixed() + '>' + (stock ? stock.name : '') + '</span>');
 	
 	    // массив прав доступа для каждого склада, нужен для отрисовки по клику на склад
 	    var screens = getScreens(permissionList, stockName);
 	
-	    userStockList.lastChild.addEventListener('click', function () {
+	    // document.querySelector(`#stock-${auth.currentStockId}`).classList.add('btn-danger');
+	    userStockList.lastChild.addEventListener('click', function (evt) {
 	      _storage2.default.currentStockId = Number(stockName).toFixed();
+	      currentStockNode = evt.target;
 	      onUserClick();
 	      console.log('screens-->', screens);
 	
@@ -8202,6 +8205,7 @@
 	  }).join('');
 	
 	  userStockPermissions.innerHTML = getScreens(permissionList, _storage2.default.currentStockId).map(drawAccessForStock).join('');
+	  document.querySelector('#stock-' + _storage2.default.currentStockId).classList.add('bg-success');
 	
 	  if (+_storage2.default.currentUserId === 1) {
 	    userStockList.innerHTML = '';
@@ -8209,6 +8213,7 @@
 	    userOtherPermissions.innerHTML = 'У вас все права';
 	  }
 	  // drawUsers(usersData.data, usersBody, onUserClick);
+	  currentStockNode.classList.add('btn-danger');
 	};
 	
 	// обработчик клика по пользователю
