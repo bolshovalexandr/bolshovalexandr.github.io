@@ -8509,20 +8509,29 @@
 	var onSuccessLoadMore = function onSuccessLoadMore(billsData) {
 	  console.log(new Date(+billsData).toLocaleString());
 	  console.log(billsData);
-	  docsBody.innerHTML = '';
+	
+	  // docsBody.innerHTML = '';
+	  if (docsBody.lastChild.tagName === 'BUTTON') {
+	    docsBody.lastChild.remove();
+	  }
 	  lastTime = billsData.data[billsData.data.length - 1].time;
+	
 	  billsData.data.sort(function (a, b) {
 	    return b.id - a.id;
 	  });
-	  _universalBillsList2.default.drawDay(prevData.concat(billsData.data), docsBody, onBillClick);
+	  prevData = prevData.concat(billsData.data);
+	  _universalBillsList2.default.drawDay(billsData.data, docsBody, onBillClick);
 	
 	  prevData = billsData.data.concat(prevData);
+	
 	  docsBody.insertAdjacentHTML('beforeend', '<button type="button" class="btn btn-primary">Загрузить еще</button>');
+	  docsBody.lastChild.removeAttribute('disabled', 'disabled');
 	  docsBody.lastChild.addEventListener('click', onClickLoadMore);
 	};
 	
-	var onClickLoadMore = function onClickLoadMore() {
+	var onClickLoadMore = function onClickLoadMore(evt) {
 	  console.log(lastTime);
+	  evt.target.setAttribute('disabled', 'disabled');
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/documents/' + _storage2.default.allDocsOperationType + '/time/' + lastTime + '/before/50',
@@ -8577,8 +8586,10 @@
 	        return +b.id - +a.id;
 	      });
 	      _universalBillsList2.default.drawDay(billsData.data, docsBody, onBillClick);
+	
 	      lastTime = billsData.data[billsData.data.length - 1].time;
 	      prevData = billsData.data.slice(0);
+	
 	      docsBody.insertAdjacentHTML('beforeend', '<button type="button" class="btn btn-primary">Загрузить еще</button>');
 	      docsBody.lastChild.addEventListener('click', onClickLoadMore);
 	    } else if (billsData.data[0].stock_name && _storage2.default.allDocsOperationType === 'balance') {
@@ -8649,11 +8660,15 @@
 	
 	docsBillBtn.addEventListener('click', function () {
 	  _storage2.default.allDocsOperationType = 'naklad';
+	  docsBalanceBtn.style.opacity = 0.4;
+	  docsBillBtn.style.opacity = 1;
 	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
 	});
 	
 	docsBalanceBtn.addEventListener('click', function () {
 	  _storage2.default.allDocsOperationType = 'balance';
+	  docsBalanceBtn.style.opacity = 1;
+	  docsBillBtn.style.opacity = 0.4;
 	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
 	});
 	
@@ -8683,6 +8698,7 @@
 	    drawDates();
 	    getDocs(docsYear.value, docsMonth.value, docsDay.value);
 	    _storage2.default.allDocsOperationType = 'naklad';
+	    docsBalanceBtn.style.opacity = 0.4;
 	  },
 	  stop: function stop() {
 	    docsList.removeEventListener('click', getStocks);
