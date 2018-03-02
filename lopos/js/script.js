@@ -8135,7 +8135,6 @@
 	};
 	
 	var permissionList = {};
-	var currentStockNode = '';
 	
 	var onSuccessUserInfoLoad = function onSuccessUserInfoLoad(userData) {
 	  var _userData$data = userData.data,
@@ -8192,7 +8191,6 @@
 	    // document.querySelector(`#stock-${auth.currentStockId}`).classList.add('btn-danger');
 	    userStockList.lastChild.addEventListener('click', function (evt) {
 	      _storage2.default.currentStockId = Number(stockName).toFixed();
-	      currentStockNode = evt.target;
 	      onUserClick();
 	      console.log('screens-->', screens);
 	
@@ -8212,8 +8210,6 @@
 	    userStockPermissions.innerHTML = 'У вас все права';
 	    userOtherPermissions.innerHTML = 'У вас все права';
 	  }
-	  // drawUsers(usersData.data, usersBody, onUserClick);
-	  currentStockNode.classList.add('btn-danger');
 	};
 	
 	// обработчик клика по пользователю
