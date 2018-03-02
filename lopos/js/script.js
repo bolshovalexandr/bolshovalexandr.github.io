@@ -8126,8 +8126,8 @@
 	
 	var getScreens = function getScreens(permissionList, stockName) {
 	  var screens = screenNamesStock.map(function (screen) {
-	    console.log('screen-->', screen);
-	    console.log('stockName-->', stockName);
+	    // console.log('screen-->', screen);
+	    // console.log('stockName-->', stockName);
 	    return permissionList.stock[stockName].includes(permissionsStock[screen].toString()) ? [screen, 'checked'] : [screen, ''];
 	  });
 	
@@ -8137,6 +8137,8 @@
 	var permissionList = {};
 	
 	var onSuccessUserInfoLoad = function onSuccessUserInfoLoad(userData) {
+	  console.log(userData);
+	
 	  var _userData$data = userData.data,
 	      name = _userData$data.name,
 	      status = _userData$data.status,
@@ -8162,8 +8164,8 @@
 	    permissions.forEach(function (item) {
 	      if (item.stock === '00') {
 	        permissionList.other.push(item.code);
-	      } else if (permissionList.stock[item.stock]) {
-	        permissionList.stock[item.stock].push(item.code);
+	      } else if (permissionList.stock[+item.stock]) {
+	        permissionList.stock[+item.stock].push(item.code);
 	      } else {
 	        permissionList.stock[+item.stock] = [item.code];
 	      }
