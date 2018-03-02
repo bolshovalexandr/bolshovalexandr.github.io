@@ -7958,7 +7958,7 @@
 	var lockSuccess = function lockSuccess(answer) {
 	  // userProfileStatus.innerText = (+userProfileStatus.innerText === 0) ? '1' : '0';
 	  _storage2.default.currentUserStatus = +_storage2.default.currentUserStatus === 0 ? 1 : 0;
-	  userProfileStatus.innerHTML = +_storage2.default.currentUserStatus === 1 ? 'Активен' : 'Заблокирован';
+	  userProfileStatus.innerHTML = +_storage2.default.currentUserStatus === 1 ? '<span class="text-success">Активен</span>' : '<span class="text-danger">Заблокирован</span>';
 	  console.log(answer);
 	};
 	
@@ -8154,7 +8154,7 @@
 	
 	  userProfileName.innerHTML = name;
 	  _storage2.default.currentUserStatus = status;
-	  userProfileStatus.innerHTML = +_storage2.default.currentUserStatus === 1 ? 'Активен' : 'Заблокирован';
+	  userProfileStatus.innerHTML = +_storage2.default.currentUserStatus === 1 ? '<span class="text-success">Активен</span>' : '<span class="text-danger">Заблокирован</span>';
 	  userProfileId.innerHTML = _storage2.default.data.directory + '-' + id;
 	  userProfileImage.style.backgroundColor = '#' + color;
 	
