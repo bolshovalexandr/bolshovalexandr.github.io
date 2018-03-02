@@ -7946,6 +7946,7 @@
 	// отрисовка списка групп по данным
 	var drawUsers = function drawUsers(users, container, handler) {
 	  container.innerHTML = '';
+	  _storage2.default.currentStockId = 1;
 	  if (users.length > 0) {
 	    markup.drawDataInContainer(users, container, handler);
 	  } else {
@@ -8109,12 +8110,31 @@
 	userOtherPermissions.addEventListener('change', changeOtherPermission);
 	
 	// ############################## ЗАГРУЗКА СПИСКА ПОЛЬЗОВАТЕЛЕЙ ##############################
+	
 	usersReturnBtn.addEventListener('click', function () {
 	  getUsers();
 	  usersBody.classList.remove('d-none');
 	  userCard.classList.add('d-none');
 	  usersHeader.classList.remove('d-none');
 	});
+	
+	var screenNamesStock = Object.keys(permissionsStock);
+	
+	var drawAccessForStock = function drawAccessForStock(accessList) {
+	  return '\n      <div class="user-permissions-string">\n        <span>' + _permissions2.default.permissionEngToRus[accessList[0]] + '</span>\n        <div>\n          <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsStock[accessList[0]] + '" ' + accessList[1] + '>\n        </div>\n      </div>';
+	};
+	
+	var getScreens = function getScreens(permissionList, stockName) {
+	  var screens = screenNamesStock.map(function (screen) {
+	    console.log('screen-->', screen);
+	    console.log('stockName-->', stockName);
+	    return permissionList.stock[stockName].includes(permissionsStock[screen].toString()) ? [screen, 'checked'] : [screen, ''];
+	  });
+	
+	  return screens;
+	};
+	
+	var permissionList = {};
 	
 	var onSuccessUserInfoLoad = function onSuccessUserInfoLoad(userData) {
 	  var _userData$data = userData.data,
@@ -8126,7 +8146,7 @@
 	      allSocks = _userData$data.all_stocks;
 	
 	
-	  var permissionList = {
+	  permissionList = {
 	    stock: {},
 	    other: []
 	  };
@@ -8140,7 +8160,6 @@
 	  if (permissions) {
 	
 	    permissions.forEach(function (item) {
-	
 	      if (item.stock === '00') {
 	        permissionList.other.push(item.code);
 	      } else if (permissionList.stock[item.stock]) {
@@ -8157,11 +8176,7 @@
 	    }
 	  });
 	
-	  var screenNamesStock = Object.keys(permissionsStock);
-	
-	  var drawAccessForStock = function drawAccessForStock(accessList) {
-	    return '\n        <div class="user-permissions-string">\n          <span>' + _permissions2.default.permissionEngToRus[accessList[0]] + '</span>\n          <div>\n            <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsStock[accessList[0]] + '" ' + accessList[1] + '>\n          </div>\n        </div>';
-	  };
+	  console.log('permissionList-->', permissionList);
 	
 	  Object.keys(permissionList.stock).forEach(function (stockName) {
 	
@@ -8170,13 +8185,10 @@
 	    });
 	    userStockList.insertAdjacentHTML('beforeEnd', '<span class="user-permissions-stock" data-stock-id=' + Number(stockName).toFixed() + '>' + (stock ? stock.name : '') + '</span>');
 	
-	    var screens = screenNamesStock.map(function (screen) {
-	      return permissionList.stock[stockName].includes(permissionsStock[screen].toString()) ? [screen, 'checked'] : [screen, ''];
-	    });
-	    // drawAccessForStock(screens[0]);
+	    // массив прав доступа для каждого склада, нужен для отрисовки по клику на склад
+	    var screens = getScreens(permissionList, stockName);
 	
 	    userStockList.lastChild.addEventListener('click', function () {
-	      console.log(Number(stockName.split('-')[1]).toFixed());
 	      _storage2.default.currentStockId = Number(stockName).toFixed();
 	      onUserClick();
 	      console.log('screens-->', screens);
@@ -8186,9 +8198,10 @@
 	  });
 	
 	  userOtherPermissions.innerHTML = Object.keys(permissionsOther).map(function (screen) {
-	    console.log(screen);
-	    return '\n    <div class="user-permissions-string">\n      <span>' + _permissions2.default.permissionEngToRus[screen] + '</span>\n      <div>\n        <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsOther[screen][0] + '" ' + (permissionList.other.includes(permissionsOther[screen][0].toString()) ? 'checked' : '') + '>\n        <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsOther[screen][1] + '" ' + (permissionList.other.includes(permissionsOther[screen][1].toString()) ? 'checked' : '') + '>\n      </div>\n    </div>';
+	    return '\n    <div class="user-permissions-string">\n      <span>' + _permissions2.default.permissionEngToRus[screen] + '</span>\n      <div>\n        <input class="form-check-input position-static user-permissions-switch" type="checkbox" value="' + permissionsOther[screen][0] + '" ' + (permissionList.other.includes(permissionsOther[screen][0].toString()) ? 'checked' : '') + '>\n        <input class="form-check-input position-static user-permissions-switch ' + (permissionsOther[screen][1] === '' ? 'd-none' : '') + '" type="checkbox" value="' + permissionsOther[screen][1] + '" ' + (permissionList.other.includes(permissionsOther[screen][1].toString()) ? 'checked' : '') + '>\n      </div>\n    </div>';
 	  }).join('');
+	
+	  userStockPermissions.innerHTML = getScreens(permissionList, _storage2.default.currentStockId).map(drawAccessForStock).join('');
 	
 	  if (+_storage2.default.currentUserId === 1) {
 	    userStockList.innerHTML = '';
