@@ -8533,7 +8533,7 @@
 	  evt.target.setAttribute('disabled', 'disabled');
 	  _xhr2.default.request = {
 	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/documents/' + _storage2.default.allDocsOperationType + '/time/' + (+lastTime + 1) + '/before/50',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/documents/' + _storage2.default.allDocsOperationType + '/time/' + lastTime + '/before/50',
 	    data: 'token=' + _storage2.default.data.token,
 	    callbackSuccess: onSuccessLoadMore
 	  };
