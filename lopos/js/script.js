@@ -3114,7 +3114,7 @@
 	  if (selectedString) {
 	    selectedString.classList.remove('bg-light');
 	  }
-	  selectedString = evt.target.labels[0];
+	  selectedString = evt.target.labels ? evt.target.labels[0] : evt.target;
 	  selectedString.classList.add('bg-light');
 	  _storage2.default.currentStockId = selectedString.dataset.stockId;
 	  enableCheckEditButtons();
@@ -3198,7 +3198,7 @@
 	  getElement: function getElement(item, index) {
 	    var currentStockFlag = item.id === _storage2.default.data['currentStock'] ? '<div class="p-0 bg-white icon icon__check"></div>' : '';
 	
-	    return '\n\n    <input type="radio" id="' + item.id + '" name="contact" value="email" class="d-none">\n\n    <label style="padding-left: 34px;" for="' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '">\n      <div><span class="reference-row-number">' + (index + 1) + '</span> ' + item.name + '</div>\n      <div class="d-flex justify-content-between align-items-center">\n        ' + currentStockFlag + '\n      </div>\n      </label>';
+	    return '\n\n    <input type="radio" id="' + item.id + '" data-stock-id="' + item.id + '" name="contact" value="email" class="d-none">\n\n    <label style="padding-left: 34px;" for="' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '">\n      <div><span class="reference-row-number">' + (index + 1) + '</span> ' + item.name + '</div>\n      <div class="d-flex justify-content-between align-items-center">\n        ' + currentStockFlag + '\n      </div>\n      </label>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(enterprisesData) {
 	    var _this = this;
@@ -7056,7 +7056,7 @@
 	// ############################## РАЗМЕТКА ##############################
 	var getElement = function getElement(item, index) {
 	
-	  return '\n  <input type="radio" id="reference-' + item.id + '" class="d-none">\n  <label style="padding-left: 34px;" for="reference-' + item.id + '" class="d-flex justify-content-between align-items-center reference-string" data-debit-credit-id="' + item.id + '" data-debit-credit-name="' + item.name + '">\n    <div><span class="reference-row-number">' + (index + 1) + '</span> ' + item.name + '</div>\n    <div class="d-flex justify-content-between align-items-center">\n    </div>\n  </label>';
+	  return '\n  <input type="radio" id="reference-' + item.id + '"  data-debit-credit-id="' + item.id + '" data-debit-credit-name="' + item.name + '" class="d-none">\n  <label style="padding-left: 34px;" for="reference-' + item.id + '" class="d-flex justify-content-between align-items-center reference-string" data-debit-credit-id="' + item.id + '" data-debit-credit-name="' + item.name + '">\n    <div><span class="reference-row-number">' + (index + 1) + '</span> ' + item.name + '</div>\n    <div class="d-flex justify-content-between align-items-center">\n    </div>\n  </label>';
 	};
 	
 	var drawDataInContainer = function drawDataInContainer(enterprisesData) {
@@ -7128,8 +7128,7 @@
 	  if (selectedString) {
 	    selectedString.classList.remove('bg-light');
 	  }
-	  console.log(evt.target.labels[0]);
-	  selectedString = evt.target.labels[0];
+	  selectedString = evt.target.labels ? evt.target.labels[0] : evt.target;
 	  selectedString.classList.add('bg-light');
 	  _storage2.default.debitCreditId = selectedString.dataset.debitCreditId;
 	  _storage2.default.debitCreditName = selectedString.dataset.debitCreditName;
@@ -8534,7 +8533,7 @@
 	  evt.target.setAttribute('disabled', 'disabled');
 	  _xhr2.default.request = {
 	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/documents/' + _storage2.default.allDocsOperationType + '/time/' + lastTime + '/before/50',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/documents/' + _storage2.default.allDocsOperationType + '/time/' + (+lastTime + 1) + '/before/50',
 	    data: 'token=' + _storage2.default.data.token,
 	    callbackSuccess: onSuccessLoadMore
 	  };
