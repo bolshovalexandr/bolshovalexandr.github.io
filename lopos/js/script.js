@@ -8698,6 +8698,7 @@
 	    drawDates();
 	    getDocs(docsYear.value, docsMonth.value, docsDay.value);
 	    _storage2.default.allDocsOperationType = 'naklad';
+	    _storage2.default.currentStockId = 'all';
 	    docsBalanceBtn.style.opacity = 0.4;
 	  },
 	  stop: function stop() {
