@@ -8502,7 +8502,7 @@
 	// ############################## ЗАГРУЖАЕМ ДОПОЛНИТЕЛЬНЫЕ ДОКУМЕНТЫ   ############
 	
 	
-	var lastTime = '';
+	var lastId = '';
 	var prevData = [];
 	
 	var onSuccessLoadMore = function onSuccessLoadMore(billsData) {
@@ -8513,7 +8513,8 @@
 	  if (docsBody.lastChild.tagName === 'BUTTON') {
 	    docsBody.lastChild.remove();
 	  }
-	  lastTime = billsData.data[billsData.data.length - 1].time;
+	  // lastId = billsData.data[billsData.data.length - 1].time;
+	  lastId = billsData.data[billsData.data.length - 1].id;
 	
 	  billsData.data.sort(function (a, b) {
 	    return b.id - a.id;
@@ -8529,11 +8530,11 @@
 	};
 	
 	var onClickLoadMore = function onClickLoadMore(evt) {
-	  console.log(lastTime);
+	  console.log(lastId);
 	  evt.target.setAttribute('disabled', 'disabled');
 	  _xhr2.default.request = {
 	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/documents/' + _storage2.default.allDocsOperationType + '/time/' + lastTime + '/before/50',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/documents/' + _storage2.default.allDocsOperationType + '/id/' + lastId + '/before/50',
 	    data: 'token=' + _storage2.default.data.token,
 	    callbackSuccess: onSuccessLoadMore
 	  };
@@ -8586,7 +8587,8 @@
 	      });
 	      _universalBillsList2.default.drawDay(billsData.data, docsBody, onBillClick);
 	
-	      lastTime = billsData.data[billsData.data.length - 1].time;
+	      // lastId = billsData.data[billsData.data.length - 1].time;
+	      lastId = billsData.data[billsData.data.length - 1].id;
 	      prevData = billsData.data.slice(0);
 	
 	      docsBody.insertAdjacentHTML('beforeend', '<button type="button" class="btn btn-primary">Загрузить еще</button>');
