@@ -8743,12 +8743,39 @@
 	  'type8': 'ic_my_production'
 	};
 	
+	var months = {
+	  '11': 'Декабрь',
+	  '10': 'Ноябрь',
+	  '9': 'Октябрь',
+	  '8': 'Сентябрь',
+	  '7': 'Август',
+	  '6': 'Июль',
+	  '5': 'Июнь',
+	  '4': 'Май',
+	  '3': 'Апрель',
+	  '2': 'Март',
+	  '1': 'Февраль',
+	  '0': 'Январь'
+	};
+	
 	var getYearElement = function getYearElement(item, index) {
-	  return '\n  <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n    <div class="media">\n      <div class="media-body">\n        <b> \u041D\u043E\u043C\u0435\u0440 \u043C\u0435\u0441\u044F\u0446\u0430: </b>' + item.month_number + '\n        <b> \u0412\u0440\u0435\u043C\u044F (\u043F\u0435\u0440\u0432\u0430\u044F) </b>' + new Date(+(item.doc_time_first + '000')).toLocaleString() + '\n        <b> \u0412\u0440\u0435\u043C\u044F (\u043F\u043E\u0441\u043B\u0435\u0434\u043D\u044F\u044F) </b>' + new Date(+(item.doc_time_last + '000')).toLocaleString() + '\n        <b> \u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u0432: </b>' + item.count_documents + '\n        <b> \u0412\u0441\u0435\u0433\u043E: </b>' + item.total + '\n      </div>\n    </div>';
+	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img src="img/ic_agree.png" alt="">\n      <span>' + months[item.month_number - 1] + ' ' + document.querySelector('#docs-year').value + ' \u0433\u043E\u0434\u0430</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.count_documents + '</span><br>\n    </div>';
 	};
 	
 	var getMonthElement = function getMonthElement(item, index) {
-	  return '\n  <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n    <div class="media">\n      <div class="media-body">\n        <b> \u041D\u043E\u043C\u0435\u0440 \u0434\u043D\u044F: </b>' + item.day_number + '\n        <b> \u0412\u0440\u0435\u043C\u044F (\u043F\u0435\u0440\u0432\u0430\u044F) </b>' + new Date(+(item.doc_time_first + '000')).toLocaleString() + '\n        <b> \u0412\u0440\u0435\u043C\u044F (\u043F\u043E\u0441\u043B\u0435\u0434\u043D\u044F\u044F) </b>' + new Date(+(item.doc_time_last + '000')).toLocaleString() + '\n        <b> \u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u0432: </b>' + item.count_documents + '\n      </div>\n    </div>';
+	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img src="img/ic_agree.png" alt="">\n      <span></b>' + (+item.day_number < 10 ? '0' + item.day_number : item.day_number) + '.' + (+document.querySelector('#docs-month').value + 1 < 10 ? '0' + (+document.querySelector('#docs-month').value + 1) : +document.querySelector('#docs-month').value + 1) + '.' + document.querySelector('#docs-year').value + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.count_documents + '</span><br>\n    </div>';
+	
+	  /*
+	  <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">
+	    <div class="media">
+	      <div class="media-body">
+	        <b> Номер дня: </b>${item.day_number}
+	        <b> Время (первая) </b>${new Date(+(item.doc_time_first + '000')).toLocaleString()}
+	        <b> Время (последняя) </b>${new Date(+(item.doc_time_last + '000')).toLocaleString()}
+	        <b> Количество документов: </b>${item.count_documents}
+	      </div>
+	    </div>`;
+	  */
 	};
 	
 	var getDayElement = function getDayElement(item, index) {

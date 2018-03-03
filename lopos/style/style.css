@@ -451,6 +451,35 @@ input[name="contact"]:checked + label {
   color: #fff;
   opacity: 1; }
 
+.alldocs-year {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid gray; }
+
+.alldocs-year-column {
+  width: 30%;
+  align-items: center;
+  justify-content: flex-end;
+  display: flex; }
+
+.alldocs-year-column:first-child {
+  width: 30%;
+  justify-content: flex-start; }
+
+.alldocs-year-column img {
+  width: 44px;
+  height: 44px;
+  padding-right: 5px; }
+
+.catalog-header h2 {
+  margin-left: 5px; }
+
+.catalog-header-title {
+  display: flex; }
+
 /*
 @import "src/sass/components/app.scss";
 @import "src/sass/components/font.scss";
