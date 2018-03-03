@@ -8585,7 +8585,7 @@
 	      _universalBillsList2.default.drawYear(billsData.data, docsBody, onYearClick);
 	    } else if (billsData.data[0].day_number) {
 	      _universalBillsList2.default.drawMonth(billsData.data, docsBody, onMonthClick);
-	    } else if (billsData.data[0].stock_name && _storage2.default.allDocsOperationType === 'naklad') {
+	    } else if ((billsData.data[0].stock_name || billsData.data[0].stock_name === 'null') && _storage2.default.allDocsOperationType === 'naklad') {
 	      billsData.data.sort(function (a, b) {
 	        return +b.id - +a.id;
 	      });
@@ -8596,7 +8596,7 @@
 	
 	      docsBody.insertAdjacentHTML('beforeend', '<button type="button" class="btn btn-primary">Загрузить еще</button>');
 	      docsBody.lastChild.addEventListener('click', onClickLoadMore);
-	    } else if (billsData.data[0].stock_name && _storage2.default.allDocsOperationType === 'balance') {
+	    } else if ((billsData.data[0].stock_name || billsData.data[0].stock_name === 'null') && _storage2.default.allDocsOperationType === 'balance') {
 	      // billsData.data.sort((a, b) => +b.id - +a.id);
 	      // bills.drawDay(billsData.data, docsBody, onBillClick);
 	
