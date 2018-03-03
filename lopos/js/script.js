@@ -8499,7 +8499,7 @@
 	  };
 	};
 	
-	// ############################## ЗАГРУЖАЕМ ДОПОЛНИТЕЛЬНЫЕ ДОКУМЕНТЫ   ############
+	// ############################## ЗАГРУЖАЕМ ДОПОЛНИТЕЛЬНЫЕ НАКЛАДНЫЕ   ############
 	
 	
 	var lastId = '';
@@ -8520,7 +8520,11 @@
 	    return b.id - a.id;
 	  });
 	  prevData = prevData.concat(billsData.data);
-	  _universalBillsList2.default.drawDay(billsData.data, docsBody, onBillClick);
+	  if (billsData.data[0].stock_name && _storage2.default.allDocsOperationType === 'naklad') {
+	    _universalBillsList2.default.drawDay(billsData.data, docsBody, onBillClick);
+	  } else if (billsData.data[0].stock_name && _storage2.default.allDocsOperationType === 'balance') {
+	    _universalBillsList2.default.drawDayBalance(billsData.data, docsBody, onBalanceActClick);
+	  }
 	
 	  prevData = billsData.data.concat(prevData);
 	
@@ -8587,17 +8591,25 @@
 	      });
 	      _universalBillsList2.default.drawDay(billsData.data, docsBody, onBillClick);
 	
-	      // lastId = billsData.data[billsData.data.length - 1].time;
 	      lastId = billsData.data[billsData.data.length - 1].id;
 	      prevData = billsData.data.slice(0);
 	
 	      docsBody.insertAdjacentHTML('beforeend', '<button type="button" class="btn btn-primary">Загрузить еще</button>');
 	      docsBody.lastChild.addEventListener('click', onClickLoadMore);
 	    } else if (billsData.data[0].stock_name && _storage2.default.allDocsOperationType === 'balance') {
+	      // billsData.data.sort((a, b) => +b.id - +a.id);
+	      // bills.drawDay(billsData.data, docsBody, onBillClick);
+	
 	      billsData.data.sort(function (a, b) {
 	        return +a.id - +b.id;
 	      });
 	      _universalBillsList2.default.drawDayBalance(billsData.data, docsBody, onBalanceActClick);
+	
+	      lastId = billsData.data[billsData.data.length - 1].id;
+	      prevData = billsData.data.slice(0);
+	
+	      docsBody.insertAdjacentHTML('beforeend', '<button type="button" class="btn btn-primary">Загрузить еще</button>');
+	      docsBody.lastChild.addEventListener('click', onClickLoadMore);
 	    }
 	  } else {
 	    docsBody.innerHTML = _storage2.default.allDocsOperationType === 'naklad' ? 'Накладных нет' : 'Балансовых операций нет';
