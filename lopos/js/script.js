@@ -8779,11 +8779,26 @@
 	};
 	
 	var getDayElement = function getDayElement(item, index) {
-	  return '\n  <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n    <div class="media">\n      <img class="mr-3" src="img/' + BillTypes['type' + item.type] + '.png" width="30" alt="">\n      <div class="media-body">\n        <b>ID: </b>' + item.id + '\n        <b> \u0421\u0442\u0430\u0442\u0443\u0441: </b>' + item.status + '\n        <b> ID \u0441\u043A\u043B\u0430\u0434\u0430: </b>' + item.stock_id + '\n        <b> \u0418\u043C\u044F \u0441\u043A\u043B\u0430\u0434\u0430: </b>' + item.stock_name + '\n        <b> \u0412\u0440\u0435\u043C\u044F: </b>' + new Date(+(item.time + '000')).toLocaleString() + '\n        <b> \u0412\u0441\u0435\u0433\u043E: </b>' + item.total + '\n        <b> \u0422\u0438\u043F: </b>' + item.type + '\n      </div>\n    </div>';
+	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img class="mr-3" src="img/' + BillTypes['type' + item.type] + '.png" width="30" alt="">\n      <span> \u2116 ' + item.id + ' \u0432 ' + new Date(+(item.time + '000')).toLocaleTimeString() + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <img class="mr-3 rounded-circle" src="img/user-male-filled-32.png" style="background-color: #' + item.operator_color + '" width="30" alt="">\n    </div>';
 	};
 	
 	var getDayBalanceElement = function getDayBalanceElement(item, index) {
-	  return '\n  <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n    <div class="media">\n      <img class="mr-3" src="img/debitcredit.png" width="30" alt="">\n\n      <div class="media-body">\n        <b>ID: </b>' + item.id + '\n        <b> ID \u0441\u043A\u043B\u0430\u0434\u0430: </b>' + item.stock_id + '\n        <b> \u0418\u043C\u044F \u0441\u043A\u043B\u0430\u0434\u0430: </b>' + item.stock_name + '\n        <b> \u0412\u0440\u0435\u043C\u044F: </b>' + new Date(+(item.time + '000')).toLocaleString() + '\n        <b> \u0412\u0441\u0435\u0433\u043E: </b>' + item.total + '\n        <b> \u041A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439: </b>' + item.comment + '\n        <b> \u041E\u0441\u043D\u043E\u0432\u0430\u043D\u0438\u0435: </b>' + item.reason + '\n      </div>\n    </div>';
+	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img class="mr-3" src="img/debitcredit.png" width="30" alt="">\n      <span> \u2116 ' + item.id + ' \u0432 ' + new Date(+(item.time + '000')).toLocaleTimeString() + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <img class="mr-3 rounded-circle" src="img/user-male-filled-32.png" style="background-color: #' + item.operator_color + '" width="30" alt="">\n    </div>';
+	  /*
+	  return `
+	  <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">
+	    <div class="media">
+	        <div class="media-body">
+	        <b>ID: </b>${item.id}
+	        <b> ID склада: </b>${item.stock_id}
+	        <b> Имя склада: </b>${item.stock_name}
+	        <b> Время: </b>${new Date(+(item.time + '000')).toLocaleString()}
+	        <b> Всего: </b>${item.total}
+	        <b> Комментарий: </b>${item.comment}
+	        <b> Основание: </b>${item.reason}
+	      </div>
+	    </div>`;
+	    */
 	};
 	
 	var markup = {
