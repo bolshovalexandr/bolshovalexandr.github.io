@@ -8783,7 +8783,7 @@
 	};
 	
 	var getDayBalanceElement = function getDayBalanceElement(item, index) {
-	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img class="mr-3" src="img/debitcredit.png" width="30" alt="">\n      <span> \u2116 ' + item.id + ' \u0432 ' + new Date(+(item.time + '000')).toLocaleTimeString() + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <img class="mr-3 rounded-circle" src="img/user-male-filled-32.png" style="background-color: #' + item.operator_color + '" width="30" alt="">\n    </div>';
+	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img class="mr-3" src="img/' + (+item.total < 0 ? 'expenses' : 'revenue') + '.png" width="30" alt="">\n      <span> \u2116 ' + item.id + ' \u0432 ' + new Date(+(item.time + '000')).toLocaleTimeString() + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <img class="mr-3 rounded-circle" src="img/user-male-filled-32.png" style="background-color: #' + item.operator_color + '" width="30" alt="">\n    </div>';
 	  /*
 	  return `
 	  <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">
