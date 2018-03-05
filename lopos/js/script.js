@@ -4862,8 +4862,6 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var groupsEditForm = document.querySelector('#groups-edit');
-	// import groupEdit from './catalog__groups--edit.js';
-	
 	var groupsEditName = document.querySelector('#groups-edit-name');
 	var groupsEditMarkup = document.querySelector('#groups-edit-markup');
 	var groupsEditSubmit = document.querySelector('#groups-edit-submit');
@@ -4871,15 +4869,11 @@
 	var listGroups = document.querySelector('#list-groups-list');
 	var listGroupsCardAddBtn = document.querySelector('#list-groups-card-add-btn');
 	var listGroupsCardDeleteBtn = document.querySelector('#groups-edit-delete');
-	// const listGroupsCardEditBtn = document.querySelector('#list-groups-card-edit-btn');
 	var listGroupsCard = document.querySelector('#list-groups-card');
 	var listGroupsCardBody = document.querySelector('#list-groups-card-body');
-	// const listGroupsCardCheckMessage = document.querySelector('#list-groups-header-check-message');
 	var groupsAddModal = document.querySelector('#groups-add');
 	var groupGoodsCard = document.querySelector('#group-goods-card');
 	var groupName = document.querySelector('#group-name');
-	
-	// const SELECT_DELAY = 2000;
 	
 	var loaderSpinnerId = 'loader-groups';
 	var loaderSpinnerMessage = 'Загрузка';
@@ -4922,19 +4916,7 @@
 	};
 	
 	// обработчики кликов редактирования/удаления
-	/*
-	const onEditDeleteClick = (evt) => {
-	  auth.groupListOperationType = (evt.target === listGroupsCardEditBtn) ? 'edit' : 'delete';
-	  listGroupsCardCheckMessage.innerHTML = 'Выберите группу';
 	
-	  window.setTimeout(function () {
-	    listGroupsCardCheckMessage.innerHTML = '';
-	    auth.groupListOperationType = 'open';
-	  }, SELECT_DELAY);
-	};
-	*/
-	// listGroupsCardEditBtn.addEventListener('click', onEditDeleteClick);
-	// listGroupsCardDeleteBtn.addEventListener('click', onEditDeleteClick);
 	
 	var getGoodsForGroup = function getGoodsForGroup() {
 	  _xhr2.default.request = {
@@ -4977,15 +4959,6 @@
 	// обработчик клика по ноде группы
 	var onGroupClick = function onGroupClick(evt) {
 	
-	  /*
-	  if (auth.groupListOperationType === 'edit') {
-	    $(groupsEditForm).modal('show');
-	    groupsEditName.value = auth.currentGroupName;
-	    groupEdit.start(groupsEditForm);
-	    } else if (auth.groupListOperationType === 'delete') {
-	    groupDelete.make();
-	    } else if (evt.target.tagName === 'BUTTON') {
-	  */
 	  if (evt.target.tagName === 'BUTTON') {
 	    $(groupsEditForm).modal('show');
 	    groupsEditName.value = _storage2.default.currentGroupName;
