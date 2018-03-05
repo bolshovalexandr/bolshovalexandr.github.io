@@ -4964,7 +4964,7 @@
 	groupsEditForm.addEventListener('submit', onGroupsEditSubmit);
 	
 	var onGroupsEditNameMarkup = function onGroupsEditNameMarkup() {
-	  if (groupsEditName.value === _storage2.default.currentGroupName && groupsEditMarkup.value === _storage2.default.currentGroupMarkup) {
+	  if (groupsEditName.value === _storage2.default.currentGroupName && +groupsEditMarkup.value === +_storage2.default.currentGroupMarkup) {
 	    groupsEditSubmit.setAttribute('disabled', 'disabled');
 	  } else {
 	    groupsEditSubmit.removeAttribute('disabled');
@@ -4995,6 +4995,7 @@
 	    } else {
 	      listGroupsCardDeleteBtn.setAttribute('disabled', 'disabled');
 	    }
+	    onGroupsEditNameMarkup();
 	    // groupEdit.start(groupsEditForm);
 	
 	    // } else if (auth.groupListOperationType === 'open' || !auth.groupListOperationType) {
