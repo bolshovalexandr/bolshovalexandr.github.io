@@ -122,31 +122,31 @@
 	
 	var _operations__manufacture2 = _interopRequireDefault(_operations__manufacture);
 	
-	var _operations__balance = __webpack_require__(56);
+	var _operations__balance = __webpack_require__(55);
 	
 	var _operations__balance2 = _interopRequireDefault(_operations__balance);
 	
-	var _online__users = __webpack_require__(57);
+	var _online__users = __webpack_require__(56);
 	
 	var _online__users2 = _interopRequireDefault(_online__users);
 	
-	var _accounting__allDocs = __webpack_require__(58);
+	var _accounting__allDocs = __webpack_require__(57);
 	
 	var _accounting__allDocs2 = _interopRequireDefault(_accounting__allDocs);
 	
-	var _catalog__cards = __webpack_require__(60);
+	var _catalog__cards = __webpack_require__(59);
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
-	var _catalog__search = __webpack_require__(63);
+	var _catalog__search = __webpack_require__(62);
 	
 	var _catalog__search2 = _interopRequireDefault(_catalog__search);
 	
-	var _operations__trade = __webpack_require__(67);
+	var _operations__trade = __webpack_require__(66);
 	
 	var _operations__trade2 = _interopRequireDefault(_operations__trade);
 	
-	var _operations__inventory = __webpack_require__(75);
+	var _operations__inventory = __webpack_require__(74);
 	
 	var _operations__inventory2 = _interopRequireDefault(_operations__inventory);
 	
@@ -456,6 +456,22 @@
 	
 	  get currentGroupLevel() {
 	    return sessionStorage.getItem('currentGroupLevel');
+	  },
+	
+	  set currentGroupMarkup(markup) {
+	    sessionStorage.setItem('currentGroupMarkup', markup);
+	  },
+	
+	  get currentGroupMarkup() {
+	    return sessionStorage.getItem('currentGroupMarkup');
+	  },
+	
+	  set currentGroupCount(count) {
+	    sessionStorage.setItem('currentGroupCount', count);
+	  },
+	
+	  get currentGroupCount() {
+	    return sessionStorage.getItem('currentGroupCount');
 	  },
 	
 	  set currentGoodId(id) {
@@ -4839,27 +4855,31 @@
 	
 	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
 	
-	var _catalog__groupsEdit = __webpack_require__(50);
+	var _universalValidityMicro = __webpack_require__(50);
 	
-	var _catalog__groupsEdit2 = _interopRequireDefault(_catalog__groupsEdit);
+	var _universalValidityMicro2 = _interopRequireDefault(_universalValidityMicro);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var groupsEditForm = document.querySelector('#groups-edit');
+	// import groupEdit from './catalog__groups--edit.js';
+	
 	var groupsEditName = document.querySelector('#groups-edit-name');
+	var groupsEditMarkup = document.querySelector('#groups-edit-markup');
+	var groupsEditSubmit = document.querySelector('#groups-edit-submit');
 	
 	var listGroups = document.querySelector('#list-groups-list');
 	var listGroupsCardAddBtn = document.querySelector('#list-groups-card-add-btn');
-	var listGroupsCardDeleteBtn = document.querySelector('#list-groups-card-delete-btn');
-	var listGroupsCardEditBtn = document.querySelector('#list-groups-card-edit-btn');
+	var listGroupsCardDeleteBtn = document.querySelector('#groups-edit-delete');
+	// const listGroupsCardEditBtn = document.querySelector('#list-groups-card-edit-btn');
 	var listGroupsCard = document.querySelector('#list-groups-card');
 	var listGroupsCardBody = document.querySelector('#list-groups-card-body');
-	var listGroupsCardCheckMessage = document.querySelector('#list-groups-header-check-message');
+	// const listGroupsCardCheckMessage = document.querySelector('#list-groups-header-check-message');
 	var groupsAddModal = document.querySelector('#groups-add');
 	var groupGoodsCard = document.querySelector('#group-goods-card');
 	var groupName = document.querySelector('#group-name');
 	
-	var SELECT_DELAY = 2000;
+	// const SELECT_DELAY = 2000;
 	
 	var loaderSpinnerId = 'loader-groups';
 	var loaderSpinnerMessage = 'Загрузка';
@@ -4872,7 +4892,7 @@
 	// поиск по группам
 	var listGroupSearchInput = document.querySelector('#list-groups-search-input');
 	listGroupSearchInput.addEventListener('input', function (evt) {
-	  _universalGroupsList2.default.draw(_universalSearch2.default.make(loadedData.data, evt.target.value), listGroupsCardBody, onGroupClick);
+	  _universalGroupsList2.default.drawCatalog(_universalSearch2.default.make(loadedData.data, evt.target.value), listGroupsCardBody, onGroupClick);
 	});
 	
 	listGroupsCardAddBtn.addEventListener('click', function () {
@@ -4882,8 +4902,9 @@
 	// обработка успеха загрузки групп
 	var onSuccessGroupsLoad = function onSuccessGroupsLoad(loadedGroups) {
 	  loadedData = loadedGroups;
+	  console.log(loadedData);
 	  document.querySelector('#' + loaderSpinnerId).remove();
-	  _universalGroupsList2.default.draw(loadedGroups.data, listGroupsCardBody, onGroupClick);
+	  _universalGroupsList2.default.drawCatalog(loadedGroups.data, listGroupsCardBody, onGroupClick);
 	};
 	
 	// получение групп
@@ -4901,17 +4922,19 @@
 	};
 	
 	// обработчики кликов редактирования/удаления
-	var onEditDeleteClick = function onEditDeleteClick(evt) {
-	  _storage2.default.groupListOperationType = evt.target === listGroupsCardEditBtn ? 'edit' : 'delete';
+	/*
+	const onEditDeleteClick = (evt) => {
+	  auth.groupListOperationType = (evt.target === listGroupsCardEditBtn) ? 'edit' : 'delete';
 	  listGroupsCardCheckMessage.innerHTML = 'Выберите группу';
 	
 	  window.setTimeout(function () {
 	    listGroupsCardCheckMessage.innerHTML = '';
-	    _storage2.default.groupListOperationType = 'open';
+	    auth.groupListOperationType = 'open';
 	  }, SELECT_DELAY);
 	};
-	listGroupsCardEditBtn.addEventListener('click', onEditDeleteClick);
-	listGroupsCardDeleteBtn.addEventListener('click', onEditDeleteClick);
+	*/
+	// listGroupsCardEditBtn.addEventListener('click', onEditDeleteClick);
+	// listGroupsCardDeleteBtn.addEventListener('click', onEditDeleteClick);
 	
 	var getGoodsForGroup = function getGoodsForGroup() {
 	  _xhr2.default.request = {
@@ -4922,16 +4945,60 @@
 	  };
 	};
 	
-	// обработчик клика по ноде группы
-	var onGroupClick = function onGroupClick() {
+	listGroupsCardDeleteBtn.addEventListener('click', _catalog__groupsDelete2.default.make);
 	
-	  if (_storage2.default.groupListOperationType === 'edit') {
+	var onGroupsEditSubmit = function onGroupsEditSubmit(evt) {
+	  evt.preventDefault();
+	  if (_universalValidityMicro2.default.check([groupsEditName, groupsEditMarkup] /* , ['balance-amount', 'balance-set-describe'] */)) {
+	    _xhr2.default.request = {
+	      metod: 'PUT',
+	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/group/' + _storage2.default.currentGoodId,
+	      data: 'markup=' + groupsEditMarkup.value + '&name=' + groupsEditName.value + '&token=' + _storage2.default.data.token,
+	      callbackSuccess: getGroups
+	    };
+	    $(groupsEditForm).modal('hide');
+	  }
+	};
+	
+	groupsEditSubmit.addEventListener('click', onGroupsEditSubmit);
+	groupsEditForm.addEventListener('submit', onGroupsEditSubmit);
+	
+	var onGroupsEditNameMarkup = function onGroupsEditNameMarkup() {
+	  if (groupsEditName.value === _storage2.default.currentGroupName && groupsEditMarkup.value === _storage2.default.currentGroupMarkup) {
+	    groupsEditSubmit.setAttribute('disabled', 'disabled');
+	  } else {
+	    groupsEditSubmit.removeAttribute('disabled');
+	  }
+	};
+	
+	groupsEditName.addEventListener('input', onGroupsEditNameMarkup);
+	groupsEditMarkup.addEventListener('input', onGroupsEditNameMarkup);
+	
+	// обработчик клика по ноде группы
+	var onGroupClick = function onGroupClick(evt) {
+	
+	  /*
+	  if (auth.groupListOperationType === 'edit') {
+	    $(groupsEditForm).modal('show');
+	    groupsEditName.value = auth.currentGroupName;
+	    groupEdit.start(groupsEditForm);
+	    } else if (auth.groupListOperationType === 'delete') {
+	    groupDelete.make();
+	    } else if (evt.target.tagName === 'BUTTON') {
+	  */
+	  if (evt.target.tagName === 'BUTTON') {
 	    $(groupsEditForm).modal('show');
 	    groupsEditName.value = _storage2.default.currentGroupName;
-	    _catalog__groupsEdit2.default.start(groupsEditForm);
-	  } else if (_storage2.default.groupListOperationType === 'delete') {
-	    _catalog__groupsDelete2.default.make();
-	  } else if (_storage2.default.groupListOperationType === 'open' || !_storage2.default.groupListOperationType) {
+	    groupsEditMarkup.value = _storage2.default.currentGroupMarkup;
+	    if (_storage2.default.currentGroupCount === '0') {
+	      listGroupsCardDeleteBtn.removeAttribute('disabled');
+	    } else {
+	      listGroupsCardDeleteBtn.setAttribute('disabled', 'disabled');
+	    }
+	    // groupEdit.start(groupsEditForm);
+	
+	    // } else if (auth.groupListOperationType === 'open' || !auth.groupListOperationType) {
+	  } else {
 	    groupName.innerHTML = _storage2.default.currentGroupName;
 	    groupGoodsCard.classList.remove('d-none');
 	    listGroupsCard.classList.add('d-none');
@@ -5037,6 +5104,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// удаление группы
+	var groupsEditForm = document.querySelector('#groups-edit');
+	
 	var onSuccessGroupDelete = function onSuccessGroupDelete(answer) {
 	
 	  var message = '';
@@ -5045,6 +5114,7 @@
 	  } else {
 	    message = 'Группа успешно удалена';
 	    _catalog__groups2.default.redraw();
+	    $(groupsEditForm).modal('hide');
 	  }
 	
 	  _tools2.default.informationtModal = {
@@ -6865,6 +6935,9 @@
 	  getElement: function getElement(item, index) {
 	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '" data-group-index="' + index + '" data-group-level="' + item.level + '" data-group-name="' + item.name + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n      <div class="d-flex justify-content-between align-items-center" style="padding-right: 34px;">\n        <span> ' + (item.count ? item.count : '') + ' </span>\n      </div>\n    </div>';
 	  },
+	  getElementExtended: function getElementExtended(item, index) {
+	    return '\n    <div class="catalog-groups-header">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + item.name + '</div>\n        <div class="catalog-groups-column">' + item.markup_group + '%</div>\n        <div class="catalog-groups-column">' + (item.count ? item.count : '') + '</div>\n        <div class="catalog-groups-column">\n          <button type="button" class="btn p-0 icon-btn icon-btn__edit--black"></button>\n        </div>\n    </div>';
+	  },
 	  drawDataInContainer: function drawDataInContainer(groupsData, container, handler) {
 	    var _this = this;
 	
@@ -6875,6 +6948,21 @@
 	        _storage2.default.currentGroupName = group.name;
 	        _storage2.default.currentGroupLevel = group.level;
 	        handler();
+	      });
+	    });
+	  },
+	  drawDataInContainerExtended: function drawDataInContainerExtended(groupsData, container, handler) {
+	    var _this2 = this;
+	
+	    groupsData.forEach(function (group, index) {
+	      container.insertAdjacentHTML('beforeend', _this2.getElementExtended(group, index));
+	      container.lastChild.addEventListener('click', function (evt) {
+	        _storage2.default.currentGroupId = group.id;
+	        _storage2.default.currentGroupName = group.name;
+	        _storage2.default.currentGroupLevel = group.level;
+	        _storage2.default.currentGroupMarkup = group.markup_group;
+	        _storage2.default.currentGroupCount = group.count;
+	        handler(evt);
 	      });
 	    });
 	  }
@@ -6890,112 +6978,74 @@
 	  }
 	};
 	
+	// расширенная отрисовка списка групп для страницы КАТАЛОГ/ГРУППЫ ТОВАРОВ
+	var drawGroupsExtended = function drawGroupsExtended(groupsList, container, handler) {
+	  container.innerHTML = '\n    <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u041D\u043E\u043C\u0435\u0440</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0446\u0435\u043D\u043A\u0430 \u043D\u0430 \u0433\u0440\u0443\u043F\u043F\u0443</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0442\u043E\u0432\u0430\u0440\u043E\u0432 \u0432 \u0433\u0440\u0443\u043F\u043F\u0435</div>\n        <div class="catalog-groups-column">\u0420\u0435\u0434.</div>\n    </div>';
+	
+	  if (groupsList.length > 0) {
+	    markup.drawDataInContainerExtended(groupsList, container, handler);
+	  } else {
+	    container.innerHTML = 'Списка групп для этого предприятия еще нет';
+	  }
+	};
+	
 	exports.default = {
-	  draw: drawGroups
+	  draw: drawGroups,
+	  drawCatalog: drawGroupsExtended
 	};
 
 /***/ }),
 /* 50 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	
-	var _storage = __webpack_require__(1);
-	
-	var _storage2 = _interopRequireDefault(_storage);
-	
-	var _tools = __webpack_require__(7);
-	
-	var _tools2 = _interopRequireDefault(_tools);
-	
-	var _formTools = __webpack_require__(39);
-	
-	var _formTools2 = _interopRequireDefault(_formTools);
-	
-	var _catalog__groups = __webpack_require__(35);
-	
-	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var appUrl = void 0;
-	var messages = void 0;
-	
-	var form = void 0;
-	var name = void 0;
-	var modal = void 0;
-	
-	var initVar = function initVar(remModal) {
-	  modal = remModal;
-	  form = modal.querySelector('*[data-formName]');
-	  name = form.querySelector('*[data-valid="name"]');
-	
-	  appUrl = window.appSettings[form.dataset.formname].UrlApi;
-	  messages = window.appSettings[form.dataset.formname].messages;
-	};
-	
-	var callbackXhrSuccess = function callbackXhrSuccess(response) {
-	  switch (response.status) {
-	    case 200:
-	      $(modal).modal('hide');
-	      _formTools2.default.reset();
-	      _catalog__groups2.default.redraw();
-	      break;
-	    case 400:
-	      _tools2.default.informationtModal = {
-	        'title': 'Error',
-	        'message': messages.mes400
-	      };
-	      break;
-	    case 271:
-	      _tools2.default.informationtModal = {
-	        'title': 'Error',
-	        'message': response.messages
-	      };
-	      break;
+	var validityRelations = {
+	  'balance-amount': {
+	    pattern: /(^\d+$)|(^\d+[.]\d+$)/,
+	    message: 'денежный формат<br>( 000, 000.000 )'
+	  },
+	  'balance-set-describe': {
+	    pattern: /^[а-яёА-ЯЁA-Za-z\s\d\.\,\:\;]{0,300}$/,
+	    message: 'Не более 300 символов со знаками препинания (. , : ;) без спецсимволов'
+	  },
+	  'universal-modal-micro-name': {
+	    pattern: /(^\d+$)|(^\d+[.]\d+$)/,
+	    message: 'Дробное число ( 000, 000.000, 0 - удалит карточку)'
+	  },
+	  'change-password': {
+	    pattern: /^[а-яёА-ЯЁA-Za-z0-9\s\d]{2,20}$/,
+	    message: 'От 2-х до 20 символов без спецсимволов'
+	  },
+	  'change-user-name': {
+	    pattern: /^[а-яёА-ЯЁA-Za-z0-9\s\№\d]{2,20}$/,
+	    message: 'От 2-х до 20 символов без спецсимволов'
+	  },
+	  'groups-edit-name': {
+	    pattern: /^[а-яёА-ЯЁA-Za-z\s\d]+$/,
+	    message: 'От 2-х до 20 символов без спецсимволов'
+	  },
+	  'groups-edit-markup': {
+	    pattern: /(^\d+$)|(^\d+[.]\d+$)/,
+	    message: 'Положительное число'
 	  }
-	};
 	
-	var callbackXhrError = function callbackXhrError(xhr) {
-	
-	  $(modal).modal('hide');
-	  _formTools2.default.reset();
-	
-	  _tools2.default.informationtModal = {
-	    'title': 'ОШИБКА СВЯЗИ',
-	    'message': '\u041E\u0448\u0438\u0431\u043A\u0430 ' + xhr.status + ': ' + xhr.statusText
-	  };
-	};
-	
-	var submitForm = function submitForm() {
-	  var stor = _storage2.default.data;
-	
-	  var postData = 'name=' + name.value + '&token=' + stor.token;
-	  var urlApp = appUrl.replace('{{dir}}', stor.directory);
-	  urlApp = urlApp.replace('{{oper}}', stor.operatorId);
-	  urlApp = urlApp.replace('{{busId}}', stor.currentBusiness);
-	  urlApp = urlApp.replace('{{groupId}}', _storage2.default.currentGroupId);
-	
-	  _formTools2.default.submit({
-	    url: urlApp,
-	    metod: 'PUT',
-	    data: postData,
-	    callbackSuccess: callbackXhrSuccess,
-	    callbackError: callbackXhrError
-	  });
 	};
 	
 	exports.default = {
-	  start: function start(remModal) {
-	    initVar(remModal);
-	    _formTools2.default.work(modal, submitForm);
-	  },
-	  stop: function stop() {
-	    _formTools2.default.reset();
+	  check: function check(fields, presetNames) {
+	    var result = [];
+	    fields.forEach(function (field, i) {
+	      var relationType = presetNames && presetNames[i] || field.id;
+	      field.nextElementSibling.innerHTML = !validityRelations[relationType].pattern.test(field.value) ? validityRelations[relationType].message : '';
+	      result.push(validityRelations[relationType].pattern.test(field.value));
+	    });
+	    return result.every(function (item) {
+	      return item;
+	    });
 	  }
 	};
 
@@ -7344,7 +7394,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _universalValidityMicro = __webpack_require__(54);
+	var _universalValidityMicro = __webpack_require__(50);
 	
 	var _universalValidityMicro2 = _interopRequireDefault(_universalValidityMicro);
 	
@@ -7352,7 +7402,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalogCards = __webpack_require__(55);
+	var _catalogCards = __webpack_require__(54);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
 	
@@ -7583,53 +7633,6 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var validityRelations = {
-	  'balance-amount': {
-	    pattern: /(^\d+$)|(^\d+[.]\d+$)/,
-	    message: 'денежный формат<br>( 000, 000.000 )'
-	  },
-	  'balance-set-describe': {
-	    pattern: /^[а-яёА-ЯЁA-Za-z\s\d\.\,\:\;]{0,300}$/,
-	    message: 'Не более 300 символов со знаками препинания (. , : ;) без спецсимволов'
-	  },
-	  'universal-modal-micro-name': {
-	    pattern: /(^\d+$)|(^\d+[.]\d+$)/,
-	    message: 'Дробное число ( 000, 000.000, 0 - удалит карточку)'
-	  },
-	  'change-password': {
-	    pattern: /^[а-яёА-ЯЁA-Za-z0-9\s\d]{2,20}$/,
-	    message: 'От 2-х до 20 символов без спецсимволов'
-	  },
-	  'change-user-name': {
-	    pattern: /^[а-яёА-ЯЁA-Za-z0-9\s\№\d]{2,20}$/,
-	    message: 'От 2-х до 20 символов без спецсимволов'
-	  }
-	
-	};
-	
-	exports.default = {
-	  check: function check(fields, presetNames) {
-	    var result = [];
-	    fields.forEach(function (field, i) {
-	      var relationType = presetNames[i] || field.id;
-	      field.nextElementSibling.innerHTML = !validityRelations[relationType].pattern.test(field.value) ? validityRelations[relationType].message : '';
-	      result.push(validityRelations[relationType].pattern.test(field.value));
-	    });
-	    return result.every(function (item) {
-	      return item;
-	    });
-	  }
-	};
-
-/***/ }),
-/* 55 */
-/***/ (function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 	exports.default = {
 	  getElement: function getElement(item, index) {
 	
@@ -7652,7 +7655,7 @@
 	};
 
 /***/ }),
-/* 56 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7669,7 +7672,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _universalValidityMicro = __webpack_require__(54);
+	var _universalValidityMicro = __webpack_require__(50);
 	
 	var _universalValidityMicro2 = _interopRequireDefault(_universalValidityMicro);
 	
@@ -7841,7 +7844,7 @@
 	};
 
 /***/ }),
-/* 57 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7858,7 +7861,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _universalValidityMicro = __webpack_require__(54);
+	var _universalValidityMicro = __webpack_require__(50);
 	
 	var _universalValidityMicro2 = _interopRequireDefault(_universalValidityMicro);
 	
@@ -8261,7 +8264,7 @@
 	};
 
 /***/ }),
-/* 58 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8278,7 +8281,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _universalBillsList = __webpack_require__(59);
+	var _universalBillsList = __webpack_require__(58);
 	
 	var _universalBillsList2 = _interopRequireDefault(_universalBillsList);
 	
@@ -8720,7 +8723,7 @@
 	};
 
 /***/ }),
-/* 59 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8764,18 +8767,6 @@
 	
 	var getMonthElement = function getMonthElement(item, index) {
 	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img src="img/ic_agree.png" alt="">\n      <span></b>' + (+item.day_number < 10 ? '0' + item.day_number : item.day_number) + '.' + (+document.querySelector('#docs-month').value + 1 < 10 ? '0' + (+document.querySelector('#docs-month').value + 1) : +document.querySelector('#docs-month').value + 1) + '.' + document.querySelector('#docs-year').value + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.count_documents + '</span><br>\n    </div>';
-	
-	  /*
-	  <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">
-	    <div class="media">
-	      <div class="media-body">
-	        <b> Номер дня: </b>${item.day_number}
-	        <b> Время (первая) </b>${new Date(+(item.doc_time_first + '000')).toLocaleString()}
-	        <b> Время (последняя) </b>${new Date(+(item.doc_time_last + '000')).toLocaleString()}
-	        <b> Количество документов: </b>${item.count_documents}
-	      </div>
-	    </div>`;
-	  */
 	};
 	
 	var getDayElement = function getDayElement(item, index) {
@@ -8784,21 +8775,6 @@
 	
 	var getDayBalanceElement = function getDayBalanceElement(item, index) {
 	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img class="mr-3" src="img/' + (+item.total < 0 ? 'expenses' : 'revenue') + '.png" width="30" alt="">\n      <span> \u2116 ' + item.id + ' \u0432 ' + new Date(+(item.time + '000')).toLocaleTimeString() + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <img class="mr-3 rounded-circle" src="img/user-male-filled-32.png" style="background-color: #' + item.operator_color + '" width="30" alt="">\n    </div>';
-	  /*
-	  return `
-	  <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">
-	    <div class="media">
-	        <div class="media-body">
-	        <b>ID: </b>${item.id}
-	        <b> ID склада: </b>${item.stock_id}
-	        <b> Имя склада: </b>${item.stock_name}
-	        <b> Время: </b>${new Date(+(item.time + '000')).toLocaleString()}
-	        <b> Всего: </b>${item.total}
-	        <b> Комментарий: </b>${item.comment}
-	        <b> Основание: </b>${item.reason}
-	      </div>
-	    </div>`;
-	    */
 	};
 	
 	var markup = {
@@ -8849,7 +8825,7 @@
 	};
 
 /***/ }),
-/* 60 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8866,7 +8842,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogCards = __webpack_require__(55);
+	var _catalogCards = __webpack_require__(54);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
 	
@@ -8874,11 +8850,11 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalog__cardsAddEdit = __webpack_require__(61);
+	var _catalog__cardsAddEdit = __webpack_require__(60);
 	
 	var _catalog__cardsAddEdit2 = _interopRequireDefault(_catalog__cardsAddEdit);
 	
-	var _catalog__cardsAddResource = __webpack_require__(62);
+	var _catalog__cardsAddResource = __webpack_require__(61);
 	
 	var _catalog__cardsAddResource2 = _interopRequireDefault(_catalog__cardsAddResource);
 	
@@ -9195,7 +9171,7 @@
 	};
 
 /***/ }),
-/* 61 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9216,7 +9192,7 @@
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalog__cards = __webpack_require__(60);
+	var _catalog__cards = __webpack_require__(59);
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
@@ -9329,7 +9305,7 @@
 	};
 
 /***/ }),
-/* 62 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9350,7 +9326,7 @@
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalog__cards = __webpack_require__(60);
+	var _catalog__cards = __webpack_require__(59);
 	
 	var _catalog__cards2 = _interopRequireDefault(_catalog__cards);
 	
@@ -9434,7 +9410,7 @@
 	};
 
 /***/ }),
-/* 63 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9471,11 +9447,11 @@
 	
 	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
-	var _singleValidation = __webpack_require__(64);
+	var _singleValidation = __webpack_require__(63);
 	
 	var _singleValidation2 = _interopRequireDefault(_singleValidation);
 	
-	var _catalog__searchBarcode = __webpack_require__(65);
+	var _catalog__searchBarcode = __webpack_require__(64);
 	
 	var _catalog__searchBarcode2 = _interopRequireDefault(_catalog__searchBarcode);
 	
@@ -9662,7 +9638,7 @@
 	};
 
 /***/ }),
-/* 64 */
+/* 63 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -9728,7 +9704,7 @@
 	};
 
 /***/ }),
-/* 65 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9741,7 +9717,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalog__searchBarcodeValid = __webpack_require__(66);
+	var _catalog__searchBarcodeValid = __webpack_require__(65);
 	
 	var _catalog__searchBarcodeValid2 = _interopRequireDefault(_catalog__searchBarcodeValid);
 	
@@ -9769,7 +9745,7 @@
 	};
 
 /***/ }),
-/* 66 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9794,7 +9770,7 @@
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
-	var _catalog__search = __webpack_require__(63);
+	var _catalog__search = __webpack_require__(62);
 	
 	var _catalog__search2 = _interopRequireDefault(_catalog__search);
 	
@@ -9894,7 +9870,7 @@
 	};
 
 /***/ }),
-/* 67 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9911,27 +9887,27 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _operationsServerTools = __webpack_require__(68);
+	var _operationsServerTools = __webpack_require__(67);
 	
 	var _operationsServerTools2 = _interopRequireDefault(_operationsServerTools);
 	
-	var _operationsLeftColumn = __webpack_require__(69);
+	var _operationsLeftColumn = __webpack_require__(68);
 	
 	var _operationsLeftColumn2 = _interopRequireDefault(_operationsLeftColumn);
 	
-	var _operationsRightColumn = __webpack_require__(71);
+	var _operationsRightColumn = __webpack_require__(70);
 	
 	var _operationsRightColumn2 = _interopRequireDefault(_operationsRightColumn);
 	
-	var _operationsHeader = __webpack_require__(72);
+	var _operationsHeader = __webpack_require__(71);
 	
 	var _operationsHeader2 = _interopRequireDefault(_operationsHeader);
 	
-	var _operationsGoodAdd = __webpack_require__(73);
+	var _operationsGoodAdd = __webpack_require__(72);
 	
 	var _operationsGoodAdd2 = _interopRequireDefault(_operationsGoodAdd);
 	
-	var _operations__tradeDiscount = __webpack_require__(74);
+	var _operations__tradeDiscount = __webpack_require__(73);
 	
 	var _operations__tradeDiscount2 = _interopRequireDefault(_operations__tradeDiscount);
 	
@@ -10535,7 +10511,7 @@
 	};
 
 /***/ }),
-/* 68 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10670,7 +10646,7 @@
 	};
 
 /***/ }),
-/* 69 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10687,7 +10663,7 @@
 	
 	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
 	
-	var _operation__trade = __webpack_require__(70);
+	var _operation__trade = __webpack_require__(69);
 	
 	var _operation__trade2 = _interopRequireDefault(_operation__trade);
 	
@@ -10899,7 +10875,7 @@
 	};
 
 /***/ }),
-/* 70 */
+/* 69 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -10940,7 +10916,7 @@
 	};
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10949,7 +10925,7 @@
 	  value: true
 	});
 	
-	var _operation__trade = __webpack_require__(70);
+	var _operation__trade = __webpack_require__(69);
 	
 	var _operation__trade2 = _interopRequireDefault(_operation__trade);
 	
@@ -11163,7 +11139,7 @@
 	};
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11172,7 +11148,7 @@
 	  value: true
 	});
 	
-	var _operation__trade = __webpack_require__(70);
+	var _operation__trade = __webpack_require__(69);
 	
 	var _operation__trade2 = _interopRequireDefault(_operation__trade);
 	
@@ -11235,7 +11211,7 @@
 	};
 
 /***/ }),
-/* 73 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11305,7 +11281,7 @@
 	};
 
 /***/ }),
-/* 74 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11364,7 +11340,7 @@
 	};
 
 /***/ }),
-/* 75 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11381,23 +11357,23 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _operationsServerTools = __webpack_require__(68);
+	var _operationsServerTools = __webpack_require__(67);
 	
 	var _operationsServerTools2 = _interopRequireDefault(_operationsServerTools);
 	
-	var _operationsLeftColumn = __webpack_require__(69);
+	var _operationsLeftColumn = __webpack_require__(68);
 	
 	var _operationsLeftColumn2 = _interopRequireDefault(_operationsLeftColumn);
 	
-	var _operationsRightColumn = __webpack_require__(71);
+	var _operationsRightColumn = __webpack_require__(70);
 	
 	var _operationsRightColumn2 = _interopRequireDefault(_operationsRightColumn);
 	
-	var _operationsHeader = __webpack_require__(72);
+	var _operationsHeader = __webpack_require__(71);
 	
 	var _operationsHeader2 = _interopRequireDefault(_operationsHeader);
 	
-	var _operationsGoodAdd = __webpack_require__(73);
+	var _operationsGoodAdd = __webpack_require__(72);
 	
 	var _operationsGoodAdd2 = _interopRequireDefault(_operationsGoodAdd);
 	

@@ -65,6 +65,10 @@
   background-image: url(../img/icons8-edit-50.png);
   background-size: cover; }
 
+.icon-btn__edit--black {
+  background-image: url(../img/edit.png);
+  background-size: cover; }
+
 .icon-btn__delete {
   background-image: url(../img/trash-100.png);
   background-size: cover; }
@@ -479,6 +483,32 @@ input[name="contact"]:checked + label {
 
 .catalog-header-title {
   display: flex; }
+
+.catalog-groups-header {
+  display: flex;
+  justify-content: space-between; }
+
+.catalog-groups-column {
+  width: auto;
+  width: 20%;
+  border: 1px solid gray;
+  margin-left: -1px;
+  padding: 2px; }
+
+.catalog-groups-column:nth-child(1) {
+  width: 10%; }
+
+.catalog-groups-column:nth-child(2) {
+  width: 70%; }
+
+.catalog-groups-column:nth-child(5) {
+  width: 10%;
+  padding: 0;
+  text-align: center; }
+
+.catalog-groups-column button {
+  background-color: #fff;
+  padding: 0; }
 
 /*
 @import "src/sass/components/app.scss";

@@ -518,8 +518,8 @@
               <div id="list-groups-header-check-message"></div>
               <div class="catalog-header-buttons">
                 <button id="list-groups-card-add-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__add" data-toggle="modal" data-target="#groups-add"></button>
-                <button id="list-groups-card-edit-btn" type="button" class="btn btn-warning p-0 icon-btn icon-btn__edit"></button>
-                <button id="list-groups-card-delete-btn" type="button" class="btn btn-danger p-0 icon-btn icon-btn__delete"></button>
+                <!--<button id="list-groups-card-edit-btn" type="button" class="btn btn-warning p-0 icon-btn icon-btn__edit"></button>-->
+                <!--<button id="list-groups-card-delete-btn" type="button" class="btn btn-danger p-0 icon-btn icon-btn__delete"></button>-->
               </div>
             </div>
             <div id="list-groups-search" class="catalog-header">
@@ -1306,6 +1306,9 @@
               <label for="groups-edit-name">Новое название</label>
               <input type="text" class="form-control" id="groups-edit-name" aria-describedby="groups-edit-name" placeholder="Название" data-valid="name" data-validLabelName="name">
               <span id="groups-edit-valid" class="badge badge-danger w-100" data-validLabel="name" data-validLabel="name"></span>
+              <label for="groups-edit-markup">Наценка</label>
+              <input type="text" class="form-control" id="groups-edit-markup" aria-describedby="groups-edit-markup" placeholder="Наценка" data-valid="name" data-validLabelName="name">
+              <span id="groups-edit-valid" class="badge badge-danger w-100" data-validLabel="name" data-validLabel="name"></span>
             </div>
 
             <div id="groups-edit-spinner" class="progress text-white mb-3 invisible" data-spinner>
@@ -1315,6 +1318,7 @@
             <button id="groups-edit-submit" type="submit" class="btn btn-primary w-100" disabled>Изменить</button>
 
             <button id="groups-edit-cancel" type="button" class="btn btn-danger w-100 mt-3" data-dismiss="modal" data-butCancel data-cancel>Отменить</button>
+            <button id="groups-edit-delete" type="button" class="btn btn-danger w-100 mt-3">Удалить</button>
           </form>
         </div>
       </div>
