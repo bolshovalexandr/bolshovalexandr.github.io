@@ -4952,7 +4952,7 @@
 	  if (_universalValidityMicro2.default.check([groupsEditName, groupsEditMarkup] /* , ['balance-amount', 'balance-set-describe'] */)) {
 	    _xhr2.default.request = {
 	      metod: 'PUT',
-	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/group/' + _storage2.default.currentGoodId,
+	      url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/group/' + _storage2.default.currentGroupId,
 	      data: 'markup=' + groupsEditMarkup.value + '&name=' + groupsEditName.value + '&token=' + _storage2.default.data.token,
 	      callbackSuccess: getGroups
 	    };
