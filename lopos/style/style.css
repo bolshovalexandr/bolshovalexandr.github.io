@@ -516,6 +516,46 @@ input[name="contact"]:checked + label {
   background-color: #fff;
   padding: 0; }
 
+#list-reports-body h4 {
+  margin-top: 30px;
+  margin-bottom: 10px; }
+
+.reports-dashboard {
+  display: flex;
+  justify-content: space-between; }
+
+.dashboard-item {
+  display: flex;
+  border: 1px solid gray;
+  width: 18%; }
+
+.dashboard-status {
+  height: 32px;
+  width: 32px;
+  background-color: #28a745;
+  border-radius: 50%;
+  margin: 15px; }
+
+.goods-left-setup-string {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid gray; }
+
+.goods-left-setup-string > span {
+  display: inline-block;
+  width: 300px;
+  margin-right: auto; }
+
+.goods-left-setup-string > div {
+  display: flex;
+  justify-content: space-between;
+  width: 50px;
+  text-align: left; }
+
+.report-goods-left-modal-footer {
+  display: flex;
+  justify-content: space-between; }
+
 /*
 @import "src/sass/components/app.scss";
 @import "src/sass/components/font.scss";
