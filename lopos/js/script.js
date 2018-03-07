@@ -8855,6 +8855,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	// import 'date-input-polyfill';
 	var reportsList = document.querySelector('#list-reports-list');
 	// const docsHeader = document.querySelector('#list-docs-header');
 	// const reportsBody = document.querySelector('#list-reports-body');
