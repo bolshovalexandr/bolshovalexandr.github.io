@@ -539,32 +539,45 @@ input[name="contact"]:checked + label {
 .goods-left-setup-string {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid gray; }
+  align-items: center;
+  border-bottom: 1px solid gray;
+  margin-left: 34px;
+  margin-right: 50px; }
 
 .goods-left-setup-string > span {
   display: inline-block;
   width: 300px;
   margin-right: auto; }
 
+/*
 .goods-left-setup-string > div {
   display: flex;
   justify-content: space-between;
   width: 50px;
-  text-align: left; }
-
+  text-align: left;
+}
+*/
 .report-goods-left-modal-footer {
   display: flex;
   justify-content: space-between; }
 
-/*
-date-input-polyfill {
-  position: absolute !important;
-  text-align: center;
-  box-shadow: 0px 3px 10px 1px rgba(0,0,0,0.22);
-  cursor: default;
-  z-index: 10000!important;
-}
-*/
+#report-goods-left-modal-setup {
+  padding-left: 20px;
+  padding-right: 10px; }
+
+.report-setup-header {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+  margin-bottom: 15px;
+  margin-left: 20px;
+  margin-right: 60px; }
+
+.report-calendar {
+  margin-left: 34px;
+  margin-right: 50px;
+  margin-bottom: 10px; }
+
 /*
 @import "src/sass/components/app.scss";
 @import "src/sass/components/font.scss";

@@ -1862,61 +1862,60 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div id="report-goods-left-modal-setup">
 
-              <div class="goods-left-setup-string">
-                <h5>Склад</h5>
-                <div>
-                  <select id="report-goods-left-modal-stock" class="custom-select mr-1">
-                    <option value="null" selected>---------</option>
-                  </select>
-                </div>
-              </div>
+            <div class="report-setup-header">
+              <h5>Склад</h5>
+                <select id="report-goods-left-modal-stock" class="custom-select mr-1">
+                  <option value="null" selected>---------</option>
+                </select>
+            </div>
+
+            <div>
 
               <div class="goods-left-setup-string">
                 <span>На текущий момент</span>
-                <div><input class="form-check-input position-static" type="checkbox" value="111" checked="" disabled></div>
+                <input class="form-check-input position-static" type="checkbox" value="111" checked="" disabled>
               </div>
 
               <div class="goods-left-setup-string">
                 <span>На дату (в разработке)</span>
-                <!--<div><input class="form-check-input position-static report-goods-left-modal-switch" type="checkbox" value="111"></div>-->
+                <!--<input class="form-check-input position-static report-goods-left-modal-switch" type="checkbox" value="111">-->
               </div>
 
               <div class="goods-left-setup-string">
                 <span>Остатки товара в статусе "доставка"</span>
-                <div><input class="form-check-input position-static report-goods-left-modal-switch" type="checkbox" value="p01"></div>
+                <input class="form-check-input position-static report-goods-left-modal-switch" type="checkbox" value="p01">
               </div>
 
               <div class="goods-left-setup-string">
                 <span>Выводить приходную сумму</span>
-                <div><input class="form-check-input position-static report-goods-left-modal-switch" type="checkbox" value="p02"></div>
+                <input class="form-check-input position-static report-goods-left-modal-switch" type="checkbox" value="p02">
               </div>
 
               <div class="goods-left-setup-string">
                 <span>Выводить розничную сумму</span>
-                <div><input class="form-check-input position-static report-goods-left-modal-switch" type="checkbox" value="p03"></div>
+                <input class="form-check-input position-static report-goods-left-modal-switch" type="checkbox" value="p03">
               </div>
 
               <div class="goods-left-setup-string">
                 <span>Выводить приходную цену</span>
-                <div><input class="form-check-input position-static report-goods-left-modal-switch" type="checkbox" value="p04"></div>
+                <input class="form-check-input position-static report-goods-left-modal-switch" type="checkbox" value="p04">
               </div>
 
               <div class="goods-left-setup-string">
                 <span>Выводить розничную цену</span>
-                <div><input class="form-check-input position-static report-goods-left-modal-switch" type="checkbox" value="p05"></div>
+                <input class="form-check-input position-static report-goods-left-modal-switch" type="checkbox" value="p05">
               </div>
 
               <div class="goods-left-setup-string">
                 <span>Штрих-код товара</span>
-                <div><input class="form-check-input position-static report-goods-left-modal-switch" type="checkbox" value="p06"></div>
+                <input class="form-check-input position-static report-goods-left-modal-switch" type="checkbox" value="p06">
               </div>
 
             </div>
-            <div class="goods-left-setup-string mt-3">
+            <div class="report-setup-header">
               <h5>Группы</h5>
-              <div><input id="report-groups-main-switch" class="form-check-input position-static user-permissions-switch" type="checkbox" value="" checked></div>
+              <input id="report-groups-main-switch" type="checkbox" value="" checked>
             </div>
             <div id="report-goods-left-modal-body" style="overflow-y: auto; height: 400px;"></div>
             <div class="modal-footer report-goods-left-modal-footer">
@@ -1945,24 +1944,20 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div id="report-goods-left-modal-setup">
 
-              <div class="goods-left-setup-string">
-                <h5>Склад</h5>
-                <div>
-                  <select id="report-goods-turn-modal-stock" class="custom-select mr-1">
-                    <option value="null" selected>---------</option>
-                  </select>
-                </div>
+            <div>
+
+            <div class="report-setup-header">
+              <h5>Склад</h5>
+                <select id="report-goods-turn-modal-stock" class="custom-select mr-1">
+                  <option value="null" selected>---------</option>
+                </select>
+            </div>
+
+              <div class="report-calendar">
+                С: <input id="report-turn-from" type="date">
+                По: <input id="report-turn-to" type="date">
               </div>
-
-              <div class="goods-turn-setup-string">
-                <span>С: </span>
-                <input id="report-turn-from" class="polyfill-calendar" type="date">
-                <span>По: </span>
-                <input id="report-turn-to" class="polyfill-calendar" type="date">
-              </div>
-
 
               <div class="goods-left-setup-string">
                 <span>Выводить приходную сумму</span>
@@ -1977,9 +1972,9 @@
 
 
             </div>
-            <div class="goods-left-setup-string mt-3">
+            <div class="report-setup-header">
               <h5>Группы</h5>
-              <div><input id="report-groups-turn-main-switch" class="form-check-input position-static user-permissions-switch" type="checkbox" value="" checked></div>
+              <input id="report-groups-turn-main-switch" class="form-check-input position-static user-permissions-switch" type="checkbox" value="" checked>
             </div>
             <div id="report-goods-turn-modal-body" style="overflow-y: auto; height: 400px;"></div>
             <div class="modal-footer report-goods-left-modal-footer">
@@ -2010,35 +2005,33 @@
             </div>
             <div id="report-goods-left-modal-setup">
 
-              <div class="goods-left-setup-string">
+              <div class="report-setup-header">
                 <h5>Склад</h5>
-                <div>
-                  <select id="report-goods-profit-modal-stock" class="custom-select mr-1">
-                    <option value="null" selected>---------</option>
-                  </select>
-                </div>
+                <select id="report-goods-profit-modal-stock" class="custom-select mr-1">
+                  <option value="null" selected>---------</option>
+                </select>
               </div>
 
-              <div>
-                <span>С: </span>
-                <input id="report-profit-from" class="polyfill-calendar" type="date">
-                <span>По: </span>
-                <input id="report-profit-to" class="polyfill-calendar" type="date">
+              <div class="report-calendar">
+                С: <input id="report-profit-from" type="date">
+                По: <input id="report-profit-to" type="date">
               </div>
 
-
-              <div>
+              <div class="goods-left-setup-string">
                   <span>Разбивать по группам</span>
                   <input class="report-goods-profit-modal-switch" type="checkbox" value="p01">
               </div>
 
-              <div>
-                <h5>Сортировка по</h5>
-                <input type="radio" id="report-sort1" class="report-goods-profit-modal-switch" name="sort" value="p02">
-                <label for="report-sort1">Наименованию</label>
+              <div class="goods-left-setup-string">
+                <span>Сортировка по</span>
+                <div>
 
-                <input type="radio" class="report-goods-profit-modal-switch" id="report-sort2" name="sort" value="p03">
-                <label for="report-sort2">Количеству</label>
+                  <input type="radio" id="report-sort1" class="report-goods-profit-modal-switch" name="sort" value="p02">
+                  <label for="report-sort1"> наименованию </label>
+
+                  <input type="radio" class="report-goods-profit-modal-switch" id="report-sort2" name="sort" value="p03">
+                  <label for="report-sort2"> количеству </label>
+                </div>
               </div>
 
 

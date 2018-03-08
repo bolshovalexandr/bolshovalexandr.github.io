@@ -8923,6 +8923,7 @@
 	
 	var getReportLink = function getReportLink() {
 	  console.log('stock-->', _storage2.default.currentStockId);
+	
 	  var params = [];
 	  var listOfGroups = [];
 	
@@ -8975,6 +8976,7 @@
 	
 	var onReportsGoodsLeftClick = function onReportsGoodsLeftClick() {
 	  reportLink.innerHTML = '';
+	  reportLinkGoogle.innerHTML = '';
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/group',
@@ -9048,7 +9050,8 @@
 	};
 	
 	var onReportsGoodsTurnClick = function onReportsGoodsTurnClick() {
-	  reportLink.innerHTML = '';
+	  reportLinkTurn.innerHTML = '';
+	  reportLinkTurnGoogle.innerHTML = '';
 	  reportTurnFrom.value = new Date().toISOString().slice(0, 8) + '01';
 	  reportTurnTo.value = new Date().toISOString().slice(0, 10);
 	  console.log(reportTurnFrom.value);
@@ -9103,6 +9106,8 @@
 	});
 	
 	var onReportsProfitClick = function onReportsProfitClick() {
+	  reportLinkProfit.innerHTML = '';
+	  reportLinkProfitGoogle.innerHTML = '';
 	  $(reportsGoodsProfitModal).modal('show');
 	  reportsGoodsProfitModalStock.value = reportsStocks.value;
 	
