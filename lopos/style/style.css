@@ -557,6 +557,15 @@ input[name="contact"]:checked + label {
   justify-content: space-between; }
 
 /*
+date-input-polyfill {
+  position: absolute !important;
+  text-align: center;
+  box-shadow: 0px 3px 10px 1px rgba(0,0,0,0.22);
+  cursor: default;
+  z-index: 10000!important;
+}
+*/
+/*
 @import "src/sass/components/app.scss";
 @import "src/sass/components/font.scss";
 body {

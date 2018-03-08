@@ -8857,11 +8857,6 @@
 	
 	// import 'date-input-polyfill';
 	var reportsList = document.querySelector('#list-reports-list');
-	// const docsHeader = document.querySelector('#list-docs-header');
-	// const reportsBody = document.querySelector('#list-reports-body');
-	
-	// import uValid from './universal-validity-micro.js';
-	// import toolsMarkup from '../markup/tools.js';
 	var reportsGroupMainSwitch = document.querySelector('#report-groups-main-switch');
 	var reportsGroupMainSwitchTurn = document.querySelector('#report-groups-turn-main-switch');
 	var reportsDashboard = document.querySelector('#reports-dashboard');
@@ -8893,18 +8888,13 @@
 	var reportProfitTo = document.querySelector('#report-profit-to');
 	
 	var reportLink = document.querySelector('#report-link');
+	var reportLinkGoogle = document.querySelector('#report-link-google');
 	var reportLinkTurn = document.querySelector('#report-link-turn');
+	var reportLinkTurnGoogle = document.querySelector('#report-link-turn-google');
 	var reportLinkProfit = document.querySelector('#report-link-profit');
+	var reportLinkProfitGoogle = document.querySelector('#report-link-profit-google');
 	
-	// const reportsGoodsTurn = document.querySelector('#report-goods-turn');
-	// const reportsProfitRetail = document.querySelector('#report-profit-retail');
 	var reportsStocks = document.querySelector('#reports-stocks');
-	
-	/*
-	const docsYear = document.querySelector('#docs-year');
-	const docsMonth = document.querySelector('#docs-month');
-	const docsDay = document.querySelector('#docs-day');
-	*/
 	
 	// ############################## РАЗМЕТКА ДАШБОРДА #############
 	var dashboardTypes = {
@@ -8924,9 +8914,11 @@
 	
 	var onPDFLoadSuccess = function onPDFLoadSuccess(data) {
 	  console.log(data);
-	  // $(reportsGoodsLeftModal).modal('hide');
 	  reportLink.href = data.data;
-	  reportLink.innerHTML = '\u0421\u0441\u044B\u043B\u043A\u0430 \u043D\u0430 \u043E\u0442\u0447\u0435\u0442 \u0432 \u0444\u043E\u0440\u043C\u0430\u0442\u0435 ' + _storage2.default.currentReportType;
+	  reportLink.innerHTML = '\u0421\u043A\u0430\u0447\u0430\u0442\u044C ' + _storage2.default.currentReportType;
+	
+	  reportLinkGoogle.href = 'https://docs.google.com/viewer?url=' + data.data + '&embedded=false';
+	  reportLinkGoogle.innerHTML = '\u0421\u043C\u043E\u0442\u0440\u0435\u0442\u044C ' + _storage2.default.currentReportType + ' \u043D\u0430 Google ';
 	};
 	
 	var getReportLink = function getReportLink() {
@@ -8976,7 +8968,8 @@
 	var onSuccessGoodsLeftLoad = function onSuccessGoodsLeftLoad(goodData) {
 	  console.log(goodData);
 	  $(reportsGoodsLeftModal).modal('show');
-	  reportsGoodsLeftModalStock.innerHTML = reportsStocks.options[reportsStocks.options.selectedIndex].innerText;
+	  reportsGoodsLeftModalStock.value = reportsStocks.value;
+	
 	  _universalGroupsList2.default.drawReports(goodData.data, reportsGoodsLeftModalBody, null);
 	};
 	
@@ -8996,9 +8989,10 @@
 	
 	var onPDFLoadSuccessTurn = function onPDFLoadSuccessTurn(data) {
 	  console.log(data);
-	  // $(reportsGoodsLeftModal).modal('hide');
 	  reportLinkTurn.href = data.data;
-	  reportLinkTurn.innerHTML = '\u0421\u0441\u044B\u043B\u043A\u0430 \u043D\u0430 \u043E\u0442\u0447\u0435\u0442 \u0432 \u0444\u043E\u0440\u043C\u0430\u0442\u0435 ' + _storage2.default.currentReportType;
+	  reportLinkTurn.innerHTML = '\u0421\u043A\u0430\u0447\u0430\u0442\u044C ' + _storage2.default.currentReportType;
+	  reportLinkTurnGoogle.href = 'https://docs.google.com/viewer?url=' + data.data + '&embedded=false';
+	  reportLinkTurnGoogle.innerHTML = '\u0421\u043C\u043E\u0442\u0440\u0435\u0442\u044C ' + _storage2.default.currentReportType + ' \u043D\u0430 Google ';
 	};
 	
 	var getReportLinkTurn = function getReportLinkTurn() {
@@ -9048,7 +9042,8 @@
 	var onSuccessGoodsTurnLoad = function onSuccessGoodsTurnLoad(goodData) {
 	  console.log(goodData);
 	  $(reportsGoodsTurnModal).modal('show');
-	  reportsGoodsTurnModalStock.innerHTML = reportsStocks.options[reportsStocks.options.selectedIndex].innerText;
+	  reportsGoodsTurnModalStock.value = reportsStocks.value;
+	
 	  _universalGroupsList2.default.drawReports(goodData.data, reportsGoodsTurnModalBody, null);
 	};
 	
@@ -9071,10 +9066,10 @@
 	// ############################## ОТЧЕТ / ПРИБЫЛЬ С РОЗНИЦЫ  ##############################
 	
 	var onPDFLoadSuccessProfit = function onPDFLoadSuccessProfit(data) {
-	  console.log(data);
-	  // $(reportsGoodsLeftModal).modal('hide');
 	  reportLinkProfit.href = data.data;
-	  reportLinkProfit.innerHTML = '\u0421\u0441\u044B\u043B\u043A\u0430 \u043D\u0430 \u043E\u0442\u0447\u0435\u0442 \u0432 \u0444\u043E\u0440\u043C\u0430\u0442\u0435 ' + _storage2.default.currentReportType;
+	  reportLinkProfit.innerHTML = '\u0421\u043A\u0430\u0447\u0430\u0442\u044C ' + _storage2.default.currentReportType;
+	  reportLinkProfitGoogle.href = 'https://docs.google.com/viewer?url=' + data.data + '&embedded=false';
+	  reportLinkProfitGoogle.innerHTML = '\u0421\u043C\u043E\u0442\u0440\u0435\u0442\u044C ' + _storage2.default.currentReportType + ' \u043D\u0430 Google ';
 	};
 	
 	var getReportLinkProfit = function getReportLinkProfit() {
@@ -9109,7 +9104,7 @@
 	
 	var onReportsProfitClick = function onReportsProfitClick() {
 	  $(reportsGoodsProfitModal).modal('show');
-	  reportsGoodsProfitModalStock.innerHTML = reportsStocks.options[reportsStocks.options.selectedIndex].innerText;
+	  reportsGoodsProfitModalStock.value = reportsStocks.value;
 	
 	  reportLinkProfit.innerHTML = '';
 	  reportProfitFrom.value = new Date().toISOString().slice(0, 8) + '01';
@@ -9120,7 +9115,16 @@
 	
 	reportsStocks.addEventListener('change', function (evt) {
 	  _storage2.default.currentStockId = evt.target.value;
+	  getReports();
 	});
+	
+	var onChangeStockModal = function onChangeStockModal(evt) {
+	  _storage2.default.currentStockId = evt.target.value;
+	};
+	
+	reportsGoodsLeftModalStock.addEventListener('change', onChangeStockModal);
+	reportsGoodsTurnModalStock.addEventListener('change', onChangeStockModal);
+	reportsGoodsProfitModalStock.addEventListener('change', onChangeStockModal);
 	
 	var onSuccessReportsLoad = function onSuccessReportsLoad(reportsData) {
 	  console.log(reportsData);
@@ -9132,27 +9136,40 @@
 	    purchase: reportsData.data.today_total_purchase
 	  };
 	
-	  reportsStocks.innerHTML = reportsData.data.all_stocks.map(function (item) {
-	    return '<option value="' + item.id + '">' + item.name + '</option>';
-	  }).join('');
+	  if (_storage2.default.currentStockId === 'all') {
 	
-	  if (reportsData.data.all_stocks.length > 1) {
-	    reportsStocks.innerHTML += '<option value="all" selected>Все склады</option';
+	    reportsStocks.innerHTML = reportsData.data.all_stocks.map(function (item) {
+	      return '<option value="' + item.id + '">' + item.name + '</option>';
+	    }).join('');
+	    reportsGoodsLeftModalStock.innerHTML = reportsData.data.all_stocks.map(function (item) {
+	      return '<option value="' + item.id + '">' + item.name + '</option>';
+	    }).join('');
+	    reportsGoodsTurnModalStock.innerHTML = reportsData.data.all_stocks.map(function (item) {
+	      return '<option value="' + item.id + '">' + item.name + '</option>';
+	    }).join('');
+	    reportsGoodsProfitModalStock.innerHTML = reportsData.data.all_stocks.map(function (item) {
+	      return '<option value="' + item.id + '">' + item.name + '</option>';
+	    }).join('');
+	
+	    if (reportsData.data.all_stocks.length > 1) {
+	      reportsStocks.innerHTML += '<option value="all" selected>Все склады</option';
+	      reportsGoodsLeftModalStock.innerHTML += '<option value="all" selected>Все склады</option';
+	      reportsGoodsTurnModalStock.innerHTML += '<option value="all" selected>Все склады</option';
+	      reportsGoodsProfitModalStock.innerHTML += '<option value="all" selected>Все склады</option';
+	    }
 	  }
 	
-	  // Object.entries(dashboard).map((dash) => reportsDashboard.insertAdjacentHTML('beforeend', getDashboardItem(dash)));
 	  reportsDashboard.innerHTML = Object.entries(dashboard).map(function (dash) {
 	    return getDashboardItem(dash);
 	  }).join('');
 	};
 	
 	var getReports = function getReports() {
-	  _storage2.default.currentStockId = 'all';
 	
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/dashboard',
-	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    data: 'view_last=0&token=' + _storage2.default.data.token + (_storage2.default.currentStockId === 'all' ? '' : '&stock=' + _storage2.default.currentStockId),
 	    callbackSuccess: onSuccessReportsLoad
 	  };
 	};
@@ -9160,6 +9177,7 @@
 	exports.default = {
 	  start: function start() {
 	    reportsList.addEventListener('click', getReports);
+	    _storage2.default.currentStockId = 'all';
 	  },
 	  stop: function stop() {
 	    reportsList.removeEventListener('click', getReports);
