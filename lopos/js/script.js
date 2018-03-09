@@ -114,27 +114,27 @@
 	
 	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
-	var _reference__debitCredit = __webpack_require__(51);
+	var _reference__debitCredit = __webpack_require__(52);
 	
 	var _reference__debitCredit2 = _interopRequireDefault(_reference__debitCredit);
 	
-	var _operations__manufacture = __webpack_require__(53);
+	var _operations__manufacture = __webpack_require__(54);
 	
 	var _operations__manufacture2 = _interopRequireDefault(_operations__manufacture);
 	
-	var _operations__balance = __webpack_require__(55);
+	var _operations__balance = __webpack_require__(56);
 	
 	var _operations__balance2 = _interopRequireDefault(_operations__balance);
 	
-	var _online__users = __webpack_require__(56);
+	var _online__users = __webpack_require__(57);
 	
 	var _online__users2 = _interopRequireDefault(_online__users);
 	
-	var _accounting__allDocs = __webpack_require__(57);
+	var _accounting__allDocs = __webpack_require__(58);
 	
 	var _accounting__allDocs2 = _interopRequireDefault(_accounting__allDocs);
 	
-	var _accounting__reports = __webpack_require__(59);
+	var _accounting__reports = __webpack_require__(47);
 	
 	var _accounting__reports2 = _interopRequireDefault(_accounting__reports);
 	
@@ -3862,7 +3862,15 @@
 	  },
 	  getElement: function getElement(item, index) {
 	
-	    return '\n\n      <div class="d-flex justify-content-between align-items-center reference-string"  data-buyer-id="' + item.id + '"  data-index="' + index + '">\n        <div style="padding-left: 34px;"><span class="reference-row-number">' + (index + 1) + '</span> <span>' + item.name + '</span></div>\n        <div class="d-flex justify-content-between align-items-center">\n\n          <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>\n        </div>\n    </div>';
+	    return '\n        <div class="reference-header" data-buyer-id="' + item.id + '" data-index="' + index + '">\n            <div class="reference-column">' + item.id + '</div>\n            <div class="reference-column">' + item.name + '</div>\n        </div>\n';
+	    /*
+	    return `
+	        <div class="d-flex justify-content-between align-items-center reference-string"  data-buyer-id="${item.id}"  data-index="${index}">
+	        <div style="padding-left: 34px;"><span class="reference-row-number">${index + 1}</span> <span>${item.name}</span></div>
+	        <div class="d-flex justify-content-between align-items-center">
+	            </div>
+	    </div>`;
+	    */
 	  },
 	  drawDataInContainer: function drawDataInContainer(buyersBodyData) {
 	    var _this = this;
@@ -3872,6 +3880,7 @@
 	    });
 	  },
 	  drawMarkupInContainer: function drawMarkupInContainer(markup) {
+	    listContractorsBody.innerHTML = '\n\n        <div class="reference-header">\n            <div class="reference-column">\u041D\u043E\u043C\u0435\u0440</div>\n            <div class="reference-column">\u0418\u043C\u044F</div>\n        </div>\n';
 	    listContractorsBody.insertAdjacentHTML('beforeend', markup);
 	  },
 	  getBuyersHeader: function getBuyersHeader() {
@@ -4863,11 +4872,11 @@
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
-	var _universalGroupsList = __webpack_require__(49);
+	var _universalGroupsList = __webpack_require__(48);
 	
 	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
 	
-	var _universalValidityMicro = __webpack_require__(50);
+	var _universalValidityMicro = __webpack_require__(51);
 	
 	var _universalValidityMicro2 = _interopRequireDefault(_universalValidityMicro);
 	
@@ -5553,11 +5562,15 @@
 	
 	var _catalog__goodsGetKeywords2 = _interopRequireDefault(_catalog__goodsGetKeywords);
 	
-	var _catalog__goodsAdd = __webpack_require__(47);
+	var _accounting__reports = __webpack_require__(47);
+	
+	var _accounting__reports2 = _interopRequireDefault(_accounting__reports);
+	
+	var _catalog__goodsAdd = __webpack_require__(49);
 	
 	var _catalog__goodsAdd2 = _interopRequireDefault(_catalog__goodsAdd);
 	
-	var _universalGoodsList = __webpack_require__(48);
+	var _universalGoodsList = __webpack_require__(50);
 	
 	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
@@ -5602,6 +5615,7 @@
 	var listGroupGoodsAddModalSell = document.querySelector('#group-goods-price-sell');
 	var listGroupGoodsAddModalBarcode = document.querySelector('#group-goods-barcode');
 	var listGroupGoodsCardCopyBtn = document.querySelector('#group-goods-copy-btn');
+	var listGroupGoodsReportBtn = document.querySelector('#group-goods-report-btn');
 	var listGroupGoodsCardAddBtn = document.querySelector('#group-goods-add-btn');
 	var listGroupsGoodsCardCheckMessage = document.querySelector('#list-groups-goods-header-check-message');
 	var groupGoodsReturnBtn = document.querySelector('#group-goods-return-btn');
@@ -5622,6 +5636,10 @@
 	goodsCardSearch.addEventListener('input', function (evt) {
 	  _universalGoodsList2.default.draw(_universalSearch2.default.make(loadedGoods.data, evt.target.value), groupGoodsBody, onGoodClick);
 	});
+	
+	// Отчет по остаткам товара
+	
+	listGroupGoodsReportBtn.addEventListener('click', _accounting__reports2.default.goodsLeftReport);
 	
 	// заполнение карточки копирования товара
 	var fillCopyCard = function fillCopyCard(loadedGoodData) {
@@ -6679,6 +6697,466 @@
 	  value: true
 	});
 	
+	var _xhr = __webpack_require__(6);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _universalGroupsList = __webpack_require__(48);
+	
+	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// import 'date-input-polyfill';
+	var reportsList = document.querySelector('#list-reports-list');
+	var reportsGroupMainSwitch = document.querySelector('#report-groups-main-switch');
+	var reportsGroupMainSwitchTurn = document.querySelector('#report-groups-turn-main-switch');
+	var reportsDashboard = document.querySelector('#reports-dashboard');
+	
+	var reportsGoodsLeft = document.querySelector('#report-goods-left');
+	var reportsGoodsLeftModal = document.querySelector('#report-goods-left-modal');
+	var reportsGoodsLeftModalStock = document.querySelector('#report-goods-left-modal-stock');
+	var reportsGoodsLeftModalBody = document.querySelector('#report-goods-left-modal-body');
+	var reportsGoodsLeftModalPDFBtn = document.querySelector('#report-goods-left-modal-pdf');
+	var reportsGoodsLeftModalExcelBtn = document.querySelector('#report-goods-left-modal-excel');
+	
+	var reportsGoodsTurn = document.querySelector('#report-goods-turn');
+	var reportsGoodsTurnModal = document.querySelector('#report-goods-turn-modal');
+	var reportsGoodsTurnModalStock = document.querySelector('#report-goods-turn-modal-stock');
+	var reportsGoodsTurnModalBody = document.querySelector('#report-goods-turn-modal-body');
+	var reportsGoodsTurnModalPDFBtn = document.querySelector('#report-goods-turn-modal-pdf');
+	var reportsGoodsTurnModalExcelBtn = document.querySelector('#report-goods-turn-modal-excel');
+	
+	var reportTurnFrom = document.querySelector('#report-turn-from');
+	var reportTurnTo = document.querySelector('#report-turn-to');
+	
+	var reportsGoodsProfit = document.querySelector('#report-profit-retail');
+	var reportsGoodsProfitModal = document.querySelector('#report-goods-profit-modal');
+	var reportsGoodsProfitModalStock = document.querySelector('#report-goods-profit-modal-stock');
+	var reportsGoodsProfitModalPDFBtn = document.querySelector('#report-goods-profit-modal-pdf');
+	var reportsGoodsProfitModalExcelBtn = document.querySelector('#report-goods-profit-modal-excel');
+	
+	var reportProfitFrom = document.querySelector('#report-profit-from');
+	var reportProfitTo = document.querySelector('#report-profit-to');
+	
+	var reportLink = document.querySelector('#report-link');
+	var reportLinkGoogle = document.querySelector('#report-link-google');
+	var reportLinkTurn = document.querySelector('#report-link-turn');
+	var reportLinkTurnGoogle = document.querySelector('#report-link-turn-google');
+	var reportLinkProfit = document.querySelector('#report-link-profit');
+	var reportLinkProfitGoogle = document.querySelector('#report-link-profit-google');
+	
+	var reportsStocks = document.querySelector('#reports-stocks');
+	
+	// ############################## РАЗМЕТКА ДАШБОРДА #############
+	var dashboardTypes = {
+	  money: 'Баланс',
+	  form: 'Закупки',
+	  proceeds: 'Выручка',
+	  profit: 'Кол-во продаж',
+	  purchase: 'Прибыль'
+	};
+	
+	var getDashboardItem = function getDashboardItem(item) {
+	  console.log(item);
+	  return '\n    <div class="dashboard-item">\n      <div class="dashboard-status"></div>\n      <div>\n        <p>' + dashboardTypes[item[0]] + '</p>\n        <span>' + item[1] + '</span>\n      </div>\n    </div>';
+	};
+	
+	// ############################## ОТЧЕТ / ОСТАТОК ТОВАРА     ##############################
+	
+	var onPDFLoadSuccess = function onPDFLoadSuccess(data) {
+	  console.log(data);
+	  reportLink.href = data.data;
+	  reportLink.innerHTML = '\u0421\u043A\u0430\u0447\u0430\u0442\u044C ' + _storage2.default.currentReportType;
+	
+	  reportLinkGoogle.href = 'https://docs.google.com/viewer?url=' + data.data + '&embedded=false';
+	  reportLinkGoogle.innerHTML = '\u0421\u043C\u043E\u0442\u0440\u0435\u0442\u044C ' + _storage2.default.currentReportType + ' \u043D\u0430 Google ';
+	};
+	
+	var getReportLink = function getReportLink() {
+	  console.log('stock-->', _storage2.default.currentStockId);
+	
+	  var params = [];
+	  var listOfGroups = [];
+	
+	  document.querySelectorAll('.report-goods-left-modal-switch').forEach(function (switchParam) {
+	    if (switchParam.checked) {
+	      params.push(switchParam.value);
+	    }
+	  });
+	
+	  reportsGoodsLeftModalBody.querySelectorAll('.report-groups-switch').forEach(function (switchGroups) {
+	    if (switchGroups.checked) {
+	      listOfGroups.push(switchGroups.value);
+	    }
+	  });
+	
+	  console.log('parameters-->', params);
+	  console.log('listOfGroups-->', listOfGroups);
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/report/remains/export/' + _storage2.default.currentReportType,
+	    data: 'token=' + _storage2.default.data.token + '&parameters=[' + params + ']&list_of_groups=[' + listOfGroups + ']' + (_storage2.default.currentStockId === 'all' ? '' : '&stock=' + _storage2.default.currentStockId),
+	    callbackSuccess: onPDFLoadSuccess
+	  };
+	};
+	
+	reportsGoodsLeftModalPDFBtn.addEventListener('click', function () {
+	  _storage2.default.currentReportType = 'pdf';
+	  getReportLink();
+	});
+	
+	reportsGoodsLeftModalExcelBtn.addEventListener('click', function () {
+	  _storage2.default.currentReportType = 'excel';
+	  getReportLink();
+	});
+	
+	reportsGroupMainSwitch.addEventListener('change', function (evt) {
+	  document.querySelectorAll('.report-groups-switch').forEach(function (switchElement) {
+	    switchElement.checked = evt.target.checked;
+	  });
+	  console.log(evt.target.checked);
+	});
+	
+	var onSuccessGoodsLeftLoad = function onSuccessGoodsLeftLoad(goodData) {
+	  console.log(goodData);
+	  $(reportsGoodsLeftModal).modal('show');
+	  reportsGoodsLeftModalStock.value = reportsStocks.value;
+	
+	  _universalGroupsList2.default.drawReports(goodData.data, reportsGoodsLeftModalBody, null);
+	};
+	
+	var onReportsGoodsLeftClick = function onReportsGoodsLeftClick() {
+	  reportLink.innerHTML = '';
+	  reportLinkGoogle.innerHTML = '';
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/group',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessGoodsLeftLoad
+	  };
+	};
+	
+	reportsGoodsLeft.addEventListener('click', onReportsGoodsLeftClick);
+	
+	// ############################## ОТЧЕТ / ОБОРОТ ТОВАРА      ##############################
+	
+	var onPDFLoadSuccessTurn = function onPDFLoadSuccessTurn(data) {
+	  console.log(data);
+	  reportLinkTurn.href = data.data;
+	  reportLinkTurn.innerHTML = '\u0421\u043A\u0430\u0447\u0430\u0442\u044C ' + _storage2.default.currentReportType;
+	  reportLinkTurnGoogle.href = 'https://docs.google.com/viewer?url=' + data.data + '&embedded=false';
+	  reportLinkTurnGoogle.innerHTML = '\u0421\u043C\u043E\u0442\u0440\u0435\u0442\u044C ' + _storage2.default.currentReportType + ' \u043D\u0430 Google ';
+	};
+	
+	var getReportLinkTurn = function getReportLinkTurn() {
+	  console.log('stock-->', _storage2.default.currentStockId);
+	  var params = [];
+	  var listOfGroups = [];
+	
+	  document.querySelectorAll('.report-goods-turn-modal-switch').forEach(function (switchParam) {
+	    if (switchParam.checked) {
+	      params.push(switchParam.value);
+	    }
+	  });
+	
+	  reportsGoodsTurnModalBody.querySelectorAll('.report-groups-switch').forEach(function (switchGroups) {
+	    if (switchGroups.checked) {
+	      listOfGroups.push(switchGroups.value);
+	    }
+	  });
+	
+	  console.log('parameters-->', params);
+	  console.log('listOfGroups-->', listOfGroups);
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/report/turnover/export/' + _storage2.default.currentReportType,
+	    data: 'token=' + _storage2.default.data.token + '&parameters=[' + params + ']&list_of_groups=[' + listOfGroups + '&time_start=' + Date.parse(reportTurnFrom.value) / 1000 + '&time_end=' + Date.parse(reportTurnTo.value) / 1000 + (_storage2.default.currentStockId === 'all' ? '' : '&stock=' + _storage2.default.currentStockId),
+	    callbackSuccess: onPDFLoadSuccessTurn
+	  };
+	};
+	
+	reportsGoodsTurnModalPDFBtn.addEventListener('click', function () {
+	  _storage2.default.currentReportType = 'pdf';
+	  getReportLinkTurn();
+	});
+	
+	reportsGoodsTurnModalExcelBtn.addEventListener('click', function () {
+	  _storage2.default.currentReportType = 'excel';
+	  getReportLinkTurn();
+	});
+	
+	reportsGroupMainSwitchTurn.addEventListener('change', function (evt) {
+	  reportsGoodsTurnModalBody.querySelectorAll('.report-groups-switch').forEach(function (switchElement) {
+	    switchElement.checked = evt.target.checked;
+	  });
+	  console.log(evt.target.checked);
+	});
+	
+	var onSuccessGoodsTurnLoad = function onSuccessGoodsTurnLoad(goodData) {
+	  console.log(goodData);
+	  $(reportsGoodsTurnModal).modal('show');
+	  reportsGoodsTurnModalStock.value = reportsStocks.value;
+	
+	  _universalGroupsList2.default.drawReports(goodData.data, reportsGoodsTurnModalBody, null);
+	};
+	
+	var onReportsGoodsTurnClick = function onReportsGoodsTurnClick() {
+	  reportLinkTurn.innerHTML = '';
+	  reportLinkTurnGoogle.innerHTML = '';
+	  reportTurnFrom.value = new Date().toISOString().slice(0, 8) + '01';
+	  reportTurnTo.value = new Date().toISOString().slice(0, 10);
+	  console.log(reportTurnFrom.value);
+	  console.log(Date.parse(reportTurnFrom.value) / 1000);
+	  console.log(Date.parse(reportTurnTo.value) / 1000);
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/group',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessGoodsTurnLoad
+	  };
+	};
+	
+	reportsGoodsTurn.addEventListener('click', onReportsGoodsTurnClick);
+	// ############################## ОТЧЕТ / ПРИБЫЛЬ С РОЗНИЦЫ  ##############################
+	
+	var onPDFLoadSuccessProfit = function onPDFLoadSuccessProfit(data) {
+	  reportLinkProfit.href = data.data;
+	  reportLinkProfit.innerHTML = '\u0421\u043A\u0430\u0447\u0430\u0442\u044C ' + _storage2.default.currentReportType;
+	  reportLinkProfitGoogle.href = 'https://docs.google.com/viewer?url=' + data.data + '&embedded=false';
+	  reportLinkProfitGoogle.innerHTML = '\u0421\u043C\u043E\u0442\u0440\u0435\u0442\u044C ' + _storage2.default.currentReportType + ' \u043D\u0430 Google ';
+	};
+	
+	var getReportLinkProfit = function getReportLinkProfit() {
+	  console.log('stock-->', _storage2.default.currentStockId);
+	  var params = [];
+	
+	  document.querySelectorAll('.report-goods-profit-modal-switch').forEach(function (switchParam) {
+	    if (switchParam.checked) {
+	      params.push(switchParam.value);
+	    }
+	  });
+	
+	  console.log('parameters-->', params);
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/report/profit/export/' + _storage2.default.currentReportType,
+	    data: 'token=' + _storage2.default.data.token + '&parameters=[' + params + ']&ime_start=' + Date.parse(reportProfitFrom.value) / 1000 + '&time_end=' + Date.parse(reportProfitTo.value) / 1000 + (_storage2.default.currentStockId === 'all' ? '' : '&stock=' + _storage2.default.currentStockId),
+	    callbackSuccess: onPDFLoadSuccessProfit
+	  };
+	};
+	
+	reportsGoodsProfitModalPDFBtn.addEventListener('click', function () {
+	  _storage2.default.currentReportType = 'pdf';
+	  getReportLinkProfit();
+	});
+	
+	reportsGoodsProfitModalExcelBtn.addEventListener('click', function () {
+	  _storage2.default.currentReportType = 'excel';
+	  getReportLinkProfit();
+	});
+	
+	var onReportsProfitClick = function onReportsProfitClick() {
+	  reportLinkProfit.innerHTML = '';
+	  reportLinkProfitGoogle.innerHTML = '';
+	  $(reportsGoodsProfitModal).modal('show');
+	  reportsGoodsProfitModalStock.value = reportsStocks.value;
+	
+	  reportLinkProfit.innerHTML = '';
+	  reportProfitFrom.value = new Date().toISOString().slice(0, 8) + '01';
+	  reportProfitTo.value = new Date().toISOString().slice(0, 10);
+	};
+	
+	reportsGoodsProfit.addEventListener('click', onReportsProfitClick);
+	
+	reportsStocks.addEventListener('change', function (evt) {
+	  _storage2.default.currentStockId = evt.target.value;
+	  getReports();
+	});
+	
+	var onChangeStockModal = function onChangeStockModal(evt) {
+	  _storage2.default.currentStockId = evt.target.value;
+	};
+	
+	reportsGoodsLeftModalStock.addEventListener('change', onChangeStockModal);
+	reportsGoodsTurnModalStock.addEventListener('change', onChangeStockModal);
+	reportsGoodsProfitModalStock.addEventListener('change', onChangeStockModal);
+	
+	var onSuccessReportsLoad = function onSuccessReportsLoad(reportsData) {
+	  console.log(reportsData);
+	  var dashboard = {
+	    money: reportsData.data.balance_money,
+	    form: reportsData.data.today_count_forms,
+	    proceeds: reportsData.data.today_total_proceeds,
+	    profit: reportsData.data.today_total_profit,
+	    purchase: reportsData.data.today_total_purchase
+	  };
+	
+	  if (_storage2.default.currentStockId === 'all') {
+	
+	    reportsStocks.innerHTML = reportsData.data.all_stocks.map(function (item) {
+	      return '<option value="' + item.id + '">' + item.name + '</option>';
+	    }).join('');
+	    reportsGoodsLeftModalStock.innerHTML = reportsData.data.all_stocks.map(function (item) {
+	      return '<option value="' + item.id + '">' + item.name + '</option>';
+	    }).join('');
+	    reportsGoodsTurnModalStock.innerHTML = reportsData.data.all_stocks.map(function (item) {
+	      return '<option value="' + item.id + '">' + item.name + '</option>';
+	    }).join('');
+	    reportsGoodsProfitModalStock.innerHTML = reportsData.data.all_stocks.map(function (item) {
+	      return '<option value="' + item.id + '">' + item.name + '</option>';
+	    }).join('');
+	
+	    if (reportsData.data.all_stocks.length > 1) {
+	      reportsStocks.innerHTML += '<option value="all" selected>Все склады</option';
+	      reportsGoodsLeftModalStock.innerHTML += '<option value="all" selected>Все склады</option';
+	      reportsGoodsTurnModalStock.innerHTML += '<option value="all" selected>Все склады</option';
+	      reportsGoodsProfitModalStock.innerHTML += '<option value="all" selected>Все склады</option';
+	    }
+	  }
+	
+	  reportsDashboard.innerHTML = Object.entries(dashboard).map(function (dash) {
+	    return getDashboardItem(dash);
+	  }).join('');
+	};
+	
+	var getReports = function getReports() {
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/dashboard',
+	    data: 'view_last=0&token=' + _storage2.default.data.token + (_storage2.default.currentStockId === 'all' ? '' : '&stock=' + _storage2.default.currentStockId),
+	    callbackSuccess: onSuccessReportsLoad
+	  };
+	};
+	
+	exports.default = {
+	  start: function start() {
+	    reportsList.addEventListener('click', getReports);
+	    _storage2.default.currentStockId = 'all';
+	  },
+	  stop: function stop() {
+	    reportsList.removeEventListener('click', getReports);
+	  },
+	
+	  goodsLeftReport: onReportsGoodsLeftClick
+	};
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var markup = {
+	  getElement: function getElement(item, index) {
+	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '" data-group-index="' + index + '" data-group-level="' + item.level + '" data-group-name="' + item.name + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n      <div class="d-flex justify-content-between align-items-center" style="padding-right: 34px;">\n        <span> ' + (item.count ? item.count : '') + ' </span>\n      </div>\n    </div>';
+	  },
+	  getElementExtended: function getElementExtended(item, index) {
+	    return '\n    <div class="catalog-groups-header">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + item.name + '</div>\n        <div class="catalog-groups-column">' + item.markup_group + '%</div>\n        <div class="catalog-groups-column">' + (item.count ? item.count : '') + '</div>\n        <div class="catalog-groups-column">\n          <button type="button" class="btn p-0 icon-btn icon-btn__edit--black"></button>\n        </div>\n    </div>';
+	  },
+	  getElementReports: function getElementReports(item, index) {
+	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n      <div class="d-flex justify-content-between align-items-center" style="padding-right: 34px;">\n        <div><input class="form-check-input position-static report-groups-switch" type="checkbox" value="' + item.id + '" checked></div>\n      </div>\n    </div>';
+	  },
+	  drawDataInContainer: function drawDataInContainer(groupsData, container, handler) {
+	    var _this = this;
+	
+	    groupsData.forEach(function (group, index) {
+	      container.insertAdjacentHTML('beforeend', _this.getElement(group, index));
+	      container.lastChild.addEventListener('click', function () {
+	        _storage2.default.currentGroupId = group.id;
+	        _storage2.default.currentGroupName = group.name;
+	        _storage2.default.currentGroupLevel = group.level;
+	        handler();
+	      });
+	    });
+	  },
+	  drawDataInContainerExtended: function drawDataInContainerExtended(groupsData, container, handler) {
+	    var _this2 = this;
+	
+	    groupsData.forEach(function (group, index) {
+	      container.insertAdjacentHTML('beforeend', _this2.getElementExtended(group, index));
+	      container.lastChild.addEventListener('click', function (evt) {
+	        _storage2.default.currentGroupId = group.id;
+	        _storage2.default.currentGroupName = group.name;
+	        _storage2.default.currentGroupLevel = group.level;
+	        _storage2.default.currentGroupMarkup = group.markup_group;
+	        _storage2.default.currentGroupCount = group.count;
+	        handler(evt);
+	      });
+	    });
+	  },
+	  drawDataInContainerReports: function drawDataInContainerReports(groupsData, container) {
+	    var _this3 = this;
+	
+	    groupsData.forEach(function (group, index) {
+	      container.insertAdjacentHTML('beforeend', _this3.getElementReports(group, index));
+	    });
+	  }
+	};
+	
+	// отрисовка списка групп по данным
+	var drawGroups = function drawGroups(groupsList, container, handler) {
+	  container.innerHTML = '';
+	  if (groupsList.length > 0) {
+	    markup.drawDataInContainer(groupsList, container, handler);
+	  } else {
+	    container.innerHTML = 'Списка групп для этого предприятия еще нет';
+	  }
+	};
+	
+	// расширенная отрисовка списка групп для страницы КАТАЛОГ/ГРУППЫ ТОВАРОВ
+	var drawGroupsExtended = function drawGroupsExtended(groupsList, container, handler) {
+	  container.innerHTML = '\n    <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u041D\u043E\u043C\u0435\u0440</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0446\u0435\u043D\u043A\u0430 \u043D\u0430 \u0433\u0440\u0443\u043F\u043F\u0443</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0442\u043E\u0432\u0430\u0440\u043E\u0432 \u0432 \u0433\u0440\u0443\u043F\u043F\u0435</div>\n        <div class="catalog-groups-column">\u0420\u0435\u0434.</div>\n    </div>';
+	
+	  if (groupsList.length > 0) {
+	    markup.drawDataInContainerExtended(groupsList, container, handler);
+	  } else {
+	    container.innerHTML = 'Списка групп для этого предприятия еще нет';
+	  }
+	};
+	
+	// отрисовка списка групп по данным
+	var drawGroupsReports = function drawGroupsReports(groupsList, container, handler) {
+	  container.innerHTML = '';
+	  if (groupsList.length > 0) {
+	    markup.drawDataInContainerReports(groupsList, container);
+	  } else {
+	    container.innerHTML = 'Списка групп для этого предприятия еще нет';
+	  }
+	};
+	
+	exports.default = {
+	  draw: drawGroups,
+	  drawCatalog: drawGroupsExtended,
+	  drawReports: drawGroupsReports
+	};
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
 	var _storage = __webpack_require__(1);
 	
 	var _storage2 = _interopRequireDefault(_storage);
@@ -6825,7 +7303,7 @@
 	};
 
 /***/ }),
-/* 48 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6902,107 +7380,7 @@
 	};
 
 /***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _storage = __webpack_require__(1);
-	
-	var _storage2 = _interopRequireDefault(_storage);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var markup = {
-	  getElement: function getElement(item, index) {
-	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '" data-group-index="' + index + '" data-group-level="' + item.level + '" data-group-name="' + item.name + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n      <div class="d-flex justify-content-between align-items-center" style="padding-right: 34px;">\n        <span> ' + (item.count ? item.count : '') + ' </span>\n      </div>\n    </div>';
-	  },
-	  getElementExtended: function getElementExtended(item, index) {
-	    return '\n    <div class="catalog-groups-header">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + item.name + '</div>\n        <div class="catalog-groups-column">' + item.markup_group + '%</div>\n        <div class="catalog-groups-column">' + (item.count ? item.count : '') + '</div>\n        <div class="catalog-groups-column">\n          <button type="button" class="btn p-0 icon-btn icon-btn__edit--black"></button>\n        </div>\n    </div>';
-	  },
-	  getElementReports: function getElementReports(item, index) {
-	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n      <div class="d-flex justify-content-between align-items-center" style="padding-right: 34px;">\n        <div><input class="form-check-input position-static report-groups-switch" type="checkbox" value="' + item.id + '" checked></div>\n      </div>\n    </div>';
-	  },
-	  drawDataInContainer: function drawDataInContainer(groupsData, container, handler) {
-	    var _this = this;
-	
-	    groupsData.forEach(function (group, index) {
-	      container.insertAdjacentHTML('beforeend', _this.getElement(group, index));
-	      container.lastChild.addEventListener('click', function () {
-	        _storage2.default.currentGroupId = group.id;
-	        _storage2.default.currentGroupName = group.name;
-	        _storage2.default.currentGroupLevel = group.level;
-	        handler();
-	      });
-	    });
-	  },
-	  drawDataInContainerExtended: function drawDataInContainerExtended(groupsData, container, handler) {
-	    var _this2 = this;
-	
-	    groupsData.forEach(function (group, index) {
-	      container.insertAdjacentHTML('beforeend', _this2.getElementExtended(group, index));
-	      container.lastChild.addEventListener('click', function (evt) {
-	        _storage2.default.currentGroupId = group.id;
-	        _storage2.default.currentGroupName = group.name;
-	        _storage2.default.currentGroupLevel = group.level;
-	        _storage2.default.currentGroupMarkup = group.markup_group;
-	        _storage2.default.currentGroupCount = group.count;
-	        handler(evt);
-	      });
-	    });
-	  },
-	  drawDataInContainerReports: function drawDataInContainerReports(groupsData, container) {
-	    var _this3 = this;
-	
-	    groupsData.forEach(function (group, index) {
-	      container.insertAdjacentHTML('beforeend', _this3.getElementReports(group, index));
-	    });
-	  }
-	};
-	
-	// отрисовка списка групп по данным
-	var drawGroups = function drawGroups(groupsList, container, handler) {
-	  container.innerHTML = '';
-	  if (groupsList.length > 0) {
-	    markup.drawDataInContainer(groupsList, container, handler);
-	  } else {
-	    container.innerHTML = 'Списка групп для этого предприятия еще нет';
-	  }
-	};
-	
-	// расширенная отрисовка списка групп для страницы КАТАЛОГ/ГРУППЫ ТОВАРОВ
-	var drawGroupsExtended = function drawGroupsExtended(groupsList, container, handler) {
-	  container.innerHTML = '\n    <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u041D\u043E\u043C\u0435\u0440</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0446\u0435\u043D\u043A\u0430 \u043D\u0430 \u0433\u0440\u0443\u043F\u043F\u0443</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0442\u043E\u0432\u0430\u0440\u043E\u0432 \u0432 \u0433\u0440\u0443\u043F\u043F\u0435</div>\n        <div class="catalog-groups-column">\u0420\u0435\u0434.</div>\n    </div>';
-	
-	  if (groupsList.length > 0) {
-	    markup.drawDataInContainerExtended(groupsList, container, handler);
-	  } else {
-	    container.innerHTML = 'Списка групп для этого предприятия еще нет';
-	  }
-	};
-	
-	// отрисовка списка групп по данным
-	var drawGroupsReports = function drawGroupsReports(groupsList, container, handler) {
-	  container.innerHTML = '';
-	  if (groupsList.length > 0) {
-	    markup.drawDataInContainerReports(groupsList, container);
-	  } else {
-	    container.innerHTML = 'Списка групп для этого предприятия еще нет';
-	  }
-	};
-	
-	exports.default = {
-	  draw: drawGroups,
-	  drawCatalog: drawGroupsExtended,
-	  drawReports: drawGroupsReports
-	};
-
-/***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -7057,7 +7435,7 @@
 	};
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7078,7 +7456,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _reference__debitCreditAddEditU = __webpack_require__(52);
+	var _reference__debitCreditAddEditU = __webpack_require__(53);
 	
 	var _reference__debitCreditAddEditU2 = _interopRequireDefault(_reference__debitCreditAddEditU);
 	
@@ -7243,7 +7621,7 @@
 	};
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7264,7 +7642,7 @@
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _reference__debitCredit = __webpack_require__(51);
+	var _reference__debitCredit = __webpack_require__(52);
 	
 	var _reference__debitCredit2 = _interopRequireDefault(_reference__debitCredit);
 	
@@ -7384,7 +7762,7 @@
 	};
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7401,7 +7779,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _universalValidityMicro = __webpack_require__(50);
+	var _universalValidityMicro = __webpack_require__(51);
 	
 	var _universalValidityMicro2 = _interopRequireDefault(_universalValidityMicro);
 	
@@ -7409,7 +7787,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalogCards = __webpack_require__(54);
+	var _catalogCards = __webpack_require__(55);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
 	
@@ -7632,7 +8010,7 @@
 	};
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -7662,7 +8040,7 @@
 	};
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7679,7 +8057,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _universalValidityMicro = __webpack_require__(50);
+	var _universalValidityMicro = __webpack_require__(51);
 	
 	var _universalValidityMicro2 = _interopRequireDefault(_universalValidityMicro);
 	
@@ -7851,7 +8229,7 @@
 	};
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7868,7 +8246,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _universalValidityMicro = __webpack_require__(50);
+	var _universalValidityMicro = __webpack_require__(51);
 	
 	var _universalValidityMicro2 = _interopRequireDefault(_universalValidityMicro);
 	
@@ -8271,7 +8649,7 @@
 	};
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8288,7 +8666,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _universalBillsList = __webpack_require__(58);
+	var _universalBillsList = __webpack_require__(59);
 	
 	var _universalBillsList2 = _interopRequireDefault(_universalBillsList);
 	
@@ -8730,7 +9108,7 @@
 	};
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8832,364 +9210,6 @@
 	};
 
 /***/ }),
-/* 59 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _xhr = __webpack_require__(6);
-	
-	var _xhr2 = _interopRequireDefault(_xhr);
-	
-	var _storage = __webpack_require__(1);
-	
-	var _storage2 = _interopRequireDefault(_storage);
-	
-	var _universalGroupsList = __webpack_require__(49);
-	
-	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	// import 'date-input-polyfill';
-	var reportsList = document.querySelector('#list-reports-list');
-	var reportsGroupMainSwitch = document.querySelector('#report-groups-main-switch');
-	var reportsGroupMainSwitchTurn = document.querySelector('#report-groups-turn-main-switch');
-	var reportsDashboard = document.querySelector('#reports-dashboard');
-	
-	var reportsGoodsLeft = document.querySelector('#report-goods-left');
-	var reportsGoodsLeftModal = document.querySelector('#report-goods-left-modal');
-	var reportsGoodsLeftModalStock = document.querySelector('#report-goods-left-modal-stock');
-	var reportsGoodsLeftModalBody = document.querySelector('#report-goods-left-modal-body');
-	var reportsGoodsLeftModalPDFBtn = document.querySelector('#report-goods-left-modal-pdf');
-	var reportsGoodsLeftModalExcelBtn = document.querySelector('#report-goods-left-modal-excel');
-	
-	var reportsGoodsTurn = document.querySelector('#report-goods-turn');
-	var reportsGoodsTurnModal = document.querySelector('#report-goods-turn-modal');
-	var reportsGoodsTurnModalStock = document.querySelector('#report-goods-turn-modal-stock');
-	var reportsGoodsTurnModalBody = document.querySelector('#report-goods-turn-modal-body');
-	var reportsGoodsTurnModalPDFBtn = document.querySelector('#report-goods-turn-modal-pdf');
-	var reportsGoodsTurnModalExcelBtn = document.querySelector('#report-goods-turn-modal-excel');
-	
-	var reportTurnFrom = document.querySelector('#report-turn-from');
-	var reportTurnTo = document.querySelector('#report-turn-to');
-	
-	var reportsGoodsProfit = document.querySelector('#report-profit-retail');
-	var reportsGoodsProfitModal = document.querySelector('#report-goods-profit-modal');
-	var reportsGoodsProfitModalStock = document.querySelector('#report-goods-profit-modal-stock');
-	var reportsGoodsProfitModalPDFBtn = document.querySelector('#report-goods-profit-modal-pdf');
-	var reportsGoodsProfitModalExcelBtn = document.querySelector('#report-goods-profit-modal-excel');
-	
-	var reportProfitFrom = document.querySelector('#report-profit-from');
-	var reportProfitTo = document.querySelector('#report-profit-to');
-	
-	var reportLink = document.querySelector('#report-link');
-	var reportLinkGoogle = document.querySelector('#report-link-google');
-	var reportLinkTurn = document.querySelector('#report-link-turn');
-	var reportLinkTurnGoogle = document.querySelector('#report-link-turn-google');
-	var reportLinkProfit = document.querySelector('#report-link-profit');
-	var reportLinkProfitGoogle = document.querySelector('#report-link-profit-google');
-	
-	var reportsStocks = document.querySelector('#reports-stocks');
-	
-	// ############################## РАЗМЕТКА ДАШБОРДА #############
-	var dashboardTypes = {
-	  money: 'Баланс',
-	  form: 'Закупки',
-	  proceeds: 'Выручка',
-	  profit: 'Кол-во продаж',
-	  purchase: 'Прибыль'
-	};
-	
-	var getDashboardItem = function getDashboardItem(item) {
-	  console.log(item);
-	  return '\n    <div class="dashboard-item">\n      <div class="dashboard-status"></div>\n      <div>\n        <p>' + dashboardTypes[item[0]] + '</p>\n        <span>' + item[1] + '</span>\n      </div>\n    </div>';
-	};
-	
-	// ############################## ОТЧЕТ / ОСТАТОК ТОВАРА     ##############################
-	
-	var onPDFLoadSuccess = function onPDFLoadSuccess(data) {
-	  console.log(data);
-	  reportLink.href = data.data;
-	  reportLink.innerHTML = '\u0421\u043A\u0430\u0447\u0430\u0442\u044C ' + _storage2.default.currentReportType;
-	
-	  reportLinkGoogle.href = 'https://docs.google.com/viewer?url=' + data.data + '&embedded=false';
-	  reportLinkGoogle.innerHTML = '\u0421\u043C\u043E\u0442\u0440\u0435\u0442\u044C ' + _storage2.default.currentReportType + ' \u043D\u0430 Google ';
-	};
-	
-	var getReportLink = function getReportLink() {
-	  console.log('stock-->', _storage2.default.currentStockId);
-	
-	  var params = [];
-	  var listOfGroups = [];
-	
-	  document.querySelectorAll('.report-goods-left-modal-switch').forEach(function (switchParam) {
-	    if (switchParam.checked) {
-	      params.push(switchParam.value);
-	    }
-	  });
-	
-	  reportsGoodsLeftModalBody.querySelectorAll('.report-groups-switch').forEach(function (switchGroups) {
-	    if (switchGroups.checked) {
-	      listOfGroups.push(switchGroups.value);
-	    }
-	  });
-	
-	  console.log('parameters-->', params);
-	  console.log('listOfGroups-->', listOfGroups);
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/report/remains/export/' + _storage2.default.currentReportType,
-	    data: 'token=' + _storage2.default.data.token + '&parameters=[' + params + ']&list_of_groups=[' + listOfGroups + ']' + (_storage2.default.currentStockId === 'all' ? '' : '&stock=' + _storage2.default.currentStockId),
-	    callbackSuccess: onPDFLoadSuccess
-	  };
-	};
-	
-	reportsGoodsLeftModalPDFBtn.addEventListener('click', function () {
-	  _storage2.default.currentReportType = 'pdf';
-	  getReportLink();
-	});
-	
-	reportsGoodsLeftModalExcelBtn.addEventListener('click', function () {
-	  _storage2.default.currentReportType = 'excel';
-	  getReportLink();
-	});
-	
-	reportsGroupMainSwitch.addEventListener('change', function (evt) {
-	  document.querySelectorAll('.report-groups-switch').forEach(function (switchElement) {
-	    switchElement.checked = evt.target.checked;
-	  });
-	  console.log(evt.target.checked);
-	});
-	
-	var onSuccessGoodsLeftLoad = function onSuccessGoodsLeftLoad(goodData) {
-	  console.log(goodData);
-	  $(reportsGoodsLeftModal).modal('show');
-	  reportsGoodsLeftModalStock.value = reportsStocks.value;
-	
-	  _universalGroupsList2.default.drawReports(goodData.data, reportsGoodsLeftModalBody, null);
-	};
-	
-	var onReportsGoodsLeftClick = function onReportsGoodsLeftClick() {
-	  reportLink.innerHTML = '';
-	  reportLinkGoogle.innerHTML = '';
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/group',
-	    data: 'view_last=0&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessGoodsLeftLoad
-	  };
-	};
-	
-	reportsGoodsLeft.addEventListener('click', onReportsGoodsLeftClick);
-	
-	// ############################## ОТЧЕТ / ОБОРОТ ТОВАРА      ##############################
-	
-	var onPDFLoadSuccessTurn = function onPDFLoadSuccessTurn(data) {
-	  console.log(data);
-	  reportLinkTurn.href = data.data;
-	  reportLinkTurn.innerHTML = '\u0421\u043A\u0430\u0447\u0430\u0442\u044C ' + _storage2.default.currentReportType;
-	  reportLinkTurnGoogle.href = 'https://docs.google.com/viewer?url=' + data.data + '&embedded=false';
-	  reportLinkTurnGoogle.innerHTML = '\u0421\u043C\u043E\u0442\u0440\u0435\u0442\u044C ' + _storage2.default.currentReportType + ' \u043D\u0430 Google ';
-	};
-	
-	var getReportLinkTurn = function getReportLinkTurn() {
-	  console.log('stock-->', _storage2.default.currentStockId);
-	  var params = [];
-	  var listOfGroups = [];
-	
-	  document.querySelectorAll('.report-goods-turn-modal-switch').forEach(function (switchParam) {
-	    if (switchParam.checked) {
-	      params.push(switchParam.value);
-	    }
-	  });
-	
-	  reportsGoodsTurnModalBody.querySelectorAll('.report-groups-switch').forEach(function (switchGroups) {
-	    if (switchGroups.checked) {
-	      listOfGroups.push(switchGroups.value);
-	    }
-	  });
-	
-	  console.log('parameters-->', params);
-	  console.log('listOfGroups-->', listOfGroups);
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/report/turnover/export/' + _storage2.default.currentReportType,
-	    data: 'token=' + _storage2.default.data.token + '&parameters=[' + params + ']&list_of_groups=[' + listOfGroups + '&time_start=' + Date.parse(reportTurnFrom.value) / 1000 + '&time_end=' + Date.parse(reportTurnTo.value) / 1000 + (_storage2.default.currentStockId === 'all' ? '' : '&stock=' + _storage2.default.currentStockId),
-	    callbackSuccess: onPDFLoadSuccessTurn
-	  };
-	};
-	
-	reportsGoodsTurnModalPDFBtn.addEventListener('click', function () {
-	  _storage2.default.currentReportType = 'pdf';
-	  getReportLinkTurn();
-	});
-	
-	reportsGoodsTurnModalExcelBtn.addEventListener('click', function () {
-	  _storage2.default.currentReportType = 'excel';
-	  getReportLinkTurn();
-	});
-	
-	reportsGroupMainSwitchTurn.addEventListener('change', function (evt) {
-	  reportsGoodsTurnModalBody.querySelectorAll('.report-groups-switch').forEach(function (switchElement) {
-	    switchElement.checked = evt.target.checked;
-	  });
-	  console.log(evt.target.checked);
-	});
-	
-	var onSuccessGoodsTurnLoad = function onSuccessGoodsTurnLoad(goodData) {
-	  console.log(goodData);
-	  $(reportsGoodsTurnModal).modal('show');
-	  reportsGoodsTurnModalStock.value = reportsStocks.value;
-	
-	  _universalGroupsList2.default.drawReports(goodData.data, reportsGoodsTurnModalBody, null);
-	};
-	
-	var onReportsGoodsTurnClick = function onReportsGoodsTurnClick() {
-	  reportLinkTurn.innerHTML = '';
-	  reportLinkTurnGoogle.innerHTML = '';
-	  reportTurnFrom.value = new Date().toISOString().slice(0, 8) + '01';
-	  reportTurnTo.value = new Date().toISOString().slice(0, 10);
-	  console.log(reportTurnFrom.value);
-	  console.log(Date.parse(reportTurnFrom.value) / 1000);
-	  console.log(Date.parse(reportTurnTo.value) / 1000);
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/group',
-	    data: 'view_last=0&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessGoodsTurnLoad
-	  };
-	};
-	
-	reportsGoodsTurn.addEventListener('click', onReportsGoodsTurnClick);
-	// ############################## ОТЧЕТ / ПРИБЫЛЬ С РОЗНИЦЫ  ##############################
-	
-	var onPDFLoadSuccessProfit = function onPDFLoadSuccessProfit(data) {
-	  reportLinkProfit.href = data.data;
-	  reportLinkProfit.innerHTML = '\u0421\u043A\u0430\u0447\u0430\u0442\u044C ' + _storage2.default.currentReportType;
-	  reportLinkProfitGoogle.href = 'https://docs.google.com/viewer?url=' + data.data + '&embedded=false';
-	  reportLinkProfitGoogle.innerHTML = '\u0421\u043C\u043E\u0442\u0440\u0435\u0442\u044C ' + _storage2.default.currentReportType + ' \u043D\u0430 Google ';
-	};
-	
-	var getReportLinkProfit = function getReportLinkProfit() {
-	  console.log('stock-->', _storage2.default.currentStockId);
-	  var params = [];
-	
-	  document.querySelectorAll('.report-goods-profit-modal-switch').forEach(function (switchParam) {
-	    if (switchParam.checked) {
-	      params.push(switchParam.value);
-	    }
-	  });
-	
-	  console.log('parameters-->', params);
-	
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/report/profit/export/' + _storage2.default.currentReportType,
-	    data: 'token=' + _storage2.default.data.token + '&parameters=[' + params + ']&ime_start=' + Date.parse(reportProfitFrom.value) / 1000 + '&time_end=' + Date.parse(reportProfitTo.value) / 1000 + (_storage2.default.currentStockId === 'all' ? '' : '&stock=' + _storage2.default.currentStockId),
-	    callbackSuccess: onPDFLoadSuccessProfit
-	  };
-	};
-	
-	reportsGoodsProfitModalPDFBtn.addEventListener('click', function () {
-	  _storage2.default.currentReportType = 'pdf';
-	  getReportLinkProfit();
-	});
-	
-	reportsGoodsProfitModalExcelBtn.addEventListener('click', function () {
-	  _storage2.default.currentReportType = 'excel';
-	  getReportLinkProfit();
-	});
-	
-	var onReportsProfitClick = function onReportsProfitClick() {
-	  reportLinkProfit.innerHTML = '';
-	  reportLinkProfitGoogle.innerHTML = '';
-	  $(reportsGoodsProfitModal).modal('show');
-	  reportsGoodsProfitModalStock.value = reportsStocks.value;
-	
-	  reportLinkProfit.innerHTML = '';
-	  reportProfitFrom.value = new Date().toISOString().slice(0, 8) + '01';
-	  reportProfitTo.value = new Date().toISOString().slice(0, 10);
-	};
-	
-	reportsGoodsProfit.addEventListener('click', onReportsProfitClick);
-	
-	reportsStocks.addEventListener('change', function (evt) {
-	  _storage2.default.currentStockId = evt.target.value;
-	  getReports();
-	});
-	
-	var onChangeStockModal = function onChangeStockModal(evt) {
-	  _storage2.default.currentStockId = evt.target.value;
-	};
-	
-	reportsGoodsLeftModalStock.addEventListener('change', onChangeStockModal);
-	reportsGoodsTurnModalStock.addEventListener('change', onChangeStockModal);
-	reportsGoodsProfitModalStock.addEventListener('change', onChangeStockModal);
-	
-	var onSuccessReportsLoad = function onSuccessReportsLoad(reportsData) {
-	  console.log(reportsData);
-	  var dashboard = {
-	    money: reportsData.data.balance_money,
-	    form: reportsData.data.today_count_forms,
-	    proceeds: reportsData.data.today_total_proceeds,
-	    profit: reportsData.data.today_total_profit,
-	    purchase: reportsData.data.today_total_purchase
-	  };
-	
-	  if (_storage2.default.currentStockId === 'all') {
-	
-	    reportsStocks.innerHTML = reportsData.data.all_stocks.map(function (item) {
-	      return '<option value="' + item.id + '">' + item.name + '</option>';
-	    }).join('');
-	    reportsGoodsLeftModalStock.innerHTML = reportsData.data.all_stocks.map(function (item) {
-	      return '<option value="' + item.id + '">' + item.name + '</option>';
-	    }).join('');
-	    reportsGoodsTurnModalStock.innerHTML = reportsData.data.all_stocks.map(function (item) {
-	      return '<option value="' + item.id + '">' + item.name + '</option>';
-	    }).join('');
-	    reportsGoodsProfitModalStock.innerHTML = reportsData.data.all_stocks.map(function (item) {
-	      return '<option value="' + item.id + '">' + item.name + '</option>';
-	    }).join('');
-	
-	    if (reportsData.data.all_stocks.length > 1) {
-	      reportsStocks.innerHTML += '<option value="all" selected>Все склады</option';
-	      reportsGoodsLeftModalStock.innerHTML += '<option value="all" selected>Все склады</option';
-	      reportsGoodsTurnModalStock.innerHTML += '<option value="all" selected>Все склады</option';
-	      reportsGoodsProfitModalStock.innerHTML += '<option value="all" selected>Все склады</option';
-	    }
-	  }
-	
-	  reportsDashboard.innerHTML = Object.entries(dashboard).map(function (dash) {
-	    return getDashboardItem(dash);
-	  }).join('');
-	};
-	
-	var getReports = function getReports() {
-	
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/dashboard',
-	    data: 'view_last=0&token=' + _storage2.default.data.token + (_storage2.default.currentStockId === 'all' ? '' : '&stock=' + _storage2.default.currentStockId),
-	    callbackSuccess: onSuccessReportsLoad
-	  };
-	};
-	
-	exports.default = {
-	  start: function start() {
-	    reportsList.addEventListener('click', getReports);
-	    _storage2.default.currentStockId = 'all';
-	  },
-	  stop: function stop() {
-	    reportsList.removeEventListener('click', getReports);
-	  }
-	};
-
-/***/ }),
 /* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9207,7 +9227,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogCards = __webpack_require__(54);
+	var _catalogCards = __webpack_require__(55);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
 	
@@ -9223,7 +9243,7 @@
 	
 	var _catalog__cardsAddResource2 = _interopRequireDefault(_catalog__cardsAddResource);
 	
-	var _universalGoodsList = __webpack_require__(48);
+	var _universalGoodsList = __webpack_require__(50);
 	
 	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
@@ -9231,7 +9251,7 @@
 	
 	var _universalSearch2 = _interopRequireDefault(_universalSearch);
 	
-	var _universalGroupsList = __webpack_require__(49);
+	var _universalGroupsList = __webpack_require__(48);
 	
 	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
 	
@@ -9808,7 +9828,7 @@
 	
 	var _universalKeywords2 = _interopRequireDefault(_universalKeywords);
 	
-	var _universalGoodsList = __webpack_require__(48);
+	var _universalGoodsList = __webpack_require__(50);
 	
 	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
@@ -11024,7 +11044,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _universalGroupsList = __webpack_require__(49);
+	var _universalGroupsList = __webpack_require__(48);
 	
 	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
 	
