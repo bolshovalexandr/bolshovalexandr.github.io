@@ -2541,7 +2541,7 @@
 	var setRequestToDeliveryBill = function setRequestToDeliveryBill() {
 	  _xhr2.default.request = {
 	    metod: 'PUT',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.currentEnterpriseId + '/' + _storage2.default.allDocsOperationType + '/' + _storage2.default.currentBillId,
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/' + _storage2.default.allDocsOperationType + '/' + _storage2.default.currentBillId,
 	    data: 'status=3&token=' + _storage2.default.data.token,
 	    callbackSuccess: onSuccessBillDelivery
 	  };
