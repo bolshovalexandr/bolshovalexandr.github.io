@@ -548,6 +548,11 @@ input[name="contact"]:checked + label {
   justify-content: space-between;
   width: 95%; }
 
+.reference-column:nth-child(3) {
+  display: flex;
+  justify-content: center;
+  width: 10%; }
+
 #list-reports-body h4 {
   margin-top: 30px;
   margin-bottom: 10px; }
@@ -613,6 +618,14 @@ input[name="contact"]:checked + label {
 .search-container {
   display: flex;
   align-items: center; }
+
+input[type="date"] {
+  position: relative;
+  margin-right: 30px;
+  background-image: url("../img/calendar-icon.png");
+  background-size: 20px 20px;
+  background-position: right;
+  background-repeat: no-repeat; }
 
 /*
 @import "src/sass/components/app.scss";
