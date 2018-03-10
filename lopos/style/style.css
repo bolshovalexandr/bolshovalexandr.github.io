@@ -67,7 +67,9 @@
 
 .icon-btn__edit--black {
   background-image: url(../img/edit.png);
-  background-size: cover; }
+  background-size: cover;
+  height: 28px;
+  width: 28px; }
 
 .icon-btn__delete {
   background-image: url(../img/trash-100.png);
@@ -427,8 +429,8 @@ input[name="contact"]:checked + label {
   border: 1px solid black; }
 
 .user-status {
-  height: 32px;
-  width: 32px;
+  height: 24px;
+  width: 24px;
   border-radius: 50%;
   margin-right: 5px; }
 
@@ -494,7 +496,8 @@ input[name="contact"]:checked + label {
 
 .catalog-groups-header {
   display: flex;
-  justify-content: space-between; }
+  justify-content: space-between;
+  height: 30px; }
 
 .catalog-groups-column {
   width: auto;
@@ -502,6 +505,10 @@ input[name="contact"]:checked + label {
   border: 1px solid gray;
   margin-left: -1px;
   padding: 2px; }
+
+.catalog-groups-header:first-child {
+  font-weight: 700;
+  background-color: #ccc; }
 
 .catalog-groups-header:hover {
   background-color: #ccc; }
@@ -529,6 +536,7 @@ input[name="contact"]:checked + label {
 .reference-header:first-child {
   outline: 1px solid black;
   margin-right: 1px;
+  background-color: #ccc;
   font-weight: 700; }
 
 .reference-header:hover {
@@ -551,7 +559,12 @@ input[name="contact"]:checked + label {
 .reference-column:nth-child(3) {
   display: flex;
   justify-content: center;
-  width: 10%; }
+  min-width: 15%; }
+
+.reference-column:nth-child(4) {
+  display: flex;
+  justify-content: center;
+  min-width: 7%; }
 
 #list-reports-body h4 {
   margin-top: 30px;
@@ -626,6 +639,10 @@ input[type="date"] {
   background-size: 20px 20px;
   background-position: right;
   background-repeat: no-repeat; }
+
+.online-user > img {
+  height: 24px;
+  width: 24px; }
 
 /*
 @import "src/sass/components/app.scss";

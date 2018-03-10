@@ -62,75 +62,75 @@
 	
 	var _log2 = _interopRequireDefault(_log);
 	
-	var _online__profile = __webpack_require__(17);
+	var _online__profile = __webpack_require__(19);
 	
 	var _online__profile2 = _interopRequireDefault(_online__profile);
 	
-	var _reference__enterprises = __webpack_require__(19);
+	var _reference__enterprises = __webpack_require__(21);
 	
 	var _reference__enterprises2 = _interopRequireDefault(_reference__enterprises);
 	
-	var _reference__enterprisesAdd = __webpack_require__(21);
+	var _reference__enterprisesAdd = __webpack_require__(23);
 	
 	var _reference__enterprisesAdd2 = _interopRequireDefault(_reference__enterprisesAdd);
 	
-	var _reference__enterprisesEdit = __webpack_require__(22);
+	var _reference__enterprisesEdit = __webpack_require__(24);
 	
 	var _reference__enterprisesEdit2 = _interopRequireDefault(_reference__enterprisesEdit);
 	
-	var _reference__points = __webpack_require__(23);
+	var _reference__points = __webpack_require__(25);
 	
 	var _reference__points2 = _interopRequireDefault(_reference__points);
 	
-	var _reference__pointsAdd = __webpack_require__(25);
+	var _reference__pointsAdd = __webpack_require__(27);
 	
 	var _reference__pointsAdd2 = _interopRequireDefault(_reference__pointsAdd);
 	
-	var _reference__pointsEdit = __webpack_require__(26);
+	var _reference__pointsEdit = __webpack_require__(28);
 	
 	var _reference__pointsEdit2 = _interopRequireDefault(_reference__pointsEdit);
 	
-	var _reference__contractors = __webpack_require__(27);
+	var _reference__contractors = __webpack_require__(29);
 	
 	var _reference__contractors2 = _interopRequireDefault(_reference__contractors);
 	
-	var _reference__contractorsAdd = __webpack_require__(31);
+	var _reference__contractorsAdd = __webpack_require__(33);
 	
 	var _reference__contractorsAdd2 = _interopRequireDefault(_reference__contractorsAdd);
 	
-	var _reference__keywords = __webpack_require__(32);
+	var _reference__keywords = __webpack_require__(34);
 	
 	var _reference__keywords2 = _interopRequireDefault(_reference__keywords);
 	
-	var _reference__keywordsAdd = __webpack_require__(34);
+	var _reference__keywordsAdd = __webpack_require__(36);
 	
 	var _reference__keywordsAdd2 = _interopRequireDefault(_reference__keywordsAdd);
 	
-	var _reference__keywordsEdit = __webpack_require__(35);
+	var _reference__keywordsEdit = __webpack_require__(37);
 	
 	var _reference__keywordsEdit2 = _interopRequireDefault(_reference__keywordsEdit);
 	
-	var _catalog__groups = __webpack_require__(36);
+	var _catalog__groups = __webpack_require__(38);
 	
 	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
-	var _reference__debitCredit = __webpack_require__(51);
+	var _reference__debitCredit = __webpack_require__(53);
 	
 	var _reference__debitCredit2 = _interopRequireDefault(_reference__debitCredit);
 	
-	var _operations__manufacture = __webpack_require__(53);
+	var _operations__manufacture = __webpack_require__(55);
 	
 	var _operations__manufacture2 = _interopRequireDefault(_operations__manufacture);
 	
-	var _operations__balance = __webpack_require__(55);
+	var _operations__balance = __webpack_require__(57);
 	
 	var _operations__balance2 = _interopRequireDefault(_operations__balance);
 	
-	var _online__users = __webpack_require__(56);
+	var _online__users = __webpack_require__(58);
 	
 	var _online__users2 = _interopRequireDefault(_online__users);
 	
-	var _accounting__allDocs = __webpack_require__(57);
+	var _accounting__allDocs = __webpack_require__(17);
 	
 	var _accounting__allDocs2 = _interopRequireDefault(_accounting__allDocs);
 	
@@ -2193,8 +2193,9 @@
 	var drawSet = count / 4;
 	
 	// отрисовка порции карточек
+	listLogBody.innerHTML = '\n    <div class="reference-header">\n        <div class="reference-column">\u041D\u043E\u043C\u0435\u0440</div>\n        <div class="reference-column">\u041E\u043F\u0435\u0440\u0430\u0446\u0438\u044F</div>\n        <div class="reference-column">\u0412\u0440\u0435\u043C\u044F</div>\n        <div class="reference-column">\u041F\u0440\u043E\u0441\u043C.</div>\n    </div>\n';
 	var drawCardSet = function drawCardSet() {
-	  return logCardNodes.splice(0, drawSet).forEach(_log2.default.addCardToContainer);
+	  logCardNodes.splice(0, drawSet).forEach(_log2.default.addCardToContainer);
 	};
 	
 	// создание нод по полученной порции данных
@@ -2207,6 +2208,7 @@
 	// успех загрузки
 	var onSuccessLogLoad = function onSuccessLogLoad(logResponse) {
 	  var loadedLog = logResponse.data;
+	  console.log(loadedLog);
 	
 	  loaderWait.classList.add('d-none');
 	  if (loadedLog.length) {
@@ -2289,15 +2291,25 @@
 
 /***/ }),
 /* 16 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var listLogBody = document.querySelector('#log-body');
 	
+	var _accounting__allDocs = __webpack_require__(17);
+	
+	var _accounting__allDocs2 = _interopRequireDefault(_accounting__allDocs);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var listLogBody = document.querySelector('#log-body');
 	exports.default = {
 	  cleanContainer: function cleanContainer() {
 	    listLogBody.innerHTML = '';
@@ -2339,11 +2351,40 @@
 	
 	    var cardHeader = item.ha_comment.split('\n');
 	    cardHeader[1] = cardHeader[1] ? cardHeader[1] : '';
-	
-	    return '\n    <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%">\n      <div class="media">\n        <img class="mr-3 rounded-circle p-1" src="img/user-male-filled-32.png" title="' + item.ha_operator_name + '" style="background-color: #' + getIconColor + '" width="30" alt="' + item.ha_operator_name + '">\n        <img class="mr-3" src="img/' + imgName + '.png" width="30" alt="Generic placeholder image">\n        <div class="media-body">\n          <b>' + cardHeader[0] + '</b>\n          ' + cardHeader[1] + '\n          <div class="badge text-right text-muted float-right">' + new Date(+(item.ha_time + '000')).toLocaleString() + '</div>\n          <div class="badge text-right text-muted float-right">' + (imgName === 'admission' || imgName === 'sale' ? '>' : '') + '</div>\n        </div>\n      </div>';
+	    /*
+	    return `
+	    <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%" data-link="${imgName}" ${(imgName === 'admission' || imgName === 'sale') ? `data-naklad=${item.ha_naklad_id_fk}` : ''} ${(imgName === 'expenses' || imgName === 'revenue') ? `data-balance=${item.ha_balance_act_id_fk}` : ''}>
+	      <div class="media">
+	        <img class="mr-3 rounded-circle p-1" src="img/user-male-filled-32.png" title="${item.ha_operator_name}" style="background-color: #${getIconColor}" width="30" alt="${item.ha_operator_name}">
+	        <img class="mr-3" src="img/${imgName}.png" width="30" alt="Generic placeholder image">
+	        <div class="media-body">
+	          <b>${cardHeader[0]}</b>
+	          ${cardHeader[1]}
+	          <div class="badge text-right text-muted float-right">${new Date(+(item.ha_time + '000')).toLocaleString()}</div>
+	          <div class="badge text-right text-muted float-right">${(imgName === 'admission' || imgName === 'sale' || imgName === 'expenses' || imgName === 'revenue') ? '>' : ''}</div>
+	        </div>
+	      </div>`;
+	    */
+	    return '\n    <div class="reference-header" data-link="' + imgName + '" ' + (imgName === 'admission' || imgName === 'sale' ? 'data-naklad=' + item.ha_naklad_id_fk : '') + ' ' + (imgName === 'expenses' || imgName === 'revenue' ? 'data-balance=' + item.ha_balance_act_id_fk : '') + '>\n      <div class="reference-column">\n        ' + (index + 1) + '\n      </div>\n      <div class="reference-column">\n\n      <div class="online-user">\n        <img class="mr-3 rounded-circle p-1" src="img/user-male-filled-32.png" title="' + item.ha_operator_name + '" style="background-color: #' + getIconColor + '" width="30" alt="' + item.ha_operator_name + '">\n        <img class="mr-3" src="img/' + imgName + '.png" width="30" alt="Generic placeholder image">\n        <b>' + cardHeader[0] + '</b>\n        ' + cardHeader[1] + '\n      </div>\n\n\n      </div>\n      <div class="reference-column">\n          <div class="badge text-right text-muted float-right">' + new Date(+(item.ha_time + '000')).toLocaleString() + '</div>\n      </div>\n      <div class="reference-column">\n          <div class="badge text-right text-muted float-right">' + (imgName === 'admission' || imgName === 'sale' || imgName === 'expenses' || imgName === 'revenue' ? '>' : '') + '</div>\n      </div>\n    </div>';
 	  },
 	  addCardToContainer: function addCardToContainer(cardMarkupItem) {
+	    console.log(cardMarkupItem);
 	    listLogBody.insertAdjacentHTML('beforeend', cardMarkupItem);
+	    if (listLogBody.lastChild.dataset.link === 'admission' || listLogBody.lastChild.dataset.link === 'sale') {
+	      var billId = listLogBody.lastChild.dataset.naklad;
+	      listLogBody.lastChild.addEventListener('click', function () {
+	        console.log(billId);
+	        _storage2.default.currentBillId = billId;
+	        _accounting__allDocs2.default.onBillClick();
+	      });
+	    } else if (listLogBody.lastChild.dataset.link === 'expenses' || listLogBody.lastChild.dataset.link === 'revenue') {
+	      var _billId = listLogBody.lastChild.dataset.balance;
+	      listLogBody.lastChild.addEventListener('click', function () {
+	        console.log(_billId);
+	        _storage2.default.currentBillId = _billId;
+	        _accounting__allDocs2.default.onBalanceActClick();
+	      });
+	    }
 	  }
 	};
 
@@ -2357,7 +2398,573 @@
 	  value: true
 	});
 	
-	var _online__profile = __webpack_require__(18);
+	var _xhr = __webpack_require__(6);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	var _universalBillsList = __webpack_require__(18);
+	
+	var _universalBillsList2 = _interopRequireDefault(_universalBillsList);
+	
+	var _tools = __webpack_require__(7);
+	
+	var _tools2 = _interopRequireDefault(_tools);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var START_YEAR = 2015;
+	// import goods from './universal-goods-list.js';
+	// import uValid from './universal-validity-micro.js';
+	
+	
+	var docsList = document.querySelector('#list-docs-list');
+	// const docsHeader = document.querySelector('#list-docs-header');
+	var docsBody = document.querySelector('#list-docs-body');
+	var docsStocks = document.querySelector('#docs-stocks');
+	
+	var docsYear = document.querySelector('#docs-year');
+	var docsMonth = document.querySelector('#docs-month');
+	var docsDay = document.querySelector('#docs-day');
+	
+	var docsBillBtn = document.querySelector('#docs-bill-btn');
+	var getDocsBtn = document.querySelector('#get-docs-btn');
+	var docsBalanceBtn = document.querySelector('#docs-balance-btn');
+	var docsReturnBtn = document.querySelector('#docs-return-btn');
+	var billCard = document.querySelector('#bill-card');
+	
+	var billCardType = document.querySelector('#bill-card-type');
+	var billCardStock = document.querySelector('#bill-card-stock');
+	var billCardId = document.querySelector('#bill-card-id');
+	var billCardTime = document.querySelector('#bill-card-time');
+	var billCardUser = document.querySelector('#bill-card-user');
+	var billCardGoods = document.querySelector('#bill-card-goods');
+	var billDeliveryBtn = document.querySelector('#bill-delivery-btn');
+	var billDeleteBtn = document.querySelector('#bill-delete-btn');
+	
+	var balanceCard = document.querySelector('#balance-act-card');
+	
+	var balanceCardStock = document.querySelector('#balance-act-card-stock');
+	var balanceCardId = document.querySelector('#balance-act-card-id');
+	var balanceCardUser = document.querySelector('#balance-act-card-user');
+	var balanceCardTime = document.querySelector('#balance-act-card-time');
+	var balanceCardTotal = document.querySelector('#balance-act-total');
+	var balanceCardReason = document.querySelector('#balance-act-reason');
+	var balanceCardComment = document.querySelector('#balance-act-comment');
+	var balanceDeleteBtn = document.querySelector('#balance-act-delete-btn');
+	
+	// ############################## РАЗМЕТКА ТОВАРОВ #############
+	var getGoodString = function getGoodString(item, index) {
+	  return '\n  <div class="goods-string"">\n    <div>\n      <span class="reference-row-number">' + (index + 1) + '</span> <span>\u2116 ' + item.good + '</span>\n    </div>\n    <div>\n      ' + Number(item.count).toFixed(2) + ' x ' + Number(item.price).toFixed(2) + ' = ' + Number(item.count).toFixed(2) * Number(item.price).toFixed(2) + '\n    </div>\n  </div>';
+	};
+	
+	// ############################## ОБРАБОТЧИКИ КЛИКОВ ПРИ ВЫВОДЕ ЗА ДЕНЬ#############
+	// let billStatus = '';
+	
+	var onSuccessBillGet = function onSuccessBillGet(answer) {
+	  console.log(answer);
+	  var _answer$data = answer.data,
+	      id = _answer$data.id,
+	      operatorName = _answer$data.operator_name,
+	      stockName = _answer$data.stock_name,
+	      time = _answer$data.time,
+	      type = _answer$data.type,
+	      goodsContent = _answer$data.content;
+	  // billStatus = status;
+	
+	  billCardStock.innerHTML = stockName;
+	  billCardType.src = 'img/' + _universalBillsList2.default.BillTypes['type' + type] + '.png';
+	  billCardId.innerHTML = '№' + id;
+	  billCardTime.innerHTML = '|| ' + new Date(+(time + '000')).toLocaleString();
+	  billCardUser.title = operatorName;
+	
+	  billCardGoods.innerHTML = '';
+	  goodsContent.forEach(function (good, index) {
+	    return billCardGoods.insertAdjacentHTML('beforeend', getGoodString(good, index));
+	  });
+	  if (+type === 0 || +type === 2) {
+	    billDeliveryBtn.classList.remove('d-none');
+	  } else {
+	    billDeliveryBtn.classList.add('d-none');
+	  }
+	  $(billCard).modal('show');
+	};
+	
+	// ############################## УДАЛЕНИЕ НАКЛАДНОЙ #############
+	var onSuccessBillDelete = function onSuccessBillDelete(answer) {
+	  console.log(answer);
+	
+	  // onListEnterprisesCardReturnBtn();
+	  $(billCard).modal('hide');
+	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	
+	  _tools2.default.informationtModal = {
+	    title: 'Уведомление',
+	    message: 'Накладная успешно удалена'
+	  };
+	};
+	
+	var setRequestToDeleteBill = function setRequestToDeleteBill() {
+	  _xhr2.default.request = {
+	    metod: 'DELETE',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.currentEnterpriseId + '/' + _storage2.default.allDocsOperationType + '/' + _storage2.default.currentBillId,
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessBillDelete
+	  };
+	};
+	
+	billDeleteBtn.addEventListener('click', function () {
+	
+	  _tools2.default.actionRequestModal = {
+	    title: 'Удаление',
+	    message: '\u0412\u044B \u0442\u043E\u0447\u043D\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u043D\u0430\u043A\u043B\u0430\u0434\u043D\u0443\u044E <b>' + _storage2.default.currentBillId + '</b>?',
+	    submitCallback: setRequestToDeleteBill
+	  };
+	});
+	
+	// ############################## ЗАВЕРШЕНИЕ ДОСТАВКИ #############
+	var onSuccessBillDelivery = function onSuccessBillDelivery(answer) {
+	  console.log(answer);
+	
+	  $(billCard).modal('hide');
+	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	
+	  _tools2.default.informationtModal = {
+	    title: 'Уведомление',
+	    message: 'Накладная успешно доставлена'
+	  };
+	};
+	
+	var setRequestToDeliveryBill = function setRequestToDeliveryBill() {
+	  _xhr2.default.request = {
+	    metod: 'PUT',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.currentEnterpriseId + '/' + _storage2.default.allDocsOperationType + '/' + _storage2.default.currentBillId,
+	    data: 'status=3&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessBillDelivery
+	  };
+	};
+	
+	billDeliveryBtn.addEventListener('click', function () {
+	
+	  _tools2.default.actionRequestModal = {
+	    title: 'Удаление',
+	    message: '\u0412\u044B \u0443\u0432\u0435\u0440\u0435\u043D\u044B, \u0447\u0442\u043E \u0434\u043E\u0441\u0442\u0430\u0432\u043A\u0430 \u043F\u043E \u0434\u0430\u043D\u043D\u043E\u0439 \u043D\u0430\u043A\u043B\u0430\u0434\u043D\u043E\u0439 <b>' + _storage2.default.currentBillId + '</b> \u043E\u043A\u043E\u043D\u0447\u0435\u043D\u0430? (\u0434\u0430\u043D\u043D\u043E\u0435 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u044F\u0432\u043B\u044F\u0435\u0442\u0441\u044F \u0431\u0435\u0437\u0432\u043E\u0437\u0432\u0440\u0430\u0442\u043D\u044B\u043C)',
+	    submitCallback: setRequestToDeliveryBill
+	  };
+	});
+	
+	var onBillClick = function onBillClick() {
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/' + _storage2.default.allDocsOperationType + '/' + _storage2.default.currentBillId + '/info',
+	    data: 'token=' + _storage2.default.data.token + (_storage2.default.currentStockId ? '&stock=' + _storage2.default.currentStockId : ''),
+	    callbackSuccess: onSuccessBillGet
+	  };
+	};
+	// ############################## УДАЛЕНИЕ БАЛАНСОВОЙ ОПЕРАЦИИ #############
+	var onSuccessBalanceDelete = function onSuccessBalanceDelete(answer) {
+	  console.log(answer);
+	
+	  $(balanceCard).modal('hide');
+	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	
+	  _tools2.default.informationtModal = {
+	    title: 'Уведомление',
+	    message: 'Балансова операция успешно удалена'
+	  };
+	};
+	
+	var setRequestToDeleteBalance = function setRequestToDeleteBalance() {
+	  _xhr2.default.request = {
+	    metod: 'DELETE',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.currentEnterpriseId + '/balance_act/' + _storage2.default.currentBillId,
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessBalanceDelete
+	  };
+	};
+	
+	balanceDeleteBtn.addEventListener('click', function () {
+	
+	  _tools2.default.actionRequestModal = {
+	    title: 'Удаление',
+	    message: '\u0412\u044B \u0442\u043E\u0447\u043D\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u0431\u0430\u043B\u0430\u043D\u0441\u043E\u0432\u0443\u044E \u043E\u043F\u0435\u0440\u0430\u0446\u0438\u044E <b>' + _storage2.default.currentBillId + '</b>?',
+	    submitCallback: setRequestToDeleteBalance
+	  };
+	});
+	
+	var onSuccessBalanceGet = function onSuccessBalanceGet(answer) {
+	  console.log(answer);
+	  var _answer$data2 = answer.data,
+	      id = _answer$data2.id,
+	      comment = _answer$data2.comment,
+	      reasonName = _answer$data2.reason_name,
+	      operatorName = _answer$data2.operator_name,
+	      stockName = _answer$data2.stock_name,
+	      time = _answer$data2.time,
+	      value = _answer$data2.value;
+	
+	  balanceCardStock.innerHTML = stockName;
+	  balanceCardTotal.innerHTML = value;
+	  balanceCardReason.innerHTML = reasonName;
+	  balanceCardComment.innerHTML = comment;
+	  balanceCardId.innerHTML = '№' + id;
+	  balanceCardTime.innerHTML = '|| ' + new Date(+(time + '000')).toLocaleString();
+	  balanceCardUser.title = operatorName;
+	
+	  $(balanceCard).modal('show');
+	};
+	
+	var onBalanceActClick = function onBalanceActClick() {
+	  console.log('hi');
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/balance_act/' + _storage2.default.currentBillId + '/info',
+	    data: 'token=' + _storage2.default.data.token + (_storage2.default.currentStockId ? '&stock=' + _storage2.default.currentStockId : ''),
+	    callbackSuccess: onSuccessBalanceGet
+	  };
+	};
+	
+	// ############################## ЗАГРУЖАЕМ ДОПОЛНИТЕЛЬНЫЕ НАКЛАДНЫЕ   ############
+	
+	
+	var lastId = '';
+	var prevData = [];
+	
+	var onSuccessLoadMore = function onSuccessLoadMore(billsData) {
+	  console.log(new Date(+billsData).toLocaleString());
+	  console.log(billsData);
+	
+	  // docsBody.innerHTML = '';
+	  if (docsBody.lastChild.tagName === 'BUTTON') {
+	    docsBody.lastChild.remove();
+	  }
+	  // lastId = billsData.data[billsData.data.length - 1].time;
+	  lastId = billsData.data[billsData.data.length - 1].id;
+	
+	  billsData.data.sort(function (a, b) {
+	    return b.id - a.id;
+	  });
+	  prevData = prevData.concat(billsData.data);
+	  if (billsData.data[0].stock_name && _storage2.default.allDocsOperationType === 'naklad') {
+	    _universalBillsList2.default.drawDay(billsData.data, docsBody, onBillClick);
+	  } else if (billsData.data[0].stock_name && _storage2.default.allDocsOperationType === 'balance') {
+	    _universalBillsList2.default.drawDayBalance(billsData.data, docsBody, onBalanceActClick);
+	  }
+	
+	  prevData = billsData.data.concat(prevData);
+	
+	  docsBody.insertAdjacentHTML('beforeend', '<button type="button" class="btn btn-primary">Загрузить еще</button>');
+	  docsBody.lastChild.removeAttribute('disabled', 'disabled');
+	  docsBody.lastChild.addEventListener('click', onClickLoadMore);
+	};
+	
+	var onClickLoadMore = function onClickLoadMore(evt) {
+	  console.log(lastId);
+	  evt.target.setAttribute('disabled', 'disabled');
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/documents/' + _storage2.default.allDocsOperationType + '/id/' + lastId + '/before/50',
+	    data: 'token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessLoadMore
+	  };
+	};
+	// ############################## ЗАГРУЖАЕМ ДОКУМЕНТЫ ##############################
+	docsReturnBtn.addEventListener('click', function () {
+	  if (docsDay.value !== 'all') {
+	    docsDay.value = 'all';
+	    getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	  } else if (docsMonth.value !== 'all') {
+	    docsMonth.value = 'all';
+	    getDocs(docsYear.value, docsMonth.value, 'all');
+	  }
+	});
+	
+	var onYearClick = function onYearClick(bill) {
+	  console.log(bill.month_number - 1);
+	  docsMonth.value = bill.month_number - 1;
+	  console.log(docsYear.value, docsMonth.value, docsDay.value);
+	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	};
+	
+	var onMonthClick = function onMonthClick(bill) {
+	  console.log(bill.day_number);
+	  console.log(docsYear.value, docsMonth.value, docsDay.value);
+	  drawDates(docsYear.value, docsMonth.value, 'all');
+	  docsDay.value = bill.day_number;
+	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	};
+	
+	var onSuccessBillsGet = function onSuccessBillsGet(billsData) {
+	  console.log(billsData);
+	
+	  if (docsMonth.value === 'all') {
+	    docsReturnBtn.setAttribute('disabled', 'disabled');
+	  } else {
+	    docsReturnBtn.removeAttribute('disabled');
+	  }
+	
+	  docsBody.innerHTML = '';
+	  if (billsData.data.length > 0) {
+	
+	    if (billsData.data[0].month_number) {
+	      _universalBillsList2.default.drawYear(billsData.data, docsBody, onYearClick);
+	    } else if (billsData.data[0].day_number) {
+	      _universalBillsList2.default.drawMonth(billsData.data, docsBody, onMonthClick);
+	    } else if ((billsData.data[0].stock_name || billsData.data[0].stock_name === 'null') && _storage2.default.allDocsOperationType === 'naklad') {
+	      billsData.data.sort(function (a, b) {
+	        return +b.id - +a.id;
+	      });
+	      _universalBillsList2.default.drawDay(billsData.data, docsBody, onBillClick);
+	
+	      lastId = billsData.data[billsData.data.length - 1].id;
+	      prevData = billsData.data.slice(0);
+	
+	      docsBody.insertAdjacentHTML('beforeend', '<button type="button" class="btn btn-primary">Загрузить еще</button>');
+	      docsBody.lastChild.addEventListener('click', onClickLoadMore);
+	    } else if ((billsData.data[0].stock_name || billsData.data[0].stock_name === 'null') && _storage2.default.allDocsOperationType === 'balance') {
+	      // billsData.data.sort((a, b) => +b.id - +a.id);
+	      // bills.drawDay(billsData.data, docsBody, onBillClick);
+	
+	      billsData.data.sort(function (a, b) {
+	        return +a.id - +b.id;
+	      });
+	      _universalBillsList2.default.drawDayBalance(billsData.data, docsBody, onBalanceActClick);
+	
+	      lastId = billsData.data[billsData.data.length - 1].id;
+	      prevData = billsData.data.slice(0);
+	
+	      docsBody.insertAdjacentHTML('beforeend', '<button type="button" class="btn btn-primary">Загрузить еще</button>');
+	      docsBody.lastChild.addEventListener('click', onClickLoadMore);
+	    }
+	  } else {
+	    docsBody.innerHTML = _storage2.default.allDocsOperationType === 'naklad' ? 'Накладных нет' : 'Балансовых операций нет';
+	  }
+	};
+	var getDocs = function getDocs(year, month, day, type) {
+	  var interval = 'year/' + year + (month !== 'all' ? '/month/' + (+month + 1) : '') + (day !== 'all' ? '/day/' + day : '');
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/documents/' + _storage2.default.allDocsOperationType + '/' + interval,
+	    data: 'token=' + _storage2.default.data.token + (_storage2.default.currentStockId !== 'all' ? '&stock=' + _storage2.default.currentStockId : ''),
+	    callbackSuccess: onSuccessBillsGet
+	  };
+	};
+	// ############################## ВЫСТАВЛЯЕМ ДАТЫ ##############################
+	var drawDates = function drawDates(year, month, day) {
+	  // month = month || 'all';
+	  // day = day || 'all';
+	
+	  var thisYear = new Date().getFullYear();
+	  var thisMonth = month || new Date().getMonth();
+	  var numberOfDays = 33 - new Date(thisYear, thisMonth, 33).getDate();
+	
+	  docsYear.innerHTML = '';
+	  docsDay.innerHTML = '';
+	
+	  for (var i = START_YEAR; i <= thisYear; i++) {
+	    docsYear.insertAdjacentHTML('afterBegin', '<option value="' + i + '">' + i + '</option>');
+	  }
+	
+	  for (var _i = 1; _i <= numberOfDays; _i++) {
+	    var currentDayNumber = new Date(thisYear, thisMonth, _i).getUTCDay();
+	    var holidayFlag = currentDayNumber === 5 || currentDayNumber === 6 ? 'class="text-danger"' : '';
+	    docsDay.insertAdjacentHTML('afterBegin', '<option value="' + _i + '" ' + holidayFlag + '>' + _i + '</option>');
+	  }
+	  docsDay.insertAdjacentHTML('afterBegin', '<option value="all">---------</option>');
+	
+	  docsYear.value = year || thisYear;
+	  docsMonth.value = thisMonth;
+	  docsDay.value = day || new Date().getUTCDate();
+	  // getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	};
+	
+	docsYear.addEventListener('change', function (evt) {
+	  return drawDates(evt.target.value, 'all', 'all');
+	});
+	docsMonth.addEventListener('change', function (evt) {
+	  return drawDates(docsYear.value, evt.target.value, 'all');
+	});
+	docsDay.addEventListener('change', function (evt) {
+	  return drawDates(docsYear.value, docsMonth.value, evt.target.value);
+	});
+	getDocsBtn.addEventListener('click', function () {
+	  return getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	});
+	
+	docsStocks.addEventListener('change', function (evt) {
+	  _storage2.default.currentStockId = evt.target.value;
+	  drawDates(docsYear.value, docsMonth.value, docsDay.value);
+	});
+	
+	docsBillBtn.addEventListener('click', function () {
+	  _storage2.default.allDocsOperationType = 'naklad';
+	  docsBalanceBtn.style.opacity = 0.4;
+	  docsBillBtn.style.opacity = 1;
+	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	});
+	
+	docsBalanceBtn.addEventListener('click', function () {
+	  _storage2.default.allDocsOperationType = 'balance';
+	  docsBalanceBtn.style.opacity = 1;
+	  docsBillBtn.style.opacity = 0.4;
+	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	});
+	
+	var onSuccessStocksLoad = function onSuccessStocksLoad(docsData) {
+	  console.log(docsData);
+	  docsStocks.innerHTML = docsData.data.map(function (item) {
+	    return '<option value="' + item.id + '">' + item.name + '</option>';
+	  }).join('');
+	  if (docsData.data.length > 1) {
+	    docsStocks.innerHTML += '<option value="all" selected>Все склады</option';
+	  }
+	};
+	
+	var getStocks = function getStocks() {
+	  _storage2.default.currentStockId = 'all';
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/stock',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessStocksLoad
+	  };
+	};
+	
+	exports.default = {
+	  start: function start() {
+	    docsList.addEventListener('click', getStocks);
+	    drawDates();
+	    getDocs(docsYear.value, docsMonth.value, docsDay.value);
+	    _storage2.default.allDocsOperationType = 'naklad';
+	    docsBalanceBtn.style.opacity = 0.4;
+	  },
+	
+	
+	  onBillClick: onBillClick,
+	  onBalanceActClick: onBalanceActClick,
+	
+	  stop: function stop() {
+	    docsList.removeEventListener('click', getStocks);
+	  }
+	};
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var BillTypes = {
+	  'type0': 'suppliers',
+	  'type1': 'admission',
+	  'type2': 'buyers',
+	  'type3': 'sale',
+	  'type8': 'ic_my_production'
+	};
+	
+	var months = {
+	  '11': 'Декабрь',
+	  '10': 'Ноябрь',
+	  '9': 'Октябрь',
+	  '8': 'Сентябрь',
+	  '7': 'Август',
+	  '6': 'Июль',
+	  '5': 'Июнь',
+	  '4': 'Май',
+	  '3': 'Апрель',
+	  '2': 'Март',
+	  '1': 'Февраль',
+	  '0': 'Январь'
+	};
+	
+	var getYearElement = function getYearElement(item, index) {
+	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img src="img/ic_agree.png" alt="">\n      <span>' + months[item.month_number - 1] + ' ' + document.querySelector('#docs-year').value + ' \u0433\u043E\u0434\u0430</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.count_documents + '</span><br>\n    </div>';
+	};
+	
+	var getMonthElement = function getMonthElement(item, index) {
+	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img src="img/ic_agree.png" alt="">\n      <span></b>' + (+item.day_number < 10 ? '0' + item.day_number : item.day_number) + '.' + (+document.querySelector('#docs-month').value + 1 < 10 ? '0' + (+document.querySelector('#docs-month').value + 1) : +document.querySelector('#docs-month').value + 1) + '.' + document.querySelector('#docs-year').value + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.count_documents + '</span><br>\n    </div>';
+	};
+	
+	var getDayElement = function getDayElement(item, index) {
+	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img class="mr-3" src="img/' + BillTypes['type' + item.type] + '.png" width="30" alt="">\n      <span> \u2116 ' + item.id + ' \u0432 ' + new Date(+(item.time + '000')).toLocaleTimeString() + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <img class="mr-3 rounded-circle" src="img/user-male-filled-32.png" style="background-color: #' + item.operator_color + '" width="30" alt="">\n    </div>';
+	};
+	
+	var getDayBalanceElement = function getDayBalanceElement(item, index) {
+	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img class="mr-3" src="img/' + (+item.total < 0 ? 'expenses' : 'revenue') + '.png" width="30" alt="">\n      <span> \u2116 ' + item.id + ' \u0432 ' + new Date(+(item.time + '000')).toLocaleTimeString() + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <img class="mr-3 rounded-circle" src="img/user-male-filled-32.png" style="background-color: #' + item.operator_color + '" width="30" alt="">\n    </div>';
+	};
+	
+	var markup = {
+	  drawBillsYear: function drawBillsYear(billsData, container, handler) {
+	    billsData.forEach(function (bill, index) {
+	      container.insertAdjacentHTML('beforeend', getYearElement(bill, index));
+	      container.lastChild.addEventListener('click', function () {
+	        handler(bill);
+	      });
+	    });
+	  },
+	  drawBillsMonth: function drawBillsMonth(billsData, container, handler) {
+	    billsData.forEach(function (bill, index) {
+	      container.insertAdjacentHTML('beforeend', getMonthElement(bill, index));
+	      container.lastChild.addEventListener('click', function () {
+	        handler(bill);
+	      });
+	    });
+	  },
+	  drawBillsDay: function drawBillsDay(billsData, container, handler) {
+	    billsData.forEach(function (bill, index) {
+	      container.insertAdjacentHTML('beforeend', getDayElement(bill, index));
+	
+	      container.lastChild.addEventListener('click', function () {
+	        _storage2.default.currentBillId = bill.id;
+	        handler();
+	      });
+	    });
+	  },
+	  drawBalanceDay: function drawBalanceDay(billsData, container, handler) {
+	    billsData.forEach(function (bill, index) {
+	      container.insertAdjacentHTML('beforeend', getDayBalanceElement(bill, index));
+	
+	      container.lastChild.addEventListener('click', function () {
+	        _storage2.default.currentBillId = bill.id;
+	        handler();
+	      });
+	    });
+	  }
+	};
+	
+	exports.default = {
+	  drawYear: markup.drawBillsYear,
+	  drawMonth: markup.drawBillsMonth,
+	  drawDay: markup.drawBillsDay,
+	  drawDayBalance: markup.drawBalanceDay,
+	  BillTypes: BillTypes
+	};
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _online__profile = __webpack_require__(20);
 	
 	var _online__profile2 = _interopRequireDefault(_online__profile);
 	
@@ -2373,7 +2980,7 @@
 	};
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2404,7 +3011,7 @@
 	};
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2421,7 +3028,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _reference__enterprises = __webpack_require__(20);
+	var _reference__enterprises = __webpack_require__(22);
 	
 	var _reference__enterprises2 = _interopRequireDefault(_reference__enterprises);
 	
@@ -2658,7 +3265,7 @@
 	};
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2710,7 +3317,7 @@
 	};
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2731,7 +3338,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _reference__enterprises = __webpack_require__(19);
+	var _reference__enterprises = __webpack_require__(21);
 	
 	var _reference__enterprises2 = _interopRequireDefault(_reference__enterprises);
 	
@@ -2898,7 +3505,7 @@
 	};
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2919,7 +3526,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _reference__enterprises = __webpack_require__(19);
+	var _reference__enterprises = __webpack_require__(21);
 	
 	var _reference__enterprises2 = _interopRequireDefault(_reference__enterprises);
 	
@@ -3091,7 +3698,7 @@
 	};
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3108,7 +3715,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _reference__points = __webpack_require__(24);
+	var _reference__points = __webpack_require__(26);
 	
 	var _reference__points2 = _interopRequireDefault(_reference__points);
 	
@@ -3217,7 +3824,7 @@
 	};
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3266,7 +3873,7 @@
 	};
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3287,7 +3894,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _reference__points = __webpack_require__(23);
+	var _reference__points = __webpack_require__(25);
 	
 	var _reference__points2 = _interopRequireDefault(_reference__points);
 	
@@ -3450,7 +4057,7 @@
 	};
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3471,7 +4078,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _reference__points = __webpack_require__(23);
+	var _reference__points = __webpack_require__(25);
 	
 	var _reference__points2 = _interopRequireDefault(_reference__points);
 	
@@ -3646,7 +4253,7 @@
 	};
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3663,11 +4270,11 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _reference__contractors = __webpack_require__(28);
+	var _reference__contractors = __webpack_require__(30);
 	
 	var _reference__contractors2 = _interopRequireDefault(_reference__contractors);
 	
-	var _reference__contractorsCard = __webpack_require__(29);
+	var _reference__contractorsCard = __webpack_require__(31);
 	
 	var _reference__contractorsCard2 = _interopRequireDefault(_reference__contractorsCard);
 	
@@ -3675,7 +4282,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _universalSearch = __webpack_require__(30);
+	var _universalSearch = __webpack_require__(32);
 	
 	var _universalSearch2 = _interopRequireDefault(_universalSearch);
 	
@@ -3887,7 +4494,7 @@
 	};
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -3933,7 +4540,7 @@
 	};
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -3977,7 +4584,7 @@
 	};
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -4000,7 +4607,7 @@
 	};
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4017,7 +4624,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _reference__contractors = __webpack_require__(27);
+	var _reference__contractors = __webpack_require__(29);
 	
 	var _reference__contractors2 = _interopRequireDefault(_reference__contractors);
 	
@@ -4254,7 +4861,7 @@
 	};
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4275,7 +4882,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _universalKeywords = __webpack_require__(33);
+	var _universalKeywords = __webpack_require__(35);
 	
 	var _universalKeywords2 = _interopRequireDefault(_universalKeywords);
 	
@@ -4404,7 +5011,7 @@
 	};
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4501,7 +5108,7 @@
 	};
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4522,7 +5129,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _reference__keywords = __webpack_require__(32);
+	var _reference__keywords = __webpack_require__(34);
 	
 	var _reference__keywords2 = _interopRequireDefault(_reference__keywords);
 	
@@ -4701,7 +5308,7 @@
 	};
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4722,7 +5329,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _reference__keywords = __webpack_require__(32);
+	var _reference__keywords = __webpack_require__(34);
 	
 	var _reference__keywords2 = _interopRequireDefault(_reference__keywords);
 	
@@ -4899,7 +5506,7 @@
 	};
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4920,27 +5527,27 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _universalSearch = __webpack_require__(30);
+	var _universalSearch = __webpack_require__(32);
 	
 	var _universalSearch2 = _interopRequireDefault(_universalSearch);
 	
-	var _catalog__groupsDelete = __webpack_require__(37);
+	var _catalog__groupsDelete = __webpack_require__(39);
 	
 	var _catalog__groupsDelete2 = _interopRequireDefault(_catalog__groupsDelete);
 	
-	var _catalog__groupsAdd = __webpack_require__(38);
+	var _catalog__groupsAdd = __webpack_require__(40);
 	
 	var _catalog__groupsAdd2 = _interopRequireDefault(_catalog__groupsAdd);
 	
-	var _catalog__goods = __webpack_require__(40);
+	var _catalog__goods = __webpack_require__(42);
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
-	var _universalGroupsList = __webpack_require__(49);
+	var _universalGroupsList = __webpack_require__(51);
 	
 	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
 	
-	var _universalValidityMicro = __webpack_require__(50);
+	var _universalValidityMicro = __webpack_require__(52);
 	
 	var _universalValidityMicro2 = _interopRequireDefault(_universalValidityMicro);
 	
@@ -5112,7 +5719,7 @@
 	};
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5133,7 +5740,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalog__groups = __webpack_require__(36);
+	var _catalog__groups = __webpack_require__(38);
 	
 	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
@@ -5189,7 +5796,7 @@
 	};
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5206,11 +5813,11 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(41);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalog__groups = __webpack_require__(36);
+	var _catalog__groups = __webpack_require__(38);
 	
 	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
@@ -5293,7 +5900,7 @@
 	};
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5562,7 +6169,7 @@
 	};
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5579,39 +6186,39 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalog__goodsExpress = __webpack_require__(41);
+	var _catalog__goodsExpress = __webpack_require__(43);
 	
 	var _catalog__goodsExpress2 = _interopRequireDefault(_catalog__goodsExpress);
 	
-	var _catalog__goodsStock = __webpack_require__(42);
+	var _catalog__goodsStock = __webpack_require__(44);
 	
 	var _catalog__goodsStock2 = _interopRequireDefault(_catalog__goodsStock);
 	
-	var _catalog__goodsEdit = __webpack_require__(43);
+	var _catalog__goodsEdit = __webpack_require__(45);
 	
 	var _catalog__goodsEdit2 = _interopRequireDefault(_catalog__goodsEdit);
 	
-	var _catalog__groups = __webpack_require__(36);
+	var _catalog__groups = __webpack_require__(38);
 	
 	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
-	var _catalog__goodsGetStock = __webpack_require__(45);
+	var _catalog__goodsGetStock = __webpack_require__(47);
 	
 	var _catalog__goodsGetStock2 = _interopRequireDefault(_catalog__goodsGetStock);
 	
-	var _catalog__goodsGetKeywords = __webpack_require__(46);
+	var _catalog__goodsGetKeywords = __webpack_require__(48);
 	
 	var _catalog__goodsGetKeywords2 = _interopRequireDefault(_catalog__goodsGetKeywords);
 	
-	var _catalog__goodsAdd = __webpack_require__(47);
+	var _catalog__goodsAdd = __webpack_require__(49);
 	
 	var _catalog__goodsAdd2 = _interopRequireDefault(_catalog__goodsAdd);
 	
-	var _universalGoodsList = __webpack_require__(48);
+	var _universalGoodsList = __webpack_require__(50);
 	
 	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
-	var _universalSearch = __webpack_require__(30);
+	var _universalSearch = __webpack_require__(32);
 	
 	var _universalSearch2 = _interopRequireDefault(_universalSearch);
 	
@@ -6116,7 +6723,7 @@
 	};
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6133,7 +6740,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(41);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -6224,7 +6831,7 @@
 	};
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6241,7 +6848,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(41);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -6326,7 +6933,7 @@
 	};
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6343,15 +6950,15 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(41);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _tools3 = __webpack_require__(44);
+	var _tools3 = __webpack_require__(46);
 	
 	var _tools4 = _interopRequireDefault(_tools3);
 	
-	var _catalog__goods = __webpack_require__(40);
+	var _catalog__goods = __webpack_require__(42);
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
@@ -6567,7 +7174,7 @@
 	};
 
 /***/ }),
-/* 44 */
+/* 46 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -6626,7 +7233,7 @@
 	};
 
 /***/ }),
-/* 45 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6694,7 +7301,7 @@
 	};
 
 /***/ }),
-/* 46 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6707,7 +7314,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalog__goods = __webpack_require__(40);
+	var _catalog__goods = __webpack_require__(42);
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
@@ -6715,15 +7322,15 @@
 	
 	var _xhr2 = _interopRequireDefault(_xhr);
 	
-	var _universalKeywords = __webpack_require__(33);
+	var _universalKeywords = __webpack_require__(35);
 	
 	var _universalKeywords2 = _interopRequireDefault(_universalKeywords);
 	
-	var _reference__keywords = __webpack_require__(32);
+	var _reference__keywords = __webpack_require__(34);
 	
 	var _reference__keywords2 = _interopRequireDefault(_reference__keywords);
 	
-	var _catalog__goodsEdit = __webpack_require__(43);
+	var _catalog__goodsEdit = __webpack_require__(45);
 	
 	var _catalog__goodsEdit2 = _interopRequireDefault(_catalog__goodsEdit);
 	
@@ -6806,7 +7413,7 @@
 	};
 
 /***/ }),
-/* 47 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6823,15 +7430,15 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(41);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalog__groups = __webpack_require__(36);
+	var _catalog__groups = __webpack_require__(38);
 	
 	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
-	var _tools3 = __webpack_require__(44);
+	var _tools3 = __webpack_require__(46);
 	
 	var _tools4 = _interopRequireDefault(_tools3);
 	
@@ -6961,7 +7568,7 @@
 	};
 
 /***/ }),
-/* 48 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7038,7 +7645,7 @@
 	};
 
 /***/ }),
-/* 49 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7112,7 +7719,7 @@
 	
 	// расширенная отрисовка списка групп для страницы КАТАЛОГ/ГРУППЫ ТОВАРОВ
 	var drawGroupsExtended = function drawGroupsExtended(groupsList, container, handler) {
-	  container.innerHTML = '\n    <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u041D\u043E\u043C\u0435\u0440</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0446\u0435\u043D\u043A\u0430 \u043D\u0430 \u0433\u0440\u0443\u043F\u043F\u0443</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0442\u043E\u0432\u0430\u0440\u043E\u0432 \u0432 \u0433\u0440\u0443\u043F\u043F\u0435</div>\n        <div class="catalog-groups-column">\u0420\u0435\u0434.</div>\n    </div>';
+	  container.innerHTML = '\n    <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u041D\u043E\u043C\u0435\u0440</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0446\u0435\u043D\u043A\u0430 \u043D\u0430 \u0433\u0440\u0443\u043F\u043F\u0443</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B-\u0432\u043E \u0442\u043E\u0432\u0430\u0440\u043E\u0432</div>\n        <div class="catalog-groups-column">\u0420\u0435\u0434.</div>\n    </div>';
 	
 	  if (groupsList.length > 0) {
 	    markup.drawDataInContainerExtended(groupsList, container, handler);
@@ -7138,7 +7745,7 @@
 	};
 
 /***/ }),
-/* 50 */
+/* 52 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -7193,7 +7800,7 @@
 	};
 
 /***/ }),
-/* 51 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7214,7 +7821,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _reference__debitCreditAddEditU = __webpack_require__(52);
+	var _reference__debitCreditAddEditU = __webpack_require__(54);
 	
 	var _reference__debitCreditAddEditU2 = _interopRequireDefault(_reference__debitCreditAddEditU);
 	
@@ -7390,7 +7997,7 @@
 	};
 
 /***/ }),
-/* 52 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7407,11 +8014,11 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(41);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _reference__debitCredit = __webpack_require__(51);
+	var _reference__debitCredit = __webpack_require__(53);
 	
 	var _reference__debitCredit2 = _interopRequireDefault(_reference__debitCredit);
 	
@@ -7531,7 +8138,7 @@
 	};
 
 /***/ }),
-/* 53 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7548,7 +8155,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _universalValidityMicro = __webpack_require__(50);
+	var _universalValidityMicro = __webpack_require__(52);
 	
 	var _universalValidityMicro2 = _interopRequireDefault(_universalValidityMicro);
 	
@@ -7556,7 +8163,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalogCards = __webpack_require__(54);
+	var _catalogCards = __webpack_require__(56);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
 	
@@ -7779,7 +8386,7 @@
 	};
 
 /***/ }),
-/* 54 */
+/* 56 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -7820,7 +8427,7 @@
 	};
 
 /***/ }),
-/* 55 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7837,7 +8444,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _universalValidityMicro = __webpack_require__(50);
+	var _universalValidityMicro = __webpack_require__(52);
 	
 	var _universalValidityMicro2 = _interopRequireDefault(_universalValidityMicro);
 	
@@ -8009,7 +8616,7 @@
 	};
 
 /***/ }),
-/* 56 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8026,7 +8633,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _universalValidityMicro = __webpack_require__(50);
+	var _universalValidityMicro = __webpack_require__(52);
 	
 	var _universalValidityMicro2 = _interopRequireDefault(_universalValidityMicro);
 	
@@ -8096,7 +8703,7 @@
 	var markup = {
 	  getElement: function getElement(item, index) {
 	
-	    return '\n    <div class="reference-header" data-user-id="' + item.id + '">\n      <div class="reference-column">\n        ' + (index + 1) + '\n      </div>\n      <div class="reference-column">\n        <div>\n          <img class="ml-2 mr-1 rounded-circle p-1" src="img/user-male-filled-32.png" title="' + item.name + '" style="background-color: #' + item.color + '" width="30" alt="' + item.name + '">\n          ' + item.name + '\n        </div>\n      </div>\n      <div class="reference-column"><div class="user-status" style="background-color: #' + (item.status === '0' ? 'dc3545' : '28a745') + '"></div></div>\n    </div>';
+	    return '\n    <div class="reference-header" data-user-id="' + item.id + '">\n      <div class="reference-column">\n        ' + (index + 1) + '\n      </div>\n      <div class="reference-column">\n        <div class="online-user">\n          <img class="rounded-circle" src="img/user-male-filled-32.png" title="' + item.name + '" style="background-color: #' + item.color + ';" alt="' + item.name + '">\n          ' + item.name + '\n        </div>\n      </div>\n      <div class="reference-column"><div class="user-status" style="background-color: #' + (item.status === '0' ? 'dc3545' : '28a745') + '"></div></div>\n    </div>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(users, container, handler) {
 	    var _this = this;
@@ -8431,567 +9038,6 @@
 	};
 
 /***/ }),
-/* 57 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _xhr = __webpack_require__(6);
-	
-	var _xhr2 = _interopRequireDefault(_xhr);
-	
-	var _storage = __webpack_require__(1);
-	
-	var _storage2 = _interopRequireDefault(_storage);
-	
-	var _universalBillsList = __webpack_require__(58);
-	
-	var _universalBillsList2 = _interopRequireDefault(_universalBillsList);
-	
-	var _tools = __webpack_require__(7);
-	
-	var _tools2 = _interopRequireDefault(_tools);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var START_YEAR = 2015;
-	// import goods from './universal-goods-list.js';
-	// import uValid from './universal-validity-micro.js';
-	
-	
-	var docsList = document.querySelector('#list-docs-list');
-	// const docsHeader = document.querySelector('#list-docs-header');
-	var docsBody = document.querySelector('#list-docs-body');
-	var docsStocks = document.querySelector('#docs-stocks');
-	
-	var docsYear = document.querySelector('#docs-year');
-	var docsMonth = document.querySelector('#docs-month');
-	var docsDay = document.querySelector('#docs-day');
-	
-	var docsBillBtn = document.querySelector('#docs-bill-btn');
-	var getDocsBtn = document.querySelector('#get-docs-btn');
-	var docsBalanceBtn = document.querySelector('#docs-balance-btn');
-	var docsReturnBtn = document.querySelector('#docs-return-btn');
-	var billCard = document.querySelector('#bill-card');
-	
-	var billCardType = document.querySelector('#bill-card-type');
-	var billCardStock = document.querySelector('#bill-card-stock');
-	var billCardId = document.querySelector('#bill-card-id');
-	var billCardTime = document.querySelector('#bill-card-time');
-	var billCardUser = document.querySelector('#bill-card-user');
-	var billCardGoods = document.querySelector('#bill-card-goods');
-	var billDeliveryBtn = document.querySelector('#bill-delivery-btn');
-	var billDeleteBtn = document.querySelector('#bill-delete-btn');
-	
-	var balanceCard = document.querySelector('#balance-act-card');
-	
-	var balanceCardStock = document.querySelector('#balance-act-card-stock');
-	var balanceCardId = document.querySelector('#balance-act-card-id');
-	var balanceCardUser = document.querySelector('#balance-act-card-user');
-	var balanceCardTime = document.querySelector('#balance-act-card-time');
-	var balanceCardTotal = document.querySelector('#balance-act-total');
-	var balanceCardReason = document.querySelector('#balance-act-reason');
-	var balanceCardComment = document.querySelector('#balance-act-comment');
-	var balanceDeleteBtn = document.querySelector('#balance-act-delete-btn');
-	
-	// ############################## РАЗМЕТКА ТОВАРОВ #############
-	var getGoodString = function getGoodString(item, index) {
-	  return '\n  <div class="goods-string"">\n    <div>\n      <span class="reference-row-number">' + (index + 1) + '</span> <span>\u2116 ' + item.good + '</span>\n    </div>\n    <div>\n      ' + Number(item.count).toFixed(2) + ' x ' + Number(item.price).toFixed(2) + ' = ' + Number(item.count).toFixed(2) * Number(item.price).toFixed(2) + '\n    </div>\n  </div>';
-	};
-	
-	// ############################## ОБРАБОТЧИКИ КЛИКОВ ПРИ ВЫВОДЕ ЗА ДЕНЬ#############
-	// let billStatus = '';
-	
-	var onSuccessBillGet = function onSuccessBillGet(answer) {
-	  console.log(answer);
-	  var _answer$data = answer.data,
-	      id = _answer$data.id,
-	      operatorName = _answer$data.operator_name,
-	      stockName = _answer$data.stock_name,
-	      time = _answer$data.time,
-	      type = _answer$data.type,
-	      goodsContent = _answer$data.content;
-	  // billStatus = status;
-	
-	  billCardStock.innerHTML = stockName;
-	  billCardType.src = 'img/' + _universalBillsList2.default.BillTypes['type' + type] + '.png';
-	  billCardId.innerHTML = '№' + id;
-	  billCardTime.innerHTML = '|| ' + new Date(+(time + '000')).toLocaleString();
-	  billCardUser.title = operatorName;
-	
-	  billCardGoods.innerHTML = '';
-	  goodsContent.forEach(function (good, index) {
-	    return billCardGoods.insertAdjacentHTML('beforeend', getGoodString(good, index));
-	  });
-	  if (+type === 0 || +type === 2) {
-	    billDeliveryBtn.classList.remove('d-none');
-	  } else {
-	    billDeliveryBtn.classList.add('d-none');
-	  }
-	  $(billCard).modal('show');
-	};
-	
-	// ############################## УДАЛЕНИЕ НАКЛАДНОЙ #############
-	var onSuccessBillDelete = function onSuccessBillDelete(answer) {
-	  console.log(answer);
-	
-	  // onListEnterprisesCardReturnBtn();
-	  $(billCard).modal('hide');
-	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
-	
-	  _tools2.default.informationtModal = {
-	    title: 'Уведомление',
-	    message: 'Накладная успешно удалена'
-	  };
-	};
-	
-	var setRequestToDeleteBill = function setRequestToDeleteBill() {
-	  _xhr2.default.request = {
-	    metod: 'DELETE',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.currentEnterpriseId + '/' + _storage2.default.allDocsOperationType + '/' + _storage2.default.currentBillId,
-	    data: 'view_last=0&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessBillDelete
-	  };
-	};
-	
-	billDeleteBtn.addEventListener('click', function () {
-	
-	  _tools2.default.actionRequestModal = {
-	    title: 'Удаление',
-	    message: '\u0412\u044B \u0442\u043E\u0447\u043D\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u043D\u0430\u043A\u043B\u0430\u0434\u043D\u0443\u044E <b>' + _storage2.default.currentBillId + '</b>?',
-	    submitCallback: setRequestToDeleteBill
-	  };
-	});
-	
-	// ############################## ЗАВЕРШЕНИЕ ДОСТАВКИ #############
-	var onSuccessBillDelivery = function onSuccessBillDelivery(answer) {
-	  console.log(answer);
-	
-	  $(billCard).modal('hide');
-	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
-	
-	  _tools2.default.informationtModal = {
-	    title: 'Уведомление',
-	    message: 'Накладная успешно доставлена'
-	  };
-	};
-	
-	var setRequestToDeliveryBill = function setRequestToDeliveryBill() {
-	  _xhr2.default.request = {
-	    metod: 'PUT',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.currentEnterpriseId + '/' + _storage2.default.allDocsOperationType + '/' + _storage2.default.currentBillId,
-	    data: 'status=3&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessBillDelivery
-	  };
-	};
-	
-	billDeliveryBtn.addEventListener('click', function () {
-	
-	  _tools2.default.actionRequestModal = {
-	    title: 'Удаление',
-	    message: '\u0412\u044B \u0443\u0432\u0435\u0440\u0435\u043D\u044B, \u0447\u0442\u043E \u0434\u043E\u0441\u0442\u0430\u0432\u043A\u0430 \u043F\u043E \u0434\u0430\u043D\u043D\u043E\u0439 \u043D\u0430\u043A\u043B\u0430\u0434\u043D\u043E\u0439 <b>' + _storage2.default.currentBillId + '</b> \u043E\u043A\u043E\u043D\u0447\u0435\u043D\u0430? (\u0434\u0430\u043D\u043D\u043E\u0435 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u044F\u0432\u043B\u044F\u0435\u0442\u0441\u044F \u0431\u0435\u0437\u0432\u043E\u0437\u0432\u0440\u0430\u0442\u043D\u044B\u043C)',
-	    submitCallback: setRequestToDeliveryBill
-	  };
-	});
-	
-	var onBillClick = function onBillClick() {
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/' + _storage2.default.allDocsOperationType + '/' + _storage2.default.currentBillId + '/info',
-	    data: 'token=' + _storage2.default.data.token + (_storage2.default.currentStockId ? '&stock=' + _storage2.default.currentStockId : ''),
-	    callbackSuccess: onSuccessBillGet
-	  };
-	};
-	// ############################## УДАЛЕНИЕ БАЛАНСОВОЙ ОПЕРАЦИИ #############
-	var onSuccessBalanceDelete = function onSuccessBalanceDelete(answer) {
-	  console.log(answer);
-	
-	  $(balanceCard).modal('hide');
-	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
-	
-	  _tools2.default.informationtModal = {
-	    title: 'Уведомление',
-	    message: 'Балансова операция успешно удалена'
-	  };
-	};
-	
-	var setRequestToDeleteBalance = function setRequestToDeleteBalance() {
-	  _xhr2.default.request = {
-	    metod: 'DELETE',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.currentEnterpriseId + '/balance_act/' + _storage2.default.currentBillId,
-	    data: 'view_last=0&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessBalanceDelete
-	  };
-	};
-	
-	balanceDeleteBtn.addEventListener('click', function () {
-	
-	  _tools2.default.actionRequestModal = {
-	    title: 'Удаление',
-	    message: '\u0412\u044B \u0442\u043E\u0447\u043D\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u0431\u0430\u043B\u0430\u043D\u0441\u043E\u0432\u0443\u044E \u043E\u043F\u0435\u0440\u0430\u0446\u0438\u044E <b>' + _storage2.default.currentBillId + '</b>?',
-	    submitCallback: setRequestToDeleteBalance
-	  };
-	});
-	
-	var onSuccessBalanceGet = function onSuccessBalanceGet(answer) {
-	  console.log(answer);
-	  var _answer$data2 = answer.data,
-	      id = _answer$data2.id,
-	      comment = _answer$data2.comment,
-	      reasonName = _answer$data2.reason_name,
-	      operatorName = _answer$data2.operator_name,
-	      stockName = _answer$data2.stock_name,
-	      time = _answer$data2.time,
-	      value = _answer$data2.value;
-	
-	  balanceCardStock.innerHTML = stockName;
-	  balanceCardTotal.innerHTML = value;
-	  balanceCardReason.innerHTML = reasonName;
-	  balanceCardComment.innerHTML = comment;
-	  balanceCardId.innerHTML = '№' + id;
-	  balanceCardTime.innerHTML = '|| ' + new Date(+(time + '000')).toLocaleString();
-	  balanceCardUser.title = operatorName;
-	
-	  $(balanceCard).modal('show');
-	};
-	
-	var onBalanceActClick = function onBalanceActClick() {
-	  console.log('hi');
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/balance_act/' + _storage2.default.currentBillId + '/info',
-	    data: 'token=' + _storage2.default.data.token + (_storage2.default.currentStockId ? '&stock=' + _storage2.default.currentStockId : ''),
-	    callbackSuccess: onSuccessBalanceGet
-	  };
-	};
-	
-	// ############################## ЗАГРУЖАЕМ ДОПОЛНИТЕЛЬНЫЕ НАКЛАДНЫЕ   ############
-	
-	
-	var lastId = '';
-	var prevData = [];
-	
-	var onSuccessLoadMore = function onSuccessLoadMore(billsData) {
-	  console.log(new Date(+billsData).toLocaleString());
-	  console.log(billsData);
-	
-	  // docsBody.innerHTML = '';
-	  if (docsBody.lastChild.tagName === 'BUTTON') {
-	    docsBody.lastChild.remove();
-	  }
-	  // lastId = billsData.data[billsData.data.length - 1].time;
-	  lastId = billsData.data[billsData.data.length - 1].id;
-	
-	  billsData.data.sort(function (a, b) {
-	    return b.id - a.id;
-	  });
-	  prevData = prevData.concat(billsData.data);
-	  if (billsData.data[0].stock_name && _storage2.default.allDocsOperationType === 'naklad') {
-	    _universalBillsList2.default.drawDay(billsData.data, docsBody, onBillClick);
-	  } else if (billsData.data[0].stock_name && _storage2.default.allDocsOperationType === 'balance') {
-	    _universalBillsList2.default.drawDayBalance(billsData.data, docsBody, onBalanceActClick);
-	  }
-	
-	  prevData = billsData.data.concat(prevData);
-	
-	  docsBody.insertAdjacentHTML('beforeend', '<button type="button" class="btn btn-primary">Загрузить еще</button>');
-	  docsBody.lastChild.removeAttribute('disabled', 'disabled');
-	  docsBody.lastChild.addEventListener('click', onClickLoadMore);
-	};
-	
-	var onClickLoadMore = function onClickLoadMore(evt) {
-	  console.log(lastId);
-	  evt.target.setAttribute('disabled', 'disabled');
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/documents/' + _storage2.default.allDocsOperationType + '/id/' + lastId + '/before/50',
-	    data: 'token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessLoadMore
-	  };
-	};
-	// ############################## ЗАГРУЖАЕМ ДОКУМЕНТЫ ##############################
-	docsReturnBtn.addEventListener('click', function () {
-	  if (docsDay.value !== 'all') {
-	    docsDay.value = 'all';
-	    getDocs(docsYear.value, docsMonth.value, docsDay.value);
-	  } else if (docsMonth.value !== 'all') {
-	    docsMonth.value = 'all';
-	    getDocs(docsYear.value, docsMonth.value, 'all');
-	  }
-	});
-	
-	var onYearClick = function onYearClick(bill) {
-	  console.log(bill.month_number - 1);
-	  docsMonth.value = bill.month_number - 1;
-	  console.log(docsYear.value, docsMonth.value, docsDay.value);
-	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
-	};
-	
-	var onMonthClick = function onMonthClick(bill) {
-	  console.log(bill.day_number);
-	  console.log(docsYear.value, docsMonth.value, docsDay.value);
-	  drawDates(docsYear.value, docsMonth.value, 'all');
-	  docsDay.value = bill.day_number;
-	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
-	};
-	
-	var onSuccessBillsGet = function onSuccessBillsGet(billsData) {
-	  console.log(billsData);
-	
-	  if (docsMonth.value === 'all') {
-	    docsReturnBtn.setAttribute('disabled', 'disabled');
-	  } else {
-	    docsReturnBtn.removeAttribute('disabled');
-	  }
-	
-	  docsBody.innerHTML = '';
-	  if (billsData.data.length > 0) {
-	
-	    if (billsData.data[0].month_number) {
-	      _universalBillsList2.default.drawYear(billsData.data, docsBody, onYearClick);
-	    } else if (billsData.data[0].day_number) {
-	      _universalBillsList2.default.drawMonth(billsData.data, docsBody, onMonthClick);
-	    } else if ((billsData.data[0].stock_name || billsData.data[0].stock_name === 'null') && _storage2.default.allDocsOperationType === 'naklad') {
-	      billsData.data.sort(function (a, b) {
-	        return +b.id - +a.id;
-	      });
-	      _universalBillsList2.default.drawDay(billsData.data, docsBody, onBillClick);
-	
-	      lastId = billsData.data[billsData.data.length - 1].id;
-	      prevData = billsData.data.slice(0);
-	
-	      docsBody.insertAdjacentHTML('beforeend', '<button type="button" class="btn btn-primary">Загрузить еще</button>');
-	      docsBody.lastChild.addEventListener('click', onClickLoadMore);
-	    } else if ((billsData.data[0].stock_name || billsData.data[0].stock_name === 'null') && _storage2.default.allDocsOperationType === 'balance') {
-	      // billsData.data.sort((a, b) => +b.id - +a.id);
-	      // bills.drawDay(billsData.data, docsBody, onBillClick);
-	
-	      billsData.data.sort(function (a, b) {
-	        return +a.id - +b.id;
-	      });
-	      _universalBillsList2.default.drawDayBalance(billsData.data, docsBody, onBalanceActClick);
-	
-	      lastId = billsData.data[billsData.data.length - 1].id;
-	      prevData = billsData.data.slice(0);
-	
-	      docsBody.insertAdjacentHTML('beforeend', '<button type="button" class="btn btn-primary">Загрузить еще</button>');
-	      docsBody.lastChild.addEventListener('click', onClickLoadMore);
-	    }
-	  } else {
-	    docsBody.innerHTML = _storage2.default.allDocsOperationType === 'naklad' ? 'Накладных нет' : 'Балансовых операций нет';
-	  }
-	};
-	var getDocs = function getDocs(year, month, day, type) {
-	  var interval = 'year/' + year + (month !== 'all' ? '/month/' + (+month + 1) : '') + (day !== 'all' ? '/day/' + day : '');
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/documents/' + _storage2.default.allDocsOperationType + '/' + interval,
-	    data: 'token=' + _storage2.default.data.token + (_storage2.default.currentStockId !== 'all' ? '&stock=' + _storage2.default.currentStockId : ''),
-	    callbackSuccess: onSuccessBillsGet
-	  };
-	};
-	// ############################## ВЫСТАВЛЯЕМ ДАТЫ ##############################
-	var drawDates = function drawDates(year, month, day) {
-	  // month = month || 'all';
-	  // day = day || 'all';
-	
-	  var thisYear = new Date().getFullYear();
-	  var thisMonth = month || new Date().getMonth();
-	  var numberOfDays = 33 - new Date(thisYear, thisMonth, 33).getDate();
-	
-	  docsYear.innerHTML = '';
-	  docsDay.innerHTML = '';
-	
-	  for (var i = START_YEAR; i <= thisYear; i++) {
-	    docsYear.insertAdjacentHTML('afterBegin', '<option value="' + i + '">' + i + '</option>');
-	  }
-	
-	  for (var _i = 1; _i <= numberOfDays; _i++) {
-	    var currentDayNumber = new Date(thisYear, thisMonth, _i).getUTCDay();
-	    var holidayFlag = currentDayNumber === 5 || currentDayNumber === 6 ? 'class="text-danger"' : '';
-	    docsDay.insertAdjacentHTML('afterBegin', '<option value="' + _i + '" ' + holidayFlag + '>' + _i + '</option>');
-	  }
-	  docsDay.insertAdjacentHTML('afterBegin', '<option value="all">---------</option>');
-	
-	  docsYear.value = year || thisYear;
-	  docsMonth.value = thisMonth;
-	  docsDay.value = day || new Date().getUTCDate();
-	  // getDocs(docsYear.value, docsMonth.value, docsDay.value);
-	};
-	
-	docsYear.addEventListener('change', function (evt) {
-	  return drawDates(evt.target.value, 'all', 'all');
-	});
-	docsMonth.addEventListener('change', function (evt) {
-	  return drawDates(docsYear.value, evt.target.value, 'all');
-	});
-	docsDay.addEventListener('change', function (evt) {
-	  return drawDates(docsYear.value, docsMonth.value, evt.target.value);
-	});
-	getDocsBtn.addEventListener('click', function () {
-	  return getDocs(docsYear.value, docsMonth.value, docsDay.value);
-	});
-	
-	docsStocks.addEventListener('change', function (evt) {
-	  _storage2.default.currentStockId = evt.target.value;
-	  drawDates(docsYear.value, docsMonth.value, docsDay.value);
-	});
-	
-	docsBillBtn.addEventListener('click', function () {
-	  _storage2.default.allDocsOperationType = 'naklad';
-	  docsBalanceBtn.style.opacity = 0.4;
-	  docsBillBtn.style.opacity = 1;
-	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
-	});
-	
-	docsBalanceBtn.addEventListener('click', function () {
-	  _storage2.default.allDocsOperationType = 'balance';
-	  docsBalanceBtn.style.opacity = 1;
-	  docsBillBtn.style.opacity = 0.4;
-	  getDocs(docsYear.value, docsMonth.value, docsDay.value);
-	});
-	
-	var onSuccessStocksLoad = function onSuccessStocksLoad(docsData) {
-	  console.log(docsData);
-	  docsStocks.innerHTML = docsData.data.map(function (item) {
-	    return '<option value="' + item.id + '">' + item.name + '</option>';
-	  }).join('');
-	  if (docsData.data.length > 1) {
-	    docsStocks.innerHTML += '<option value="all" selected>Все склады</option';
-	  }
-	};
-	
-	var getStocks = function getStocks() {
-	  _storage2.default.currentStockId = 'all';
-	
-	  _xhr2.default.request = {
-	    metod: 'POST',
-	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/stock',
-	    data: 'view_last=0&token=' + _storage2.default.data.token,
-	    callbackSuccess: onSuccessStocksLoad
-	  };
-	};
-	
-	exports.default = {
-	  start: function start() {
-	    docsList.addEventListener('click', getStocks);
-	    drawDates();
-	    getDocs(docsYear.value, docsMonth.value, docsDay.value);
-	    _storage2.default.allDocsOperationType = 'naklad';
-	    docsBalanceBtn.style.opacity = 0.4;
-	  },
-	  stop: function stop() {
-	    docsList.removeEventListener('click', getStocks);
-	  }
-	};
-
-/***/ }),
-/* 58 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _storage = __webpack_require__(1);
-	
-	var _storage2 = _interopRequireDefault(_storage);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var BillTypes = {
-	  'type0': 'suppliers',
-	  'type1': 'admission',
-	  'type2': 'buyers',
-	  'type3': 'sale',
-	  'type8': 'ic_my_production'
-	};
-	
-	var months = {
-	  '11': 'Декабрь',
-	  '10': 'Ноябрь',
-	  '9': 'Октябрь',
-	  '8': 'Сентябрь',
-	  '7': 'Август',
-	  '6': 'Июль',
-	  '5': 'Июнь',
-	  '4': 'Май',
-	  '3': 'Апрель',
-	  '2': 'Март',
-	  '1': 'Февраль',
-	  '0': 'Январь'
-	};
-	
-	var getYearElement = function getYearElement(item, index) {
-	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img src="img/ic_agree.png" alt="">\n      <span>' + months[item.month_number - 1] + ' ' + document.querySelector('#docs-year').value + ' \u0433\u043E\u0434\u0430</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.count_documents + '</span><br>\n    </div>';
-	};
-	
-	var getMonthElement = function getMonthElement(item, index) {
-	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img src="img/ic_agree.png" alt="">\n      <span></b>' + (+item.day_number < 10 ? '0' + item.day_number : item.day_number) + '.' + (+document.querySelector('#docs-month').value + 1 < 10 ? '0' + (+document.querySelector('#docs-month').value + 1) : +document.querySelector('#docs-month').value + 1) + '.' + document.querySelector('#docs-year').value + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.count_documents + '</span><br>\n    </div>';
-	};
-	
-	var getDayElement = function getDayElement(item, index) {
-	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img class="mr-3" src="img/' + BillTypes['type' + item.type] + '.png" width="30" alt="">\n      <span> \u2116 ' + item.id + ' \u0432 ' + new Date(+(item.time + '000')).toLocaleTimeString() + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <img class="mr-3 rounded-circle" src="img/user-male-filled-32.png" style="background-color: #' + item.operator_color + '" width="30" alt="">\n    </div>';
-	};
-	
-	var getDayBalanceElement = function getDayBalanceElement(item, index) {
-	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img class="mr-3" src="img/' + (+item.total < 0 ? 'expenses' : 'revenue') + '.png" width="30" alt="">\n      <span> \u2116 ' + item.id + ' \u0432 ' + new Date(+(item.time + '000')).toLocaleTimeString() + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <img class="mr-3 rounded-circle" src="img/user-male-filled-32.png" style="background-color: #' + item.operator_color + '" width="30" alt="">\n    </div>';
-	};
-	
-	var markup = {
-	  drawBillsYear: function drawBillsYear(billsData, container, handler) {
-	    billsData.forEach(function (bill, index) {
-	      container.insertAdjacentHTML('beforeend', getYearElement(bill, index));
-	      container.lastChild.addEventListener('click', function () {
-	        handler(bill);
-	      });
-	    });
-	  },
-	  drawBillsMonth: function drawBillsMonth(billsData, container, handler) {
-	    billsData.forEach(function (bill, index) {
-	      container.insertAdjacentHTML('beforeend', getMonthElement(bill, index));
-	      container.lastChild.addEventListener('click', function () {
-	        handler(bill);
-	      });
-	    });
-	  },
-	  drawBillsDay: function drawBillsDay(billsData, container, handler) {
-	    billsData.forEach(function (bill, index) {
-	      container.insertAdjacentHTML('beforeend', getDayElement(bill, index));
-	
-	      container.lastChild.addEventListener('click', function () {
-	        _storage2.default.currentBillId = bill.id;
-	        handler();
-	      });
-	    });
-	  },
-	  drawBalanceDay: function drawBalanceDay(billsData, container, handler) {
-	    billsData.forEach(function (bill, index) {
-	      container.insertAdjacentHTML('beforeend', getDayBalanceElement(bill, index));
-	
-	      container.lastChild.addEventListener('click', function () {
-	        _storage2.default.currentBillId = bill.id;
-	        handler();
-	      });
-	    });
-	  }
-	};
-	
-	exports.default = {
-	  drawYear: markup.drawBillsYear,
-	  drawMonth: markup.drawBillsMonth,
-	  drawDay: markup.drawBillsDay,
-	  drawDayBalance: markup.drawBalanceDay,
-	  BillTypes: BillTypes
-	};
-
-/***/ }),
 /* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9009,7 +9055,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _universalGroupsList = __webpack_require__(49);
+	var _universalGroupsList = __webpack_require__(51);
 	
 	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
 	
@@ -9388,7 +9434,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalogCards = __webpack_require__(54);
+	var _catalogCards = __webpack_require__(56);
 	
 	var _catalogCards2 = _interopRequireDefault(_catalogCards);
 	
@@ -9404,15 +9450,15 @@
 	
 	var _catalog__cardsAddResource2 = _interopRequireDefault(_catalog__cardsAddResource);
 	
-	var _universalGoodsList = __webpack_require__(48);
+	var _universalGoodsList = __webpack_require__(50);
 	
 	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
-	var _universalSearch = __webpack_require__(30);
+	var _universalSearch = __webpack_require__(32);
 	
 	var _universalSearch2 = _interopRequireDefault(_universalSearch);
 	
-	var _universalGroupsList = __webpack_require__(49);
+	var _universalGroupsList = __webpack_require__(51);
 	
 	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
 	
@@ -9734,7 +9780,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(41);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -9868,7 +9914,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(41);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -9977,19 +10023,19 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalog__groups = __webpack_require__(36);
+	var _catalog__groups = __webpack_require__(38);
 	
 	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
-	var _catalog__goods = __webpack_require__(40);
+	var _catalog__goods = __webpack_require__(42);
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
-	var _universalKeywords = __webpack_require__(33);
+	var _universalKeywords = __webpack_require__(35);
 	
 	var _universalKeywords2 = _interopRequireDefault(_universalKeywords);
 	
-	var _universalGoodsList = __webpack_require__(48);
+	var _universalGoodsList = __webpack_require__(50);
 	
 	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
@@ -10308,11 +10354,11 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(41);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalog__goods = __webpack_require__(40);
+	var _catalog__goods = __webpack_require__(42);
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
@@ -10429,7 +10475,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _tools = __webpack_require__(44);
+	var _tools = __webpack_require__(46);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
@@ -10457,7 +10503,7 @@
 	
 	var _operations__tradeDiscount2 = _interopRequireDefault(_operations__tradeDiscount);
 	
-	var _catalog__goods = __webpack_require__(40);
+	var _catalog__goods = __webpack_require__(42);
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
@@ -11205,7 +11251,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _universalGroupsList = __webpack_require__(49);
+	var _universalGroupsList = __webpack_require__(51);
 	
 	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
 	
@@ -11766,7 +11812,7 @@
 	  value: true
 	});
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(41);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -11836,7 +11882,7 @@
 	  value: true
 	});
 	
-	var _formTools = __webpack_require__(39);
+	var _formTools = __webpack_require__(41);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -11899,7 +11945,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _tools = __webpack_require__(44);
+	var _tools = __webpack_require__(46);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
@@ -11923,7 +11969,7 @@
 	
 	var _operationsGoodAdd2 = _interopRequireDefault(_operationsGoodAdd);
 	
-	var _catalog__goods = __webpack_require__(40);
+	var _catalog__goods = __webpack_require__(42);
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
