@@ -6272,9 +6272,9 @@
 	  */
 	
 	  reportLink.href = data.data;
-	  reportLink.innerHTML = '<img src="/img/report-download.png" style="height: 34px;" title="Скачать на компьютер">';
+	  reportLink.innerHTML = '<img src="./img/report-download.png" style="height: 34px;" title="Скачать на компьютер">';
 	  reportLinkGoogle.href = 'https://docs.google.com/viewer?url=' + data.data + '&embedded=false';
-	  reportLinkGoogle.innerHTML = '<img src="/img/report-google.png" style="height: 34px;" title="Смотреть на Google">';
+	  reportLinkGoogle.innerHTML = '<img src="./img/report-google.png" style="height: 34px;" title="Смотреть на Google">';
 	};
 	
 	var getReportLink = function getReportLink() {
@@ -9129,9 +9129,9 @@
 	  // reportLinkGoogle.innerHTML = `Смотреть ${auth.currentReportType} на Google `;
 	
 	  reportLink.href = data.data;
-	  reportLink.innerHTML = '<img src="/img/report-download.png" style="height: 34px;" title="Скачать на компьютер">';
+	  reportLink.innerHTML = '<img src="./img/report-download.png" style="height: 34px;" title="Скачать на компьютер">';
 	  reportLinkGoogle.href = 'https://docs.google.com/viewer?url=' + data.data + '&embedded=false';
-	  reportLinkGoogle.innerHTML = '<img src="/img/report-google.png" style="height: 34px;" title="Смотреть на Google">';
+	  reportLinkGoogle.innerHTML = '<img src="./img/report-google.png" style="height: 34px;" title="Смотреть на Google">';
 	};
 	
 	var getReportLink = function getReportLink() {
@@ -9211,9 +9211,9 @@
 	  reportLinkTurnGoogle.innerHTML = `Смотреть ${auth.currentReportType} на Google `;
 	  */
 	  reportLinkTurn.href = data.data;
-	  reportLinkTurn.innerHTML = '<img src="/img/report-download.png" style="height: 34px;" title="Скачать на компьютер">';
+	  reportLinkTurn.innerHTML = '<img src="./img/report-download.png" style="height: 34px;" title="Скачать на компьютер">';
 	  reportLinkTurnGoogle.href = 'https://docs.google.com/viewer?url=' + data.data + '&embedded=false';
-	  reportLinkTurnGoogle.innerHTML = '<img src="/img/report-google.png" style="height: 34px;" title="Смотреть на Google">';
+	  reportLinkTurnGoogle.innerHTML = '<img src="./img/report-google.png" style="height: 34px;" title="Смотреть на Google">';
 	};
 	
 	var getReportLinkTurn = function getReportLinkTurn() {
@@ -9295,9 +9295,9 @@
 	  reportLinkProfitGoogle.innerHTML = `Смотреть ${auth.currentReportType} на Google `;
 	  */
 	  reportLinkProfit.href = data.data;
-	  reportLinkProfit.innerHTML = '<img src="/img/report-download.png" style="height: 34px;" title="Скачать на компьютер">';
+	  reportLinkProfit.innerHTML = '<img src="./img/report-download.png" style="height: 34px;" title="Скачать на компьютер">';
 	  reportLinkProfitGoogle.href = 'https://docs.google.com/viewer?url=' + data.data + '&embedded=false';
-	  reportLinkProfitGoogle.innerHTML = '<img src="/img/report-google.png" style="height: 34px;" title="Смотреть на Google">';
+	  reportLinkProfitGoogle.innerHTML = '<img src="./img/report-google.png" style="height: 34px;" title="Смотреть на Google">';
 	};
 	
 	var getReportLinkProfit = function getReportLinkProfit() {
