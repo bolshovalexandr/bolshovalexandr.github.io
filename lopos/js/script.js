@@ -2351,20 +2351,6 @@
 	
 	    var cardHeader = item.ha_comment.split('\n');
 	    cardHeader[1] = cardHeader[1] ? cardHeader[1] : '';
-	    /*
-	    return `
-	    <div id="log-row" class="card mb-0 p-1 rounded-0" style="width: 100%" data-link="${imgName}" ${(imgName === 'admission' || imgName === 'sale') ? `data-naklad=${item.ha_naklad_id_fk}` : ''} ${(imgName === 'expenses' || imgName === 'revenue') ? `data-balance=${item.ha_balance_act_id_fk}` : ''}>
-	      <div class="media">
-	        <img class="mr-3 rounded-circle p-1" src="img/user-male-filled-32.png" title="${item.ha_operator_name}" style="background-color: #${getIconColor}" width="30" alt="${item.ha_operator_name}">
-	        <img class="mr-3" src="img/${imgName}.png" width="30" alt="Generic placeholder image">
-	        <div class="media-body">
-	          <b>${cardHeader[0]}</b>
-	          ${cardHeader[1]}
-	          <div class="badge text-right text-muted float-right">${new Date(+(item.ha_time + '000')).toLocaleString()}</div>
-	          <div class="badge text-right text-muted float-right">${(imgName === 'admission' || imgName === 'sale' || imgName === 'expenses' || imgName === 'revenue') ? '>' : ''}</div>
-	        </div>
-	      </div>`;
-	    */
 	    return '\n    <div class="reference-header" data-link="' + imgName + '" ' + (imgName === 'admission' || imgName === 'sale' ? 'data-naklad=' + item.ha_naklad_id_fk : '') + ' ' + (imgName === 'expenses' || imgName === 'revenue' ? 'data-balance=' + item.ha_balance_act_id_fk : '') + '>\n      <div class="reference-column">\n        <img class="mr-3 rounded-circle p-1" src="img/user-male-filled-32.png" title="' + item.ha_operator_name + '" style="background-color: #' + getIconColor + '" width="30" alt="' + item.ha_operator_name + '">\n      </div>\n      <div class="reference-column">\n\n      <div class="online-user">\n        <img class="mr-3" src="img/' + imgName + '.png" width="30" alt="Generic placeholder image">\n        <b>' + cardHeader[0] + '</b>\n        ' + cardHeader[1] + '\n      </div>\n\n\n      </div>\n      <div class="reference-column">\n          <div class="badge text-right text-muted float-right">' + new Date(+(item.ha_time + '000')).toLocaleString() + '</div>\n      </div>\n      <div class="reference-column">\n          <div class="badge text-right text-muted float-right">' + (imgName === 'admission' || imgName === 'sale' || imgName === 'expenses' || imgName === 'revenue' ? '>' : '') + '</div>\n      </div>\n    </div>';
 	  },
 	  addCardToContainer: function addCardToContainer(cardMarkupItem) {
@@ -7597,18 +7583,6 @@
 	  getGoodString: function getGoodString(item, index) {
 	
 	    return '\n      <div class="catalog-groups-header" data-good-id="' + item.id + '">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + item.name + '</div>\n        <div class="catalog-groups-column">' + (Number(item.count) ? Number(item.count).toFixed(2) : '') + '</div>\n        <div class="catalog-groups-column"><button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button></div>\n      </div>';
-	    /*
-	    return `
-	    <div class="goods-string" data-good-id="${item.id}">
-	      <div>
-	        <span class="reference-row-number">${index + 1}</span> <span>${item.name}</span>
-	      </div>
-	      <div>
-	        ${(Number(item.count)) ? Number(item.count).toFixed(2) : ''}
-	        <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>
-	      </div>
-	    </div>`;
-	    */
 	  },
 	  getGoodTile: function getGoodTile(item, index) {
 	
@@ -7639,8 +7613,6 @@
 	
 	    if (goodsData) {
 	      container.innerHTML = '<div class="goods-tile"></div>';
-	      /*
-	      */
 	      goodsData.forEach(function (good, index) {
 	        container.firstChild.insertAdjacentHTML('beforeend', _this2.getGoodTile(good, index));
 	        container.firstChild.lastChild.addEventListener('click', function () {
@@ -7658,7 +7630,6 @@
 	var drawGoods = function drawGoods(goodsList, container, handler, viewFlag) {
 	  console.log(goodsList);
 	  if (_storage2.default.goodsViewMode === 'string' || viewFlag === 'string') {
-	    console.log('hihihi');
 	    markup.drawGoodsTable(goodsList, container, handler);
 	  } else if (_storage2.default.goodsViewMode === 'metro') {
 	    markup.drawGoodsMetro(goodsList, container, handler);
@@ -8437,7 +8408,7 @@
 	  drawDataInContainer: function drawDataInContainer(cardsData, container) {
 	    var _this = this;
 	
-	    container.innerHTML = '\n      <div class="reference-header">\n          <div class="reference-column">\u041D\u043E\u043C\u0435\u0440</div>\n          <div class="reference-column">\u041A\u0430\u0440\u0442\u043E\u0447\u043A\u0430 \u0442\u043E\u0432\u0430\u0440\u0430</div>\n      </div>\n    ';
+	    container.innerHTML = '\n      <div class="reference-header">\n          <div class="reference-column">\u2116</div>\n          <div class="reference-column">\u041A\u0430\u0440\u0442\u043E\u0447\u043A\u0430 \u0442\u043E\u0432\u0430\u0440\u0430</div>\n      </div>\n    ';
 	    if (cardsData.length > 0) {
 	      cardsData.forEach(function (item, index) {
 	        return container.insertAdjacentHTML('beforeend', _this.getElement(item, index));
