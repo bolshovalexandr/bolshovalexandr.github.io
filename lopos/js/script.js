@@ -2193,7 +2193,7 @@
 	var drawSet = count / 4;
 	
 	// отрисовка порции карточек
-	listLogBody.innerHTML = '\n    <div class="reference-header">\n        <div class="reference-column">\u041D\u043E\u043C\u0435\u0440</div>\n        <div class="reference-column">\u041E\u043F\u0435\u0440\u0430\u0446\u0438\u044F</div>\n        <div class="reference-column">\u0412\u0440\u0435\u043C\u044F</div>\n        <div class="reference-column">\u041F\u0440\u043E\u0441\u043C.</div>\n    </div>\n';
+	listLogBody.innerHTML = '\n    <div class="reference-header">\n        <div class="reference-column"></div>\n        <div class="reference-column">\u041E\u043F\u0435\u0440\u0430\u0446\u0438\u044F</div>\n        <div class="reference-column">\u0412\u0440\u0435\u043C\u044F</div>\n        <div class="reference-column">\u041F\u0440\u043E\u0441\u043C.</div>\n    </div>\n';
 	var drawCardSet = function drawCardSet() {
 	  logCardNodes.splice(0, drawSet).forEach(_log2.default.addCardToContainer);
 	};
@@ -2365,7 +2365,7 @@
 	        </div>
 	      </div>`;
 	    */
-	    return '\n    <div class="reference-header" data-link="' + imgName + '" ' + (imgName === 'admission' || imgName === 'sale' ? 'data-naklad=' + item.ha_naklad_id_fk : '') + ' ' + (imgName === 'expenses' || imgName === 'revenue' ? 'data-balance=' + item.ha_balance_act_id_fk : '') + '>\n      <div class="reference-column">\n        ' + (index + 1) + '\n      </div>\n      <div class="reference-column">\n\n      <div class="online-user">\n        <img class="mr-3 rounded-circle p-1" src="img/user-male-filled-32.png" title="' + item.ha_operator_name + '" style="background-color: #' + getIconColor + '" width="30" alt="' + item.ha_operator_name + '">\n        <img class="mr-3" src="img/' + imgName + '.png" width="30" alt="Generic placeholder image">\n        <b>' + cardHeader[0] + '</b>\n        ' + cardHeader[1] + '\n      </div>\n\n\n      </div>\n      <div class="reference-column">\n          <div class="badge text-right text-muted float-right">' + new Date(+(item.ha_time + '000')).toLocaleString() + '</div>\n      </div>\n      <div class="reference-column">\n          <div class="badge text-right text-muted float-right">' + (imgName === 'admission' || imgName === 'sale' || imgName === 'expenses' || imgName === 'revenue' ? '>' : '') + '</div>\n      </div>\n    </div>';
+	    return '\n    <div class="reference-header" data-link="' + imgName + '" ' + (imgName === 'admission' || imgName === 'sale' ? 'data-naklad=' + item.ha_naklad_id_fk : '') + ' ' + (imgName === 'expenses' || imgName === 'revenue' ? 'data-balance=' + item.ha_balance_act_id_fk : '') + '>\n      <div class="reference-column">\n        <img class="mr-3 rounded-circle p-1" src="img/user-male-filled-32.png" title="' + item.ha_operator_name + '" style="background-color: #' + getIconColor + '" width="30" alt="' + item.ha_operator_name + '">\n      </div>\n      <div class="reference-column">\n\n      <div class="online-user">\n        <img class="mr-3" src="img/' + imgName + '.png" width="30" alt="Generic placeholder image">\n        <b>' + cardHeader[0] + '</b>\n        ' + cardHeader[1] + '\n      </div>\n\n\n      </div>\n      <div class="reference-column">\n          <div class="badge text-right text-muted float-right">' + new Date(+(item.ha_time + '000')).toLocaleString() + '</div>\n      </div>\n      <div class="reference-column">\n          <div class="badge text-right text-muted float-right">' + (imgName === 'admission' || imgName === 'sale' || imgName === 'expenses' || imgName === 'revenue' ? '>' : '') + '</div>\n      </div>\n    </div>';
 	  },
 	  addCardToContainer: function addCardToContainer(cardMarkupItem) {
 	    console.log(cardMarkupItem);
@@ -7585,7 +7585,20 @@
 	
 	var markup = {
 	  getGoodString: function getGoodString(item, index) {
-	    return '\n    <div class="goods-string" data-good-id="' + item.id + '">\n      <div>\n        <span class="reference-row-number">' + (index + 1) + '</span> <span>' + item.name + '</span>\n      </div>\n      <div>\n        ' + (Number(item.count) ? Number(item.count).toFixed(2) : '') + '\n        <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>\n      </div>\n    </div>';
+	
+	    return '\n      <div class="catalog-groups-header" data-good-id="' + item.id + '">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + item.name + '</div>\n        <div class="catalog-groups-column">' + (Number(item.count) ? Number(item.count).toFixed(2) : '') + '</div>\n        <div class="catalog-groups-column"><button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button></div>\n      </div>';
+	    /*
+	    return `
+	    <div class="goods-string" data-good-id="${item.id}">
+	      <div>
+	        <span class="reference-row-number">${index + 1}</span> <span>${item.name}</span>
+	      </div>
+	      <div>
+	        ${(Number(item.count)) ? Number(item.count).toFixed(2) : ''}
+	        <button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button>
+	      </div>
+	    </div>`;
+	    */
 	  },
 	  getGoodTile: function getGoodTile(item, index) {
 	
@@ -7598,7 +7611,7 @@
 	  drawGoodsTable: function drawGoodsTable(goodsData, container, handler) {
 	    var _this = this;
 	
-	    container.innerHTML = '';
+	    container.innerHTML = '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u041D\u043E\u043C\u0435\u0440</div>\n        <div class="catalog-groups-column">\u0422\u043E\u0432\u0430\u0440</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E</div>\n        <div class="catalog-groups-column">\u0420\u0435\u0434.</div>\n      </div>\n    ';
 	    if (goodsData) {
 	      goodsData.forEach(function (good, index) {
 	        container.insertAdjacentHTML('beforeend', _this.getGoodString(good, index));
@@ -7616,6 +7629,8 @@
 	
 	    if (goodsData) {
 	      container.innerHTML = '<div class="goods-tile"></div>';
+	      /*
+	      */
 	      goodsData.forEach(function (good, index) {
 	        container.firstChild.insertAdjacentHTML('beforeend', _this2.getGoodTile(good, index));
 	        container.firstChild.lastChild.addEventListener('click', function () {
@@ -8703,12 +8718,12 @@
 	var markup = {
 	  getElement: function getElement(item, index) {
 	
-	    return '\n    <div class="reference-header" data-user-id="' + item.id + '">\n      <div class="reference-column">\n        ' + (index + 1) + '\n      </div>\n      <div class="reference-column">\n        <div class="online-user">\n          <img class="rounded-circle" src="img/user-male-filled-32.png" title="' + item.name + '" style="background-color: #' + item.color + ';" alt="' + item.name + '">\n          ' + item.name + '\n        </div>\n      </div>\n      <div class="reference-column"><div class="user-status" style="background-color: #' + (item.status === '0' ? 'dc3545' : '28a745') + '"></div></div>\n    </div>';
+	    return '\n    <div class="reference-header" data-user-id="' + item.id + '">\n      <div class="reference-column">\n          <img class="rounded-circle" src="img/user-male-filled-32.png" title="' + item.name + '" style="background-color: #' + item.color + ';" alt="' + item.name + '">\n      </div>\n      <div class="reference-column">\n        <div class="online-user">\n          ' + item.name + '\n        </div>\n      </div>\n      <div class="reference-column"><div class="user-status" style="background-color: #' + (item.status === '0' ? 'dc3545' : '28a745') + '"></div></div>\n    </div>';
 	  },
 	  drawDataInContainer: function drawDataInContainer(users, container, handler) {
 	    var _this = this;
 	
-	    container.innerHTML = '\n      <div class="reference-header">\n          <div class="reference-column">\u041D\u043E\u043C\u0435\u0440</div>\n          <div class="reference-column">\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C</div>\n          <div class="reference-column">\u0421\u0442\u0430\u0442\u0443\u0441</div>\n      </div>\n    ';
+	    container.innerHTML = '\n      <div class="reference-header">\n          <div class="reference-column"></div>\n          <div class="reference-column">\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C</div>\n          <div class="reference-column">\u0421\u0442\u0430\u0442\u0443\u0441</div>\n      </div>\n    ';
 	    users.forEach(function (user, index) {
 	      container.insertAdjacentHTML('beforeend', _this.getElement(user, index));
 	      container.lastChild.addEventListener('click', function () {

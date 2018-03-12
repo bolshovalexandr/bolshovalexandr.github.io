@@ -519,6 +519,10 @@ input[name="contact"]:checked + label {
 .catalog-groups-column:nth-child(2) {
   width: 70%; }
 
+.catalog-groups-column:nth-child(4) button {
+  width: 24px;
+  height: 24px; }
+
 .catalog-groups-column:nth-child(5) {
   width: 10%;
   padding: 0;
@@ -549,7 +553,13 @@ input[name="contact"]:checked + label {
   padding: 2px; }
 
 .reference-column:nth-child(1) {
-  width: 10%; }
+  width: 10%;
+  display: flex;
+  justify-content: center; }
+
+.reference-column:nth-child(1) img {
+  height: 24px;
+  width: 24px; }
 
 .reference-column:nth-child(2) {
   display: flex;
