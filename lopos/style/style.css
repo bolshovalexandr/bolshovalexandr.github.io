@@ -654,6 +654,9 @@ input[type="date"] {
   height: 24px;
   width: 24px; }
 
+a.disabled img {
+  opacity: 0.4; }
+
 /*
 @import "src/sass/components/app.scss";
 @import "src/sass/components/font.scss";

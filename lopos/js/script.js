@@ -3306,7 +3306,7 @@
 	  drawDataInContainer: function drawDataInContainer(enterprisesData) {
 	    var _this = this;
 	
-	    listEnterprisesBody.innerHTML = '\n      <div class="reference-header">\n          <div class="reference-column">\u041D\u043E\u043C\u0435\u0440</div>\n          <div class="reference-column">\u041F\u0440\u0435\u0434\u043F\u0440\u0438\u044F\u0442\u0438\u0435</div>\n      </div>\n    ';
+	    listEnterprisesBody.innerHTML = '\n      <div class="reference-header">\n          <div class="reference-column">\u2116</div>\n          <div class="reference-column">\u041F\u0440\u0435\u0434\u043F\u0440\u0438\u044F\u0442\u0438\u0435</div>\n      </div>\n    ';
 	    enterprisesData.forEach(function (item, index) {
 	      return listEnterprisesBody.insertAdjacentHTML('beforeend', _this.getElement(item, index));
 	    });
@@ -3862,7 +3862,7 @@
 	  drawDataInContainer: function drawDataInContainer(enterprisesData) {
 	    var _this = this;
 	
-	    listPointsBody.innerHTML = '\n    <div class="reference-header">\n        <div class="reference-column">\u041D\u043E\u043C\u0435\u0440</div>\n        <div class="reference-column">\u0422\u043E\u0447\u043A\u0430</div>\n    </div>\n    ';
+	    listPointsBody.innerHTML = '\n    <div class="reference-header">\n        <div class="reference-column">\u2116</div>\n        <div class="reference-column">\u0422\u043E\u0447\u043A\u0430</div>\n    </div>\n    ';
 	    enterprisesData.forEach(function (item, index) {
 	      return listPointsBody.insertAdjacentHTML('beforeend', _this.getElement(item, index));
 	    });
@@ -4528,7 +4528,7 @@
 	    });
 	  },
 	  drawMarkupInContainer: function drawMarkupInContainer(markup) {
-	    listContractorsBody.innerHTML = '\n\n        <div class="reference-header">\n            <div class="reference-column">\u041D\u043E\u043C\u0435\u0440</div>\n            <div class="reference-column">\u0418\u043C\u044F</div>\n        </div>\n  ';
+	    listContractorsBody.innerHTML = '\n\n        <div class="reference-header">\n            <div class="reference-column">\u2116</div>\n            <div class="reference-column">\u0418\u043C\u044F</div>\n        </div>\n  ';
 	    listContractorsBody.insertAdjacentHTML('beforeend', markup);
 	  },
 	  getBuyersHeader: function getBuyersHeader() {
@@ -6272,16 +6272,20 @@
 	  */
 	
 	  reportLink.href = data.data;
-	  reportLink.innerHTML = '<img src="./img/report-download.png" style="height: 34px;" title="Скачать на компьютер">';
 	  reportLinkGoogle.href = 'https://docs.google.com/viewer?url=' + data.data + '&embedded=false';
-	  reportLinkGoogle.innerHTML = '<img src="./img/report-google.png" style="height: 34px;" title="Смотреть на Google">';
+	
+	  reportLink.classList.remove('disabled');
+	  reportLinkGoogle.classList.remove('disabled');
+	  // reportLink.innerHTML = '<img src="./img/report-download.png" style="height: 34px;" title="Скачать на компьютер">';
+	  // reportLinkGoogle.innerHTML = '<img src="./img/report-google.png" style="height: 34px;" title="Смотреть на Google">';
 	};
 	
 	var getReportLink = function getReportLink() {
 	  console.log('stock-->', _storage2.default.currentStockId);
 	
 	  var params = [];
-	
+	  reportLink.classList.add('disabled');
+	  reportLinkGoogle.classList.add('disabled');
 	  reportsGoodsLeftModalSwitchesBody.querySelectorAll('.report-goods-left-modal-switch').forEach(function (switchParam) {
 	    if (switchParam.checked) {
 	      params.push(switchParam.value);
@@ -6300,17 +6304,23 @@
 	
 	reportsGoodsLeftModalPDFBtn.addEventListener('click', function () {
 	  _storage2.default.currentReportType = 'pdf';
+	  reportLink.classList.add('disabled');
+	  reportLinkGoogle.classList.add('disabled');
 	  getReportLink();
 	});
 	
 	reportsGoodsLeftModalExcelBtn.addEventListener('click', function () {
 	  _storage2.default.currentReportType = 'excel';
+	  reportLink.classList.add('disabled');
+	  reportLinkGoogle.classList.add('disabled');
 	  getReportLink();
 	});
 	
 	var onSuccessStockLoad = function onSuccessStockLoad(stockData) {
-	  reportLink.innerHTML = '';
-	  reportLinkGoogle.innerHTML = '';
+	  // reportLink.innerHTML = '';
+	  // reportLinkGoogle.innerHTML = '';
+	  reportLink.classList.add('disabled');
+	  reportLinkGoogle.classList.add('disabled');
 	  reportsGoodsLeftModalStock.innerHTML = stockData.data.map(function (item) {
 	    return '<option value="' + item.id + '">' + item.name + '</option>';
 	  }).join('');
@@ -7611,7 +7621,7 @@
 	  drawGoodsTable: function drawGoodsTable(goodsData, container, handler) {
 	    var _this = this;
 	
-	    container.innerHTML = '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u041D\u043E\u043C\u0435\u0440</div>\n        <div class="catalog-groups-column">\u0422\u043E\u0432\u0430\u0440</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E</div>\n        <div class="catalog-groups-column">\u0420\u0435\u0434.</div>\n      </div>\n    ';
+	    container.innerHTML = '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u2116</div>\n        <div class="catalog-groups-column">\u0422\u043E\u0432\u0430\u0440</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E</div>\n        <div class="catalog-groups-column">\u0420\u0435\u0434.</div>\n      </div>\n    ';
 	    if (goodsData) {
 	      goodsData.forEach(function (good, index) {
 	        container.insertAdjacentHTML('beforeend', _this.getGoodString(good, index));
@@ -7734,7 +7744,7 @@
 	
 	// расширенная отрисовка списка групп для страницы КАТАЛОГ/ГРУППЫ ТОВАРОВ
 	var drawGroupsExtended = function drawGroupsExtended(groupsList, container, handler) {
-	  container.innerHTML = '\n    <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u041D\u043E\u043C\u0435\u0440</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0446\u0435\u043D\u043A\u0430 \u043D\u0430 \u0433\u0440\u0443\u043F\u043F\u0443</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B-\u0432\u043E \u0442\u043E\u0432\u0430\u0440\u043E\u0432</div>\n        <div class="catalog-groups-column">\u0420\u0435\u0434.</div>\n    </div>';
+	  container.innerHTML = '\n    <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u2116</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0446\u0435\u043D\u043A\u0430 \u043D\u0430 \u0433\u0440\u0443\u043F\u043F\u0443</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B-\u0432\u043E \u0442\u043E\u0432\u0430\u0440\u043E\u0432</div>\n        <div class="catalog-groups-column">\u0420\u0435\u0434.</div>\n    </div>';
 	
 	  if (groupsList.length > 0) {
 	    markup.drawDataInContainerExtended(groupsList, container, handler);
@@ -7885,7 +7895,7 @@
 	};
 	
 	var drawDataInContainer = function drawDataInContainer(enterprisesData) {
-	  debitCreditBody.innerHTML = '\n    <div class="reference-header">\n        <div class="reference-column">\u041D\u043E\u043C\u0435\u0440</div>\n        <div class="reference-column">\u041A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044F</div>\n    </div>';
+	  debitCreditBody.innerHTML = '\n    <div class="reference-header">\n        <div class="reference-column">\u2116</div>\n        <div class="reference-column">\u041A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044F</div>\n    </div>';
 	  enterprisesData.forEach(function (item, index) {
 	    return debitCreditBody.insertAdjacentHTML('beforeend', getElement(item, index));
 	  });
@@ -9142,11 +9152,12 @@
 	
 	  // reportLinkGoogle.href = `https://docs.google.com/viewer?url=${data.data}&embedded=false`;
 	  // reportLinkGoogle.innerHTML = `Смотреть ${auth.currentReportType} на Google `;
-	
+	  reportLink.classList.remove('disabled');
+	  reportLinkGoogle.classList.remove('disabled');
 	  reportLink.href = data.data;
-	  reportLink.innerHTML = '<img src="./img/report-download.png" style="height: 34px;" title="Скачать на компьютер">';
 	  reportLinkGoogle.href = 'https://docs.google.com/viewer?url=' + data.data + '&embedded=false';
-	  reportLinkGoogle.innerHTML = '<img src="./img/report-google.png" style="height: 34px;" title="Смотреть на Google">';
+	  // reportLink.innerHTML = '<img src="./img/report-download.png" style="height: 34px;" title="Скачать на компьютер">';
+	  // reportLinkGoogle.innerHTML = '<img src="./img/report-google.png" style="height: 34px;" title="Смотреть на Google">';
 	};
 	
 	var getReportLink = function getReportLink() {
@@ -9179,11 +9190,15 @@
 	
 	reportsGoodsLeftModalPDFBtn.addEventListener('click', function () {
 	  _storage2.default.currentReportType = 'pdf';
+	  reportLink.classList.add('disabled');
+	  reportLinkGoogle.classList.add('disabled');
 	  getReportLink();
 	});
 	
 	reportsGoodsLeftModalExcelBtn.addEventListener('click', function () {
 	  _storage2.default.currentReportType = 'excel';
+	  reportLink.classList.add('disabled');
+	  reportLinkGoogle.classList.add('disabled');
 	  getReportLink();
 	});
 	
@@ -9203,8 +9218,8 @@
 	};
 	
 	var onReportsGoodsLeftClick = function onReportsGoodsLeftClick() {
-	  reportLink.innerHTML = '';
-	  reportLinkGoogle.innerHTML = '';
+	  reportLink.classList.add('disabled');
+	  reportLinkGoogle.classList.add('disabled');
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/group',
@@ -9219,16 +9234,11 @@
 	
 	var onPDFLoadSuccessTurn = function onPDFLoadSuccessTurn(data) {
 	  console.log(data);
-	  /*
+	
 	  reportLinkTurn.href = data.data;
-	  reportLinkTurn.innerHTML = `Скачать ${auth.currentReportType}`;
-	  reportLinkTurnGoogle.href = `https://docs.google.com/viewer?url=${data.data}&embedded=false`;
-	  reportLinkTurnGoogle.innerHTML = `Смотреть ${auth.currentReportType} на Google `;
-	  */
-	  reportLinkTurn.href = data.data;
-	  reportLinkTurn.innerHTML = '<img src="./img/report-download.png" style="height: 34px;" title="Скачать на компьютер">';
+	  reportLinkTurn.classList.remove('disabled');
+	  reportLinkTurnGoogle.classList.remove('disabled');
 	  reportLinkTurnGoogle.href = 'https://docs.google.com/viewer?url=' + data.data + '&embedded=false';
-	  reportLinkTurnGoogle.innerHTML = '<img src="./img/report-google.png" style="height: 34px;" title="Смотреть на Google">';
 	};
 	
 	var getReportLinkTurn = function getReportLinkTurn() {
@@ -9248,8 +9258,6 @@
 	    }
 	  });
 	
-	  console.log('parameters-->', params);
-	  console.log('listOfGroups-->', listOfGroups);
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/report/turnover/export/' + _storage2.default.currentReportType,
@@ -9260,11 +9268,15 @@
 	
 	reportsGoodsTurnModalPDFBtn.addEventListener('click', function () {
 	  _storage2.default.currentReportType = 'pdf';
+	  reportLinkTurn.classList.add('disabled');
+	  reportLinkTurnGoogle.classList.add('disabled');
 	  getReportLinkTurn();
 	});
 	
 	reportsGoodsTurnModalExcelBtn.addEventListener('click', function () {
 	  _storage2.default.currentReportType = 'excel';
+	  reportLinkTurn.classList.add('disabled');
+	  reportLinkTurnGoogle.classList.add('disabled');
 	  getReportLinkTurn();
 	});
 	
@@ -9278,19 +9290,17 @@
 	var onSuccessGoodsTurnLoad = function onSuccessGoodsTurnLoad(goodData) {
 	  console.log(goodData);
 	  $(reportsGoodsTurnModal).modal('show');
+	  reportLinkTurn.classList.add('disabled');
+	  reportLinkTurnGoogle.classList.add('disabled');
 	  reportsGoodsTurnModalStock.value = reportsStocks.value;
 	
 	  _universalGroupsList2.default.drawReports(goodData.data, reportsGoodsTurnModalBody, null);
 	};
 	
 	var onReportsGoodsTurnClick = function onReportsGoodsTurnClick() {
-	  reportLinkTurn.innerHTML = '';
-	  reportLinkTurnGoogle.innerHTML = '';
+	  // reportLinkTurn.innerHTML = '';
 	  reportTurnFrom.value = new Date().toISOString().slice(0, 8) + '01';
 	  reportTurnTo.value = new Date().toISOString().slice(0, 10);
-	  console.log(reportTurnFrom.value);
-	  console.log(Date.parse(reportTurnFrom.value) / 1000);
-	  console.log(Date.parse(reportTurnTo.value) / 1000);
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/group',
@@ -9303,16 +9313,10 @@
 	// ############################## ОТЧЕТ / ПРИБЫЛЬ С РОЗНИЦЫ  ##############################
 	
 	var onPDFLoadSuccessProfit = function onPDFLoadSuccessProfit(data) {
-	  /*
+	  reportLinkProfit.classList.remove('disabled');
+	  reportLinkProfitGoogle.classList.remove('disabled');
 	  reportLinkProfit.href = data.data;
-	  reportLinkProfit.innerHTML = `Скачать ${auth.currentReportType}`;
-	  reportLinkProfitGoogle.href = `https://docs.google.com/viewer?url=${data.data}&embedded=false`;
-	  reportLinkProfitGoogle.innerHTML = `Смотреть ${auth.currentReportType} на Google `;
-	  */
-	  reportLinkProfit.href = data.data;
-	  reportLinkProfit.innerHTML = '<img src="./img/report-download.png" style="height: 34px;" title="Скачать на компьютер">';
 	  reportLinkProfitGoogle.href = 'https://docs.google.com/viewer?url=' + data.data + '&embedded=false';
-	  reportLinkProfitGoogle.innerHTML = '<img src="./img/report-google.png" style="height: 34px;" title="Смотреть на Google">';
 	};
 	
 	var getReportLinkProfit = function getReportLinkProfit() {
@@ -9337,21 +9341,25 @@
 	
 	reportsGoodsProfitModalPDFBtn.addEventListener('click', function () {
 	  _storage2.default.currentReportType = 'pdf';
+	  reportLinkProfit.classList.add('disabled');
+	  reportLinkProfitGoogle.classList.add('disabled');
 	  getReportLinkProfit();
 	});
 	
 	reportsGoodsProfitModalExcelBtn.addEventListener('click', function () {
 	  _storage2.default.currentReportType = 'excel';
+	  reportLinkProfit.classList.add('disabled');
+	  reportLinkProfitGoogle.classList.add('disabled');
 	  getReportLinkProfit();
 	});
 	
 	var onReportsProfitClick = function onReportsProfitClick() {
-	  reportLinkProfit.innerHTML = '';
-	  reportLinkProfitGoogle.innerHTML = '';
+	  // reportLinkProfit.innerHTML = '';
+	  // reportLinkProfitGoogle.innerHTML = '';
 	  $(reportsGoodsProfitModal).modal('show');
 	  reportsGoodsProfitModalStock.value = reportsStocks.value;
-	
-	  reportLinkProfit.innerHTML = '';
+	  reportLinkProfit.classList.add('disabled');
+	  reportLinkProfitGoogle.classList.add('disabled');
 	  reportProfitFrom.value = new Date().toISOString().slice(0, 8) + '01';
 	  reportProfitTo.value = new Date().toISOString().slice(0, 10);
 	};
