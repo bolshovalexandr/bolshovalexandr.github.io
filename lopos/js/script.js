@@ -7619,6 +7619,10 @@
 	
 	    return '\n      <div class="catalog-groups-header" data-good-id="' + item.id + '">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + item.name + '</div>\n        <div class="catalog-groups-column">' + (Number(item.count) ? Number(item.count).toFixed(2) : '') + '</div>\n        <div class="catalog-groups-column"><button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button></div>\n      </div>';
 	  },
+	  getGoodStringSearch: function getGoodStringSearch(item, index) {
+	
+	    return '\n      <div class="catalog-groups-header" data-good-id="' + item.id + '">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + item.name + '</div>\n        <div class="catalog-groups-column"> > </div>\n      </div>';
+	  },
 	  getGoodTile: function getGoodTile(item, index) {
 	
 	    var getImg = function getImg(imgUrl) {
@@ -7643,13 +7647,29 @@
 	      container.innerHTML = 'Пусто';
 	    }
 	  },
-	  drawGoodsMetro: function drawGoodsMetro(goodsData, container, handler) {
+	  drawGoodsSearch: function drawGoodsSearch(goodsData, container, handler) {
 	    var _this2 = this;
+	
+	    container.innerHTML = '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u2116</div>\n        <div class="catalog-groups-column">\u0422\u043E\u0432\u0430\u0440</div>\n        <div class="catalog-groups-column">\u0420\u0435\u0434.</div>\n      </div>\n    ';
+	    if (goodsData) {
+	      goodsData.forEach(function (good, index) {
+	        container.insertAdjacentHTML('beforeend', _this2.getGoodStringSearch(good, index));
+	        container.lastChild.addEventListener('click', function () {
+	          _storage2.default.currentGoodId = good.id;
+	          handler(good);
+	        });
+	      });
+	    } else {
+	      container.innerHTML = 'Пусто';
+	    }
+	  },
+	  drawGoodsMetro: function drawGoodsMetro(goodsData, container, handler) {
+	    var _this3 = this;
 	
 	    if (goodsData) {
 	      container.innerHTML = '<div class="goods-tile"></div>';
 	      goodsData.forEach(function (good, index) {
-	        container.firstChild.insertAdjacentHTML('beforeend', _this2.getGoodTile(good, index));
+	        container.firstChild.insertAdjacentHTML('beforeend', _this3.getGoodTile(good, index));
 	        container.firstChild.lastChild.addEventListener('click', function () {
 	          _storage2.default.currentGoodId = good.id;
 	          handler(good);
@@ -7664,7 +7684,9 @@
 	// отрисовка списка товаров по данным
 	var drawGoods = function drawGoods(goodsList, container, handler, viewFlag) {
 	  console.log(goodsList);
-	  if (_storage2.default.goodsViewMode === 'string' || viewFlag === 'string') {
+	  if (viewFlag === 'search') {
+	    markup.drawGoodsSearch(goodsList, container, handler);
+	  } else if (_storage2.default.goodsViewMode === 'string' || viewFlag === 'string') {
 	    markup.drawGoodsTable(goodsList, container, handler);
 	  } else if (_storage2.default.goodsViewMode === 'metro') {
 	    markup.drawGoodsMetro(goodsList, container, handler);
@@ -10109,7 +10131,7 @@
 	// отрисовка результатов поиска
 	var drawResult = function drawResult(data) {
 	  if (data.length) {
-	    _universalGoodsList2.default.draw(data, listSearchBody, onGoodClick, 'string');
+	    _universalGoodsList2.default.draw(data, listSearchBody, onGoodClick, 'search');
 	  } else {
 	    listSearchBody.innerHTML = '\u041D\u0435 \u0437\u0430\u0432\u0435\u0437\u043B\u0438 \u043F\u043E\u043A\u0430 <b>' + listSearchInput.value + '</b>, \u0445\u043E\u0442\u044F \u0438 \u0436\u0434\u0430\u043B\u0438 \u043D\u0430\u043C\u0435\u0434\u043D\u0438...';
 	  }
