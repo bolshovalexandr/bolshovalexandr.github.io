@@ -453,7 +453,7 @@ input[name="express-sell-radio"]:checked + label {
 .operations-trade-delivery {
   min-width: 60px;
   height: 40px;
-  background-image: url("/img/suppliers.png");
+  background-image: url("../img/suppliers.png");
   background-color: #DFB939;
   background-position: left;
   background-size: 45px, 45px;
@@ -480,22 +480,22 @@ input[name="express-sell-radio"]:checked + label {
   background-size: cover; }
 
 .otBtnClear {
-  background-image: url("/img/Cancel-96.png"); }
+  background-image: url("../img/Cancel-96.png"); }
 
 .otBtnBarcode {
-  background-image: url("/img/Barcode-64.png");
+  background-image: url("../img/Barcode-64.png");
   margin-bottom: 5px; }
 
 .otBtnAddRow {
-  background-image: url("/img/plus-math-50.png");
+  background-image: url("../img/plus-math-50.png");
   width: 30px;
   height: 30px; }
 
 .otBtnFind {
-  background-image: url("/img/icons8-search-26.png"); }
+  background-image: url("../img/icons8-search-26.png"); }
 
 .otBtnDiscount {
-  background-image: url("/img/percent.png"); }
+  background-image: url("../img/percent.png"); }
 
 .balance-set-form {
   display: flex;
