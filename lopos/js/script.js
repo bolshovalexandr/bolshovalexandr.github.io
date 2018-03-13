@@ -3869,14 +3869,14 @@
 	
 	    /*
 	    return `
-	     <input type="radio" id="${item.id}" data-stock-id="${item.id}" name="contact" value="email" class="d-none">
-	     <label style="padding-left: 34px;" for="${item.id}"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="${item.id}" data-stock-name="${item.name}">
+	      <input type="radio" id="${item.id}" data-stock-id="${item.id}" name="contact" value="email" class="d-none">
+	      <label style="padding-left: 34px;" for="${item.id}"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="${item.id}" data-stock-name="${item.name}">
 	      <div><span class="reference-row-number">${index + 1}</span> ${item.name}</div>
 	      <div class="d-flex justify-content-between align-items-center">
 	        ${currentStockFlag}
 	      </div>
 	      </label>`;
-	     */
+	      */
 	    return '\n    <input type="radio" id="' + item.id + '" data-stock-id="' + item.id + '" name="contact" value="email" class="d-none">\n\n    <label class="reference-header" for="' + item.id + '" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '">\n        <div class="reference-column">' + (index + 1) + '</div>\n        <div class="reference-column">' + item.name + currentStockFlag + '</div>\n    </label>\n';
 	  },
 	  drawDataInContainer: function drawDataInContainer(enterprisesData) {
@@ -4530,13 +4530,13 @@
 	  },
 	  getElement: function getElement(item, index) {
 	
-	    return '\n        <div class="reference-header" data-buyer-id="' + item.id + '" data-index="' + index + '">\n            <div class="reference-column">' + item.id + '</div>\n            <div class="reference-column">' + item.name + '</div>\n        </div>\n';
+	    return '\n        <div class="reference-header" data-buyer-id="' + item.id + '" data-index="' + index + '">\n            <div class="reference-column">' + (index + 1) + '</div>\n            <div class="reference-column">' + item.name + '</div>\n        </div>\n';
 	    /*
 	    return `
-	       <div class="d-flex justify-content-between align-items-center reference-string"  data-buyer-id="${item.id}"  data-index="${index}">
+	        <div class="d-flex justify-content-between align-items-center reference-string"  data-buyer-id="${item.id}"  data-index="${index}">
 	        <div style="padding-left: 34px;"><span class="reference-row-number">${index + 1}</span> <span>${item.name}</span></div>
 	        <div class="d-flex justify-content-between align-items-center">
-	          </div>
+	            </div>
 	    </div>`;
 	    */
 	  },
@@ -7301,7 +7301,7 @@
 	      if (!_storage2.default.currentStockId) {
 	        checkedStock = item.id === _storage2.default.data.currentStock ? item.id : checkedStock;
 	      } else {
-	        checkedStock = _storage2.default.currentStockId;
+	        checkedStock = _storage2.default.currentStockId === 'all' ? 1 : _storage2.default.currentStockId;
 	      }
 	      return '\n      <input type="radio" id="stock-' + item.id + '" name="stock" value="email" class="d-none">\n      <label style="padding-left: 34px;" for="stock-' + item.id + '"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '" data-stock-t2="' + item.values[2][0] + '">\n        <div class="row w-100 h-100">\n          <div class="col-8">' + item.name + '</div>\n          <div class="col-4 d-flex justify-content-between">\n            <div class="w-100 text-center">' + item.values[3][0] + '</div>\n            <div class="w-100 text-center">' + item.values[2][0] + '</div>\n            <div class="w-100 text-center">' + item.values[4][0] + '</div>\n          </div>\n          </div>\n        </label>';
 	    }).join(''));
@@ -7313,6 +7313,7 @@
 	  }
 	
 	  // переписать на storage
+	  console.log(checkedStock);
 	  if (checkedStock) {
 	    goodsStock.querySelector('#stock-' + checkedStock).checked = true;
 	    _storage2.default.currentStockId = checkedStock;

@@ -596,10 +596,17 @@ input[name="contact"]:checked + label {
   background-color: #ccc; }
 
 .catalog-groups-column:nth-child(1) {
-  width: 10%; }
+  width: 10%;
+  text-align: center; }
 
 .catalog-groups-column:nth-child(2) {
   width: 70%; }
+
+.catalog-groups-column:nth-child(3) {
+  text-align: right; }
+
+.catalog-groups-column:nth-child(4) {
+  text-align: right; }
 
 .catalog-groups-column:nth-child(4) button {
   width: 24px;
