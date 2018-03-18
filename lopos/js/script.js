@@ -102,15 +102,15 @@
 	
 	var _reference__keywords2 = _interopRequireDefault(_reference__keywords);
 	
-	var _reference__keywordsAdd = __webpack_require__(36);
+	var _reference__keywordsAdd = __webpack_require__(38);
 	
 	var _reference__keywordsAdd2 = _interopRequireDefault(_reference__keywordsAdd);
 	
-	var _reference__keywordsEdit = __webpack_require__(37);
+	var _reference__keywordsEdit = __webpack_require__(39);
 	
 	var _reference__keywordsEdit2 = _interopRequireDefault(_reference__keywordsEdit);
 	
-	var _catalog__groups = __webpack_require__(38);
+	var _catalog__groups = __webpack_require__(40);
 	
 	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
@@ -243,6 +243,25 @@
 	    _main_login_window2.default.init();
 	  }
 	};
+	
+	// ========== ВЫХОД ==========
+	var wideScreenBtn = document.querySelector('#widescreen-mode-btn');
+	
+	var onWideScreenBtnClick = function onWideScreenBtnClick() {
+	  var screenWidth = document.body.clientWidth;
+	  if (!wideScreenBtn.classList.contains('icon-btn__widescreen--active') && screenWidth > 1300) {
+	    wideScreenBtn.classList.add('icon-btn__widescreen--active');
+	    app.style.maxWidth = screenWidth - 50 + 'px';
+	  } else if (wideScreenBtn.classList.contains('icon-btn__widescreen--active') && screenWidth > 1300) {
+	    app.style.maxWidth = '1140px';
+	    console.log(document.body.clientWidth);
+	    wideScreenBtn.classList.remove('icon-btn__widescreen--active');
+	  }
+	  console.log(wideScreenBtn.classList.contains('icon-btn__widescreen--active') && screenWidth > 1300);
+	};
+	
+	wideScreenBtn.addEventListener('click', onWideScreenBtnClick);
+	// ==========  ==========
 	
 	// ========== ВЫХОД ==========
 	var stop = function stop() {
@@ -2730,10 +2749,13 @@
 	  if (billsData.data.length > 0) {
 	
 	    if (billsData.data[0].month_number) {
+	      docsBody.innerHTML = '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column"></div>\n        <div class="catalog-groups-column">\u0414\u0430\u0442\u0430</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u0432</div>\n        <div class="catalog-groups-column">\u0421\u0443\u043C\u043C\u0430</div>\n      </div>';
 	      _universalBillsList2.default.drawYear(billsData.data, docsBody, onYearClick);
 	    } else if (billsData.data[0].day_number) {
+	      docsBody.innerHTML = '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column"></div>\n        <div class="catalog-groups-column">\u0414\u0430\u0442\u0430</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u0432</div>\n        <div class="catalog-groups-column">\u0421\u0443\u043C\u043C\u0430</div>\n      </div>';
 	      _universalBillsList2.default.drawMonth(billsData.data, docsBody, onMonthClick);
 	    } else if ((billsData.data[0].stock_name || billsData.data[0].stock_name === 'null') && _storage2.default.allDocsOperationType === 'naklad') {
+	      docsBody.innerHTML = '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column"></div>\n        <div class="catalog-groups-column">\u0414\u0430\u0442\u0430</div>\n        <div class="catalog-groups-column">\u0421\u0443\u043C\u043C\u0430</div>\n      </div>';
 	      billsData.data.sort(function (a, b) {
 	        return +b.id - +a.id;
 	      });
@@ -2745,6 +2767,7 @@
 	      docsBody.insertAdjacentHTML('beforeend', '<button type="button" class="btn btn-primary">Загрузить еще</button>');
 	      docsBody.lastChild.addEventListener('click', onClickLoadMore);
 	    } else if ((billsData.data[0].stock_name || billsData.data[0].stock_name === 'null') && _storage2.default.allDocsOperationType === 'balance') {
+	      docsBody.innerHTML = '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column"></div>\n        <div class="catalog-groups-column">\u0414\u0430\u0442\u0430</div>\n        <div class="catalog-groups-column">\u0421\u0443\u043C\u043C\u0430</div>\n      </div>';
 	      // billsData.data.sort((a, b) => +b.id - +a.id);
 	      // bills.drawDay(billsData.data, docsBody, onBillClick);
 	
@@ -2912,15 +2935,15 @@
 	};
 	
 	var getYearElement = function getYearElement(item, index) {
-	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img src="img/ic_agree.png" alt="">\n      <span>' + months[item.month_number - 1] + ' ' + document.querySelector('#docs-year').value + ' \u0433\u043E\u0434\u0430</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.count_documents + '</span><br>\n    </div>';
+	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img src="img/ic_agree.png" alt="">\n      <span>' + months[item.month_number - 1] + ' ' + document.querySelector('#docs-year').value + ' \u0433\u043E\u0434\u0430</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.count_documents + '</span><br>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n';
 	};
 	
 	var getMonthElement = function getMonthElement(item, index) {
-	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img src="img/ic_agree.png" alt="">\n      <span></b>' + (+item.day_number < 10 ? '0' + item.day_number : item.day_number) + '.' + (+document.querySelector('#docs-month').value + 1 < 10 ? '0' + (+document.querySelector('#docs-month').value + 1) : +document.querySelector('#docs-month').value + 1) + '.' + document.querySelector('#docs-year').value + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.count_documents + '</span><br>\n    </div>';
+	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img src="img/ic_agree.png" alt="">\n      <span></b>' + (+item.day_number < 10 ? '0' + item.day_number : item.day_number) + '.' + (+document.querySelector('#docs-month').value + 1 < 10 ? '0' + (+document.querySelector('#docs-month').value + 1) : +document.querySelector('#docs-month').value + 1) + '.' + document.querySelector('#docs-year').value + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.count_documents + '</span><br>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n';
 	};
 	
 	var getDayElement = function getDayElement(item, index) {
-	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img class="mr-3" src="img/' + BillTypes['type' + item.type] + '.png" width="30" alt="">\n      <span> \u2116 ' + item.id + ' \u0432 ' + new Date(+(item.time + '000')).toLocaleTimeString() + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <img class="mr-3 rounded-circle" src="img/user-male-filled-32.png" style="background-color: #' + item.operator_color + '" width="30" alt="">\n    </div>';
+	  return '\n\n  <div class="alldocs-year">\n    <div class="alldocs-year-column">\n      <img class="mr-3" src="img/' + BillTypes['type' + item.type] + '.png" width="30" alt="">\n      <span> \u2116 ' + item.id + ' \u0432 ' + new Date(+(item.time + '000')).toLocaleTimeString() + '</span>\n    </div>\n    <div class="alldocs-year-column">\n      <img class="mr-3 rounded-circle" src="img/user-male-filled-32.png" style="background-color: #' + item.operator_color + '" width="30" alt="">\n    </div>\n    <div class="alldocs-year-column">\n      <span>' + item.total + '</span>\n    </div>\n';
 	};
 	
 	var getDayBalanceElement = function getDayBalanceElement(item, index) {
@@ -3869,14 +3892,14 @@
 	
 	    /*
 	    return `
-	     <input type="radio" id="${item.id}" data-stock-id="${item.id}" name="contact" value="email" class="d-none">
-	     <label style="padding-left: 34px;" for="${item.id}"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="${item.id}" data-stock-name="${item.name}">
+	      <input type="radio" id="${item.id}" data-stock-id="${item.id}" name="contact" value="email" class="d-none">
+	      <label style="padding-left: 34px;" for="${item.id}"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="${item.id}" data-stock-name="${item.name}">
 	      <div><span class="reference-row-number">${index + 1}</span> ${item.name}</div>
 	      <div class="d-flex justify-content-between align-items-center">
 	        ${currentStockFlag}
 	      </div>
 	      </label>`;
-	     */
+	      */
 	    return '\n    <input type="radio" id="' + item.id + '" data-stock-id="' + item.id + '" name="contact" value="email" class="d-none">\n\n    <label class="reference-header" for="' + item.id + '" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '">\n        <div class="reference-column">' + (index + 1) + '</div>\n        <div class="reference-column">' + item.name + currentStockFlag + '</div>\n    </label>\n';
 	  },
 	  drawDataInContainer: function drawDataInContainer(enterprisesData) {
@@ -4906,6 +4929,18 @@
 	
 	var _universalKeywords2 = _interopRequireDefault(_universalKeywords);
 	
+	var _universalSearch = __webpack_require__(32);
+	
+	var _universalSearch2 = _interopRequireDefault(_universalSearch);
+	
+	var _universalGoodsList = __webpack_require__(36);
+	
+	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
+	
+	var _universalGroupsList = __webpack_require__(37);
+	
+	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var listKeywords = document.querySelector('#list-keywords-list');
@@ -4919,6 +4954,179 @@
 	var listKeywordsBody = document.querySelector('#list-keywords-body');
 	var listKeywordsCard = document.querySelector('#list-keywords-card');
 	var listKeywordsCardEdit = document.querySelector('#list-keywords-card-edit');
+	var listKeywordsLinks = document.querySelector('#list-keywords-links');
+	
+	// /////////////////////////////////
+	
+	/*
+	const cardResources = document.querySelector('#card-resources');
+	const cardResourcesReturnBtn = document.querySelector('#card-resources-return-btn');
+	const cardResourcesDeleteBtn = document.querySelector('#card-resources-delete-btn');
+	const cardName = document.querySelector('#card-resources-name');
+	
+	const cardResourcesResources = document.querySelector('#card-resources-body-resources');
+	const cardResourcesProduct = document.querySelector('#card-resources-body-product');
+	
+	const cardResourcesOldCost = document.querySelector('#card-resources-old-cost');
+	const cardResourcesNewPrice = document.querySelector('#card-resources-new-price');
+	
+	const resourcesAddBtn = document.querySelector('#resources-add-btn');
+	const productAddBtn = document.querySelector('#product-add-btn');
+	*/
+	
+	
+	var cardResourcesGroupModal = document.querySelector('#card-resources-group');
+	var cardResourcesGroupModalTitle = document.querySelector('#card-resources-title');
+	var cardResourcesGroupModalBody = document.querySelector('#card-resources-groups-body');
+	var cardResourcesGroupModalReturnBtn = document.querySelector('#card-resources-modal-return-btn');
+	
+	var addResourcesModal = document.querySelector('#add-resources-modal');
+	// const addResourcesModalLabel = document.querySelector('#add-resources-modal-label');
+	
+	var loadedGoods = [];
+	var loadedGroups = [];
+	
+	var fastEditFlag = false;
+	
+	// поиск по товару внутри группы
+	var cardResourcesSearchInput = document.querySelector('#card-resources-search-input');
+	
+	var onSuccessAddLink = function onSuccessAddLink(answer) {
+	  console.log(answer);
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag/' + _storage2.default.currentKeywordId + '/compare_meta',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: showKeywordLinks
+	  };
+	};
+	
+	var onGoodClick = function onGoodClick(good) {
+	  // $(cardResourcesGroupModal).modal('hide');
+	  // $(addResourcesModal).modal('show');
+	  // addResourcesModalLabel.innerHTML = good.name;
+	  // resourceAdd.start(addResourcesModal);
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag/' + _storage2.default.currentKeywordId + '/compare_meta',
+	    data: 'good=' + _storage2.default.currentGoodId + '&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessAddLink
+	  };
+	};
+	
+	var drawGoods = function drawGoods(data) {
+	  cardResourcesGroupModalReturnBtn.classList.remove('invisible');
+	  cardResourcesSearchInput.addEventListener('input', onGoodsSearch);
+	  cardResourcesSearchInput.removeEventListener('input', onGroupsSearch);
+	  _universalGoodsList2.default.draw(data, cardResourcesGroupModalBody, onGoodClick, 'string');
+	};
+	
+	var onGroupClick = function onGroupClick() {
+	
+	  cardResourcesSearchInput.focus();
+	  cardResourcesSearchInput.value = '';
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/group/' + _storage2.default.currentGroupId + '/goods_light',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessGroupGood
+	  };
+	};
+	
+	var drawGroups = function drawGroups(groupsData) {
+	  console.log(groupsData);
+	  cardResourcesGroupModalReturnBtn.classList.add('invisible');
+	  cardResourcesSearchInput.removeEventListener('input', onGoodsSearch);
+	  cardResourcesSearchInput.addEventListener('input', onGroupsSearch);
+	  _universalGroupsList2.default.draw(groupsData, cardResourcesGroupModalBody, onGroupClick);
+	};
+	
+	var onGoodsSearch = function onGoodsSearch(evt) {
+	  drawGoods(_universalSearch2.default.make(loadedGoods.data, cardResourcesSearchInput.value));
+	};
+	
+	var onGroupsSearch = function onGroupsSearch(evt) {
+	  drawGroups(_universalSearch2.default.make(loadedGroups.data, cardResourcesSearchInput.value));
+	};
+	
+	var onSuccessGroupGood = function onSuccessGroupGood(goodsData) {
+	  loadedGoods = goodsData;
+	  cardResourcesGroupModalTitle.innerHTML = '\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0442\u043E\u0432\u0430\u0440 \u0432 \u0433\u0440\u0443\u043F\u043F\u0435 "' + _storage2.default.currentGroupName + '"';
+	  cardResourcesGroupModalReturnBtn.addEventListener('click', getGroups);
+	  drawGoods(goodsData.data);
+	};
+	
+	$(addResourcesModal).on('hidden.bs.modal', function () {
+	  if (fastEditFlag === false) {
+	    $(cardResourcesGroupModal).modal('show');
+	  }
+	});
+	
+	var onSuccessGroupsLoad = function onSuccessGroupsLoad(groupsData) {
+	  loadedGroups = groupsData;
+	  cardResourcesGroupModalBody.innerHTML = '';
+	  cardResourcesGroupModalTitle.innerHTML = 'Выберите группу';
+	  cardResourcesSearchInput.focus();
+	  drawGroups(groupsData.data);
+	};
+	
+	var getGroups = function getGroups() {
+	  _storage2.default.currentGroupId = false;
+	  cardResourcesSearchInput.value = '';
+	  $(cardResourcesGroupModal).modal('show');
+	  fastEditFlag = false;
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/group',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: onSuccessGroupsLoad
+	  };
+	};
+	
+	var onResourcesAddBtn = function onResourcesAddBtn() {
+	  _storage2.default.currentCardOperation = -1;
+	  getGroups();
+	};
+	
+	// ///////////////////////////////////////
+	
+	var getKeywordsLinkString = function getKeywordsLinkString(index, id, name) {
+	
+	  return '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + name + '</div>\n        <div class="catalog-groups-column">\u0443\u0434\u0430\u043B\u0438\u0442\u044C \u0441\u0432\u044F\u0437\u044C</div>\n      </div>';
+	};
+	
+	var onDeleteLink = function onDeleteLink(answer) {
+	  console.log(answer);
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag/' + _storage2.default.currentKeywordId + '/compare_meta',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: showKeywordLinks
+	  };
+	};
+	
+	var showKeywordLinks = function showKeywordLinks(data) {
+	  console.log(data);
+	  listKeywordsLinks.innerHTML = '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u2116</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435</div>\n        <div class="catalog-groups-column"></div>\n      </div>';
+	
+	  data.data.forEach(function (link, index) {
+	    listKeywordsLinks.insertAdjacentHTML('beforeend', getKeywordsLinkString(index, link.id, link.name));
+	    console.log(listKeywordsCardEdit);
+	    console.log(listKeywordsCardEdit.lastChild);
+	    listKeywordsLinks.lastChild.lastElementChild.addEventListener('click', function () {
+	      _xhr2.default.request = {
+	        metod: 'DELETE',
+	        url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag/' + _storage2.default.currentKeywordId + '/compare_meta',
+	        data: 'good=' + link.id + '&token=' + _storage2.default.data.token,
+	        callbackSuccess: onDeleteLink
+	      };
+	    });
+	  });
+	  listKeywordsLinks.insertAdjacentHTML('beforeend', '<button id="" type="button" class="btn btn-success p-0 icon-btn icon-btn__add"></button>');
+	  listKeywordsLinks.lastChild.addEventListener('click', onResourcesAddBtn);
+	};
 	
 	// функция прячет страницу "справочники -> ключевые слова"
 	var hideReferenceKeywordsMain = function hideReferenceKeywordsMain() {
@@ -4943,11 +5151,19 @@
 	// обработчик
 	var onKeywordClick = function onKeywordClick(evt) {
 	  var clickedKeywordNode = evt.target;
+	  listKeywordsLinks.innerHTML = '';
 	  _storage2.default.currentKeywordId = clickedKeywordNode.dataset.keywordId;
 	  _storage2.default.currentKeywordName = clickedKeywordNode.innerText.slice(1);
 	  _storage2.default.currentKeywordRgb = clickedKeywordNode.dataset.keywordRgb;
 	  hideReferenceKeywordsMain();
 	  showEditKeywordCard();
+	
+	  _xhr2.default.request = {
+	    metod: 'POST',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag/' + _storage2.default.currentKeywordId + '/compare_meta',
+	    data: 'view_last=0&token=' + _storage2.default.data.token,
+	    callbackSuccess: showKeywordLinks
+	  };
 	};
 	
 	// ================== удаление ключевго слова ============================
@@ -5129,6 +5345,205 @@
 
 /***/ }),
 /* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var markup = {
+	  getGoodString: function getGoodString(item, index) {
+	
+	    return '\n      <div class="catalog-groups-header" data-good-id="' + item.id + '">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + item.name + '</div>\n        <div class="catalog-groups-column">' + (Number(item.count) ? Number(item.count).toFixed(2) : '') + '</div>\n        <div class="catalog-groups-column"><button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button></div>\n      </div>';
+	  },
+	  getGoodStringSearch: function getGoodStringSearch(item, index) {
+	
+	    return '\n      <div class="catalog-groups-header" data-good-id="' + item.id + '">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + item.name + '</div>\n\n      </div>';
+	  },
+	  getGoodTile: function getGoodTile(item, index) {
+	
+	    var getImg = function getImg(imgUrl) {
+	      return imgUrl ? 'https://lopos.bidone.ru/users/600a5357/images/' + imgUrl + '_preview150.jpg' : './img/not-available.png';
+	    };
+	
+	    return '\n    <div class="card goods-tile-card" data-good-id="' + item.id + '">\n      <img class="card-img-top" src="' + getImg(item.img_url) + '" alt="' + item.name + '" title="' + item.name + '">\n      <div class="card-body ' + (Number(item.count) ? 'goods-tile-title' : '') + '">\n        <p class="card-text">' + (Number(item.count) ? Number(item.count).toFixed(2) : '') + '</p>\n      </div>\n    </div>';
+	  },
+	  drawGoodsTable: function drawGoodsTable(goodsData, container, handler) {
+	    var _this = this;
+	
+	    container.innerHTML = '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u2116</div>\n        <div class="catalog-groups-column">\u0422\u043E\u0432\u0430\u0440</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E</div>\n        <div class="catalog-groups-column">\u0420\u0435\u0434.</div>\n      </div>\n    ';
+	    if (goodsData) {
+	      goodsData.forEach(function (good, index) {
+	        container.insertAdjacentHTML('beforeend', _this.getGoodString(good, index));
+	        container.lastChild.addEventListener('click', function () {
+	          _storage2.default.currentGoodId = good.id;
+	          handler(good);
+	        });
+	      });
+	    } else {
+	      container.innerHTML = 'Пусто';
+	    }
+	  },
+	  drawGoodsSearch: function drawGoodsSearch(goodsData, container, handler) {
+	    var _this2 = this;
+	
+	    container.innerHTML = '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u2116</div>\n        <div class="catalog-groups-column">\u0422\u043E\u0432\u0430\u0440</div>\n      </div>\n    ';
+	    if (goodsData) {
+	      goodsData.forEach(function (good, index) {
+	        container.insertAdjacentHTML('beforeend', _this2.getGoodStringSearch(good, index));
+	        container.lastChild.addEventListener('click', function () {
+	          _storage2.default.currentGoodId = good.id;
+	          handler(good);
+	        });
+	      });
+	    } else {
+	      container.innerHTML = 'Пусто';
+	    }
+	  },
+	  drawGoodsMetro: function drawGoodsMetro(goodsData, container, handler) {
+	    var _this3 = this;
+	
+	    if (goodsData) {
+	      container.innerHTML = '<div class="goods-tile"></div>';
+	      goodsData.forEach(function (good, index) {
+	        container.firstChild.insertAdjacentHTML('beforeend', _this3.getGoodTile(good, index));
+	        container.firstChild.lastChild.addEventListener('click', function () {
+	          _storage2.default.currentGoodId = good.id;
+	          handler(good);
+	        });
+	      });
+	    } else {
+	      container.innerHTML = 'Пусто';
+	    }
+	  }
+	};
+	
+	// отрисовка списка товаров по данным
+	var drawGoods = function drawGoods(goodsList, container, handler, viewFlag) {
+	  console.log(goodsList);
+	  if (viewFlag === 'search') {
+	    markup.drawGoodsSearch(goodsList, container, handler);
+	  } else if (_storage2.default.goodsViewMode === 'string' || viewFlag === 'string') {
+	    markup.drawGoodsTable(goodsList, container, handler);
+	  } else if (_storage2.default.goodsViewMode === 'metro') {
+	    markup.drawGoodsMetro(goodsList, container, handler);
+	  }
+	};
+	
+	exports.default = {
+	  draw: drawGoods
+	};
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _storage = __webpack_require__(1);
+	
+	var _storage2 = _interopRequireDefault(_storage);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var markup = {
+	  getElement: function getElement(item, index) {
+	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '" data-group-index="' + index + '" data-group-level="' + item.level + '" data-group-name="' + item.name + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n      <div class="d-flex justify-content-between align-items-center" style="padding-right: 34px;">\n        <span> ' + (item.count ? item.count : '') + ' </span>\n      </div>\n    </div>';
+	  },
+	  getElementExtended: function getElementExtended(item, index) {
+	    return '\n    <div class="catalog-groups-header">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + item.name + '</div>\n        <div class="catalog-groups-column">' + item.markup_group + '%</div>\n        <div class="catalog-groups-column">' + (item.count ? item.count : '') + '</div>\n        <div class="catalog-groups-column">\n          <button type="button" class="btn p-0 icon-btn icon-btn__edit--black"></button>\n        </div>\n    </div>';
+	  },
+	  getElementReports: function getElementReports(item, index) {
+	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n      <div class="d-flex justify-content-between align-items-center" style="padding-right: 34px;">\n        <div><input class="form-check-input position-static report-groups-switch" type="checkbox" value="' + item.id + '" checked></div>\n      </div>\n    </div>';
+	  },
+	  drawDataInContainer: function drawDataInContainer(groupsData, container, handler) {
+	    var _this = this;
+	
+	    groupsData.forEach(function (group, index) {
+	      container.insertAdjacentHTML('beforeend', _this.getElement(group, index));
+	      container.lastChild.addEventListener('click', function () {
+	        _storage2.default.currentGroupId = group.id;
+	        _storage2.default.currentGroupName = group.name;
+	        _storage2.default.currentGroupLevel = group.level;
+	        handler();
+	      });
+	    });
+	  },
+	  drawDataInContainerExtended: function drawDataInContainerExtended(groupsData, container, handler) {
+	    var _this2 = this;
+	
+	    groupsData.forEach(function (group, index) {
+	      container.insertAdjacentHTML('beforeend', _this2.getElementExtended(group, index));
+	      container.lastChild.addEventListener('click', function (evt) {
+	        _storage2.default.currentGroupId = group.id;
+	        _storage2.default.currentGroupName = group.name;
+	        _storage2.default.currentGroupLevel = group.level;
+	        _storage2.default.currentGroupMarkup = group.markup_group;
+	        _storage2.default.currentGroupCount = group.count;
+	        handler(evt);
+	      });
+	    });
+	  },
+	  drawDataInContainerReports: function drawDataInContainerReports(groupsData, container) {
+	    var _this3 = this;
+	
+	    groupsData.forEach(function (group, index) {
+	      container.insertAdjacentHTML('beforeend', _this3.getElementReports(group, index));
+	    });
+	  }
+	};
+	
+	// отрисовка списка групп по данным
+	var drawGroups = function drawGroups(groupsList, container, handler) {
+	  container.innerHTML = '';
+	  if (groupsList.length > 0) {
+	    markup.drawDataInContainer(groupsList, container, handler);
+	  } else {
+	    container.innerHTML = 'Списка групп для этого предприятия еще нет';
+	  }
+	};
+	
+	// расширенная отрисовка списка групп для страницы КАТАЛОГ/ГРУППЫ ТОВАРОВ
+	var drawGroupsExtended = function drawGroupsExtended(groupsList, container, handler) {
+	  container.innerHTML = '\n    <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u2116</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0446\u0435\u043D\u043A\u0430</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B-\u0432\u043E \u0442\u043E\u0432\u0430\u0440\u043E\u0432</div>\n        <div class="catalog-groups-column">\u0420\u0435\u0434.</div>\n    </div>';
+	
+	  if (groupsList.length > 0) {
+	    markup.drawDataInContainerExtended(groupsList, container, handler);
+	  } else {
+	    container.innerHTML = 'Списка групп для этого предприятия еще нет';
+	  }
+	};
+	
+	// отрисовка списка групп по данным
+	var drawGroupsReports = function drawGroupsReports(groupsList, container, handler) {
+	  container.innerHTML = '';
+	  if (groupsList.length > 0) {
+	    markup.drawDataInContainerReports(groupsList, container);
+	  } else {
+	    container.innerHTML = 'Списка групп для этого предприятия еще нет';
+	  }
+	};
+	
+	exports.default = {
+	  draw: drawGroups,
+	  drawCatalog: drawGroupsExtended,
+	  drawReports: drawGroupsReports
+	};
+
+/***/ }),
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5328,7 +5743,7 @@
 	};
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5526,7 +5941,7 @@
 	};
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5551,19 +5966,19 @@
 	
 	var _universalSearch2 = _interopRequireDefault(_universalSearch);
 	
-	var _catalog__groupsDelete = __webpack_require__(39);
+	var _catalog__groupsDelete = __webpack_require__(41);
 	
 	var _catalog__groupsDelete2 = _interopRequireDefault(_catalog__groupsDelete);
 	
-	var _catalog__groupsAdd = __webpack_require__(40);
+	var _catalog__groupsAdd = __webpack_require__(42);
 	
 	var _catalog__groupsAdd2 = _interopRequireDefault(_catalog__groupsAdd);
 	
-	var _catalog__goods = __webpack_require__(42);
+	var _catalog__goods = __webpack_require__(44);
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
-	var _universalGroupsList = __webpack_require__(51);
+	var _universalGroupsList = __webpack_require__(37);
 	
 	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
 	
@@ -5739,7 +6154,7 @@
 	};
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5760,7 +6175,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalog__groups = __webpack_require__(38);
+	var _catalog__groups = __webpack_require__(40);
 	
 	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
@@ -5816,7 +6231,7 @@
 	};
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5833,11 +6248,11 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(41);
+	var _formTools = __webpack_require__(43);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalog__groups = __webpack_require__(38);
+	var _catalog__groups = __webpack_require__(40);
 	
 	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
@@ -5920,7 +6335,7 @@
 	};
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6189,7 +6604,7 @@
 	};
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6206,35 +6621,35 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalog__goodsExpress = __webpack_require__(43);
+	var _catalog__goodsExpress = __webpack_require__(45);
 	
 	var _catalog__goodsExpress2 = _interopRequireDefault(_catalog__goodsExpress);
 	
-	var _catalog__goodsStock = __webpack_require__(44);
+	var _catalog__goodsStock = __webpack_require__(46);
 	
 	var _catalog__goodsStock2 = _interopRequireDefault(_catalog__goodsStock);
 	
-	var _catalog__goodsEdit = __webpack_require__(45);
+	var _catalog__goodsEdit = __webpack_require__(47);
 	
 	var _catalog__goodsEdit2 = _interopRequireDefault(_catalog__goodsEdit);
 	
-	var _catalog__groups = __webpack_require__(38);
+	var _catalog__groups = __webpack_require__(40);
 	
 	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
-	var _catalog__goodsGetStock = __webpack_require__(47);
+	var _catalog__goodsGetStock = __webpack_require__(49);
 	
 	var _catalog__goodsGetStock2 = _interopRequireDefault(_catalog__goodsGetStock);
 	
-	var _catalog__goodsGetKeywords = __webpack_require__(48);
+	var _catalog__goodsGetKeywords = __webpack_require__(50);
 	
 	var _catalog__goodsGetKeywords2 = _interopRequireDefault(_catalog__goodsGetKeywords);
 	
-	var _catalog__goodsAdd = __webpack_require__(49);
+	var _catalog__goodsAdd = __webpack_require__(51);
 	
 	var _catalog__goodsAdd2 = _interopRequireDefault(_catalog__goodsAdd);
 	
-	var _universalGoodsList = __webpack_require__(50);
+	var _universalGoodsList = __webpack_require__(36);
 	
 	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
@@ -6753,7 +7168,7 @@
 	};
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6770,7 +7185,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(41);
+	var _formTools = __webpack_require__(43);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -6861,7 +7276,7 @@
 	};
 
 /***/ }),
-/* 44 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6878,7 +7293,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(41);
+	var _formTools = __webpack_require__(43);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -6963,7 +7378,7 @@
 	};
 
 /***/ }),
-/* 45 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6980,15 +7395,15 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(41);
+	var _formTools = __webpack_require__(43);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _tools3 = __webpack_require__(46);
+	var _tools3 = __webpack_require__(48);
 	
 	var _tools4 = _interopRequireDefault(_tools3);
 	
-	var _catalog__goods = __webpack_require__(42);
+	var _catalog__goods = __webpack_require__(44);
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
@@ -7204,7 +7619,7 @@
 	};
 
 /***/ }),
-/* 46 */
+/* 48 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -7263,7 +7678,7 @@
 	};
 
 /***/ }),
-/* 47 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7332,7 +7747,7 @@
 	};
 
 /***/ }),
-/* 48 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7345,7 +7760,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _catalog__goods = __webpack_require__(42);
+	var _catalog__goods = __webpack_require__(44);
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
@@ -7361,7 +7776,7 @@
 	
 	var _reference__keywords2 = _interopRequireDefault(_reference__keywords);
 	
-	var _catalog__goodsEdit = __webpack_require__(45);
+	var _catalog__goodsEdit = __webpack_require__(47);
 	
 	var _catalog__goodsEdit2 = _interopRequireDefault(_catalog__goodsEdit);
 	
@@ -7444,7 +7859,7 @@
 	};
 
 /***/ }),
-/* 49 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7461,15 +7876,15 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(41);
+	var _formTools = __webpack_require__(43);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalog__groups = __webpack_require__(38);
+	var _catalog__groups = __webpack_require__(40);
 	
 	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
-	var _tools3 = __webpack_require__(46);
+	var _tools3 = __webpack_require__(48);
 	
 	var _tools4 = _interopRequireDefault(_tools3);
 	
@@ -7596,205 +8011,6 @@
 	  stop: function stop() {
 	    _formTools2.default.reset();
 	  }
-	};
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _storage = __webpack_require__(1);
-	
-	var _storage2 = _interopRequireDefault(_storage);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var markup = {
-	  getGoodString: function getGoodString(item, index) {
-	
-	    return '\n      <div class="catalog-groups-header" data-good-id="' + item.id + '">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + item.name + '</div>\n        <div class="catalog-groups-column">' + (Number(item.count) ? Number(item.count).toFixed(2) : '') + '</div>\n        <div class="catalog-groups-column"><button type="button" class="btn p-0 bg-white icon-btn icon-btn__go"></button></div>\n      </div>';
-	  },
-	  getGoodStringSearch: function getGoodStringSearch(item, index) {
-	
-	    return '\n      <div class="catalog-groups-header" data-good-id="' + item.id + '">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + item.name + '</div>\n\n      </div>';
-	  },
-	  getGoodTile: function getGoodTile(item, index) {
-	
-	    var getImg = function getImg(imgUrl) {
-	      return imgUrl ? 'https://lopos.bidone.ru/users/600a5357/images/' + imgUrl + '_preview150.jpg' : './img/not-available.png';
-	    };
-	
-	    return '\n    <div class="card goods-tile-card" data-good-id="' + item.id + '">\n      <img class="card-img-top" src="' + getImg(item.img_url) + '" alt="' + item.name + '" title="' + item.name + '">\n      <div class="card-body ' + (Number(item.count) ? 'goods-tile-title' : '') + '">\n        <p class="card-text">' + (Number(item.count) ? Number(item.count).toFixed(2) : '') + '</p>\n      </div>\n    </div>';
-	  },
-	  drawGoodsTable: function drawGoodsTable(goodsData, container, handler) {
-	    var _this = this;
-	
-	    container.innerHTML = '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u2116</div>\n        <div class="catalog-groups-column">\u0422\u043E\u0432\u0430\u0440</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E</div>\n        <div class="catalog-groups-column">\u0420\u0435\u0434.</div>\n      </div>\n    ';
-	    if (goodsData) {
-	      goodsData.forEach(function (good, index) {
-	        container.insertAdjacentHTML('beforeend', _this.getGoodString(good, index));
-	        container.lastChild.addEventListener('click', function () {
-	          _storage2.default.currentGoodId = good.id;
-	          handler(good);
-	        });
-	      });
-	    } else {
-	      container.innerHTML = 'Пусто';
-	    }
-	  },
-	  drawGoodsSearch: function drawGoodsSearch(goodsData, container, handler) {
-	    var _this2 = this;
-	
-	    container.innerHTML = '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u2116</div>\n        <div class="catalog-groups-column">\u0422\u043E\u0432\u0430\u0440</div>\n      </div>\n    ';
-	    if (goodsData) {
-	      goodsData.forEach(function (good, index) {
-	        container.insertAdjacentHTML('beforeend', _this2.getGoodStringSearch(good, index));
-	        container.lastChild.addEventListener('click', function () {
-	          _storage2.default.currentGoodId = good.id;
-	          handler(good);
-	        });
-	      });
-	    } else {
-	      container.innerHTML = 'Пусто';
-	    }
-	  },
-	  drawGoodsMetro: function drawGoodsMetro(goodsData, container, handler) {
-	    var _this3 = this;
-	
-	    if (goodsData) {
-	      container.innerHTML = '<div class="goods-tile"></div>';
-	      goodsData.forEach(function (good, index) {
-	        container.firstChild.insertAdjacentHTML('beforeend', _this3.getGoodTile(good, index));
-	        container.firstChild.lastChild.addEventListener('click', function () {
-	          _storage2.default.currentGoodId = good.id;
-	          handler(good);
-	        });
-	      });
-	    } else {
-	      container.innerHTML = 'Пусто';
-	    }
-	  }
-	};
-	
-	// отрисовка списка товаров по данным
-	var drawGoods = function drawGoods(goodsList, container, handler, viewFlag) {
-	  console.log(goodsList);
-	  if (viewFlag === 'search') {
-	    markup.drawGoodsSearch(goodsList, container, handler);
-	  } else if (_storage2.default.goodsViewMode === 'string' || viewFlag === 'string') {
-	    markup.drawGoodsTable(goodsList, container, handler);
-	  } else if (_storage2.default.goodsViewMode === 'metro') {
-	    markup.drawGoodsMetro(goodsList, container, handler);
-	  }
-	};
-	
-	exports.default = {
-	  draw: drawGoods
-	};
-
-/***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _storage = __webpack_require__(1);
-	
-	var _storage2 = _interopRequireDefault(_storage);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var markup = {
-	  getElement: function getElement(item, index) {
-	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '" data-group-index="' + index + '" data-group-level="' + item.level + '" data-group-name="' + item.name + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n      <div class="d-flex justify-content-between align-items-center" style="padding-right: 34px;">\n        <span> ' + (item.count ? item.count : '') + ' </span>\n      </div>\n    </div>';
-	  },
-	  getElementExtended: function getElementExtended(item, index) {
-	    return '\n    <div class="catalog-groups-header">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + item.name + '</div>\n        <div class="catalog-groups-column">' + item.markup_group + '%</div>\n        <div class="catalog-groups-column">' + (item.count ? item.count : '') + '</div>\n        <div class="catalog-groups-column">\n          <button type="button" class="btn p-0 icon-btn icon-btn__edit--black"></button>\n        </div>\n    </div>';
-	  },
-	  getElementReports: function getElementReports(item, index) {
-	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n      <div class="d-flex justify-content-between align-items-center" style="padding-right: 34px;">\n        <div><input class="form-check-input position-static report-groups-switch" type="checkbox" value="' + item.id + '" checked></div>\n      </div>\n    </div>';
-	  },
-	  drawDataInContainer: function drawDataInContainer(groupsData, container, handler) {
-	    var _this = this;
-	
-	    groupsData.forEach(function (group, index) {
-	      container.insertAdjacentHTML('beforeend', _this.getElement(group, index));
-	      container.lastChild.addEventListener('click', function () {
-	        _storage2.default.currentGroupId = group.id;
-	        _storage2.default.currentGroupName = group.name;
-	        _storage2.default.currentGroupLevel = group.level;
-	        handler();
-	      });
-	    });
-	  },
-	  drawDataInContainerExtended: function drawDataInContainerExtended(groupsData, container, handler) {
-	    var _this2 = this;
-	
-	    groupsData.forEach(function (group, index) {
-	      container.insertAdjacentHTML('beforeend', _this2.getElementExtended(group, index));
-	      container.lastChild.addEventListener('click', function (evt) {
-	        _storage2.default.currentGroupId = group.id;
-	        _storage2.default.currentGroupName = group.name;
-	        _storage2.default.currentGroupLevel = group.level;
-	        _storage2.default.currentGroupMarkup = group.markup_group;
-	        _storage2.default.currentGroupCount = group.count;
-	        handler(evt);
-	      });
-	    });
-	  },
-	  drawDataInContainerReports: function drawDataInContainerReports(groupsData, container) {
-	    var _this3 = this;
-	
-	    groupsData.forEach(function (group, index) {
-	      container.insertAdjacentHTML('beforeend', _this3.getElementReports(group, index));
-	    });
-	  }
-	};
-	
-	// отрисовка списка групп по данным
-	var drawGroups = function drawGroups(groupsList, container, handler) {
-	  container.innerHTML = '';
-	  if (groupsList.length > 0) {
-	    markup.drawDataInContainer(groupsList, container, handler);
-	  } else {
-	    container.innerHTML = 'Списка групп для этого предприятия еще нет';
-	  }
-	};
-	
-	// расширенная отрисовка списка групп для страницы КАТАЛОГ/ГРУППЫ ТОВАРОВ
-	var drawGroupsExtended = function drawGroupsExtended(groupsList, container, handler) {
-	  container.innerHTML = '\n    <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u2116</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0446\u0435\u043D\u043A\u0430</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B-\u0432\u043E \u0442\u043E\u0432\u0430\u0440\u043E\u0432</div>\n        <div class="catalog-groups-column">\u0420\u0435\u0434.</div>\n    </div>';
-	
-	  if (groupsList.length > 0) {
-	    markup.drawDataInContainerExtended(groupsList, container, handler);
-	  } else {
-	    container.innerHTML = 'Списка групп для этого предприятия еще нет';
-	  }
-	};
-	
-	// отрисовка списка групп по данным
-	var drawGroupsReports = function drawGroupsReports(groupsList, container, handler) {
-	  container.innerHTML = '';
-	  if (groupsList.length > 0) {
-	    markup.drawDataInContainerReports(groupsList, container);
-	  } else {
-	    container.innerHTML = 'Списка групп для этого предприятия еще нет';
-	  }
-	};
-	
-	exports.default = {
-	  draw: drawGroups,
-	  drawCatalog: drawGroupsExtended,
-	  drawReports: drawGroupsReports
 	};
 
 /***/ }),
@@ -8067,7 +8283,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(41);
+	var _formTools = __webpack_require__(43);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -8240,9 +8456,28 @@
 	var currentGoods = [];
 	// #################### РАЗМЕТКА ДЛЯ ПОМЕЩЕНИЯ ТОВАРОВ В КОЛОНКИ ######################
 	
-	var getGoodString = function getGoodString(id, name, good, index, value, classDanger) {
-	  return '\n  <div class="goods-string ' + classDanger + '" data-good-id="' + id + '">\n    <div>\n      <span class="reference-row-number">' + index + '</span> <span>' + name + '</span>\n    </div>\n    <div>\n      <span>' + (good ? good : 'X') + '</span>\n      <span>' + value + '</span>\n    </div>\n  </div>';
+	var getMaterialString = function getMaterialString(id, name, good, index, value, classDanger) {
+	
+	  return '\n      <div class="catalog-groups-header ' + classDanger + '" data-good-id="' + id + '">\n        <div class="catalog-groups-column">' + index + '</div>\n        <div class="catalog-groups-column">' + name + '</div>\n        <div class="catalog-groups-column ' + (good ? good : 'text-muted') + '">' + (good ? good : 'x') + '</div>\n        <div class="catalog-groups-column">' + value + '</div>\n      </div>';
 	};
+	
+	var getGoodString = function getGoodString(id, name, good, index, value, classDanger) {
+	
+	  return '\n      <div class="catalog-groups-header ' + classDanger + '" data-good-id="' + id + '">\n        <div class="catalog-groups-column">' + index + '</div>\n        <div class="catalog-groups-column">' + name + '</div>\n        <div class="catalog-groups-column">' + value + '</div>\n      </div>';
+	};
+	
+	/*
+	return `
+	<div class="goods-string ${classDanger}" data-good-id="${id}">
+	  <div>
+	    <span class="reference-row-number">${index}</span> <span>${name}</span>
+	  </div>
+	  <div>
+	    <span>${(good) ? good : 'X' }</span>
+	    <span>${value}</span>
+	  </div>
+	</div>`;
+	*/
 	
 	var drawGoodsToColumns = function drawGoodsToColumns() {
 	  var materialNumber = 0;
@@ -8251,13 +8486,16 @@
 	  goodColumnBody.innerHTML = '';
 	  manufactureCountBtn.removeAttribute('disabled');
 	  currentGoods = [];
+	  materialColumnBody.innerHTML = '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u2116</div>\n        <div class="catalog-groups-column">\u0422\u043E\u0432\u0430\u0440</div>\n        <div class="catalog-groups-column">\u041D\u0430\u043B</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B</div>\n      </div>\n    ';
+	
+	  goodColumnBody.innerHTML = '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u2116</div>\n        <div class="catalog-groups-column">\u0422\u043E\u0432\u0430\u0440</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B</div>\n      </div>\n    ';
 	  selectedNomenklatureCards.forEach(function (card) {
 	    if (card.content) {
 	      card.content.forEach(function (good) {
 	        currentGoods.push(good);
 	        if (good.value < 0) {
 	          materialNumber++;
-	          materialColumnBody.insertAdjacentHTML('beforeend', getGoodString(good.id, good.name, good.good, materialNumber, good.value * card.k, ''));
+	          materialColumnBody.insertAdjacentHTML('beforeend', getMaterialString(good.id, good.name, good.good, materialNumber, good.value * card.k, ''));
 	        } else {
 	          goodNumber++;
 	          goodColumnBody.insertAdjacentHTML('beforeend', getGoodString(good.id, good.name, '', goodNumber, good.value * card.k, ''));
@@ -8288,13 +8526,14 @@
 	var onSuccessCountLoad = function onSuccessCountLoad(data) {
 	  var materialNumber = 0;
 	  var goodNumber = 0;
-	  materialColumnBody.innerHTML = '';
-	  goodColumnBody.innerHTML = '';
+	  materialColumnBody.innerHTML = '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u2116</div>\n        <div class="catalog-groups-column">\u0422\u043E\u0432\u0430\u0440</div>\n        <div class="catalog-groups-column">\u041D\u0430\u043B</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B</div>\n      </div>\n    ';
+	
+	  goodColumnBody.innerHTML = '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u2116</div>\n        <div class="catalog-groups-column">\u0422\u043E\u0432\u0430\u0440</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B</div>\n      </div>\n    ';
 	  for (var i = 0; i < data.data.length; i++) {
 	    if (currentGoods[i].value < 0) {
 	      materialNumber++;
 	      var classDanger = +data.data[i].value + +currentGoods[i].value < 0 ? 'bg-danger' : '';
-	      materialColumnBody.insertAdjacentHTML('beforeend', getGoodString(currentGoods[i].id, currentGoods[i].name, data.data[i].value, materialNumber, currentGoods[i].value, classDanger));
+	      materialColumnBody.insertAdjacentHTML('beforeend', getMaterialString(currentGoods[i].id, currentGoods[i].name, data.data[i].value, materialNumber, currentGoods[i].value, classDanger));
 	    } else {
 	      goodNumber++;
 	      goodColumnBody.insertAdjacentHTML('beforeend', getGoodString(currentGoods[i].id, currentGoods[i].name, data.data[i].value, goodNumber, currentGoods[i].value));
@@ -9108,7 +9347,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _universalGroupsList = __webpack_require__(51);
+	var _universalGroupsList = __webpack_require__(37);
 	
 	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
 	
@@ -9411,10 +9650,10 @@
 	  console.log(reportsData);
 	  var dashboard = {
 	    money: reportsData.data.balance_money,
-	    form: reportsData.data.today_count_forms,
-	    proceeds: reportsData.data.today_total_proceeds,
 	    profit: reportsData.data.today_total_profit,
-	    purchase: reportsData.data.today_total_purchase
+	    purchase: reportsData.data.today_total_purchase,
+	    proceeds: reportsData.data.today_total_proceeds,
+	    form: reportsData.data.today_count_forms
 	  };
 	
 	  if (_storage2.default.currentStockId === 'all') {
@@ -9501,7 +9740,7 @@
 	
 	var _catalog__cardsAddResource2 = _interopRequireDefault(_catalog__cardsAddResource);
 	
-	var _universalGoodsList = __webpack_require__(50);
+	var _universalGoodsList = __webpack_require__(36);
 	
 	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
@@ -9509,7 +9748,7 @@
 	
 	var _universalSearch2 = _interopRequireDefault(_universalSearch);
 	
-	var _universalGroupsList = __webpack_require__(51);
+	var _universalGroupsList = __webpack_require__(37);
 	
 	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
 	
@@ -9831,7 +10070,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(41);
+	var _formTools = __webpack_require__(43);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -9965,7 +10204,7 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(41);
+	var _formTools = __webpack_require__(43);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -10074,11 +10313,11 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _catalog__groups = __webpack_require__(38);
+	var _catalog__groups = __webpack_require__(40);
 	
 	var _catalog__groups2 = _interopRequireDefault(_catalog__groups);
 	
-	var _catalog__goods = __webpack_require__(42);
+	var _catalog__goods = __webpack_require__(44);
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
@@ -10086,7 +10325,7 @@
 	
 	var _universalKeywords2 = _interopRequireDefault(_universalKeywords);
 	
-	var _universalGoodsList = __webpack_require__(50);
+	var _universalGoodsList = __webpack_require__(36);
 	
 	var _universalGoodsList2 = _interopRequireDefault(_universalGoodsList);
 	
@@ -10416,11 +10655,11 @@
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
-	var _formTools = __webpack_require__(41);
+	var _formTools = __webpack_require__(43);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
-	var _catalog__goods = __webpack_require__(42);
+	var _catalog__goods = __webpack_require__(44);
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
@@ -10537,7 +10776,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _tools = __webpack_require__(46);
+	var _tools = __webpack_require__(48);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
@@ -10561,7 +10800,7 @@
 	
 	var _operationsGoodAdd2 = _interopRequireDefault(_operationsGoodAdd);
 	
-	var _catalog__goods = __webpack_require__(42);
+	var _catalog__goods = __webpack_require__(44);
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
@@ -11437,7 +11676,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _universalGroupsList = __webpack_require__(51);
+	var _universalGroupsList = __webpack_require__(37);
 	
 	var _universalGroupsList2 = _interopRequireDefault(_universalGroupsList);
 	
@@ -12234,7 +12473,7 @@
 	  value: true
 	});
 	
-	var _formTools = __webpack_require__(41);
+	var _formTools = __webpack_require__(43);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -12307,7 +12546,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _tools = __webpack_require__(46);
+	var _tools = __webpack_require__(48);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
@@ -12335,7 +12574,7 @@
 	
 	var _operations__tradeDiscount2 = _interopRequireDefault(_operations__tradeDiscount);
 	
-	var _catalog__goods = __webpack_require__(42);
+	var _catalog__goods = __webpack_require__(44);
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
@@ -12947,7 +13186,7 @@
 	  value: true
 	});
 	
-	var _formTools = __webpack_require__(41);
+	var _formTools = __webpack_require__(43);
 	
 	var _formTools2 = _interopRequireDefault(_formTools);
 	
@@ -13010,7 +13249,7 @@
 	
 	var _storage2 = _interopRequireDefault(_storage);
 	
-	var _tools = __webpack_require__(46);
+	var _tools = __webpack_require__(48);
 	
 	var _tools2 = _interopRequireDefault(_tools);
 	
@@ -13034,7 +13273,7 @@
 	
 	var _operationsGoodAdd2 = _interopRequireDefault(_operationsGoodAdd);
 	
-	var _catalog__goods = __webpack_require__(42);
+	var _catalog__goods = __webpack_require__(44);
 	
 	var _catalog__goods2 = _interopRequireDefault(_catalog__goods);
 	
