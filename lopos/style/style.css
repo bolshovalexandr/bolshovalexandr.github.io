@@ -110,6 +110,14 @@
   background-size: cover;
   margin-right: 5px; }
 
+.icon-btn__unlink {
+  background-image: url(../img/icons8-unlink.png);
+  background-size: cover;
+  margin-right: 5px;
+  background-color: #fff;
+  width: 24px;
+  height: 24px; }
+
 .icon-btn__widescreen {
   background-image: url(../img/st_fon_selected.png);
   background-size: cover;
@@ -758,6 +766,9 @@ input[type="date"] {
 
 a.disabled img {
   opacity: 0.4; }
+
+#card-resources-groups-body {
+  margin: 10px; }
 
 /*
 @import "src/sass/components/app.scss";

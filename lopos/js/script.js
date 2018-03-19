@@ -3892,14 +3892,14 @@
 	
 	    /*
 	    return `
-	      <input type="radio" id="${item.id}" data-stock-id="${item.id}" name="contact" value="email" class="d-none">
-	      <label style="padding-left: 34px;" for="${item.id}"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="${item.id}" data-stock-name="${item.name}">
+	     <input type="radio" id="${item.id}" data-stock-id="${item.id}" name="contact" value="email" class="d-none">
+	     <label style="padding-left: 34px;" for="${item.id}"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="${item.id}" data-stock-name="${item.name}">
 	      <div><span class="reference-row-number">${index + 1}</span> ${item.name}</div>
 	      <div class="d-flex justify-content-between align-items-center">
 	        ${currentStockFlag}
 	      </div>
 	      </label>`;
-	      */
+	     */
 	    return '\n    <input type="radio" id="' + item.id + '" data-stock-id="' + item.id + '" name="contact" value="email" class="d-none">\n\n    <label class="reference-header" for="' + item.id + '" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '">\n        <div class="reference-column">' + (index + 1) + '</div>\n        <div class="reference-column">' + item.name + currentStockFlag + '</div>\n    </label>\n';
 	  },
 	  drawDataInContainer: function drawDataInContainer(enterprisesData) {
@@ -5018,7 +5018,7 @@
 	  cardResourcesGroupModalReturnBtn.classList.remove('invisible');
 	  cardResourcesSearchInput.addEventListener('input', onGoodsSearch);
 	  cardResourcesSearchInput.removeEventListener('input', onGroupsSearch);
-	  _universalGoodsList2.default.draw(data, cardResourcesGroupModalBody, onGoodClick, 'string');
+	  _universalGoodsList2.default.draw(data, cardResourcesGroupModalBody, onGoodClick, 'search');
 	};
 	
 	var onGroupClick = function onGroupClick() {
@@ -5094,7 +5094,7 @@
 	
 	var getKeywordsLinkString = function getKeywordsLinkString(index, id, name) {
 	
-	  return '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + name + '</div>\n        <div class="catalog-groups-column">\u0443\u0434\u0430\u043B\u0438\u0442\u044C \u0441\u0432\u044F\u0437\u044C</div>\n      </div>';
+	  return '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + name + '</div>\n        <div class="catalog-groups-column">\n          <button id="add-keyword-link-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__unlink"></button>\n        </div>\n      </div>';
 	};
 	
 	var onDeleteLink = function onDeleteLink(answer) {
@@ -5109,7 +5109,11 @@
 	
 	var showKeywordLinks = function showKeywordLinks(data) {
 	  console.log(data);
-	  listKeywordsLinks.innerHTML = '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u2116</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435</div>\n        <div class="catalog-groups-column"></div>\n      </div>';
+	
+	  listKeywordsLinks.innerHTML = '';
+	  listKeywordsLinks.insertAdjacentHTML('afterbegin', '\n    <div class="catalog-header">\n      <h6>\u0422\u043E\u0432\u0430\u0440\u044B, \u043A \u043A\u043E\u0442\u043E\u0440\u044B\u043C \u043F\u0440\u0438\u0432\u044F\u0437\u0430\u043D\u043E \u043A\u043B\u044E\u0447\u0435\u0432\u043E\u0435 \u0441\u043B\u043E\u0432\u043E</h6>\n      <button id="add-keyword-link-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__add"></button>\n    </div>\n    <div class="catalog-groups-header" style="background-color: #ccc">\n      <div class="catalog-groups-column">\u2116</div>\n      <div class="catalog-groups-column">\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435</div>\n      <div class="catalog-groups-column"></div>\n    </div>\n  ');
+	
+	  listKeywordsLinks.querySelector('#add-keyword-link-btn').addEventListener('click', onResourcesAddBtn);
 	
 	  data.data.forEach(function (link, index) {
 	    listKeywordsLinks.insertAdjacentHTML('beforeend', getKeywordsLinkString(index, link.id, link.name));
@@ -5124,8 +5128,6 @@
 	      };
 	    });
 	  });
-	  listKeywordsLinks.insertAdjacentHTML('beforeend', '<button id="" type="button" class="btn btn-success p-0 icon-btn icon-btn__add"></button>');
-	  listKeywordsLinks.lastChild.addEventListener('click', onResourcesAddBtn);
 	};
 	
 	// функция прячет страницу "справочники -> ключевые слова"
@@ -5460,7 +5462,19 @@
 	
 	var markup = {
 	  getElement: function getElement(item, index) {
-	    return '\n    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="' + item.id + '" data-group-index="' + index + '" data-group-level="' + item.level + '" data-group-name="' + item.name + '">\n      <div style="padding-left: 34px;">\n        <span class="reference-row-number">' + (index + 1) + '</span>\n        <span>' + item.name + '</span>\n      </div>\n      <div class="d-flex justify-content-between align-items-center" style="padding-right: 34px;">\n        <span> ' + (item.count ? item.count : '') + ' </span>\n      </div>\n    </div>';
+	    return '\n    <div class="catalog-groups-header">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + item.name + '</div>\n        <div class="catalog-groups-column">' + (item.count ? item.count : '') + '</div>\n    </div>';
+	    /*
+	    return `
+	    <div class="d-flex justify-content-between align-items-center reference-string" data-group-id="${item.id}" data-group-index="${index}" data-group-level="${item.level}" data-group-name="${item.name}">
+	      <div style="padding-left: 34px;">
+	        <span class="reference-row-number">${index + 1}</span>
+	        <span>${item.name}</span>
+	      </div>
+	      <div class="d-flex justify-content-between align-items-center" style="padding-right: 34px;">
+	        <span> ${(item.count) ? item.count : ''} </span>
+	      </div>
+	    </div>`;
+	    */
 	  },
 	  getElementExtended: function getElementExtended(item, index) {
 	    return '\n    <div class="catalog-groups-header">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + item.name + '</div>\n        <div class="catalog-groups-column">' + item.markup_group + '%</div>\n        <div class="catalog-groups-column">' + (item.count ? item.count : '') + '</div>\n        <div class="catalog-groups-column">\n          <button type="button" class="btn p-0 icon-btn icon-btn__edit--black"></button>\n        </div>\n    </div>';
@@ -5507,7 +5521,7 @@
 	
 	// отрисовка списка групп по данным
 	var drawGroups = function drawGroups(groupsList, container, handler) {
-	  container.innerHTML = '';
+	  container.innerHTML = '\n    <div class="catalog-groups-header">\n        <div class="catalog-groups-column">\u2116</div>\n        <div class="catalog-groups-column">\u041D\u0430\u0446\u0435\u043D\u043A\u0430</div>\n        <div class="catalog-groups-column">\u041A\u043E\u043B-\u0432\u043E \u0442\u043E\u0432\u0430\u0440\u043E\u0432</div>\n    </div>';
 	  if (groupsList.length > 0) {
 	    markup.drawDataInContainer(groupsList, container, handler);
 	  } else {
@@ -8713,8 +8727,20 @@
 	      container.innerHTML = 'Производственных карточек еще не создано';
 	    }
 	  },
-	  getResourceElement: function getResourceElement(item) {
-	    return '\n    <div class="d-flex justify-content-between reference-string" data-card-id="' + item.good_id + '"">\n      <div style="padding-left: 34px;">\n        ' + item.name + '\n      </div>\n      <div style="padding-right: 10px;">\n        ' + item.value + '\n      </div>\n\n    </div>';
+	  getResourceElement: function getResourceElement(item, number) {
+	
+	    return '\n    <div class="reference-header" data-card-id="' + item.good_id + '">\n      <div class="reference-column">' + number + '</div>\n      <div class="reference-column">' + item.name + '</div>\n      <div class="reference-column">' + item.value + '</div>\n    </div>\n    ';
+	    /*
+	    return `
+	    <div class="d-flex justify-content-between reference-string" data-card-id="${item.good_id}"">
+	      <div style="padding-left: 34px;">
+	        ${item.name}
+	      </div>
+	      <div style="padding-right: 10px;">
+	        ${item.value}
+	      </div>
+	    </div>`;
+	    */
 	  }
 	};
 
@@ -9397,16 +9423,19 @@
 	
 	// ############################## РАЗМЕТКА ДАШБОРДА #############
 	var dashboardTypes = {
+	  balance: 'Кол-во продаж',
 	  money: 'Баланс',
 	  form: 'Закупки',
 	  proceeds: 'Выручка',
-	  profit: 'Кол-во продаж',
 	  purchase: 'Прибыль'
 	};
 	
 	var getDashboardItem = function getDashboardItem(item) {
 	  console.log(item);
-	  return '\n    <div class="dashboard-item">\n      <div class="dashboard-status"></div>\n      <div>\n        <p>' + dashboardTypes[item[0]] + '</p>\n        <span>' + item[1] + '</span>\n      </div>\n    </div>';
+	  console.log(item[1]);
+	  // console.log(item[1].indexOf('.'));
+	  // console.log(item[1].split('.')[1]);
+	  return '\n    <div class="dashboard-item">\n      <div class="dashboard-status" style="background-color: #' + (item[1] && +item[1] > 0 ? '0f0' : 'f00') + '"></div>\n      <div>\n        <p>' + dashboardTypes[item[0]] + '</p>\n        <span>' + (item[1] && item[1].includes('.') ? Number(item[1]).toFixed(2) : item[1]) + '</span>\n      </div>\n    </div>';
 	};
 	
 	// ############################## ОТЧЕТ / ОСТАТОК ТОВАРА     ##############################
@@ -9649,8 +9678,8 @@
 	var onSuccessReportsLoad = function onSuccessReportsLoad(reportsData) {
 	  console.log(reportsData);
 	  var dashboard = {
-	    money: reportsData.data.balance_money,
-	    profit: reportsData.data.today_total_profit,
+	    money: reportsData.data.balance_goods_in_money,
+	    balance: reportsData.data.balance_money,
 	    purchase: reportsData.data.today_total_purchase,
 	    proceeds: reportsData.data.today_total_proceeds,
 	    form: reportsData.data.today_count_forms
@@ -9803,7 +9832,7 @@
 	  cardResourcesGroupModalReturnBtn.classList.remove('invisible');
 	  cardResourcesSearchInput.addEventListener('input', onGoodsSearch);
 	  cardResourcesSearchInput.removeEventListener('input', onGroupsSearch);
-	  _universalGoodsList2.default.draw(data, cardResourcesGroupModalBody, onGoodClick, 'string');
+	  _universalGoodsList2.default.draw(data, cardResourcesGroupModalBody, onGoodClick, 'search');
 	};
 	
 	var onGroupClick = function onGroupClick() {
@@ -9891,13 +9920,16 @@
 	
 	var onSuccessCardResourcesLoad = function onSuccessCardResourcesLoad(cardResourcesData) {
 	  console.log(cardResourcesData);
-	  cardResourcesResources.innerHTML = '';
-	  cardResourcesProduct.innerHTML = '';
+	  var numberResources = 1;
+	  var numberProduct = 1;
+	  cardResourcesResources.innerHTML = '\n    <div class="reference-header">\n        <div class="reference-column">\u2116</div>\n        <div class="reference-column">\u0422\u043E\u0432\u0430\u0440</div>\n        <div class="reference-column">\u041A\u043E\u043B</div>\n    </div>\n  ';
+	  cardResourcesProduct.innerHTML = '\n    <div class="reference-header">\n        <div class="reference-column">\u2116</div>\n        <div class="reference-column">\u0422\u043E\u0432\u0430\u0440</div>\n        <div class="reference-column">\u041A\u043E\u043B</div>\n    </div>\n  ';
 	  cardResourcesOldCost.innerHTML = +cardResourcesData.data.old_cost ? cardResourcesData.data.old_cost : '';
 	  cardResourcesNewPrice.innerHTML = +cardResourcesData.data.new_price ? cardResourcesData.data.new_price : '';
 	  cardName.innerHTML = cardResourcesData.data.name;
 	
 	  if (cardResourcesData.data.resours.length) {
+	
 	    cardResourcesData.data.resours.forEach(function (item) {
 	
 	      var onResourcesGoodClick = function onResourcesGoodClick(good) {
@@ -9911,13 +9943,15 @@
 	      };
 	      console.log(item.value < 0);
 	      if (item.value < 0) {
-	        cardResourcesResources.insertAdjacentHTML('beforeend', _catalogCards2.default.getResourceElement(item));
+	        cardResourcesResources.insertAdjacentHTML('beforeend', _catalogCards2.default.getResourceElement(item, numberResources));
 	        cardResourcesResources.lastChild.addEventListener('click', onResourcesGoodClick);
+	        numberResources++;
 	      } else {
 	        console.log('hi');
 	        console.log(_catalogCards2.default.getResourceElement(item));
-	        cardResourcesProduct.insertAdjacentHTML('beforeend', _catalogCards2.default.getResourceElement(item));
+	        cardResourcesProduct.insertAdjacentHTML('beforeend', _catalogCards2.default.getResourceElement(item, numberProduct));
 	        cardResourcesProduct.lastChild.addEventListener('click', onResourcesGoodClick);
+	        numberProduct++;
 	      }
 	      console.log(cardResourcesProduct);
 	    });
