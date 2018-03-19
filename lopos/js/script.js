@@ -3892,14 +3892,14 @@
 	
 	    /*
 	    return `
-	     <input type="radio" id="${item.id}" data-stock-id="${item.id}" name="contact" value="email" class="d-none">
-	     <label style="padding-left: 34px;" for="${item.id}"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="${item.id}" data-stock-name="${item.name}">
+	      <input type="radio" id="${item.id}" data-stock-id="${item.id}" name="contact" value="email" class="d-none">
+	      <label style="padding-left: 34px;" for="${item.id}"  class="d-flex justify-content-between align-items-center reference-string" data-stock-id="${item.id}" data-stock-name="${item.name}">
 	      <div><span class="reference-row-number">${index + 1}</span> ${item.name}</div>
 	      <div class="d-flex justify-content-between align-items-center">
 	        ${currentStockFlag}
 	      </div>
 	      </label>`;
-	     */
+	      */
 	    return '\n    <input type="radio" id="' + item.id + '" data-stock-id="' + item.id + '" name="contact" value="email" class="d-none">\n\n    <label class="reference-header" for="' + item.id + '" data-stock-id="' + item.id + '" data-stock-name="' + item.name + '">\n        <div class="reference-column">' + (index + 1) + '</div>\n        <div class="reference-column">' + item.name + currentStockFlag + '</div>\n    </label>\n';
 	  },
 	  drawDataInContainer: function drawDataInContainer(enterprisesData) {
@@ -5097,13 +5097,21 @@
 	  return '\n      <div class="catalog-groups-header">\n        <div class="catalog-groups-column">' + (index + 1) + '</div>\n        <div class="catalog-groups-column">' + name + '</div>\n        <div class="catalog-groups-column">\n          <button id="add-keyword-link-btn" type="button" class="btn btn-success p-0 icon-btn icon-btn__unlink"></button>\n        </div>\n      </div>';
 	};
 	
-	var onDeleteLink = function onDeleteLink(answer) {
+	var onDeleteSuccess = function onDeleteSuccess(answer) {
 	  console.log(answer);
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag/' + _storage2.default.currentKeywordId + '/compare_meta',
 	    data: 'view_last=0&token=' + _storage2.default.data.token,
 	    callbackSuccess: showKeywordLinks
+	  };
+	};
+	var onDeleteClick = function onDeleteClick(id) {
+	  _xhr2.default.request = {
+	    metod: 'DELETE',
+	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag/' + _storage2.default.currentKeywordId + '/compare_meta',
+	    data: 'good=' + id + '&token=' + _storage2.default.data.token,
+	    callbackSuccess: onDeleteSuccess
 	  };
 	};
 	
@@ -5120,11 +5128,10 @@
 	    console.log(listKeywordsCardEdit);
 	    console.log(listKeywordsCardEdit.lastChild);
 	    listKeywordsLinks.lastChild.lastElementChild.addEventListener('click', function () {
-	      _xhr2.default.request = {
-	        metod: 'DELETE',
-	        url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/1/business/' + _storage2.default.data.currentBusiness + '/tag/' + _storage2.default.currentKeywordId + '/compare_meta',
-	        data: 'good=' + link.id + '&token=' + _storage2.default.data.token,
-	        callbackSuccess: onDeleteLink
+	      _tools2.default.actionRequestModal = {
+	        title: 'Удаление',
+	        message: '\u0412\u044B \u0442\u043E\u0447\u043D\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u0441\u0432\u044F\u0437\u044C <b>' + link.name + '</b>',
+	        submitCallback: onDeleteClick.bind(null, link.id)
 	      };
 	    });
 	  });
