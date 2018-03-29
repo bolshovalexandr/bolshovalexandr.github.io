@@ -141,3 +141,14 @@ nav a:active {
 
 .social:hover {
   color: #00555d; }
+
+.feedback-modal {
+  display: flex;
+  justify-content: center;
+  margin: 20px; }
+
+.feedback-modal form {
+  width: 280px; }
+
+.feedback-modal fieldset {
+  display: flex; }

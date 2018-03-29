@@ -48,17 +48,33 @@
 	
 	// import auth from './tools/storage.js';
 	
-	var logo = document.querySelector('.logo.logo-white');
-	logo.addEventListener('click', function () {
+	var feedbackResponse = document.querySelector('#feedback-response');
+	var feedbackSend = document.querySelector('#feedback-send');
+	
+	var feedbackForm = document.forms.feedback;
+	
+	feedbackSend.addEventListener('click', function (evt) {
+	  evt.preventDefault();
+	
+	  feedbackResponse.innerHTML = 'отправляем...';
+	
 	  var xhr = new XMLHttpRequest();
-	  xhr.open('POST', 'https://precedent.herokuapp.com');
-	  var body = {
-	    "name": "DevD",
-	    "message": "часовой пояс",
-	    "contact": "Heroku external server TEST",
-	    "employee": "01"
+	
+	  xhr.open('POST', 'https://precedent.herokuapp.com/');
+	  xhr.setRequestHeader('content-type', 'application/json');
+	  var data = JSON.stringify({
+	    name: feedbackForm.name.value,
+	    message: feedbackForm.message.value,
+	    contact: feedbackForm.contact.value,
+	    employee: feedbackForm.employee.value
+	  });
+	  xhr.onreadystatechange = function () {
+	    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+	      var answer = JSON.parse(xhr.responseText);
+	      feedbackResponse.innerHTML = '\n\n        \u0423\u0432\u0430\u0436\u0430\u0435\u043C\u044B\u0439 <b>' + answer.name + '</b>,<br>\n        \u0412\u0430\u0448 \u0437\u0430\u043F\u0440\u043E\u0441 \u043F\u043E \u0442\u0435\u043C\u0435 \u043F\u0440\u0438\u043D\u044F\u0442 <b>' + answer.message + '</b> \u0438 \u043E\u0442\u043F\u0440\u0430\u0432\u043B\u0435\u043D \u043D\u0430 \u043F\u043E\u0447\u0442\u0443<br>\n        \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0441\u0442\u0443 <b>' + answer.employee + '</b>,<br>\n        \u043A\u043E\u0442\u043E\u0440\u044B\u0439 \u0441\u0432\u044F\u0436\u0435\u0442\u0441\u044F \u0441 \u0412\u0430\u043C\u0438 \u043F\u043E <b>' + answer.contact + '</b><br>\n      ';
+	    }
 	  };
-	  xhr.send(body);
+	  xhr.send(data);
 	});
 
 /***/ })

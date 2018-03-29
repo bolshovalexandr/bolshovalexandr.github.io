@@ -59,6 +59,40 @@
       <a href="">Вопрос-ответ</a>
       <a href="">Отзывы</a>
     </nav>
+
+    <div id="feedback-modal" class="feedback-modal">
+
+      <form action="#" name="feedback">
+        <fieldset>
+          <label for="name">Имя</label>
+          <input type="text" name="name" required>
+        </fieldset>
+        <fieldset>
+          <label for="message">Ваш вопрос</label>
+          <input type="text" name="message" required>
+        </fieldset>
+        <fieldset>
+          <label for="contact">Контакты для связи</label>
+          <input type="text" name="contact" required>
+        </fieldset>
+        <fieldset>
+          <input type="radio" id="employee-1" name="employee" value="1" checked>
+          <label for="employee-1">Елена Никоненкова</label>
+          <input type="radio" id="employee-2" name="employee" value="2">
+          <label for="employee-2">Дмитрий Волков</label>
+          <input type="radio" id="employee-3" name="employee" value="3">
+          <label for="employee-3">Соколов Евгений</label>
+        </fieldset>
+
+
+
+        <button id="feedback-send">Отправить</button>
+
+        <div id="feedback-response"></div>
+
+      </form>
+    </div>
+
     <footer></footer>
 
   </div>
