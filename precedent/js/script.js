@@ -57,9 +57,9 @@
 	  var xhr = new XMLHttpRequest();
 	  var data = new FormData(feedbackForm);
 	
-	  xhr.open(null, null);
+	  // xhr.open(null, null);
 	  // xhr.open('POST', 'https://precedent.herokuapp.com/');
-	  // xhr.open('POST', 'http://localhost:5000');
+	  xhr.open(feedbackForm.method, feedbackForm.action);
 	
 	  xhr.onreadystatechange = function () {
 	    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
