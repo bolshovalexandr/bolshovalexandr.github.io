@@ -44,8 +44,22 @@
 /* 0 */
 /***/ (function(module, exports) {
 
+	'use strict';
+	
 	// import auth from './tools/storage.js';
-	"use strict";
+	
+	var logo = document.querySelector('.logo.logo-white');
+	logo.addEventListener('click', function () {
+	  var xhr = new XMLHttpRequest();
+	  xhr.open('POST', 'https://precedent.herokuapp.com');
+	  var body = {
+	    "name": "DevD",
+	    "message": "часовой пояс",
+	    "contact": "Heroku external server TEST",
+	    "employee": "01"
+	  };
+	  xhr.send(body);
+	});
 
 /***/ })
 /******/ ]);
