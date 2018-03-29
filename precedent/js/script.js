@@ -57,7 +57,7 @@
 	  var xhr = new XMLHttpRequest();
 	  var data = new FormData(feedbackForm);
 	
-	  xhr.open();
+	  xhr.open(null, null);
 	  // xhr.open('POST', 'https://precedent.herokuapp.com/');
 	  // xhr.open('POST', 'http://localhost:5000');
 	
