@@ -9564,7 +9564,7 @@
 	  _xhr2.default.request = {
 	    metod: 'POST',
 	    url: 'lopos_directory/' + _storage2.default.data.directory + '/operator/' + _storage2.default.data.operatorId + '/business/' + _storage2.default.data.currentBusiness + '/report/turnover/export/' + _storage2.default.currentReportType,
-	    data: 'token=' + _storage2.default.data.token + '&parameters=[' + params + ']&list_of_groups=[' + listOfGroups + '&time_start=' + Date.parse(reportTurnFrom.value) / 1000 + '&time_end=' + Date.parse(reportTurnTo.value) / 1000 + (_storage2.default.currentStockId === 'all' ? '' : '&stock=' + _storage2.default.currentStockId),
+	    data: 'token=' + _storage2.default.data.token + '&parameters=[' + params + ']&list_of_groups=[' + listOfGroups + ']&time_start=' + Date.parse(reportTurnFrom.value) / 1000 + '&time_end=' + Date.parse(reportTurnTo.value) / 1000 + (_storage2.default.currentStockId === 'all' ? '' : '&stock=' + _storage2.default.currentStockId),
 	    callbackSuccess: onPDFLoadSuccessTurn
 	  };
 	};
