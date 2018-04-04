@@ -116,7 +116,7 @@ h2 {
   justify-content: space-between;
   height: 200px;
   padding: 0 60px;
-  background-image: url("./imgdecoration/bg-diagonal.png");
+  background-image: url("../imgdecoration/bg-diagonal.png");
   background-size: cover; }
 
 .page-header__logo {
