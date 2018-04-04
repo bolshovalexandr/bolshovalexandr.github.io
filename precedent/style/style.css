@@ -227,7 +227,7 @@ h2 {
   flex-wrap: nowrap;
   height: 260px;
   width: 100%;
-  background-image: url("./imgdecoration/bg-special.png");
+  background-image: url("../imgdecoration/bg-special.png");
   background-size: cover; }
 
 .special-offer__wrapper {
