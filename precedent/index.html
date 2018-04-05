@@ -27,7 +27,37 @@
 
 <body>
 
+  <div id="feedback-modal" class="feedback-modal">
+    <form action="https://precedent.herokuapp.com/" method="post" name="feedback">
+      <fieldset>
+        <label for="name">Имя</label>
+        <input type="text" name="name" required>
+      </fieldset>
+      <fieldset>
+        <label for="message">Ваш вопрос</label>
+        <input type="text" name="message" required>
+      </fieldset>
+      <fieldset>
+        <label for="contact">Контакты для связи</label>
+        <input type="text" name="contact" required>
+      </fieldset>
+      <fieldset>
+        <input type="radio" id="employee-1" name="employee" value="1" checked>
+        <label for="employee-1">Елена Никоненкова</label>
+        <input type="radio" id="employee-2" name="employee" value="2">
+        <label for="employee-2">Дмитрий Волков</label>
+        <input type="radio" id="employee-3" name="employee" value="3">
+        <label for="employee-3">Соколов Евгений</label>
+      </fieldset>
+      <input type="submit">
+      <div id="feedback-response"></div>
+    </form>
+  </div>
+
+
   <div class="global-wrapper">
+
+
     <div class="overhead-banner">
       <span>КОНСУЛЬТАЦИИ ОНЛАЙН - БЫСТРЕЕ И ДЕШЕВЛЕ</span>
     </div>
@@ -273,36 +303,6 @@
 
       </div>
 
-      <div id="feedback-modal" class="feedback-modal">
-
-        <form action="https://precedent.herokuapp.com/" method="post" name="feedback">
-          <fieldset>
-            <label for="name">Имя</label>
-            <input type="text" name="name" required>
-          </fieldset>
-          <fieldset>
-            <label for="message">Ваш вопрос</label>
-            <input type="text" name="message" required>
-          </fieldset>
-          <fieldset>
-            <label for="contact">Контакты для связи</label>
-            <input type="text" name="contact" required>
-          </fieldset>
-          <fieldset>
-            <input type="radio" id="employee-1" name="employee" value="1" checked>
-            <label for="employee-1">Елена Никоненкова</label>
-            <input type="radio" id="employee-2" name="employee" value="2">
-            <label for="employee-2">Дмитрий Волков</label>
-            <input type="radio" id="employee-3" name="employee" value="3">
-            <label for="employee-3">Соколов Евгений</label>
-          </fieldset>
-
-          <input type="submit">
-
-          <div id="feedback-response"></div>
-
-        </form>
-      </div>
     </main>
 
     <footer class="page-footer">
@@ -394,7 +394,7 @@
         </div>
       </nav>
     </footer>
-    <div>© ООО “Консалтинговая фирма ”Прецедент”, 2005-2017, Нижний Новгород</div>
+    <div class="copyright">© ООО “Консалтинговая фирма ”Прецедент”, 2005-2018, Нижний Новгород</div>
 
   </div>
 
