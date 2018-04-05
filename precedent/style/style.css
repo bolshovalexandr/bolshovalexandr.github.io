@@ -410,19 +410,47 @@ h2 {
   justify-content: space-between; }
 
 .contacts-list__item {
-  height: 120px;
-  background-color: #c6d8eb; }
+  display: flex;
+  padding: 5px 20px;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: center;
+  height: 135px;
+  background-color: #c6d8eb;
+  text-align: center;
+  font-family: "RobotoCondensedRegular";
+  font-size: 16px;
+  color: #002d5d; }
+
+.contacts-list__item h3 {
+  margin: 0;
+  margin-bottom: 10px; }
+
+.contacts-list__item div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; }
+
+.contacts-list__item img {
+  width: 100px;
+  height: auto; }
 
 .skype-offer {
   background-color: #c6d8eb;
   width: 100%;
-  height: 120px;
-  margin-bottom: 30px; }
+  height: 140px;
+  margin-bottom: 30px;
+  box-sizing: border-box;
+  padding: 10px;
+  font-family: "RobotoCondensedRegular";
+  font-size: 16px;
+  color: #002d5d;
+  text-align: center; }
 
 .page-footer {
   display: flex;
   width: 100%;
-  height: 440px;
+  height: 480px;
   background-color: #002d5d;
   box-sizing: border-box;
   padding: 20px 60px; }
@@ -483,8 +511,15 @@ h2 {
   font-weight: bold; }
 
 .footer-sitemap__item ul {
+  display: block;
   list-style-type: none;
   font-weight: bold; }
+
+.footer-sitemap__item ul > li {
+  margin-bottom: 15px; }
+
+.footer-sitemap__item ul ul li {
+  margin-bottom: 10px; }
 
 .footer-sitemap__item ul ul {
   font-weight: normal;
@@ -493,68 +528,6 @@ h2 {
   margin-bottom: 20px;
   min-height: 150px; }
 
-/*
-.counter-item {
-  @include visually-hidden;
-}
-
-@media (min-width: $tablet-width) {
-
-  footer {
-    width: $tablet-width;
-    min-height: 320px;
-  }
-
-  .footer-sitemap {
-    display: flex;
-    justify-content: space-between;
-    width: 768px;
-    margin-bottom: 10px;
-  }
-
-
-
-  .footer-info {
-    display: flex;
-    width: 768px;
-    min-height: 50px;
-    background-color: #ffffff;
-
-  }
-
-  .footer-info__counters {
-    margin: auto 20px;
-  }
-
-  .counter-item {
-    display: inline-block;
-  }
-
-  .footer-info__copyright {
-    font-size: 12px;
-    text-align: right;
-    color:  $precedent-blue-dark;
-    margin-top: auto;
-    margin-left: auto;
-  }
-}
-
-@media (min-width: $desktop-width) {
-
-  footer {
-    width: 940px;
-  }
-
-  .footer-sitemap {
-    width: 940px;
-  }
-
-  .footer-info {
-    width: 940px;
-  }
-
-}
-*/
 .copyright {
   display: flex;
   justify-content: center;
