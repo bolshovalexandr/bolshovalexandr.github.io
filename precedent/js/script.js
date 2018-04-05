@@ -46,6 +46,8 @@
 
 	'use strict';
 	
+	// ============= ОБРАТНАЯ СВЯЗЬ =============
+	
 	var feedbackResponse = document.querySelector('#feedback-response');
 	var feedbackForm = document.forms.feedback;
 	
@@ -68,6 +70,22 @@
 	  };
 	  xhr.send(data);
 	});
+	
+	// ============= МОДАЛЬНОЕ ОКНО "НАЧАТЬ РАБОТУ" =============
+	
+	var startWorkOpenBtn = document.querySelector('#start-work-open');
+	var startWorkCloseBtn = document.querySelector('#start-work-close');
+	var startWorkModal = document.querySelector('#start-work-modal');
+	
+	var onStartWorkOpenBtnClick = function onStartWorkOpenBtnClick() {
+	  startWorkModal.style.display = 'block';
+	};
+	var onStartWorkCloseBtnClick = function onStartWorkCloseBtnClick() {
+	  startWorkModal.style.display = 'none';
+	};
+	
+	startWorkOpenBtn.addEventListener('click', onStartWorkOpenBtnClick);
+	startWorkCloseBtn.addEventListener('click', onStartWorkCloseBtnClick);
 
 /***/ })
 /******/ ]);

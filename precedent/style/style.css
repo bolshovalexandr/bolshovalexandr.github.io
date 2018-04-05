@@ -429,7 +429,14 @@ h2 {
 .contacts-list__item div {
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between; }
+
+.contacts-list__item div a {
+  opacity: 0.6; }
+
+.contacts-list__item div a:hover {
+  opacity: 1; }
 
 .contacts-list__item img {
   width: 100px;
@@ -575,3 +582,127 @@ nav a:active {
 
 .feedback-modal fieldset {
   display: flex; }
+
+.start-work-modal {
+  display: none;
+  box-sizing: border-box;
+  padding: 20px;
+  height: 520px;
+  width: 720px;
+  position: absolute;
+  top: 200px;
+  background-color: #fff;
+  z-index: 10;
+  box-shadow: 0px 0px 45px 5px rgba(0, 0, 0, 0.7);
+  border-radius: 10px; }
+
+.start-work-modal__body {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  /*
+  align-items: center;
+  align-self: center;
+  */ }
+
+.start-work__address {
+  border-radius: 5px;
+  background-color: #007bff;
+  width: 300px;
+  height: 100px; }
+
+.start-work__practice {
+  display: flex;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  border-width: 1px;
+  border-color: #002d5d;
+  border-style: dashed;
+  border-radius: 5px;
+  height: 130px;
+  width: 320px;
+  padding: 10px 15px; }
+
+.start-work__practice div {
+  display: flex;
+  font-size: 14px;
+  font-family: "SegoeUIRegular";
+  text-transform: uppercase;
+  line-height: 1.2;
+  width: 100px;
+  height: 34px;
+  align-items: flex-end;
+  justify-content: space-between;
+  font-weight: bold; }
+
+.start-work__practice button {
+  display: flex;
+  border-radius: 5px;
+  background-color: #002d5d;
+  width: 157px;
+  height: 34px;
+  font-size: 16px;
+  font-family: "SegoeUIRegular";
+  line-height: 1.2;
+  color: #fff;
+  border: none;
+  margin-bottom: 5px; }
+
+.start-work__practice button svg {
+  fill: #fff;
+  height: 22px;
+  width: 22px;
+  margin-right: 15px; }
+
+.start-work__servise {
+  border-width: 1px;
+  border-color: #ff9a27;
+  border-style: dashed;
+  border-radius: 5px;
+  width: 298px;
+  height: 123px; }
+
+.start-work__servise button {
+  border-radius: 5px;
+  background-color: #ff9a27;
+  width: 157px;
+  height: 34px;
+  font-size: 16px;
+  font-family: "SegoeUIRegular";
+  line-height: 1.2;
+  color: #fff;
+  border: none;
+  margin-bottom: 5px; }
+
+.start-work__about {
+  border-radius: 5px;
+  background-color: #214c3c;
+  width: 300px;
+  height: 100px;
+  margin-top: 25px; }
+
+.start-work__offer {
+  border-radius: 10px;
+  background-color: #d47f1e;
+  height: 60px;
+  border: none;
+  font-size: 16px;
+  font-family: "SegoeUIRegular";
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: #fff; }
+
+.start-work__close {
+  border-radius: 10px;
+  background-color: #002d5d;
+  width: 100px;
+  height: 60px;
+  border: none;
+  font-size: 16px;
+  font-family: "SegoeUIRegular";
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: #fff;
+  margin-left: 45px; }
