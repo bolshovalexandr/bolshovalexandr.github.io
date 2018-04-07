@@ -282,6 +282,14 @@ h2 {
   margin-top: 10px;
   justify-content: space-around; }
 
+.index-central__about p {
+  font-size: 16px;
+  font-family: "SegoeUIRegular";
+  line-height: 1.2;
+  text-align: justify;
+  margin: 0;
+  margin-right: 15px; }
+
 .index-central__news {
   width: 30%; }
 
@@ -546,6 +554,15 @@ h2 {
   text-transform: uppercase;
   letter-spacing: 0.1em; }
 
+.signature span {
+  display: block;
+  text-align: right;
+  margin-right: 15px;
+  font-size: 16px;
+  font-family: "SegoeUIRegular";
+  line-height: 1.2;
+  font-weight: bold; }
+
 nav {
   display: flex;
   justify-content: space-between;
@@ -710,25 +727,31 @@ nav a:active {
   width: 22px;
   margin-right: 15px; }
 
-.solid--green {
+.solid-green {
   background-color: #214c3c;
   margin-top: 25px; }
 
-.solid--green div {
+/*
+.solid-green div {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between; }
-
-.solid--green div div {
+  justify-content: space-between;
+}
+div.solid-green__item {
   display: flex;
+  flex-direction: row;
+  height: 100px;
   justify-content: center;
-  width: 40%; }
+  width: 40%;
 
-.solid--green div svg {
+}
+
+.solid-green__item svg {
   height: 35px;
   width: 35px;
-  margin: 0; }
-
+  margin: 0;
+}
+*/
 .start-work__offer {
   border-radius: 10px;
   background-color: #d47f1e;
