@@ -1,3 +1,4 @@
+@charset "UTF-8";
 body {
   display: flex;
   justify-content: center;
@@ -563,6 +564,54 @@ h2 {
   line-height: 1.2;
   font-weight: bold; }
 
+/*MAIN SLIDER |start|*/
+.slider {
+  position: relative;
+  background-color: #ffffff; }
+
+/*MAIN SLIDER -> Механизм переключения*/
+.slider-1,
+.slider-2,
+.slider-3 {
+  display: none; }
+
+.slider-buttons {
+  /*
+  position: absolute;
+  bottom: 147px;
+  right: 63px;
+  */
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin-top: 15px; }
+
+.slider input[type="radio"] {
+  display: none; }
+
+.slider-buttons .slider-btn {
+  margin-right: 35px;
+  width: 8px;
+  height: 8px;
+  border: 3px solid #b2b2b2;
+  border-radius: 50%; }
+
+.slider-buttons .slider-btn:hover {
+  border-color: #999999;
+  cursor: pointer; }
+
+#slider-btn-1:checked ~ #slider-1,
+#slider-btn-2:checked ~ #slider-2,
+#slider-btn-3:checked ~ #slider-3 {
+  display: block; }
+
+#slider-btn-1:checked ~ .slider-buttons .btn-1,
+#slider-btn-2:checked ~ .slider-buttons .btn-2,
+#slider-btn-3:checked ~ .slider-buttons .btn-3 {
+  border-color: #002d5d; }
+
+/*MAIN SLIDER |end|*/
 nav {
   display: flex;
   justify-content: space-between;
