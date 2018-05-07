@@ -73,19 +73,91 @@
 	
 	// ============= МОДАЛЬНОЕ ОКНО "НАЧАТЬ РАБОТУ" =============
 	
+	var startWorkModal = document.querySelector('#start-work-modal');
+	var startWorkModalFeedback = document.querySelector('#start-work-modal-feedback');
+	var startWorkModalInfo = document.querySelector('#start-work-modal-info');
+	
 	var startWorkOpenBtn = document.querySelector('#start-work-open');
 	var startWorkCloseBtn = document.querySelector('#start-work-close');
-	var startWorkModal = document.querySelector('#start-work-modal');
+	var startWorkChangeBtn = document.querySelector('#start-work__change');
+	
+	var viewMode = '';
+	
+	var showFeedback = function showFeedback() {
+	
+	  startWorkModalInfo.classList.remove('fade-in');
+	  startWorkModalInfo.classList.add('fade-out');
+	  startWorkModalInfo.style.display = 'none';
+	
+	  startWorkModalFeedback.style.display = 'flex';
+	  startWorkModalFeedback.classList.remove('fade-out');
+	  startWorkModalFeedback.classList.add('fade-in');
+	
+	  startWorkChangeBtn.innerHTML = '';
+	  startWorkChangeBtn.classList.remove('tracking-in-expand');
+	  window.setTimeout(function () {
+	    startWorkChangeBtn.innerHTML = 'Узнать больше';
+	    startWorkChangeBtn.classList.add('tracking-in-expand');
+	  }, 500);
+	
+	  viewMode = 'feedback';
+	};
+	
+	var showInfo = function showInfo() {
+	
+	  startWorkModalFeedback.classList.remove('fade-in');
+	  startWorkModalFeedback.classList.add('fade-out');
+	  startWorkModalFeedback.style.display = 'none';
+	
+	  startWorkModalInfo.style.display = 'flex';
+	  startWorkModalInfo.classList.remove('fade-out');
+	  startWorkModalInfo.classList.add('fade-in');
+	
+	  startWorkChangeBtn.classList.remove('tracking-in-expand');
+	  window.setTimeout(function () {
+	    return startWorkChangeBtn.classList.add('tracking-in-expand');
+	  }, 500);
+	  startWorkChangeBtn.classList.remove('tracking-in-expand');
+	  startWorkChangeBtn.innerHTML = '';
+	  window.setTimeout(function () {
+	    startWorkChangeBtn.innerHTML = 'Написать прямо сейчас';
+	    startWorkChangeBtn.classList.add('tracking-in-expand');
+	  }, 500);
+	  viewMode = 'learnmore';
+	};
 	
 	var onStartWorkOpenBtnClick = function onStartWorkOpenBtnClick() {
+	
 	  startWorkModal.style.display = 'block';
+	  startWorkModal.classList.add('fade-in');
+	  startWorkModal.classList.remove('fade-out');
+	
+	  showFeedback();
 	};
+	
 	var onStartWorkCloseBtnClick = function onStartWorkCloseBtnClick() {
+	  startWorkModal.classList.remove('fade-in');
+	  startWorkModal.classList.add('fade-out');
 	  startWorkModal.style.display = 'none';
 	};
 	
 	startWorkOpenBtn.addEventListener('click', onStartWorkOpenBtnClick);
 	startWorkCloseBtn.addEventListener('click', onStartWorkCloseBtnClick);
+	
+	// ============= СМЕНА МОДАЛЬНЫХ ОКОН "СПРАВКА"/"ЗАДАТЬ ВОПРОС" =============
+	
+	
+	startWorkChangeBtn.addEventListener('click', function () {
+	  // feedbackModal.classList.toggle('fade-in');
+	
+	  if (viewMode === 'feedback') {
+	    showInfo();
+	  } else if (viewMode === 'learnmore') {
+	    showFeedback();
+	  }
+	
+	  // startWorkModalBody.classList.toggle('fade-out');
+	});
 
 /***/ })
 /******/ ]);
