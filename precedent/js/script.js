@@ -48,13 +48,14 @@
 	
 	// ============= ОБРАТНАЯ СВЯЗЬ =============
 	
-	var feedbackResponse = document.querySelector('#feedback-response');
 	var feedbackForm = document.forms.feedback;
+	var feedbackSubmitBtn = document.querySelector('#feedback-submit');
 	
 	feedbackForm.addEventListener('submit', function (evt) {
 	  evt.preventDefault();
 	
-	  feedbackResponse.innerHTML = 'отправляем...';
+	  feedbackSubmitBtn.value = 'отправляем...';
+	  feedbackSubmitBtn.classList.add('color-change-3x');
 	
 	  var xhr = new XMLHttpRequest();
 	  var data = new FormData(feedbackForm);
@@ -63,9 +64,8 @@
 	
 	  xhr.onreadystatechange = function () {
 	    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-	      var answer = JSON.parse(xhr.responseText);
-	
-	      feedbackResponse.innerHTML = '\n        \u0423\u0432\u0430\u0436\u0430\u0435\u043C\u044B\u0439 <b>' + answer.name + '</b>,<br>\n        \u0412\u0430\u0448 \u0437\u0430\u043F\u0440\u043E\u0441 \u043F\u043E \u0442\u0435\u043C\u0435 \u043F\u0440\u0438\u043D\u044F\u0442 <b>' + answer.message + '</b> \u0438 \u043E\u0442\u043F\u0440\u0430\u0432\u043B\u0435\u043D \u043D\u0430 \u043F\u043E\u0447\u0442\u0443<br>\n        \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0441\u0442\u0443 <b>' + answer.employee + '</b>,<br>\n        \u043A\u043E\u0442\u043E\u0440\u044B\u0439 \u0441\u0432\u044F\u0436\u0435\u0442\u0441\u044F \u0441 \u0412\u0430\u043C\u0438 \u043F\u043E <b>' + answer.contact + '</b><br>\n      ';
+	      feedbackSubmitBtn.value = 'Готово!';
+	      feedbackSubmitBtn.classList.remove('color-change-3x');
 	    }
 	  };
 	  xhr.send(data);
@@ -93,12 +93,12 @@
 	  startWorkModalFeedback.classList.remove('fade-out');
 	  startWorkModalFeedback.classList.add('fade-in');
 	
-	  startWorkChangeBtn.innerHTML = '';
-	  startWorkChangeBtn.classList.remove('tracking-in-expand');
+	  startWorkChangeBtn.classList.add('tracking-out-contract');
 	  window.setTimeout(function () {
-	    startWorkChangeBtn.innerHTML = 'Узнать больше';
+	    startWorkChangeBtn.innerHTML = 'Узнать нас немного больше';
+	    startWorkChangeBtn.classList.remove('tracking-out-contract');
 	    startWorkChangeBtn.classList.add('tracking-in-expand');
-	  }, 500);
+	  }, 700);
 	
 	  viewMode = 'feedback';
 	};
@@ -114,15 +114,13 @@
 	  startWorkModalInfo.classList.add('fade-in');
 	
 	  startWorkChangeBtn.classList.remove('tracking-in-expand');
-	  window.setTimeout(function () {
-	    return startWorkChangeBtn.classList.add('tracking-in-expand');
-	  }, 500);
-	  startWorkChangeBtn.classList.remove('tracking-in-expand');
-	  startWorkChangeBtn.innerHTML = '';
+	  startWorkChangeBtn.classList.add('tracking-out-contract');
+	
 	  window.setTimeout(function () {
 	    startWorkChangeBtn.innerHTML = 'Написать прямо сейчас';
 	    startWorkChangeBtn.classList.add('tracking-in-expand');
-	  }, 500);
+	    startWorkChangeBtn.classList.remove('tracking-out-contract');
+	  }, 700);
 	  viewMode = 'learnmore';
 	};
 	
@@ -138,7 +136,6 @@
 	var onStartWorkCloseBtnClick = function onStartWorkCloseBtnClick() {
 	  startWorkModal.classList.remove('fade-in');
 	  startWorkModal.classList.add('fade-out');
-	  startWorkModal.style.display = 'none';
 	};
 	
 	startWorkOpenBtn.addEventListener('click', onStartWorkOpenBtnClick);
@@ -148,15 +145,12 @@
 	
 	
 	startWorkChangeBtn.addEventListener('click', function () {
-	  // feedbackModal.classList.toggle('fade-in');
 	
 	  if (viewMode === 'feedback') {
 	    showInfo();
 	  } else if (viewMode === 'learnmore') {
 	    showFeedback();
 	  }
-	
-	  // startWorkModalBody.classList.toggle('fade-out');
 	});
 
 /***/ })

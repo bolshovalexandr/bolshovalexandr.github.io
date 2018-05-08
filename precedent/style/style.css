@@ -618,7 +618,7 @@ h2 {
  * ----------------------------------------
  */
 .fade-in {
-  animation: fade-in 0.5s cubic-bezier(0.39, 0.575, 0.565, 1) both; }
+  animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both; }
 
 @keyframes fade-in {
   0% {
@@ -632,7 +632,7 @@ h2 {
  * ----------------------------------------
  */
 .fade-out {
-  animation: fade-out 0.5s ease-out both; }
+  animation: fade-out 1s ease-out both; }
 
 @keyframes fade-out {
   0% {
@@ -744,14 +744,13 @@ h2 {
     opacity: 1;
     text-shadow: 0 0 30px rgba(255, 255, 255, 0.6), 0 0 60px rgba(255, 255, 255, 0.45), 0 0 110px rgba(255, 255, 255, 0.25), 0 0 100px rgba(255, 255, 255, 0.1); } }
 
-.tracking-in-expand {
-  animation: tracking-in-expand 0.5s cubic-bezier(0.215, 0.61, 0.355, 1) both; }
-
 /**
  * ----------------------------------------
  * animation tracking-in-expand
  * ----------------------------------------
  */
+.tracking-in-expand {
+  animation: tracking-in-expand 0.5s cubic-bezier(0.215, 0.61, 0.355, 1) both; }
 
 @keyframes tracking-in-expand {
   0% {
@@ -761,6 +760,48 @@ h2 {
     opacity: 0.6; }
   100% {
     opacity: 1; } }
+
+/**
+ * ----------------------------------------
+ * animation tracking-out-contract
+ * ----------------------------------------
+ */
+.tracking-out-contract {
+  animation: tracking-out-contract 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both; }
+
+@keyframes tracking-out-contract {
+  0% {
+    opacity: 1; }
+  50% {
+    opacity: 1; }
+  100% {
+    letter-spacing: -0.5em;
+    opacity: 0; } }
+
+.color-change-3x {
+  animation: color-change-3x 2s linear infinite alternate both; }
+
+/**
+ * ----------------------------------------
+ * animation color-change-3x
+ * ----------------------------------------
+ */
+
+@keyframes color-change-3x {
+  0% {
+    background: #46a699; }
+  50% {
+    background: #b22cff; }
+  100% {
+    background: #002d5d; } }
+
+button,
+input[type="submit"],
+button:active,
+input[type="submit"]:active,
+button:focus,
+input[type="submit"]:focus {
+  outline: none; }
 
 nav {
   display: flex;
@@ -791,11 +832,77 @@ nav a:active {
   margin: 20px;
   background-color: #fff; }
 
-.feedback-modal form {
-  width: 280px; }
+.start-work-modal-body form {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  font-family: "SegoeUIRegular";
+  font-size: 16px; }
 
-.feedback-modal fieldset {
-  display: flex; }
+.start-work-modal-body form > div:first-child {
+  width: 80%;
+  flex-direction: column;
+  margin: 0; }
+
+.start-work-modal-body form > div:last-child {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 15%; }
+
+.start-work-modal-body form div:last-child input[type="submit"] {
+  display: block;
+  border-radius: 50%;
+  height: 100px;
+  width: 100px;
+  color: #fff;
+  text-transform: uppercase;
+  background-color: #46a699;
+  background-image: linear-gradient(0deg, #46a699 0%, #46a699 85%, #46bb99 100%);
+  font-family: "RobotoCondensedRegular";
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  font-weight: 800;
+  padding: 0;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
+  border: none;
+  cursor: pointer; }
+
+.start-work-modal-body form div:last-child input[type="submit"]:hover {
+  box-shadow: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.3); }
+
+.feedback-message {
+  display: block; }
+
+.feedback-employee {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  height: 40px;
+  align-items: center;
+  margin: 0;
+  width: 100%; }
+
+.feedback-name,
+.feedback-contact {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px; }
+
+.feedback-name input,
+.feedback-contact input {
+  width: 380px; }
+
+.feedback-message {
+  display: flex;
+  flex-direction: column; }
+
+.feedback-message textarea {
+  height: 130px; }
+
+.feedback-response {
+  display: flex;
+  flex-direction: column; }
 
 .start-work-modal {
   display: none;
@@ -815,6 +922,8 @@ nav a:active {
   font-family: "RobotoCondensedRegular";
   color: #002d5d;
   line-height: 1.2;
+  text-align: center;
+  width: 100%;
   margin: 5px 0; }
 
 .start-work-modal p {
@@ -950,11 +1059,16 @@ div.solid-green__item {
   margin: 0;
 }
 */
+.start-work-buttons {
+  display: flex;
+  height: 60px;
+  justify-content: space-between; }
+
 .start-work__offer {
   border-radius: 10px;
   background-color: #d47f1e;
   height: 60px;
-  width: 250px;
+  width: 320px;
   border: none;
   font-size: 16px;
   font-family: "SegoeUIRegular";
@@ -972,5 +1086,4 @@ div.solid-green__item {
   font-family: "SegoeUIRegular";
   text-transform: uppercase;
   line-height: 1.2;
-  color: #fff;
-  margin-left: 325px; }
+  color: #fff; }
