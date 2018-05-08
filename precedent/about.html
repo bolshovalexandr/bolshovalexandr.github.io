@@ -15,21 +15,11 @@
 
 </head>
 
-<!--
-Семантическая верстка
-
-1. HEADER
-- Шапка (бело-синий блок) - независимый БЛОК с классом page-header
-  -
-
--->
-
 
 <body>
 
 
   <div id="start-work-modal" class="start-work-modal">
-
 
 
     <div id="start-work-modal-feedback" class="start-work-modal-body start-work-modal__feedback">
@@ -56,12 +46,10 @@
           <div class="feedback-employee">
             <input type="radio" id="employee-1" name="employee" value="1" checked>
             <label for="employee-1">Елена Никоненкова</label>
-            <div class="feedback-employee__info">
-              [i]
-              <div>Елена Никоненкова</div>
-            </div>
             <input type="radio" id="employee-2" name="employee" value="2">
-            <label for="employee-2">Дмитрий Волков</label> <div class="feedback-employee__info">[i]<div>testst2</div></div>
+            <label for="employee-2">Дмитрий Волков</label>
+            <input type="radio" id="employee-3" name="employee" value="3">
+            <label for="employee-3">Кто-то Еще</label>
           </div>
         </div>
         <div>
@@ -190,7 +178,7 @@
 
     </header>
     <nav>
-      <a href="about.html">О компании</a>
+      <a href="">О компании</a>
       <a href="">Новости</a>
       <a href="">Услуги</a>
       <a href="">Аналитика</a>
@@ -200,208 +188,73 @@
     </nav>
 
     <main class="page-main">
+      <h1>О компании</h1>
 
-      <div class="special-offer">
-        <div class="special-offer__wrapper">
+      <span class="">Мы знаем как! Мы сделаем - будете уверены!</span>
+      <p>Консалтинговая фирма "Прецедент" начала свою работу в 2005 году. Прошедшие годы безупречной работы подарили нам неисчерпаемое количество опыта в решении самых разнообразных дел. Наши юристы обладают доскональным знанием российских законов, а накопленная судебная и административная практика, позволяют нам легко находить решения поставленных Заказчиком задач.</p>
+      <p>Мы гордимся тем, что в нашей компании работают талантливые специалисты, настоящие энтузиасты своего дела, объединенные общей идеей - сделать жизнь наших Заказчиков легче. Мы не упускаем ни одной детали и решаем сложные юридические задачи, чтобы вы посвятили себя по-настоящему приятным и важным вещам - семье или развитию бизнеса.</p>
 
-          <div class="special-offer__header">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M32 448c0 17.7 14.3 32 32 32h160V320H32v128zm448-288h-42.1c6.2-12.1 10.1-25.5 10.1-40 0-48.5-39.5-88-88-88-41.6 0-68.5 21.3-103 68.3-34.5-47-61.4-68.3-103-68.3-48.5 0-88 39.5-88 88 0 14.5 3.8 27.9 10.1 40H32c-17.7 0-32 14.3-32 32v80c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16v-80c0-17.7-14.3-32-32-32zm-326.1 0c-22.1 0-40-17.9-40-40s17.9-40 40-40c19.9 0 34.6 3.3 86.1 80h-86.1zm206.1 0h-86.1c51.4-76.5 65.7-80 86.1-80 22.1 0 40 17.9 40 40s-17.9 40-40 40zm-72 320h160c17.7 0 32-14.3 32-32V320H288v160z"/></svg>
-            <p>Подпишитесь на нас и получите консультацию юриста в подарок! При записи на консультацию назовите электронный адрес, на который была оформлена подписка, и мы бесплатно ответим на ваши вопросы!</p>
+      <h2>Компании "Прецедент" ведет дела следующих категорий</h2>
+
+      <section class="card">
+        <article class="accordian-item">
+          <h3 class="accordian-item__header" data-accordion-element-trigger>ЮРИДИЧЕСКОЕ СОПРОВОЖДЕНИЕ СТРОИТЕЛЬСТВА ЖИЛЫХ И КОММЕРЧЕСКИХ ОБЪЕКТОВ</h3>
+          <div data-accordion-element-content class="content">
+            <p class="accordian-item__text">Работа по сопровождению строительства начинается от анализа земельного участка (можно ли построить? и что можно построить?) и заканчивается оформлением прав на построенный объект. Ну и тут еще про всякое пишем, ссылки там</p>
           </div>
+        </article>
 
-          <div class="special-offer__body">
-            <form action="" method="post" name="subscribe">
-              <label for="name">Имя</label>
-              <input type="text" name="name" required>
-              <label for="contact">Адрес</label>
-              <input type="text" name="contact" required>
-
-              <button type="submit">
-                 Подписаться
-                  <img src="./imgdecoration/blue-arrow.png" alt="">
-                </button>
-
-
-            </form>
+        <article class="accordian-item">
+          <h3 class="accordian-item__header" data-accordion-element-trigger>АБОНЕНТСКОЕ ОБСЛУЖИВАНИЕ ЮРИДИЧЕСКИХ ЛИЦ И ИП</h3>
+          <div data-accordion-element-content class="content">
+            <p class="accordian-item__text">Ну и тут еще про всякое пишем, ссылки там </p>
           </div>
+        </article>
 
-          <div class="special-offer__footer">Ежемесячно мы собираем самые важные новости по вопросам земли и недвижимости и рассылаем вам. В каждом выпуске рассылки будет размещена ссылка, по которой вы в любой момент сможете отписаться, если рассылка вас не заинтересует.
+        <article class="accordian-item">
+          <h3 class="accordian-item__header" data-accordion-element-trigger>ПРОЦЕДУРНЫЕ ВОПРОСЫ С ОБЪЕКТАМИ НЕДВИЖИМОСТИ</h3>
+          <div data-accordion-element-content class="content">
+            <p class="accordian-item__text">Ну и тут еще про всякое пишем, ссылки там </p>
           </div>
+        </article>
 
+        <article class="accordian-item">
+          <h3 class="accordian-item__header" data-accordion-element-trigger>ПОЛУЧЕНИЕ ЗЕМЛИ ПОД СТРОИТЕЛЬСТВО</h3>
+          <div data-accordion-element-content class="content">
+            <p class="accordian-item__text">Ну и тут еще про всякое пишем, ссылки там </p>
+          </div>
+        </article>
+
+        <article class="accordian-item">
+          <h3 class="accordian-item__header" data-accordion-element-trigger>ВЗЫСКАНИЕ ЗАДОЛЖЕННОСТИ</h3>
+          <div data-accordion-element-content class="content">
+            <p class="accordian-item__text">Ну и тут еще про всякое пишем, ссылки там </p>
+          </div>
+        </article>
+
+      </section>
+
+      <h2>Работая с компанией "Прецедент" вы получаете:</h2>
+      <h2>Стоит ли верить обещаниям юридических компаний?</h2>
+      <h2>Компания "Прецедент" предлагает Вам:</h2>
+
+      <div>
+
+        <div class="contacts-list__item">
+          <p>Присмотритесь к нам, читая наши статьи и реализованные проекты на сайте</p>
+        </div>
+
+        <div class="contacts-list__item">
+          <p>Приходите к нам в офис и получите практический ответ на поставленную задачу или вопрос и проанализируйте - подходит ли вам наша манера вести дела и решать проблемы.</p>
+        </div>
+
+        <div class="contacts-list__item">
+          <p>Позвоните нам и послушайте, внушают ли вам доверие наши специалисты. Или задайте нам бесплатный вопрос по форме обратной связи.</p>
         </div>
       </div>
 
-      <div class="index-central">
+      <p>Протестируйте нас - и убедитесь, что мы достойны вашего времени и запрашиваемых денег. Ведь вы - наши Заказчики - достойны самого лучшего. Не покупайтесь на рекламу - делайте осознанный выбор. Мы обещаем, что вы всегда получите подробное консультирование и оптимальный вариант решения проблемы (если она в принципе может быть решена) и... свободу выбора - решать ее самому, обратиться за помощью к кому-то еще или работать с нами.</p>
 
-        <div class="index-central__news">
-          <h2>Новости</h2>
-          <div class="news-list">
-
-            <div class="news-list__item">
-              <h3>Что вы знаете о своей обязанности вносить сведения в Федресурс?</h3>
-              <span>15.02.2018 </span>
-              <p>Закон не новый, но как показывает практика, о нем мало кто из предпринимателей знает. </p>
-              <a href="">читать далее</a>
-            </div>
-            <div class="news-list__item">
-              <h3>Рейтинг "Добросовестный застройщик загородной недвижимости - 2017"</h3>
-              <span>11.10.2017 </span>
-              <p>Телепрограмма «Домой! Новости» в очередной раз проводит общественный Рейтинг коттеджных поселков. За звание лучшего загородного комплекса будут бороться более двух десятков проектов. География их широка – от близлежащих Кстовского и Богородского районов, до дальних, но от этого ...</p>
-              <a href="">читать далее</a>
-            </div>
-
-            <div class="news-list__item">
-              <h3>Можно ли взыскать убытки за пролив квартиры спустя 2 года?</h3>
-              <span>16.08.2017</span>
-              <p>Наш опыт ведения судебного дела, где убытки за пролив квартиры были предъявлены истцом спустя почти 2 года.</p>
-              <a href="">читать далее</a>
-            </div>
-
-
-          </div>
-        </div>
-
-        <div class="index-central__timeline">
-
-          <h2>О компании</h2>
-          <div class="slider">
-
-            <input type="radio" id="slider-btn-1" name="toggle" checked>
-            <input type="radio" id="slider-btn-2" name="toggle">
-            <input type="radio" id="slider-btn-3" name="toggle">
-
-
-            <div class="slider-1" id="slider-1">
-
-              <div class="slider-text">
-
-                <div class="index-central__about">
-
-                  <div>
-                    <p>Консалтинговая фирма "Прецедент" начала свою работу в 2005 году. Прошедшие годы безупречной работы подарили нам неисчерпаемое количество опыта в решении самых разнообразных дел. Наши юристы обладают доскональным знанием российских законов, а накопленная судебная и административная практика, позволяют нам легко находить решения поставленных Заказчиком задач.</p>
-                    <div class="signature">
-                      <span>Елена Никоненкова,</span>
-                      <span>Директор юридической компании “Прецедент”</span>
-                    </div>
-                  </div>
-                  <img src="./img/index-about-01.png" alt="">
-
-                </div>
-
-              </div>
-            </div>
-
-            <div class="slider-2" id="slider-2">
-
-              <div class="slider-text">
-                <div class="index-central__about">
-
-                  <div>
-                    <p>Тут мессадж Волкова: онсалтинговая фирма "Прецедент" начала свою работу в 2005 году. Прошедшие годы безупречной работы подарили нам неисчерпаемое количество опыта в решении самых разнообразных дел. Наши юристы обладают доскональным знанием российских законов, а накопленная судебная и административная практика, позволяют нам легко находить</p>
-                    <div class="signature">
-                      <span>Дмитрий Волков,</span>
-                      <span>Заместитель директора юридической компании “Прецедент”</span>
-                    </div>
-                  </div>
-                  <img src="./img/index-about-02.jpg" alt="" width="175" height="191">
-
-                </div>
-              </div>
-            </div>
-
-            <div class="slider-3" id="slider-3">
-
-              <div class="slider-text">
-                <div class="index-central__about">
-
-                  <div>
-                    <p>Тут мессадж Кого-То: онсалтинговая фирма "Прецедент" начала свою работу в 2005 году. Прошедшие годы безупречной работы подарили нам неисчерпаемое количество опыта в решении самых разнообразных дел. Наши юристы обладают доскональным знанием российских законов, а накопленная</p>
-                    <div class="signature">
-                      <span>Кто-то</span>
-                      <span>Юрист компании “Прецедент”</span>
-                    </div>
-                  </div>
-                  <img src="./img/index-about-02.jpg" alt="" width="175" height="191">
-
-                </div>
-              </div>
-
-            </div>
-
-            <div class="slider-buttons">
-              <label for="slider-btn-1" class="icon icon-slider"></label>
-              <label for="slider-btn-2" class="icon icon-slider"></label>
-              <label for="slider-btn-3" class="icon icon-slider"></label>
-
-              <label for="slider-btn-1" class="slider-btn btn-1"></label>
-              <label for="slider-btn-2" class="slider-btn btn-2"></label>
-              <label for="slider-btn-3" class="slider-btn btn-3"></label>
-            </div>
-
-          </div>
-
-          <h2>Партнеры</h2>
-          <div class="index-central__partners">
-            <img src="./img/index-partners-01.png" alt="">
-            <img src="./img/index-partners-02.png" alt="">
-            <img src="./img/index-partners-03.png" alt="">
-            <img src="./img/index-partners-04.png" alt="">
-            <img src="./img/index-partners-05.png" alt="">
-          </div>
-
-          <h2>Эфир</h2>
-
-          <div class="index-central__onair">
-
-            <div class="square square--red index-central__onair--item">
-              <div class="square__header">
-                <h3>Интервью Никоненковой Е. для "Честный час" на тему налоговые вычеты.</h3>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M336.2 64H47.8C21.4 64 0 85.4 0 111.8v288.4C0 426.6 21.4 448 47.8 448h288.4c26.4 0 47.8-21.4 47.8-47.8V111.8c0-26.4-21.4-47.8-47.8-47.8zm189.4 37.7L416 177.3v157.4l109.6 75.5c21.2 14.6 50.4-.3 50.4-25.8V127.5c0-25.4-29.1-40.4-50.4-25.8z"/></svg>
-              </div>
-              <div class="square__body">
-                <img src="./img/index-onair-01.png" alt="">
-              </div>
-              <div class="square__footer">
-                <a href="">Смотреть на youtube</a>
-              </div>
-
-            </div>
-
-            <div class="square square--yellow index-central__onair--item">
-              <div class="square__header">
-                <h3>Уменьшение кадастровой стоимости земельного участка и объекта недвижимости</h3>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M320 288h192v144c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48V288h192v20c0 6.627 5.373 12 12 12h104c6.627 0 12-5.373 12-12v-20zm192-112v80H0v-80c0-26.51 21.49-48 48-48h80V80c0-26.51 21.49-48 48-48h160c26.51 0 48 21.49 48 48v48h80c26.51 0 48 21.49 48 48zM320 96H192v32h128V96z"/></svg>
-              </div>
-              <div class="square__body">
-                <span>Почему кадастровая стоимость моей земли или здания такая большая?</span>
-                <span>Что нужно сделать, чтобы уменьшить налоги?</span>
-                <span>Как уменьшить кадастровую стоимость моих объектов недвижимости или земли?</span>
-              </div>
-              <div class="square__footer">
-                <a href="">Читать далее</a>
-              </div>
-
-            </div>
-
-            <div class="square square--blue index-central__onair--item">
-              <div class="square__header">
-                <h3>Что год грядущий нам готовит или чем же «порадует» нас законодатель в начале 2017?</h3>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M622.884 199.005l-275.817 85.1a96 96 0 0 1-54.134 0L92.398 222.232c-8.564 11.438-11.018 23.05-11.918 38.335C89.778 266.165 96 276.355 96 288c0 11.952-6.557 22.366-16.265 27.861l16.197 123.096c.63 4.786-3.1 9.043-7.932 9.043H40c-4.828 0-8.562-4.253-7.932-9.044L48.265 315.86C38.557 310.366 32 299.952 32 288c0-12.034 6.646-22.511 16.465-27.976.947-17.951 3.974-33.231 12.152-47.597l-43.502-13.422c-22.876-6.801-22.766-39.241 0-46.01l275.817-85.1a96 96 0 0 1 54.134 0l275.817 85.1c22.877 6.801 22.767 39.241.001 46.01zM356.503 314.682l-.207.064-.207.061a127.998 127.998 0 0 1-72.177 0l-.207-.061-.207-.064-150.914-46.57L120 352c0 35.346 89.543 64 200 64s200-28.654 200-64l-12.583-83.888-150.914 46.57z"/></svg>
-              </div>
-              <div class="square__body">
-                <span>Представляем Вам обзор изменений законодательства в сфере недвижимости, вступающего в силу с 01 января 2017 года.</span>
-              </div>
-              <div class="square__footer">
-                <a href="">Читать далее</a>
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
       <h2>Контакты</h2>
 
       <div class="contacts">
@@ -457,11 +310,10 @@
 
       <div class="skype-offer">
 
-        <p>Проконсультируйтесь с юристом компании Прецедент по skype прямо из офиса или дома, без долгого ожидания и стояния в пробках. Стоимость консультации с анализом документов 500 рублей – в 2-3 раза ниже очной консультации.</p>
+        <p>Проконсультируйтесь с юристом компании Прецедент по skype прямо из офиса или дома, без долгого ожидания и стояния в пробках. Стоимость консультации с анализом документов 450 рублей – в 2-3 раза ниже очной консультации.</p>
         <p>Свяжитесь с нами по телефону в Нижнем Новгороде (831) 436-23-33, на адрес info@precedentnn.ru пришлите письмо с кратким описанием проблемы. При необходимости правового анализа документа пришлите скан-копию документа. Способ оплаты консультации – по согласованию.</p>
 
       </div>
-
     </main>
 
     <footer>
