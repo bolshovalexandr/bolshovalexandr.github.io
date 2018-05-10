@@ -666,24 +666,24 @@ p {
 
 h3.accordian-item__header {
   position: relative;
-  background: #3F51B5;
+  background: #c6d8eb;
   padding: 15px 30px;
   margin: 0;
   font-size: 20px;
   line-height: 30px;
-  color: #fff;
+  color: #002d5d;
   line-height: 1.2;
   text-transform: uppercase;
   font-family: "RobotoCondensedLight";
   font-size: 16px;
   letter-spacing: 0.1em;
-  color: #fff;
   overflow: hidden;
   transition: background .3s; }
   h3.accordian-item__header:hover,
   .selected h3.accordian-item__header {
     cursor: pointer;
-    background: #3949AB; }
+    background: #002d5d;
+    color: #fff; }
   h3.accordian-item__header:before, h3.accordian-item__header:after {
     content: "";
     position: absolute;
