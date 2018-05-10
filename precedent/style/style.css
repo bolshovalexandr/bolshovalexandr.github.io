@@ -948,10 +948,10 @@ p.accordian-item__text {
   box-sizing: border-box; }
 
 button,
-input[type="submit"],
 button:active,
-input[type="submit"]:active,
 button:focus,
+input[type="submit"],
+input[type="submit"]:active,
 input[type="submit"]:focus {
   outline: none; }
 
@@ -1038,16 +1038,21 @@ nav a:active {
 .feedback-employee__info {
   position: relative; }
 
+.feedback-employee__info > span {
+  display: inline-block;
+  color: blue; }
+
 .feedback-employee__info > div {
   display: none; }
 
 .feedback-employee__info:hover > div {
   display: block;
   position: absolute;
-  right: -35px;
-  top: -25px;
-  width: 30px;
-  height: 30px;
+  left: 1px;
+  bottom: 20px;
+  width: 360px;
+  height: 140px;
+  border: 1px solid black;
   background-color: #fff; }
 
 /*

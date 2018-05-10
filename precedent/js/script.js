@@ -58,7 +58,7 @@
 	feedbackForm.addEventListener('submit', function (evt) {
 	  evt.preventDefault();
 	
-	  feedbackSubmitBtn.value = 'отправляем...';
+	  feedbackSubmitBtn.value = 'отправляем';
 	  feedbackSubmitBtn.classList.add('color-change-3x');
 	
 	  var xhr = new XMLHttpRequest();
@@ -130,6 +130,7 @@
 	
 	var onStartWorkOpenBtnClick = function onStartWorkOpenBtnClick() {
 	
+	  feedbackSubmitBtn.value = 'отправить';
 	  startWorkModal.style.display = 'block';
 	  startWorkModal.classList.add('fade-in');
 	  startWorkModal.classList.remove('fade-out');
