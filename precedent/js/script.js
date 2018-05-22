@@ -656,12 +656,12 @@
 	  _createClass(SliderModel, [{
 	    key: 'increaseCounter',
 	    value: function increaseCounter() {
-	      this.currentElement = this.currentElement === this.dataLength ? 0 : ++this.currentElement;
+	      this.currentElement = this.currentElement >= this.dataLength ? 0 : ++this.currentElement;
 	    }
 	  }, {
 	    key: 'decreaseCounter',
 	    value: function decreaseCounter() {
-	      this.currentElement = this.currentElement === 0 ? this.dataLength : --this.currentElement;
+	      this.currentElement = this.currentElement <= 0 ? this.dataLength : --this.currentElement;
 	    }
 	  }, {
 	    key: 'counter',
@@ -687,27 +687,30 @@
 	
 	  var slider = document.querySelector('.slider-big');
 	
-	  var sliderModel = new SliderModel(data);
-	  var sliderView = new SliderView(slider);
+	  if (slider) {
 	
-	  var arrowSubscriber = function arrowSubscriber(direction) {
-	    if (direction === 'next') {
-	      sliderModel.increaseCounter();
-	    } else {
-	      sliderModel.decreaseCounter();
-	    }
-	    console.log(sliderModel);
+	    var sliderModel = new SliderModel(data);
+	    var sliderView = new SliderView(slider);
+	
+	    var arrowSubscriber = function arrowSubscriber(direction) {
+	      if (direction === 'next') {
+	        sliderModel.increaseCounter();
+	      } else {
+	        sliderModel.decreaseCounter();
+	      }
+	      console.log(sliderModel);
+	      sliderView.draw(sliderModel.data);
+	    };
+	
+	    var dotSubscriber = function dotSubscriber(number) {
+	      sliderModel.counter = number;
+	      sliderView.draw(sliderModel.data);
+	    };
+	
+	    sliderView.init(sliderModel.quantity, arrowSubscriber, dotSubscriber);
+	    sliderView.start();
 	    sliderView.draw(sliderModel.data);
-	  };
-	
-	  var dotSubscriber = function dotSubscriber(number) {
-	    sliderModel.counter = number;
-	    sliderView.draw(sliderModel.data);
-	  };
-	
-	  sliderView.init(sliderModel.quantity, arrowSubscriber, dotSubscriber);
-	  sliderView.start();
-	  sliderView.draw(sliderModel.data);
+	  }
 	};
 
 /***/ })
