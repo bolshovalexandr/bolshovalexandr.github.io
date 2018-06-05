@@ -229,6 +229,26 @@
 	myAccordion.on('elementSelected', function (data) {
 	  console.log('elementOpened', data);
 	});
+	
+	// ============= ОБРАТНАЯ СВЯЗЬ =============
+	var feedbackOpenBtn = document.querySelector('#feedback-open');
+	var feedbackCloseBtn = document.querySelector('#feedback-close');
+	var feedbackModal = document.querySelector('#feedback-modal');
+	
+	var onFeedbackCloseBtnClick = function onFeedbackCloseBtnClick() {
+	  feedbackModal.classList.remove('fade-in');
+	  feedbackModal.classList.add('fade-out');
+	  feedbackModal.style.display = 'none';
+	};
+	
+	var onFeedbackOpenBtnClick = function onFeedbackOpenBtnClick() {
+	  feedbackModal.style.display = 'block';
+	  feedbackModal.classList.add('fade-in');
+	  feedbackModal.classList.remove('fade-out');
+	};
+	
+	feedbackCloseBtn.addEventListener('click', onFeedbackCloseBtnClick);
+	feedbackOpenBtn.addEventListener('click', onFeedbackOpenBtnClick);
 
 /***/ }),
 /* 1 */
