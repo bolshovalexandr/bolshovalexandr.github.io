@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Добро пожаловать | ВКонтакте</title>
+  <link rel="stylesheet" href="./index.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+
+  <div class="header-wrapper">
+    <header>
+      <img src="/img/ic_head_logo.svg" alt="" class="logo">
+      <input type="text" placeholder="Поиск">
+      <a href="news.html">Switch to English</a>
+    </header>
+  </div>
+
+  <div class="main-wrapper">
+    <main class="main-index">
+
+      <div class="welcome">
+        <h2>ВКонтакте для мобильных устройств</h2>
+        <p>Установите официальное мобильное приложение ВКонтакте и оставайтесь в курсе новостей Ваших друзей, где бы Вы ни находились.</p>
+        <div class="images-container">
+          <img class="images-container__item" src="./img/android_ru.png" alt="">
+          <img class="images-container__item images-container__item--top" src="./img/ios_ru.png" alt="">
+          <img class="images-container__item" src="./img/wp_ru.png" alt="">
+        </div>
+        <div class="app-links">
+          <button class="app-links"><span class="icon icon__android"></span>VK для Android</button>
+          <button class="app-links"><span class="icon icon__iphone"></span>VK для iPhone</button>
+          <button class="app-links"><span class="icon icon__winodws"></span>VK для WP</button>
+        </div>
+        <a class="app-links__all" href="">Все продукты</a>
+      </div>
+
+      <div class="enter">
+
+        <form id="signup" class="signup" action="/vk" method="post">
+          <input type="text" name="contact" placeholder="Телефон или email">
+          <input type="password" name="pass" placeholder="Пароль">
+          <input type="submit" value="Войти">
+          <a href="">Забыли пароль?</a>
+        </form>
+
+        <form class="register" action="">
+          <h2>Впервые ВКонтакте?</h2>
+          <p>Моментальная регистрация</p>
+          <input type="text" placeholder="Ваше имя">
+          <input type="text" placeholder="Ваша фамилия">
+
+          <div class="birthday-tooltip">
+            <span class="birthday-tooltip__note">Дата рождения</span>
+            <div class="birthday-tooltip__icon">?</div>
+            <div class="birthday-tooltip__info"><b>Заполненная дата рождения</b> позволит друзьям легче найти Вас, а также подбирать для Вас интересные материалы.<br>Вы сможете всегда настроить видимость Вашей даты рождения в редактировании профиля.</div>
+          </div>
+
+          <div class="register-birthday">
+
+            <select name="" id="day">
+            <option>День</option>
+          </select>
+
+            <select name="" id="month">
+            <option>Месяц</option>
+          </select>
+
+            <select name="" id="year">
+            <option>Год</option>
+            </select>
+          </div>
+          <button>Продолжить регистрацию</button>
+          <button>Продолжить с Facebook</button>
+        </form>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <div class="footer-wrapper">
+    <footer>
+      <div class="footer-link copyright">
+        <a href="">ВКонтакте</a>
+        <span>© 2018</span>
+      </div>
+      <div class="footer-link link">
+        <a href="">о компании</a>
+        <a href="">правила</a>
+        <a href="">реклама</a>
+        <a href="">разработчикам</a>
+      </div>
+      <div class="footer-link langs">
+        <span>Язык:</span>
+        <a href="">English</a>
+        <a href="">Русский</a>
+        <a href="">Українська</a>
+        <a href="">все языки »</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+
+</html>

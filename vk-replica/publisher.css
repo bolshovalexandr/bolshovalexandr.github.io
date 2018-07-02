@@ -1,0 +1,70 @@
+.publisher-wrap {
+
+}
+
+.publisher {
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  border-radius: 2px;
+}
+
+.publisher input[type="text"],
+.publisher input[type="password"],
+textarea {
+  width: 100%;
+  height: 35px;
+  margin-bottom: 15px;
+  background-color: #fff;
+  border: 1px solid #d3d9de;
+  border-radius: 3px;
+  padding: 6px 12px 8px 12px;
+}
+
+.publisher textarea {
+  height: 100px;
+}
+
+.publisher input[type="password"] {
+  display: inline-block;
+  width: 200px;
+}
+
+.publisher input[type="submit"] {
+  width: 100px;
+  height: 35px;
+  font-size: 14px;
+  line-height: 20px;
+  margin-right: 15px;
+  border: none;
+  border-radius: 3px;
+  color: #fff;
+  background-color: #5181b8;
+  cursor: pointer;
+}
+
+.publisher input[type="submit"]:hover {
+  background-color: #5b88bd;
+}
+
+
+.submit-wrap {
+  display: flex;
+  width: 100%;
+  border: none;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  justify-content: flex-end;
+}
+
+.submit-wrap input[type="text"] {
+  width: 150px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.submit-wrap input[type="submit"] {
+  padding: 0;
+  margin: 0;
+  margin-left: 15px;
+}
