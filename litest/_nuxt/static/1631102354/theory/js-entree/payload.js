@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/theory/js-entree", {data:[{}],fetch:{},mutations:void 0});

@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/external/space", {data:[{}],fetch:{},mutations:void 0});
