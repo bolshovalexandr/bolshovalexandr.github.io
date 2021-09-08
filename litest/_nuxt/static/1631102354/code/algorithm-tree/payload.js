@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/code/algorithm-tree", {data:[{}],fetch:{},mutations:void 0});

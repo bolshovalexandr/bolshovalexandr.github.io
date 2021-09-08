@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/theory/js-savourex", {data:[{}],fetch:{},mutations:void 0});

@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/theory/ts-advanced", {data:[{}],fetch:{},mutations:void 0});

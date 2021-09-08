@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/theory/animation-basics", {data:[{}],fetch:{},mutations:void 0});
